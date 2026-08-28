@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>创新支撑系统 - 原型+PRD需求评审</title>
+    <script src="https://cdn.tailwindcss.com/3.4.16"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css">
+    <style>
+        body { font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif; background: #F5F7FA; margin: 0; }
+        .hero-bg { background: linear-gradient(135deg, #165DFF 0%, #0E42D2 50%, #002C99 100%); }
+        .card-hover { transition: all 0.3s ease; }
+        .card-hover:hover { transform: translateY(-4px); box-shadow: 0 8px 24px rgba(22, 93, 255, 0.15); }
+        .stat-card { background: linear-gradient(135deg, #fff 0%, #F5F9FF 100%); }
+        .module-card { cursor: pointer; }
+        .timeline-dot { width: 12px; height: 12px; border-radius: 50%; background: #165DFF; border: 3px solid #E8F3FF; }
+        .tag-green { background: #F6FFED; color: #52C41A; padding: 2px 8px; border-radius: 4px; font-size: 12px; }
+        .tag-orange { background: #FFF7E6; color: #FA8C16; padding: 2px 8px; border-radius: 4px; font-size: 12px; }
+        .tag-red { background: #FFF1F0; color: #FF4D4F; padding: 2px 8px; border-radius: 4px; font-size: 12px; }
+        .tag-blue { background: #E8F3FF; color: #165DFF; padding: 2px 8px; border-radius: 4px; font-size: 12px; }
+        .submenu-item { padding: 8px 16px 8px 40px; cursor: pointer; border-radius: 4px; font-size: 14px; color: #555; transition: all 0.2s; }
+        .submenu-item:hover { background: #F0F7FF; color: #165DFF; }
+    </style>
+</head>
+<body>
+    <!-- 顶部 Hero -->
+    <div class="hero-bg text-white">
+        <div class="max-w-6xl mx-auto px-8 py-12">
+            <div class="flex items-center justify-between">
+                <div>
+                    <div class="flex items-center gap-3 mb-3">
+                        <div class="w-12 h-12 bg-white/20 rounded-lg flex items-center justify-center backdrop-blur">
+                            <i class="fa fa-cube text-2xl"></i>
+                        </div>
+                        <div>
+                            <h1 class="text-2xl font-bold">创新支撑平台</h1>
+                            <p class="text-white/70 text-sm">Innovation Support System · 原型 + PRD 需求评审</p>
+                        </div>
+                    </div>
+                    <p class="text-white/80 text-sm max-w-xl">基于赣政通创新支撑平台走查记录整理的高保真原型与PRD需求说明，覆盖全部44个功能模块</p>
+                </div>
+                <div class="text-right">
+                    <div class="text-white/60 text-xs mb-1">版本</div>
+                    <div class="text-xl font-bold">v5.0</div>
+                    <div class="text-white/50 text-xs mt-1">2026-08-28</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 统计概览 -->
+    <div class="max-w-6xl mx-auto px-8 -mt-6">
+        <div class="grid grid-cols-4 gap-4">
+            <div class="stat-card rounded-lg p-4 shadow-sm card-hover">
+                <div class="text-3xl font-bold text-blue-600">44</div>
+                <div class="text-sm text-gray-500 mt-1">功能模块</div>
+            </div>
+            <div class="stat-card rounded-lg p-4 shadow-sm card-hover">
+                <div class="text-3xl font-bold text-green-600">100%</div>
+                <div class="text-sm text-gray-500 mt-1">走查覆盖</div>
+            </div>
+            <div class="stat-card rounded-lg p-4 shadow-sm card-hover">
+                <div class="text-3xl font-bold text-orange-500">7</div>
+                <div class="text-sm text-gray-500 mt-1">功能模式</div>
+            </div>
+            <div class="stat-card rounded-lg p-4 shadow-sm card-hover">
+                <div class="text-3xl font-bold text-purple-600">8</div>
+                <div class="text-sm text-gray-500 mt-1">Tab页模块</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 快速入口 -->
+    <div class="max-w-6xl mx-auto px-8 py-8">
+        <h2 class="text-lg font-bold text-gray-800 mb-4 flex items-center gap-2">
+            <i class="fa fa-rocket text-blue-600"></i>快速入口
+        </h2>
+        <div class="grid grid-cols-3 gap-4">
+            <div class="module-card bg-white rounded-lg p-5 shadow-sm card-hover border border-gray-100" onclick="goToPage('home')">
+                <div class="w-10 h-10 bg-blue-50 rounded-lg flex items-center justify-center mb-3">
+                    <i class="fa fa-home text-blue-600 text-lg"></i>
+                </div>
+                <div class="font-semibold text-gray-800">工作台首页</div>
+                <div class="text-xs text-gray-500 mt-1">概览统计 + 快捷入口</div>
+            </div>
+            <div class="module-card bg-white rounded-lg p-5 shadow-sm card-hover border border-gray-100" onclick="goToPage('user')">
+                <div class="w-10 h-10 bg-green-50 rounded-lg flex items-center justify-center mb-3">
+                    <i class="fa fa-users text-green-600 text-lg"></i>
+                </div>
+                <div class="font-semibold text-gray-800">用户管理</div>
+                <div class="text-xs text-gray-500 mt-1">8Tab结构 · 任职全生命周期</div>
+            </div>
+            <div class="module-card bg-white rounded-lg p-5 shadow-sm card-hover border border-gray-100" onclick="goToPage('title-level')">
+                <div class="w-10 h-10 bg-purple-50 rounded-lg flex items-center justify-center mb-3">
+                    <i class="fa fa-id-badge text-purple-600 text-lg"></i>
+                </div>
+                <div class="font-semibold text-gray-800">职级职称管理</div>
+                <div class="text-xs text-gray-500 mt-1">岗位/职称/职级 三Tab</div>
+            </div>
+            <div class="module-card bg-white rounded-lg p-5 shadow-sm card-hover border border-gray-100" onclick="goToPage('app-list')">
+                <div class="w-10 h-10 bg-orange-50 rounded-lg flex items-center justify-center mb-3">
+                    <i class="fa fa-th-large text-orange-500 text-lg"></i>
+                </div>
+                <div class="font-semibold text-gray-800">应用列表</div>
+                <div class="text-xs text-gray-500 mt-1">应用统计可视化</div>
+            </div>
+            <div class="module-card bg-white rounded-lg p-5 shadow-sm card-hover border border-gray-100" onclick="goToPage('role')">
+                <div class="w-10 h-10 bg-red-50 rounded-lg flex items-center justify-center mb-3">
+                    <i class="fa fa-user-circle text-red-500 text-lg"></i>
+                </div>
+                <div class="font-semibold text-gray-800">角色权限组</div>
+                <div class="text-xs text-gray-500 mt-1">授权类型动态切换</div>
+            </div>
+            <div class="module-card bg-white rounded-lg p-5 shadow-sm card-hover border border-gray-100" onclick="goToPage('menu')">
+                <div class="w-10 h-10 bg-cyan-50 rounded-lg flex items-center justify-center mb-3">
+                    <i class="fa fa-list text-cyan-600 text-lg"></i>
+                </div>
+                <div class="font-semibold text-gray-800">菜单管理</div>
+                <div class="text-xs text-gray-500 mt-1">树形结构 · 三级排序</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 更新日志 -->
+    <div class="max-w-6xl mx-auto px-8 pb-12">
+        <h2 class="text-lg font-bold text-gray-800 mb-4 flex items-center gap-2">
+            <i class="fa fa-clock-o text-blue-600"></i>v5.0 更新内容
+        </h2>
+        <div class="bg-white rounded-lg shadow-sm border border-gray-100 p-5">
+            <div class="space-y-3">
+                <div class="flex gap-3">
+                    <div class="timeline-dot mt-1.5 flex-shrink-0"></div>
+                    <div>
+                        <div class="font-medium text-gray-800">岗位管理独立Tab</div>
+                        <div class="text-sm text-gray-500">职级职称管理新增"岗位管理"Tab，支持完整CRUD + 批量删除 + 查询排序 + 查看 + 字段规则</div>
+                    </div>
+                </div>
+                <div class="flex gap-3">
+                    <div class="timeline-dot mt-1.5 flex-shrink-0"></div>
+                    <div>
+                        <div class="font-medium text-gray-800">应用统计可视化</div>
+                        <div class="text-sm text-gray-500">应用列表新增统计配置入口，新增应用统计页面（折线图/柱状图/散点图）</div>
+                    </div>
+                </div>
+                <div class="flex gap-3">
+                    <div class="timeline-dot mt-1.5 flex-shrink-0"></div>
+                    <div>
+                        <div class="font-medium text-gray-800">角色权限组授权类型切换</div>
+                        <div class="text-sm text-gray-500">关联弹窗增加"角色/角色权限组"单选切换，动态展示授权树</div>
+                    </div>
+                </div>
+                <div class="flex gap-3">
+                    <div class="timeline-dot mt-1.5 flex-shrink-0"></div>
+                    <div>
+                        <div class="font-medium text-gray-800">菜单管理三级排序</div>
+                        <div class="text-sm text-gray-500">默认排序规则：菜单类型（目录>菜单>按钮）→ 状态 → 排序号</div>
+                    </div>
+                </div>
+                <div class="flex gap-3">
+                    <div class="timeline-dot mt-1.5 flex-shrink-0"></div>
+                    <div>
+                        <div class="font-medium text-gray-800">用户管理Tab化</div>
+                        <div class="text-sm text-gray-500">8个Tab：基本信息/拓展信息/机构关联/岗位关联/职称关联/职级关联/职务关联/任职审批</div>
+                    </div>
+                </div>
+                <div class="flex gap-3">
+                    <div class="timeline-dot mt-1.5 flex-shrink-0"></div>
+                    <div>
+                        <div class="font-medium text-gray-800">机构管理Tab化</div>
+                        <div class="text-sm text-gray-500">2个Tab：基本信息、拓展信息</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function goToPage(pageKey) {
+            window.location.href = 'prototypes/innovation-support/prototype-with-prd.html?page=' + pageKey;
+        }
+    </script>
+</body>
+</html>
