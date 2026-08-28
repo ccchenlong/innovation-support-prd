@@ -1,0 +1,27 @@
+# 临时脚本文件
+temp_*.js
+fix-*.js
+enhance-*.js
+check-*.js
+check_*.js
+find-*.js
+remove-*.js
+upload_*.js
+*.py
+_check_syntax.js
+fix_reqs*.js
+fix-req*.js
+fix_*.py
+mod*.py
+monitor_update.py
+read_prd_template.py
+test_*.js
+
+# Node modules
+node_modules/
+
+# 临时文件
+*.tmp
+*.log
+.DS_Store
+Thumbs.db

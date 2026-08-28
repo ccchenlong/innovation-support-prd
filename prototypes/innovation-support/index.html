@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>创新支撑系统 - 原型+PRD需求评审</title>
+    <script src="https://cdn.tailwindcss.com/3.4.16"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css">
+    <style>
+        body { font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif; background: #F5F7FA; margin: 0; }
+        .hero-bg { background: linear-gradient(135deg, #165DFF 0%, #0E42D2 50%, #002C99 100%); }
+        .card-hover { transition: all 0.3s ease; }
+        .card-hover:hover { transform: translateY(-4px); box-shadow: 0 8px 24px rgba(22, 93, 255, 0.15); }
+        .stat-card { background: linear-gradient(135deg, #fff 0%, #F5F9FF 100%); }
+        .module-card { cursor: pointer; }
+        .timeline-dot { width: 12px; height: 12px; border-radius: 50%; background: #165DFF; border: 3px solid #E8F3FF; }
+        .tag-green { background: #F6FFED; color: #52C41A; padding: 2px 8px; border-radius: 4px; font-size: 12px; }
+        .tag-orange { background: #FFF7E6; color: #FA8C16; padding: 2px 8px; border-radius: 4px; font-size: 12px; }
+        .tag-red { background: #FFF1F0; color: #FF4D4F; padding: 2px 8px; border-radius: 4px; font-size: 12px; }
+        .tag-blue { background: #E8F3FF; color: #165DFF; padding: 2px 8px; border-radius: 4px; font-size: 12px; }
+        .submenu-item { padding: 8px 16px 8px 40px; cursor: pointer; border-radius: 4px; font-size: 14px; color: #555; transition: all 0.2s; }
+        .submenu-item:hover { background: #F0F7FF; color: #165DFF; }
+    </style>
+</head>
+<body>
+    <!-- 顶部 Hero -->
+    <div class="hero-bg text-white">
+        <div class="max-w-6xl mx-auto px-8 py-12">
+            <div class="flex items-center justify-between">
+                <div>
+                    <div class="text-sm opacity-80 mb-2"><i class="fa fa-cube"></i> 赣政通创新支撑平台</div>
+                    <h1 class="text-3xl font-bold mb-2">原型 + PRD 需求评审</h1>
+                    <p class="text-base opacity-90">基于验收走查结果的功能优化 · 105项功能点全覆盖</p>
+                </div>
+                <div class="text-right">
+                    <div class="text-sm opacity-80 mb-1">当前版本</div>
+                    <div class="text-2xl font-bold">v1.1.0</div>
+                    <div class="text-xs opacity-70 mt-1">2026-08-27 更新</div>
+                </div>
+            </div>
+            <!-- 统计卡片 -->
+            <div class="grid grid-cols-5 gap-4 mt-8">
+                <div class="stat-card rounded-lg p-4 text-center">
+                    <div class="text-2xl font-bold" style="color:#165DFF;">105</div>
+                    <div class="text-xs text-gray-500 mt-1">走查功能点</div>
+                </div>
+                <div class="stat-card rounded-lg p-4 text-center">
+                    <div class="text-2xl font-bold" style="color:#52C41A;">72</div>
+                    <div class="text-xs text-gray-500 mt-1">符合</div>
+                </div>
+                <div class="stat-card rounded-lg p-4 text-center">
+                    <div class="text-2xl font-bold" style="color:#FF4D4F;">2</div>
+                    <div class="text-xs text-gray-500 mt-1">不符合</div>
+                </div>
+                <div class="stat-card rounded-lg p-4 text-center">
+                    <div class="text-2xl font-bold" style="color:#FA8C16;">31</div>
+                    <div class="text-xs text-gray-500 mt-1">部分符合</div>
+                </div>
+                <div class="stat-card rounded-lg p-4 text-center">
+                    <div class="text-2xl font-bold" style="color:#13C2C2;">22</div>
+                    <div class="text-xs text-gray-500 mt-1">功能页面</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="max-w-6xl mx-auto px-8 py-8">
+        <div class="grid grid-cols-3 gap-6">
+            <!-- 左侧：导航目录 -->
+            <div class="col-span-1">
+                <div class="bg-white rounded-lg shadow-sm p-4 sticky" style="top: 20px;">
+                    <h3 class="text-base font-bold text-gray-800 mb-3 flex items-center">
+                        <i class="fa fa-list-ul" style="color:#165DFF;margin-right:8px;"></i>功能导航
+                    </h3>
+                    <div style="max-height: 500px; overflow-y: auto;">
+                        <!-- 概览 -->
+                        <div class="submenu-item" onclick="goTo('overview')">
+                            <i class="fa fa-home" style="width:18px;color:#999;"></i> 概览总览
+                        </div>
+                        <!-- 标签管理 -->
+                        <div class="mt-2 mb-1 px-4 text-xs text-gray-400 font-medium">标签管理</div>
+                        <div class="submenu-item" onclick="goTo('tags-manage')">
+                            <i class="fa fa-tags" style="width:18px;color:#999;"></i> 分类标签管理
+                        </div>
+                        <!-- 工单中心 -->
+                        <div class="mt-3 mb-1 px-4 text-xs text-gray-400 font-medium">工单中心</div>
+                        <div class="submenu-item" onclick="goTo('ticket-sort')">
+                            <i class="fa fa-sort" style="width:18px;color:#999;"></i> 工单排序
+                        </div>
+                        <div class="submenu-item" onclick="goTo('ticket-flow')">
+                            <i class="fa fa-sitemap" style="width:18px;color:#999;"></i> 工单流程配置管理
+                        </div>
+                        <div class="submenu-item" onclick="goTo('ticket-cc')">
+                            <i class="fa fa-paper-plane" style="width:18px;color:#999;"></i> 工单抄送管理
+                        </div>
+                        <!-- 开放门户 -->
+                        <div class="mt-3 mb-1 px-4 text-xs text-gray-400 font-medium">开放门户管理</div>
+                        <div class="submenu-item" onclick="goTo('notice')">
+                            <i class="fa fa-bullhorn" style="width:18px;color:#999;"></i> 通知公告管理
+                        </div>
+                        <!-- 软件服务商 -->
+                        <div class="mt-3 mb-1 px-4 text-xs text-gray-400 font-medium">软件服务商工作台</div>
+                        <div class="submenu-item" onclick="goTo('provider')">
+                            <i class="fa fa-building" style="width:18px;color:#999;"></i> 软件服务商管理
+                            <span class="tag-red" style="float:right;font-size:10px;">不符合</span>
+                        </div>
+                        <!-- 权限管理 -->
+                        <div class="mt-3 mb-1 px-4 text-xs text-gray-400 font-medium">权限管理</div>
+                        <div class="submenu-item" onclick="goTo('role')">
+                            <i class="fa fa-user-circle" style="width:18px;color:#999;"></i> 角色管理
+                        </div>
+                        <div class="submenu-item" onclick="goTo('perm-group')">
+                            <i class="fa fa-users" style="width:18px;color:#999;"></i> 权限组管理
+                            <span class="tag-red" style="float:right;font-size:10px;">不符合</span>
+                        </div>
+                        <div class="submenu-item" onclick="goTo('admin-auth')">
+                            <i class="fa fa-shield" style="width:18px;color:#999;"></i> 管理员授权
+                            <span class="tag-orange" style="float:right;font-size:10px;">架构变更</span>
+                        </div>
+                        <div class="submenu-item" onclick="goTo('role-perm')">
+                            <i class="fa fa-link" style="width:18px;color:#999;"></i> 角色权限组关联
+                        </div>
+                        <div class="submenu-item" onclick="goTo('menu')">
+                            <i class="fa fa-list" style="width:18px;color:#999;"></i> 菜单管理
+                        </div>
+                        <!-- 组织机构 -->
+                        <div class="mt-3 mb-1 px-4 text-xs text-gray-400 font-medium">组织机构管理</div>
+                        <div class="submenu-item" onclick="goTo('org')">
+                            <i class="fa fa-sitemap" style="width:18px;color:#999;"></i> 机构管理
+                        </div>
+                        <div class="submenu-item" onclick="goTo('user')">
+                            <i class="fa fa-user" style="width:18px;color:#999;"></i> 用户管理
+                        </div>
+                        <div class="submenu-item" onclick="goTo('title-level')">
+                            <i class="fa fa-graduation-cap" style="width:18px;color:#999;"></i> 职级职称管理
+                        </div>
+                        <div class="submenu-item" onclick="goTo('ext-field')">
+                            <i class="fa fa-th-list" style="width:18px;color:#999;"></i> 拓展字段管理
+                        </div>
+                        <div class="submenu-item" onclick="goTo('transfer')">
+                            <i class="fa fa-exchange" style="width:18px;color:#999;"></i> 用户任职调离管理
+                            <span class="tag-orange" style="float:right;font-size:10px;">需求变动</span>
+                        </div>
+                        <div class="submenu-item" onclick="goTo('contact-visibility')">
+                            <i class="fa fa-eye" style="width:18px;color:#999;"></i> 通讯录可见性管理
+                        </div>
+                        <div class="submenu-item" onclick="goTo('line')">
+                            <i class="fa fa-code-fork" style="width:18px;color:#999;"></i> 机构条线管理
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 变更模式图例 -->
+                <div class="bg-white rounded-lg shadow-sm p-4 mt-4">
+                    <h3 class="text-base font-bold text-gray-800 mb-3 flex items-center">
+                        <i class="fa fa-info-circle" style="color:#165DFF;margin-right:8px;"></i>变更模式说明
+                    </h3>
+                    <div class="space-y-2 text-sm">
+                        <div class="flex items-center gap-2">
+                            <span class="tag-blue">模式A</span>
+                            <span class="text-gray-600">查询字段排序能力补齐</span>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <span class="tag-green">模式B</span>
+                            <span class="text-gray-600">批量删除能力补齐</span>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <span class="tag-orange">模式C</span>
+                            <span class="text-gray-600">赣政通管理员体系统一</span>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <span class="tag-blue" style="background:#E6FFFB;color:#13C2C2;">模式D</span>
+                            <span class="text-gray-600">工单节点自动匹配层级</span>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <span class="tag-orange" style="background:#FFF0E6;color:#FA8C16;">模式E</span>
+                            <span class="text-gray-600">调离审批自动通过</span>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <span class="tag-green" style="background:#F9F0FF;color:#722ED1;">模式F</span>
+                            <span class="text-gray-600">多Excel文件批量导入</span>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <span class="tag-blue" style="background:#F6FFED;color:#52C41A;">模式G</span>
+                            <span class="text-gray-600">拓展信息管理</span>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <span class="tag-red" style="background:#E8F3FF;color:#165DFF;">模式H</span>
+                            <span class="text-gray-600">默认标签 + 页面合并</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 右侧：更新记录 + 快速入口 -->
+            <div class="col-span-2 space-y-6">
+                <!-- 更新记录 -->
+                <div class="bg-white rounded-lg shadow-sm p-6">
+                    <h2 class="text-lg font-bold text-gray-800 mb-4 flex items-center">
+                        <i class="fa fa-clock-o" style="color:#165DFF;margin-right:8px;"></i>版本更新记录
+                    </h2>
+                    <div class="relative pl-6">
+                        <div class="absolute left-1 top-2 bottom-2" style="width:2px;background:#E8F3FF;"></div>
+                        <!-- v1.1.0 -->
+                        <div class="relative mb-6">
+                            <div class="timeline-dot absolute -left-5 top-1" style="background:#165DFF;"></div>
+                            <div class="flex items-center gap-2 mb-2">
+                                <span class="font-bold text-gray-800">v1.1.0</span>
+                                <span class="text-xs text-gray-400">2026-08-27</span>
+                                <span class="tag-blue" style="background:#E6F7FF;color:#1890FF;border-color:#91D5FF;">最新更新</span>
+                            </div>
+                            <ul class="text-sm text-gray-600 space-y-1 list-disc pl-5">
+                                <li>工作台模板管理：拆分为基本信息/模板配置双Tab，各支持CRUD、批量删除、字段排序（新增4项功能点）</li>
+                                <li>用户任职调离管理：拆分为调离记录/调离审批配置双Tab，调离审批配置新增7项功能</li>
+                                <li>标签管理-分类管理：系统标签仅可编辑不可删除（隐藏删除按钮）</li>
+                                <li>标签管理-分组管理：detail列表增加查询字段排序功能</li>
+                                <li>全页面分页统一：增加总数、每页条数选择、前往指定页功能</li>
+                                <li>机构选择器：增加Hover显示机构全路径，解决同名机构区分问题</li>
+                                <li>补充测试数据：模板管理12+15条、调离管理12条，覆盖更多业务场景</li>
+                                <li>功能点总数：92 → 105项，符合率提升至68.6%</li>
+                            </ul>
+                        </div>
+                        <!-- v1.0.0 -->
+                        <div class="relative mb-6">
+                            <div class="timeline-dot absolute -left-5 top-1"></div>
+                            <div class="flex items-center gap-2 mb-2">
+                                <span class="font-bold text-gray-800">v1.0.0</span>
+                                <span class="text-xs text-gray-400">2025-08-24</span>
+                                <span class="tag-blue">正式版本</span>
+                            </div>
+                            <ul class="text-sm text-gray-600 space-y-1 list-disc pl-5">
+                                <li>基于验收走查结果完成92项功能点的原型设计与PRD编写</li>
+                                <li>完成8大变更模式的功能实现：查询排序、批量删除、管理员体系统一、工单节点自动匹配、调离自动审核、多文件导入、拓展信息、默认标签</li>
+                                <li>组织机构管理模块：机构管理(4项)、用户管理(17项)、职级职称(4项)、拓展字段(1项)、调离管理(15项)、可见性(4项)、条线管理(11项)</li>
+                                <li>权限管理模块：角色管理、权限组管理(不符合项已修复)、管理员授权(6Tab)、角色权限组关联、菜单管理</li>
+                                <li>工单中心：工单排序(新增)、流程配置(节点自动匹配层级)、抄送管理(规则自动匹配层级)</li>
+                                <li>标签管理：软件服务商+工作台模板标签合并为统一页面，增加默认标签功能</li>
+                                <li>软件服务商：帐号关联查询排序功能(不符合项已修复)</li>
+                                <li>通知公告：增加查询字段排序功能</li>
+                                <li>原型+PRD对照页上线，支持左右对照、页面联动切换</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 模块快速入口 -->
+                <div class="bg-white rounded-lg shadow-sm p-6">
+                    <h2 class="text-lg font-bold text-gray-800 mb-4 flex items-center">
+                        <i class="fa fa-th-large" style="color:#165DFF;margin-right:8px;"></i>模块快速入口
+                    </h2>
+                    <div class="grid grid-cols-3 gap-4">
+                        <div class="module-card card-hover border rounded-lg p-4 text-center" onclick="goTo('user')">
+                            <div class="w-12 h-12 mx-auto mb-2 rounded-full flex items-center justify-center" style="background:#E8F3FF;">
+                                <i class="fa fa-user text-xl" style="color:#165DFF;"></i>
+                            </div>
+                            <div class="font-medium text-sm text-gray-800">用户管理</div>
+                            <div class="text-xs text-gray-400 mt-1">17项功能点 · 8个Tab</div>
+                        </div>
+                        <div class="module-card card-hover border rounded-lg p-4 text-center" onclick="goTo('org')">
+                            <div class="w-12 h-12 mx-auto mb-2 rounded-full flex items-center justify-center" style="background:#F6FFED;">
+                                <i class="fa fa-sitemap text-xl" style="color:#52C41A;"></i>
+                            </div>
+                            <div class="font-medium text-sm text-gray-800">机构管理</div>
+                            <div class="text-xs text-gray-400 mt-1">4项功能点 · 拓展信息</div>
+                        </div>
+                        <div class="module-card card-hover border rounded-lg p-4 text-center" onclick="goTo('admin-auth')">
+                            <div class="w-12 h-12 mx-auto mb-2 rounded-full flex items-center justify-center" style="background:#FFF7E6;">
+                                <i class="fa fa-shield text-xl" style="color:#FA8C16;"></i>
+                            </div>
+                            <div class="font-medium text-sm text-gray-800">管理员授权</div>
+                            <div class="text-xs text-gray-400 mt-1">6个Tab · 架构变更</div>
+                        </div>
+                        <div class="module-card card-hover border rounded-lg p-4 text-center" onclick="goTo('ticket-flow')">
+                            <div class="w-12 h-12 mx-auto mb-2 rounded-full flex items-center justify-center" style="background:#E6FFFB;">
+                                <i class="fa fa-sitemap text-xl" style="color:#13C2C2;"></i>
+                            </div>
+                            <div class="font-medium text-sm text-gray-800">工单流程配置</div>
+                            <div class="text-xs text-gray-400 mt-1">节点匹配层级</div>
+                        </div>
+                        <div class="module-card card-hover border rounded-lg p-4 text-center" onclick="goTo('transfer')">
+                            <div class="w-12 h-12 mx-auto mb-2 rounded-full flex items-center justify-center" style="background:#FFF0E6;">
+                                <i class="fa fa-exchange text-xl" style="color:#FA8C16;"></i>
+                            </div>
+                            <div class="font-medium text-sm text-gray-800">任职调离管理</div>
+                            <div class="text-xs text-gray-400 mt-1">自动审核通过</div>
+                        </div>
+                        <div class="module-card card-hover border rounded-lg p-4 text-center" onclick="goTo('line')">
+                            <div class="w-12 h-12 mx-auto mb-2 rounded-full flex items-center justify-center" style="background:#F9F0FF;">
+                                <i class="fa fa-code-fork text-xl" style="color:#722ED1;"></i>
+                            </div>
+                            <div class="font-medium text-sm text-gray-800">机构条线管理</div>
+                            <div class="text-xs text-gray-400 mt-1">11项功能点</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 使用说明 -->
+                <div class="bg-white rounded-lg shadow-sm p-6">
+                    <h2 class="text-lg font-bold text-gray-800 mb-4 flex items-center">
+                        <i class="fa fa-book" style="color:#165DFF;margin-right:8px;"></i>使用说明
+                    </h2>
+                    <div class="grid grid-cols-2 gap-4 text-sm text-gray-600">
+                        <div>
+                            <div class="font-medium text-gray-800 mb-2"><i class="fa fa-desktop text-blue-500 mr-2"></i>页面布局</div>
+                            <p>左侧为交互原型区，可操作所有功能（新增、编辑、删除、排序、批量操作、弹窗等）；右侧为PRD需求说明区，含功能背景、目标用户、核心功能、业务流程、页面结构、交互逻辑、验收标准。</p>
+                        </div>
+                        <div>
+                            <div class="font-medium text-gray-800 mb-2"><i class="fa fa-link text-blue-500 mr-2"></i>联动切换</div>
+                            <p>左侧原型切换页面时，右侧PRD自动同步更新；也可通过右侧页面选择器手动切换，左侧原型同步跳转。</p>
+                        </div>
+                        <div>
+                            <div class="font-medium text-gray-800 mb-2"><i class="fa fa-check-circle text-green-500 mr-2"></i>验收参考</div>
+                            <p>每个页面的PRD说明中都包含"功能背景"章节，列出了该页面对应的走查功能点编号、名称、走查状态及原型实现方式，可直接对照验收。</p>
+                        </div>
+                        <div>
+                            <div class="font-medium text-gray-800 mb-2"><i class="fa fa-chevron-right text-blue-500 mr-2"></i>快速开始</div>
+                            <p>点击左侧导航或上方模块卡片直接进入对应页面的对照视图，开始需求评审和开发参考。</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 页脚 -->
+        <div class="text-center text-xs text-gray-400 mt-8 pb-4">
+            <p>赣政通创新支撑平台 · 原型+PRD需求评审文档 · v1.1.0</p>
+            <p class="mt-1">© 2025 云上（江西）大数据发展有限公司</p>
+        </div>
+    </div>
+
+    <script>
+        function goTo(pageKey) {
+            window.location.href = 'prototype-with-prd.html?page=' + pageKey;
+        }
+    </script>
+</body>
+</html>
