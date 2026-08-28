@@ -1189,6 +1189,13 @@ var pageConfigs = {
                 { id: 5, name: '南昌市人民政府', code: 'GOV-NC', orgPath: '江西省人民政府/南昌市人民政府', type: '市级', sort: 2, status: true, children: [] },
             ]},
         ],
+        data: [
+            { id: 1, name: '江西省人民政府', code: 'GOV-JX', orgPath: '江西省人民政府', type: '省级', sort: 1, status: true },
+            { id: 2, name: '赣州市人民政府', code: 'GOV-GZ', orgPath: '江西省人民政府/赣州市人民政府', type: '市级', sort: 1, status: true },
+            { id: 3, name: '于都县人民政府', code: 'GOV-YD', orgPath: '江西省人民政府/赣州市人民政府/于都县人民政府', type: '县级', sort: 1, status: true },
+            { id: 4, name: '信丰县人民政府', code: 'GOV-XF', orgPath: '江西省人民政府/赣州市人民政府/信丰县人民政府', type: '县级', sort: 2, status: true },
+            { id: 5, name: '南昌市人民政府', code: 'GOV-NC', orgPath: '江西省人民政府/南昌市人民政府', type: '市级', sort: 2, status: true },
+        ],
         drawerTabs: [
             { key: 'basic', label: '基本信息' },
             { key: 'extend', label: '拓展信息' },
@@ -1222,7 +1229,7 @@ var pageConfigs = {
             { key: 'account', label: '用户账号', type: 'input', placeholder: '请输入账号' },
             { key: 'status', label: '状态', type: 'select', placeholder: '请选择', options: [{ value: '', label: '全部' }, { value: 'true', label: '启用' }, { value: 'false', label: '停用' }] },
         ],
-        toolbar: [{ type: 'batchDelete' }, { type: 'import' }],
+        toolbar: [{ type: 'add', text: '新增用户' }, { type: 'batchDelete' }, { type: 'import' }],
         columns: [
             { type: 'checkbox' },
             { type: 'index', title: '序号' },
@@ -2916,6 +2923,8 @@ function switchTab(pageKey, tabKey) {
  * ============================================================ */
 
 var currentDrawerTab = {};
+var currentDrawerUserId = null;
+var currentDrawerOrgId = null;
 
 /** 打开用户详情抽屉 */
 function openUserDrawer(userId) {
@@ -2929,6 +2938,7 @@ function openUserDrawer(userId) {
     var tabs = config.drawerTabs || [];
     var firstTab = tabs[0] ? tabs[0].key : 'basic';
     currentDrawerTab['user'] = firstTab;
+    currentDrawerUserId = userId;
 
     var title = '<i class="fa fa-user-circle" style="color:#165DFF;"></i> 用户详情 - ' + user.name;
     var bodyHtml = renderUserDrawerBody(user, firstTab);
@@ -2959,15 +2969,11 @@ function renderUserDrawerBody(user, activeTab) {
 /** 切换用户抽屉Tab */
 function switchUserDrawerTab(tabKey) {
     var config = pageConfigs['user'];
+    var userId = currentDrawerUserId;
     var user = null;
-    // 从当前选中或第一条数据获取
-    var userId = state.selectedRows['user'] && state.selectedRows['user'].size > 0
-        ? Array.from(state.selectedRows['user'])[0]
-        : (config.data[0] ? config.data[0].id : null);
     for (var i = 0; i < config.data.length; i++) {
         if (config.data[i].id === userId) { user = config.data[i]; break; }
     }
-    if (!user && config.data[0]) user = config.data[0];
     if (!user) return;
 
     currentDrawerTab['user'] = tabKey;
@@ -3084,26 +3090,18 @@ function renderOrgDrawerPage(pageKey) {
     html += renderOrgTreeNodes(config.treeData || [], 0);
     html += '</div>';
     html += '</div>';
-    // 右侧表格
-    html += '<div style="flex:1;padding:16px;overflow-y:auto;">';
+    // 右侧：查询区 + 工具栏 + 表格 + 分页（用通用渲染）
+    html += '<div style="flex:1;display:flex;flex-direction:column;overflow:hidden;">';
+    html += '<div id="orgRightContent_' + pageKey + '" style="flex:1;overflow-y:auto;padding:16px;">';
+    // 查询区
     html += renderQueryArea(pageKey, config);
+    // 工具栏
     html += renderToolbar(pageKey, config);
-    html += '<div id="tableContainer_' + pageKey + '" style="border:1px solid #E8E8E8;border-radius:4px;overflow:hidden;">';
-    html += '<table class="data-table" style="margin:0;"><thead><tr>';
-    var cols = config.columns || [];
-    for (var c = 0; c < cols.length; c++) {
-        var col = cols[c];
-        if (col.type === 'checkbox') {
-            html += '<th style="width:40px;"><input type="checkbox" onclick="toggleAllCheckboxes(this)" /></th>';
-        } else if (col.type === 'actions') {
-            html += '<th style="width:200px;">' + (col.title || '操作') + '</th>';
-        } else {
-            html += '<th>' + (col.title || col.key) + '</th>';
-        }
-    }
-    html += '</tr></thead><tbody>';
-    html += '<tr><td colspan="' + cols.length + '" style="text-align:center;color:var(--text-tertiary);padding:30px;">请选择左侧机构节点</td></tr>';
-    html += '</tbody></table>';
+    // 表格容器
+    html += '<div id="tableContainer_' + pageKey + '" style="border:1px solid #E8E8E8;border-radius:4px;overflow:hidden;"></div>';
+    // 分页
+    var flatData = flattenOrgTree(config.treeData || []);
+    html += renderPagination(pageKey, flatData.length);
     html += '</div>';
     html += '</div>';
     html += '</div></div>';
@@ -3150,9 +3148,8 @@ function selectOrgNode(orgId, el) {
 
 /** 渲染机构抽屉表格 */
 function renderOrgDrawerTable(pageKey) {
-    var config = pageConfigs[pageKey];
-    var data = flattenOrgTree(config.treeData || []);
-    renderTable('tableContainer_' + pageKey, config.columns, data, pageKey);
+    var data = getPageData(pageKey);
+    renderTable('tableContainer_' + pageKey, pageConfigs[pageKey].columns, data, pageKey);
 }
 
 /** 扁平化为表格数据 */
@@ -3182,6 +3179,7 @@ function openOrgDrawer(orgId) {
     var tabs = config.drawerTabs || [];
     var firstTab = tabs[0] ? tabs[0].key : 'basic';
     currentDrawerTab['org'] = firstTab;
+    currentDrawerOrgId = orgId;
 
     var title = '<i class="fa fa-sitemap" style="color:#165DFF;"></i> 机构详情 - ' + org.name;
     var bodyHtml = renderOrgDrawerBody(org, firstTab);
@@ -3212,8 +3210,11 @@ function renderOrgDrawerBody(org, activeTab) {
 /** 切换机构抽屉Tab */
 function switchOrgDrawerTab(tabKey) {
     var config = pageConfigs['org'];
-    var allOrgs = flattenOrgTree(config.treeData || []);
-    var org = allOrgs[0] || null;
+    var allOrgs = config.data || flattenOrgTree(config.treeData || []);
+    var org = null;
+    for (var i = 0; i < allOrgs.length; i++) {
+        if (allOrgs[i].id === currentDrawerOrgId) { org = allOrgs[i]; break; }
+    }
     if (!org) return;
 
     currentDrawerTab['org'] = tabKey;
@@ -6112,6 +6113,7 @@ function handleAction(actionKey, pageKey, rowId) {
     switch (actionKey) {
         case 'edit': openEditModal(pageKey, rowId); break;
         case 'delete': openDeleteConfirm(pageKey, rowId); break;
+        case 'addChild': showToast('新增子机构', 'info'); break;
         case 'view':
             if (pageKey === 'user') { openUserDrawer(rowId); break; }
             if (pageKey === 'org') { openOrgDrawer(rowId); break; }
