@@ -97,6 +97,41 @@
         .modal-body { padding: 24px; overflow-y: auto; }
         .modal-footer { padding: 12px 24px; border-top: 1px solid #F0F0F0; display: flex; justify-content: flex-end; gap: 8px; flex-shrink: 0; }
 
+        /* 右侧抽屉 Drawer */
+        .drawer-mask { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.45); z-index: 1000; display: none; }
+        .drawer-mask.show { display: block; }
+        .drawer { position: fixed; top: 0; right: 0; bottom: 0; width: 720px; background: #fff; box-shadow: -4px 0 16px rgba(0,0,0,0.08); display: flex; flex-direction: column; transform: translateX(100%); transition: transform 0.3s ease; z-index: 1001; }
+        .drawer.show { transform: translateX(0); }
+        .drawer-header { padding: 16px 24px; border-bottom: 1px solid #F0F0F0; display: flex; justify-content: space-between; align-items: center; flex-shrink: 0; }
+        .drawer-title { font-size: 16px; font-weight: 600; color: #1D2129; display: flex; align-items: center; gap: 8px; }
+        .drawer-close { width: 28px; height: 28px; display: flex; align-items: center; justify-content: center; border-radius: 4px; cursor: pointer; color: #86909C; transition: all 0.2s; }
+        .drawer-close:hover { background: #F2F3F5; color: #1D2129; }
+        .drawer-body { flex: 1; overflow-y: auto; padding: 0; }
+        .drawer-footer { padding: 12px 24px; border-top: 1px solid #F0F0F0; display: flex; justify-content: flex-end; gap: 8px; flex-shrink: 0; background: #fff; }
+
+        /* 抽屉内Tab */
+        .drawer-tabs { display: flex; border-bottom: 1px solid #E5E6EB; padding: 0 24px; background: #FAFBFC; flex-shrink: 0; }
+        .drawer-tab-item { padding: 12px 20px; font-size: 13px; color: #4E5969; cursor: pointer; position: relative; transition: all 0.2s; font-weight: 500; }
+        .drawer-tab-item:hover { color: #165DFF; }
+        .drawer-tab-item.active { color: #165DFF; font-weight: 600; }
+        .drawer-tab-item.active::after { content: ''; position: absolute; bottom: -1px; left: 0; right: 0; height: 2px; background: #165DFF; border-radius: 1px; }
+        .drawer-tab-content { padding: 20px 24px; }
+
+        /* 抽屉内信息展示 */
+        .drawer-info-section { margin-bottom: 20px; }
+        .drawer-section-title { font-size: 14px; font-weight: 600; color: #1D2129; margin-bottom: 12px; padding-left: 8px; border-left: 3px solid #165DFF; line-height: 1; }
+        .drawer-info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px 20px; }
+        .drawer-info-item { display: flex; flex-direction: column; gap: 4px; }
+        .drawer-info-label { font-size: 12px; color: #86909C; }
+        .drawer-info-value { font-size: 13px; color: #1D2129; }
+        .drawer-info-item.full { grid-column: 1 / -1; }
+
+        /* 抽屉内子表格 */
+        .drawer-sub-table { width: 100%; border-collapse: collapse; font-size: 12px; }
+        .drawer-sub-table thead th { background: #F7F8FA; color: #4E5969; font-weight: 500; padding: 8px 12px; text-align: left; border-bottom: 1px solid #E5E6EB; }
+        .drawer-sub-table tbody td { padding: 8px 12px; border-bottom: 1px solid #F2F3F5; color: #1D2129; }
+        .drawer-sub-table tbody tr:hover { background: #F7F8FA; }
+
         /* Toast */
         .toast-container { position: fixed; top: 70px; right: 24px; z-index: 2000; display: flex; flex-direction: column; gap: 8px; }
         .toast { padding: 12px 16px; border-radius: 4px; color: #fff; font-size: 13px; min-width: 200px; animation: slideIn 0.3s ease; display: flex; align-items: center; gap: 8px; }
@@ -531,7 +566,8 @@ var navConfig = [
             { key: 'app-apply', label: '应用申请', type: 'page' },
             { key: 'app-audit', label: '应用审核', type: 'page' },
             { key: 'app-list', label: '应用列表', type: 'page' },
-            
+            { key: 'app-monitor', label: '应用监测', type: 'page' },
+            { key: 'app-statistics', label: '应用统计', type: 'page' },
         ]
     },
     {
@@ -968,29 +1004,121 @@ var pageConfigs = {
         },
     },
 
-    /* ---------- 角色权限组关联 ---------- */
+    /* ---------- 角色权限组关联（授权类型切换+主从布局） ---------- */
     'role-perm': {
+        type: 'role-perm-config',
         breadcrumb: ['权限管理', '授权管理', '角色权限组关联'],
-        query: [
-            { key: 'roleName', label: '角色名称', type: 'input', placeholder: '请输入角色名称' },
-            { key: 'groupName', label: '权限组名称', type: 'input', placeholder: '请输入权限组名称' },
+        // 授权类型：role / roleGroup
+        authTypes: [
+            { key: 'role', label: '角色' },
+            { key: 'roleGroup', label: '角色权限组' },
         ],
-        toolbar: [{ type: 'add', text: '新增关联' }, { type: 'batchDelete' }],
-        columns: [
-            { type: 'checkbox' },
-            { type: 'index', title: '序号' },
-            { key: 'roleName', title: '角色名称', sortable: true },
-            { key: 'groupName', title: '权限组名称' },
-            { key: 'linkTime', title: '关联时间', sortable: true },
-            { type: 'actions', title: '操作', actions: [{ key: 'delete', label: '删除', danger: true }] },
+        // 角色列表
+        roleList: [
+            { id: 1, name: '超级管理员', code: 'SUPER_ADMIN', desc: '系统最高权限角色', status: true },
+            { id: 2, name: '平台管理员', code: 'PLATFORM_ADMIN', desc: '平台管理权限角色', status: true },
+            { id: 3, name: '分级管理员', code: 'GRADED_ADMIN', desc: '分级管理权限角色', status: true },
+            { id: 4, name: '工单管理员', code: 'TICKET_ADMIN', desc: '工单管理权限角色', status: true },
+            { id: 5, name: '标签管理员', code: 'TAG_ADMIN', desc: '标签管理权限角色', status: true },
+            { id: 6, name: '普通用户', code: 'NORMAL_USER', desc: '普通用户角色', status: true },
         ],
-        data: [
-            { id: 1, roleName: '超级管理员', groupName: '系统设置权限组', linkTime: '2025-01-01 10:30:00' },
-            { id: 2, roleName: '平台管理员', groupName: '标签管理权限组', linkTime: '2025-01-02 14:00:00' },
-            { id: 3, roleName: '平台管理员', groupName: '工单管理权限组', linkTime: '2025-01-03 09:15:00' },
-            { id: 4, roleName: '分级管理员', groupName: '组织机构权限组', linkTime: '2025-01-05 16:45:00' },
-            { id: 5, roleName: '工单管理员', groupName: '工单管理权限组', linkTime: '2025-01-08 11:10:00' },
+        // 角色权限组列表
+        roleGroupList: [
+            { id: 1, name: '系统设置权限组', code: 'PERM_SYSTEM', desc: '系统设置相关权限', status: true },
+            { id: 2, name: '标签管理权限组', code: 'PERM_TAG', desc: '标签管理相关权限', status: true },
+            { id: 3, name: '工单管理权限组', code: 'PERM_TICKET', desc: '工单管理相关权限', status: true },
+            { id: 4, name: '门户管理权限组', code: 'PERM_PORTAL', desc: '门户管理相关权限', status: true },
+            { id: 5, name: '组织机构权限组', code: 'PERM_ORG', desc: '组织机构相关权限', status: true },
         ],
+        // 权限树（菜单+按钮）
+        permissionTree: [
+            { id: 1, name: '概览总览', icon: 'fa-dashboard', type: 'menu', children: [
+                { id: 101, name: '查看首页', type: 'button', children: [] },
+            ]},
+            { id: 2, name: '标签管理', icon: 'fa-tags', type: 'menu', children: [
+                { id: 201, name: '分类管理', type: 'menu', children: [
+                    { id: 20101, name: '新增分类', type: 'button', children: [] },
+                    { id: 20102, name: '编辑分类', type: 'button', children: [] },
+                    { id: 20103, name: '删除分类', type: 'button', children: [] },
+                ]},
+                { id: 202, name: '分组管理', type: 'menu', children: [
+                    { id: 20201, name: '新增分组', type: 'button', children: [] },
+                    { id: 20202, name: '编辑分组', type: 'button', children: [] },
+                    { id: 20203, name: '删除分组', type: 'button', children: [] },
+                ]},
+            ]},
+            { id: 3, name: '工单中心', icon: 'fa-ticket', type: 'menu', children: [
+                { id: 301, name: '工单排序', type: 'menu', children: [
+                    { id: 30101, name: '上移', type: 'button', children: [] },
+                    { id: 30102, name: '下移', type: 'button', children: [] },
+                ]},
+                { id: 302, name: '工单类型管理', type: 'menu', children: [
+                    { id: 30201, name: '新增类型', type: 'button', children: [] },
+                    { id: 30202, name: '编辑类型', type: 'button', children: [] },
+                    { id: 30203, name: '删除类型', type: 'button', children: [] },
+                ]},
+            ]},
+            { id: 4, name: '应用管理', icon: 'fa-th-large', type: 'menu', children: [
+                { id: 401, name: '应用申请', type: 'menu', children: [
+                    { id: 40101, name: '提交申请', type: 'button', children: [] },
+                    { id: 40102, name: '撤销申请', type: 'button', children: [] },
+                ]},
+                { id: 402, name: '应用审核', type: 'menu', children: [
+                    { id: 40201, name: '通过', type: 'button', children: [] },
+                    { id: 40202, name: '驳回', type: 'button', children: [] },
+                ]},
+                { id: 403, name: '应用列表', type: 'menu', children: [
+                    { id: 40301, name: '批量删除', type: 'button', children: [] },
+                    { id: 40302, name: '监测配置', type: 'button', children: [] },
+                    { id: 40303, name: '统计配置', type: 'button', children: [] },
+                ]},
+            ]},
+            { id: 5, name: '组织机构管理', icon: 'fa-sitemap', type: 'menu', children: [
+                { id: 501, name: '机构管理', type: 'menu', children: [
+                    { id: 50101, name: '新增机构', type: 'button', children: [] },
+                    { id: 50102, name: '编辑机构', type: 'button', children: [] },
+                    { id: 50103, name: '删除机构', type: 'button', children: [] },
+                ]},
+                { id: 502, name: '用户管理', type: 'menu', children: [
+                    { id: 50201, name: '新增用户', type: 'button', children: [] },
+                    { id: 50202, name: '编辑用户', type: 'button', children: [] },
+                    { id: 50203, name: '删除用户', type: 'button', children: [] },
+                ]},
+            ]},
+            { id: 6, name: '权限管理', icon: 'fa-shield', type: 'menu', children: [
+                { id: 601, name: '角色管理', type: 'menu', children: [
+                    { id: 60101, name: '新增角色', type: 'button', children: [] },
+                    { id: 60102, name: '编辑角色', type: 'button', children: [] },
+                    { id: 60103, name: '删除角色', type: 'button', children: [] },
+                ]},
+                { id: 602, name: '权限组管理', type: 'menu', children: [
+                    { id: 60201, name: '新增权限组', type: 'button', children: [] },
+                    { id: 60202, name: '编辑权限组', type: 'button', children: [] },
+                    { id: 60203, name: '删除权限组', type: 'button', children: [] },
+                ]},
+                { id: 603, name: '角色权限组关联', type: 'menu', children: [
+                    { id: 60301, name: '新增关联', type: 'button', children: [] },
+                    { id: 60302, name: '解除关联', type: 'button', children: [] },
+                ]},
+            ]},
+        ],
+        // 已授权权限（角色ID -> 权限ID数组）
+        rolePermissions: {
+            1: [1, 101, 2, 201, 20101, 20102, 20103, 202, 20201, 20202, 20203, 3, 301, 30101, 30102, 302, 30201, 30202, 30203, 4, 401, 40101, 40102, 402, 40201, 40202, 403, 40301, 40302, 40303, 5, 501, 50101, 50102, 50103, 502, 50201, 50202, 50203, 6, 601, 60101, 60102, 60103, 602, 60201, 60202, 60203, 603, 60301, 60302],
+            2: [1, 101, 2, 201, 20101, 20102, 202, 20201, 20202, 3, 301, 30101, 30102, 302, 30201, 30202, 4, 401, 40101, 40102, 402, 40201, 40202, 403, 40301, 40302, 40303],
+            3: [1, 101, 5, 501, 50101, 502, 50201, 50202],
+            4: [1, 101, 3, 301, 30101, 30102, 302, 30201, 30202, 30203],
+            5: [1, 101, 2, 201, 20101, 20102, 20103, 202, 20201, 20202, 20203],
+            6: [1, 101],
+        },
+        // 已授权权限（权限组ID -> 权限ID数组）
+        groupPermissions: {
+            1: [6, 601, 60101, 60102, 60103, 602, 60201, 60202, 60203, 603, 60301, 60302],
+            2: [2, 201, 20101, 20102, 20103, 202, 20201, 20202, 20203],
+            3: [3, 301, 30101, 30102, 302, 30201, 30202, 30203],
+            4: [1, 101],
+            5: [5, 501, 50101, 50102, 50103, 502, 50201, 50202, 50203],
+        },
     },
 
     /* ---------- 菜单管理 ---------- */
@@ -1033,72 +1161,90 @@ var pageConfigs = {
     /* ===== 以下为组织机构管理 9 个页面（简化配置） ===== */
 
     /* ---------- 机构管理 ---------- */
+    /* ---------- 机构管理（树形列表+右侧抽屉详情） ---------- */
     'org': {
-        type: 'tab-table',
+        type: 'org-drawer',
         breadcrumb: ['组织机构管理', '单位部门管理', '机构管理'],
-        tabs: [
+        query: [
+            { key: 'name', label: '机构名称', type: 'input', placeholder: '请输入机构名称' },
+            { key: 'code', label: '机构编码', type: 'input', placeholder: '请输入机构编码' },
+        ],
+        toolbar: [{ type: 'add', text: '新增机构' }, { type: 'batchDelete' }, { type: 'sync' }, { type: 'import' }, { type: 'export' }],
+        columns: [
+            { type: 'checkbox' },
+            { key: 'name', title: '机构名称', sortable: true },
+            { key: 'code', title: '机构编码' },
+            { key: 'orgPath', title: '机构路径' },
+            { key: 'type', title: '机构类型', type: 'tag', tagMap: { '省级': { text: '省级', color: 'blue' }, '市级': { text: '市级', color: 'green' }, '县级': { text: '县级', color: 'orange' } } },
+            { key: 'sort', title: '排序号', sortable: true },
+            { key: 'status', title: '状态', type: 'toggle' },
+            { type: 'actions', title: '操作', actions: [{ key: 'view', label: '查看' }, { key: 'addChild', label: '新增子机构' }, { key: 'edit', label: '编辑' }, { key: 'delete', label: '删除', danger: true }] },
+        ],
+        treeData: [
+            { id: 1, name: '江西省人民政府', code: 'GOV-JX', orgPath: '江西省人民政府', type: '省级', sort: 1, status: true, children: [
+                { id: 2, name: '赣州市人民政府', code: 'GOV-GZ', orgPath: '江西省人民政府/赣州市人民政府', type: '市级', sort: 1, status: true, children: [
+                    { id: 3, name: '于都县人民政府', code: 'GOV-YD', orgPath: '江西省人民政府/赣州市人民政府/于都县人民政府', type: '县级', sort: 1, status: true, children: [] },
+                    { id: 4, name: '信丰县人民政府', code: 'GOV-XF', orgPath: '江西省人民政府/赣州市人民政府/信丰县人民政府', type: '县级', sort: 2, status: true, children: [] },
+                ]},
+                { id: 5, name: '南昌市人民政府', code: 'GOV-NC', orgPath: '江西省人民政府/南昌市人民政府', type: '市级', sort: 2, status: true, children: [] },
+            ]},
+        ],
+        drawerTabs: [
             { key: 'basic', label: '基本信息' },
             { key: 'extend', label: '拓展信息' },
         ],
-        tabConfigs: {
-            'basic': {
-                query: [
-                    { key: 'name', label: '机构名称', type: 'input', placeholder: '请输入机构名称' },
-                    { key: 'code', label: '机构编码', type: 'input', placeholder: '请输入机构编码' },
-                ],
-                toolbar: [{ type: 'add', text: '新增机构' }, { type: 'batchDelete' }, { type: 'sync' }, { type: 'import' }, { type: 'export' }],
-                columns: [
-                    { type: 'checkbox' },
-                    { type: 'index', title: '序号' },
-                    { key: 'name', title: '机构名称', sortable: true },
-                    { key: 'code', title: '机构编码' },
-                    { key: 'orgPath', title: '机构路径' },
-                    { key: 'type', title: '机构类型', type: 'tag', tagMap: { '省级': { text: '省级', color: 'blue' }, '市级': { text: '市级', color: 'green' }, '县级': { text: '县级', color: 'orange' } } },
-                    { key: 'sort', title: '排序号', sortable: true },
-                    { key: 'status', title: '状态', type: 'toggle' },
-                    { type: 'actions', title: '操作', actions: [{ key: 'view', label: '查看' }, { key: 'addChild', label: '新增子机构' }, { key: 'edit', label: '编辑' }, { key: 'delete', label: '删除', danger: true }] },
-                ],
-                data: [
-                    { id: 1, name: '江西省人民政府', code: 'GOV-JX', orgPath: '江西省人民政府', type: '省级', sort: 1, status: true },
-                    { id: 2, name: '赣州市人民政府', code: 'GOV-GZ', orgPath: '江西省人民政府/赣州市人民政府', type: '市级', sort: 1, status: true },
-                    { id: 3, name: '于都县人民政府', code: 'GOV-YD', orgPath: '江西省人民政府/赣州市人民政府/于都县人民政府', type: '县级', sort: 1, status: true },
-                    { id: 4, name: '信丰县人民政府', code: 'GOV-XF', orgPath: '江西省人民政府/赣州市人民政府/信丰县人民政府', type: '县级', sort: 2, status: true },
-                    { id: 5, name: '南昌市人民政府', code: 'GOV-NC', orgPath: '江西省人民政府/南昌市人民政府', type: '市级', sort: 2, status: true },
-                ],
+        drawerData: {
+            basic: function(org) {
+                return [
+                    { label: '机构名称', value: org.name },
+                    { label: '机构编码', value: org.code },
+                    { label: '机构类型', value: org.type, type: 'tag', tagColor: org.type === '省级' ? 'blue' : (org.type === '市级' ? 'green' : 'orange') },
+                    { label: '机构路径', value: org.orgPath },
+                    { label: '排序号', value: org.sort },
+                    { label: '状态', value: org.status ? '启用' : '停用', type: 'tag', tagColor: org.status ? 'green' : 'gray' },
+                ];
             },
-            'extend': {
-                query: [
-                    { key: 'orgName', label: '机构名称', type: 'input', placeholder: '请输入机构名称' },
-                    { key: 'fieldName', label: '字段名称', type: 'input', placeholder: '请输入字段名称' },
-                ],
-                toolbar: [],
-                columns: [
-                    { type: 'index', title: '序号' },
-                    { key: 'orgName', title: '机构名称', sortable: true },
-                    { key: 'orgCode', title: '机构编码' },
-                    { key: 'fieldName', title: '拓展字段' },
-                    { key: 'fieldValue', title: '字段值' },
-                    { key: 'fieldType', title: '字段类型' },
-                    { key: 'updateTime', title: '更新时间', sortable: true },
-                    { type: 'actions', title: '操作', actions: [{ key: 'edit', label: '编辑' }] },
-                ],
-                data: [
-                    { id: 1, orgName: '江西省人民政府', orgCode: 'GOV-JX', fieldName: '地址', fieldValue: '南昌市红谷滩新区', fieldType: '文本', updateTime: '2025-01-10 10:30:00' },
-                    { id: 2, orgName: '江西省人民政府', orgCode: 'GOV-JX', fieldName: '联系电话', fieldValue: '0791-12345678', fieldType: '文本', updateTime: '2025-01-10 10:30:00' },
-                    { id: 3, orgName: '赣州市人民政府', orgCode: 'GOV-GZ', fieldName: '地址', fieldValue: '赣州市章贡区', fieldType: '文本', updateTime: '2025-01-12 15:00:00' },
-                    { id: 4, orgName: '赣州市人民政府', orgCode: 'GOV-GZ', fieldName: '编制人数', fieldValue: '200', fieldType: '数字', updateTime: '2025-01-12 15:00:00' },
-                    { id: 5, orgName: '南昌市人民政府', orgCode: 'GOV-NC', fieldName: '地址', fieldValue: '南昌市东湖区', fieldType: '文本', updateTime: '2025-01-15 09:20:00' },
-                    { id: 6, orgName: '于都县人民政府', orgCode: 'GOV-YD', fieldName: '编制人数', fieldValue: '150', fieldType: '数字', updateTime: '2025-01-18 17:00:00' },
-                ],
-            },
+            extend: [
+                { fieldName: '地址', fieldValue: '南昌市红谷滩新区', fieldType: '文本', updateTime: '2025-01-10 10:30:00' },
+                { fieldName: '联系电话', fieldValue: '0791-12345678', fieldType: '文本', updateTime: '2025-01-10 10:30:00' },
+                { fieldName: '编制人数', fieldValue: '200', fieldType: '数字', updateTime: '2025-01-10 10:30:00' },
+                { fieldName: '负责人', fieldValue: '王主任', fieldType: '文本', updateTime: '2025-01-10 10:30:00' },
+            ],
         },
     },
 
-    /* ---------- 用户管理（Tab布局） ---------- */
+    /* ---------- 用户管理（列表+右侧抽屉详情） ---------- */
     'user': {
-        type: 'tab-table',
+        type: 'user-drawer',
         breadcrumb: ['组织机构管理', '单位部门管理', '用户管理'],
-        tabs: [
+        query: [
+            { key: 'name', label: '用户姓名', type: 'input', placeholder: '请输入用户姓名' },
+            { key: 'account', label: '用户账号', type: 'input', placeholder: '请输入账号' },
+            { key: 'status', label: '状态', type: 'select', placeholder: '请选择', options: [{ value: '', label: '全部' }, { value: 'true', label: '启用' }, { value: 'false', label: '停用' }] },
+        ],
+        toolbar: [{ type: 'batchDelete' }, { type: 'import' }],
+        columns: [
+            { type: 'checkbox' },
+            { type: 'index', title: '序号' },
+            { key: 'name', title: '姓名', sortable: true },
+            { key: 'account', title: '账号', sortable: true },
+            { key: 'mobile', title: '手机号' },
+            { key: 'orgName', title: '所属机构' },
+            { key: 'positionName', title: '岗位' },
+            { key: 'status', title: '状态', type: 'toggle' },
+            { key: 'createTime', title: '创建时间', sortable: true },
+            { type: 'actions', title: '操作', actions: [{ key: 'view', label: '查看' }, { key: 'edit', label: '编辑' }, { key: 'delete', label: '删除', danger: true }] },
+        ],
+        data: [
+            { id: 1, name: '张三', account: 'zhangsan', mobile: '138****1234', email: 'zhangsan@example.com', orgName: '省政务信息中心', positionName: '高级工程师', status: true, createTime: '2025-01-10 10:00:00' },
+            { id: 2, name: '李四', account: 'lisi', mobile: '139****5678', email: 'lisi@example.com', orgName: '省政务信息中心', positionName: '产品经理', status: true, createTime: '2025-01-12 14:30:00' },
+            { id: 3, name: '王五', account: 'wangwu', mobile: '137****9012', email: 'wangwu@example.com', orgName: '云上（江西）大数据发展有限公司', positionName: '前端开发工程师', status: true, createTime: '2025-01-15 09:15:00' },
+            { id: 4, name: '赵六', account: 'zhaoliu', mobile: '136****3456', email: 'zhaoliu@example.com', orgName: '云上（江西）大数据发展有限公司', positionName: 'UI设计师', status: false, createTime: '2025-01-18 16:45:00' },
+            { id: 5, name: '钱七', account: 'qianqi', mobile: '135****7890', email: 'qianqi@example.com', orgName: '赣政通', positionName: '运维工程师', status: true, createTime: '2025-02-01 11:20:00' },
+            { id: 6, name: '孙八', account: 'sunba', mobile: '134****2345', email: 'sunba@example.com', orgName: '赣州市人民政府', positionName: '行政专员', status: true, createTime: '2025-02-10 08:30:00' },
+        ],
+        // 抽屉详情数据
+        drawerTabs: [
             { key: 'basic', label: '基本信息' },
             { key: 'extend', label: '拓展信息' },
             { key: 'orgLink', label: '机构关联' },
@@ -1108,204 +1254,44 @@ var pageConfigs = {
             { key: 'duty', label: '职务关联' },
             { key: 'approval', label: '任职审批' },
         ],
-        tabConfigs: {
-            'basic': {
-                query: [
-                    { key: 'name', label: '用户姓名', type: 'input', placeholder: '请输入用户姓名' },
-                    { key: 'account', label: '用户账号', type: 'input', placeholder: '请输入账号' },
-                    { key: 'status', label: '状态', type: 'select', placeholder: '请选择', options: [{ value: '', label: '全部' }, { value: 'true', label: '启用' }, { value: 'false', label: '停用' }] },
-                ],
-                toolbar: [{ type: 'batchDelete' }, { type: 'import' }],
-                columns: [
-                    { type: 'checkbox' },
-                    { type: 'index', title: '序号' },
-                    { key: 'name', title: '姓名', sortable: true },
-                    { key: 'account', title: '账号', sortable: true },
-                    { key: 'mobile', title: '手机号' },
-                    { key: 'email', title: '邮箱' },
-                    { key: 'orgName', title: '所属机构' },
-                    { key: 'status', title: '状态', type: 'toggle' },
-                    { key: 'createTime', title: '创建时间', sortable: true },
-                    { type: 'actions', title: '操作', actions: [{ key: 'view', label: '查看' }, { key: 'edit', label: '编辑' }, { key: 'delete', label: '删除', danger: true }] },
-                ],
-                data: [
-                    { id: 1, name: '张三', account: 'zhangsan', mobile: '138****1234', email: 'zhangsan@example.com', orgName: '省政务信息中心', status: true, createTime: '2025-01-10 10:00:00' },
-                    { id: 2, name: '李四', account: 'lisi', mobile: '139****5678', email: 'lisi@example.com', orgName: '省政务信息中心', status: true, createTime: '2025-01-12 14:30:00' },
-                    { id: 3, name: '王五', account: 'wangwu', mobile: '137****9012', email: 'wangwu@example.com', orgName: '云上（江西）大数据发展有限公司', status: true, createTime: '2025-01-15 09:15:00' },
-                    { id: 4, name: '赵六', account: 'zhaoliu', mobile: '136****3456', email: 'zhaoliu@example.com', orgName: '云上（江西）大数据发展有限公司', status: false, createTime: '2025-01-18 16:45:00' },
-                    { id: 5, name: '钱七', account: 'qianqi', mobile: '135****7890', email: 'qianqi@example.com', orgName: '赣政通', status: true, createTime: '2025-02-01 11:20:00' },
-                    { id: 6, name: '孙八', account: 'sunba', mobile: '134****2345', email: 'sunba@example.com', orgName: '赣州市人民政府', status: true, createTime: '2025-02-10 08:30:00' },
-                ],
+        drawerData: {
+            basic: function(user) {
+                return [
+                    { label: '姓名', value: user.name },
+                    { label: '账号', value: user.account },
+                    { label: '手机号', value: user.mobile },
+                    { label: '邮箱', value: user.email },
+                    { label: '所属机构', value: user.orgName },
+                    { label: '岗位', value: user.positionName },
+                    { label: '状态', value: user.status ? '启用' : '停用', type: 'tag', tagColor: user.status ? 'green' : 'gray' },
+                    { label: '创建时间', value: user.createTime },
+                ];
             },
-            'extend': {
-                query: [
-                    { key: 'userName', label: '用户姓名', type: 'input', placeholder: '请输入用户姓名' },
-                    { key: 'fieldName', label: '字段名称', type: 'input', placeholder: '请输入字段名称' },
-                ],
-                toolbar: [],
-                columns: [
-                    { type: 'index', title: '序号' },
-                    { key: 'userName', title: '用户姓名', sortable: true },
-                    { key: 'account', title: '用户账号', sortable: true },
-                    { key: 'fieldName', title: '拓展字段' },
-                    { key: 'fieldValue', title: '字段值' },
-                    { key: 'fieldType', title: '字段类型' },
-                    { key: 'updateTime', title: '更新时间', sortable: true },
-                    { type: 'actions', title: '操作', actions: [{ key: 'edit', label: '编辑' }] },
-                ],
-                data: [
-                    { id: 1, userName: '张三', account: 'zhangsan', fieldName: '入职日期', fieldValue: '2023-06-15', fieldType: '日期', updateTime: '2025-01-10 10:30:00' },
-                    { id: 2, userName: '张三', account: 'zhangsan', fieldName: '学历', fieldValue: '本科', fieldType: '下拉', updateTime: '2025-01-10 10:30:00' },
-                    { id: 3, userName: '李四', account: 'lisi', fieldName: '入职日期', fieldValue: '2024-03-20', fieldType: '日期', updateTime: '2025-01-12 15:00:00' },
-                    { id: 4, userName: '李四', account: 'lisi', fieldName: '专业', fieldValue: '计算机科学', fieldType: '文本', updateTime: '2025-01-12 15:00:00' },
-                    { id: 5, userName: '王五', account: 'wangwu', fieldName: '入职日期', fieldValue: '2022-09-01', fieldType: '日期', updateTime: '2025-01-15 10:20:00' },
-                    { id: 6, userName: '赵六', account: 'zhaoliu', fieldName: '学历', fieldValue: '硕士', fieldType: '下拉', updateTime: '2025-01-18 17:00:00' },
-                ],
-            },
-            'orgLink': {
-                query: [
-                    { key: 'userName', label: '用户姓名', type: 'input', placeholder: '请输入用户姓名' },
-                    { key: 'orgName', label: '机构名称', type: 'input', placeholder: '请输入机构名称' },
-                ],
-                toolbar: [{ type: 'batchDelete' }],
-                columns: [
-                    { type: 'checkbox' },
-                    { type: 'index', title: '序号' },
-                    { key: 'userName', title: '用户姓名', sortable: true },
-                    { key: 'account', title: '用户账号' },
-                    { key: 'orgName', title: '所属机构', sortable: true },
-                    { key: 'orgPath', title: '机构路径' },
-                    { key: 'isMain', title: '主机构', type: 'tag', tagMap: { true: { text: '是', color: 'green' }, false: { text: '否', color: 'gray' } } },
-                    { key: 'linkTime', title: '关联时间', sortable: true },
-                    { type: 'actions', title: '操作', actions: [{ key: 'delete', label: '删除', danger: true }] },
-                ],
-                data: [
-                    { id: 1, userName: '张三', account: 'zhangsan', orgName: '省政务信息中心', orgPath: '江西省/赣政通/省政务信息中心', isMain: true, linkTime: '2025-01-10 10:00:00' },
-                    { id: 2, userName: '张三', account: 'zhangsan', orgName: '云上（江西）大数据发展有限公司', orgPath: '江西省/赣政通/省政务信息中心/云上（江西）大数据发展有限公司', isMain: false, linkTime: '2025-02-01 14:00:00' },
-                    { id: 3, userName: '李四', account: 'lisi', orgName: '省政务信息中心', orgPath: '江西省/赣政通/省政务信息中心', isMain: true, linkTime: '2025-01-12 14:30:00' },
-                    { id: 4, userName: '王五', account: 'wangwu', orgName: '云上（江西）大数据发展有限公司', orgPath: '江西省/赣政通/省政务信息中心/云上（江西）大数据发展有限公司', isMain: true, linkTime: '2025-01-15 09:15:00' },
-                    { id: 5, userName: '钱七', account: 'qianqi', orgName: '赣政通', orgPath: '江西省/赣政通', isMain: true, linkTime: '2025-02-01 11:20:00' },
-                ],
-            },
-            'position': {
-                query: [
-                    { key: 'userName', label: '用户姓名', type: 'input', placeholder: '请输入用户姓名' },
-                    { key: 'positionName', label: '岗位名称', type: 'input', placeholder: '请输入岗位名称' },
-                ],
-                toolbar: [],
-                columns: [
-                    { type: 'index', title: '序号' },
-                    { key: 'userName', title: '用户姓名', sortable: true },
-                    { key: 'account', title: '用户账号' },
-                    { key: 'positionName', title: '岗位名称', sortable: true },
-                    { key: 'positionType', title: '岗位类型' },
-                    { key: 'linkTime', title: '任职时间', sortable: true },
-                    { type: 'actions', title: '操作', actions: [{ key: 'view', label: '查看' }] },
-                ],
-                data: [
-                    { id: 1, userName: '张三', account: 'zhangsan', positionName: '高级工程师', positionType: '技术岗', linkTime: '2023-06-15' },
-                    { id: 2, userName: '李四', account: 'lisi', positionName: '产品经理', positionType: '管理岗', linkTime: '2024-03-20' },
-                    { id: 3, userName: '王五', account: 'wangwu', positionName: '前端开发工程师', positionType: '技术岗', linkTime: '2022-09-01' },
-                    { id: 4, userName: '赵六', account: 'zhaoliu', positionName: 'UI设计师', positionType: '设计岗', linkTime: '2024-01-10' },
-                    { id: 5, userName: '钱七', account: 'qianqi', positionName: '运维工程师', positionType: '技术岗', linkTime: '2023-11-25' },
-                ],
-            },
-            'title': {
-                query: [
-                    { key: 'userName', label: '用户姓名', type: 'input', placeholder: '请输入用户姓名' },
-                    { key: 'titleName', label: '职称名称', type: 'input', placeholder: '请输入职称名称' },
-                ],
-                toolbar: [{ type: 'batchDelete' }],
-                columns: [
-                    { type: 'checkbox' },
-                    { type: 'index', title: '序号' },
-                    { key: 'userName', title: '用户姓名', sortable: true },
-                    { key: 'account', title: '用户账号' },
-                    { key: 'titleName', title: '职称名称', sortable: true },
-                    { key: 'rank', title: '级别' },
-                    { key: 'certNo', title: '证书编号' },
-                    { key: 'grantDate', title: '授予时间', sortable: true },
-                    { type: 'actions', title: '操作', actions: [{ key: 'view', label: '查看' }, { key: 'delete', label: '删除', danger: true }] },
-                ],
-                data: [
-                    { id: 1, userName: '张三', account: 'zhangsan', titleName: '高级工程师', rank: '副高级', certNo: 'ZC2023001', grantDate: '2023-10-15' },
-                    { id: 2, userName: '李四', account: 'lisi', titleName: '中级工程师', rank: '中级', certNo: 'ZC2022045', grantDate: '2022-08-20' },
-                    { id: 3, userName: '王五', account: 'wangwu', titleName: '初级工程师', rank: '初级', certNo: 'ZC2024012', grantDate: '2024-01-10' },
-                    { id: 4, userName: '钱七', account: 'qianqi', titleName: '高级经济师', rank: '副高级', certNo: 'ZC2023078', grantDate: '2023-12-05' },
-                    { id: 5, userName: '孙八', account: 'sunba', titleName: '中级会计师', rank: '中级', certNo: 'ZC2023120', grantDate: '2023-06-18' },
-                ],
-            },
-            'level': {
-                query: [
-                    { key: 'userName', label: '用户姓名', type: 'input', placeholder: '请输入用户姓名' },
-                    { key: 'levelName', label: '职级名称', type: 'input', placeholder: '请输入职级名称' },
-                ],
-                toolbar: [{ type: 'batchDelete' }],
-                columns: [
-                    { type: 'checkbox' },
-                    { type: 'index', title: '序号' },
-                    { key: 'userName', title: '用户姓名', sortable: true },
-                    { key: 'account', title: '用户账号' },
-                    { key: 'levelName', title: '职级名称', sortable: true },
-                    { key: 'rank', title: '级别' },
-                    { key: 'appointDate', title: '任职时间', sortable: true },
-                    { type: 'actions', title: '操作', actions: [{ key: 'view', label: '查看' }, { key: 'delete', label: '删除', danger: true }] },
-                ],
-                data: [
-                    { id: 1, userName: '张三', account: 'zhangsan', levelName: '正科级', rank: '正科', appointDate: '2023-10-15' },
-                    { id: 2, userName: '李四', account: 'lisi', levelName: '副科级', rank: '副科', appointDate: '2022-08-20' },
-                    { id: 3, userName: '王五', account: 'wangwu', levelName: '科员', rank: '科员', appointDate: '2024-01-10' },
-                    { id: 4, userName: '钱七', account: 'qianqi', levelName: '副处级', rank: '副处', appointDate: '2023-12-05' },
-                    { id: 5, userName: '孙八', account: 'sunba', levelName: '主任科员', rank: '正科', appointDate: '2023-06-18' },
-                ],
-            },
-            'duty': {
-                query: [
-                    { key: 'userName', label: '用户姓名', type: 'input', placeholder: '请输入用户姓名' },
-                    { key: 'dutyName', label: '职务名称', type: 'input', placeholder: '请输入职务名称' },
-                ],
-                toolbar: [],
-                columns: [
-                    { type: 'index', title: '序号' },
-                    { key: 'userName', title: '用户姓名', sortable: true },
-                    { key: 'account', title: '用户账号' },
-                    { key: 'dutyName', title: '职务名称', sortable: true },
-                    { key: 'dutyLevel', title: '职务级别' },
-                    { key: 'orgName', title: '任职机构' },
-                    { key: 'appointDate', title: '任职时间', sortable: true },
-                    { type: 'actions', title: '操作', actions: [{ key: 'view', label: '查看' }] },
-                ],
-                data: [
-                    { id: 1, userName: '张三', account: 'zhangsan', dutyName: '技术部经理', dutyLevel: '中层', orgName: '省政务信息中心', appointDate: '2023-10-15' },
-                    { id: 2, userName: '李四', account: 'lisi', dutyName: '产品总监', dutyLevel: '高层', orgName: '云上（江西）大数据发展有限公司', appointDate: '2022-08-20' },
-                    { id: 3, userName: '王五', account: 'wangwu', dutyName: '前端组长', dutyLevel: '基层', orgName: '云上（江西）大数据发展有限公司', appointDate: '2024-01-10' },
-                    { id: 4, userName: '钱七', account: 'qianqi', dutyName: '运维主管', dutyLevel: '中层', orgName: '省政务信息中心', appointDate: '2023-12-05' },
-                ],
-            },
-            'approval': {
-                query: [
-                    { key: 'userName', label: '用户姓名', type: 'input', placeholder: '请输入用户姓名' },
-                    { key: 'status', label: '审批状态', type: 'select', placeholder: '请选择', options: [{ value: '', label: '全部' }, { value: 'approved', label: '已通过' }, { value: 'rejected', label: '已驳回' }, { value: 'pending', label: '审批中' }] },
-                ],
-                toolbar: [],
-                columns: [
-                    { type: 'index', title: '序号' },
-                    { key: 'userName', title: '用户姓名', sortable: true },
-                    { key: 'account', title: '用户账号' },
-                    { key: 'approvalType', title: '审批类型' },
-                    { key: 'targetOrg', title: '目标机构' },
-                    { key: 'status', title: '审批状态', type: 'tag', tagMap: { approved: { text: '已通过', color: 'green' }, rejected: { text: '已驳回', color: 'red' }, pending: { text: '审批中', color: 'orange' } } },
-                    { key: 'approver', title: '审批人' },
-                    { key: 'approveTime', title: '审批时间', sortable: true },
-                    { type: 'actions', title: '操作', actions: [{ key: 'view', label: '查看' }] },
-                ],
-                data: [
-                    { id: 1, userName: '张三', account: 'zhangsan', approvalType: '机构任职审批', targetOrg: '云上（江西）大数据发展有限公司', status: 'approved', approver: '王主任', approveTime: '2025-02-01 14:30:00' },
-                    { id: 2, userName: '李四', account: 'lisi', approvalType: '岗位调整审批', targetOrg: '省政务信息中心', status: 'approved', approver: '李总', approveTime: '2025-01-20 10:15:00' },
-                    { id: 3, userName: '王五', account: 'wangwu', approvalType: '机构任职审批', targetOrg: '省政务信息中心', status: 'pending', approver: '-', approveTime: '-' },
-                    { id: 4, userName: '赵六', account: 'zhaoliu', approvalType: '职级调整审批', targetOrg: '赣州市人民政府', status: 'rejected', approver: '张总', approveTime: '2025-01-25 16:45:00' },
-                ],
-            },
+            extend: [
+                { fieldName: '入职日期', fieldValue: '2023-06-15', fieldType: '日期', updateTime: '2025-01-10 10:30:00' },
+                { fieldName: '学历', fieldValue: '本科', fieldType: '下拉', updateTime: '2025-01-10 10:30:00' },
+                { fieldName: '专业', fieldValue: '计算机科学与技术', fieldType: '文本', updateTime: '2025-01-10 10:30:00' },
+                { fieldName: '籍贯', fieldValue: '江西南昌', fieldType: '文本', updateTime: '2025-01-10 10:30:00' },
+            ],
+            orgLink: [
+                { orgName: '省政务信息中心', orgPath: '江西省/赣政通/省政务信息中心', isMain: true, linkTime: '2025-01-10 10:00:00' },
+                { orgName: '云上（江西）大数据发展有限公司', orgPath: '江西省/赣政通/省政务信息中心/云上（江西）大数据发展有限公司', isMain: false, linkTime: '2025-02-01 14:00:00' },
+            ],
+            position: [
+                { positionName: '高级工程师', positionType: '技术岗', linkTime: '2023-06-15' },
+            ],
+            title: [
+                { titleName: '高级工程师', rank: '副高级', certNo: 'ZC2023001', grantDate: '2023-10-15' },
+            ],
+            level: [
+                { levelName: '正科级', rank: '正科', appointDate: '2023-10-15' },
+            ],
+            duty: [
+                { dutyName: '技术部经理', dutyLevel: '中层', orgName: '省政务信息中心', appointDate: '2023-10-15' },
+            ],
+            approval: [
+                { approvalType: '机构任职审批', targetOrg: '云上（江西）大数据发展有限公司', status: 'approved', approver: '王主任', approveTime: '2025-02-01 14:30:00' },
+            ],
         },
     },
 
@@ -1840,8 +1826,8 @@ var pageConfigs = {
             { key: 'status', label: '状态', type: 'select', placeholder: '请选择', options: [{ value: '', label: '全部' }, { value: 'running', label: '运行中' }, { value: 'stopped', label: '已停用' }, { value: 'maintaining', label: '维护中' }] },
         ],
         toolbar: [
-            { type: 'custom', text: '监测配置', icon: 'fa-line-chart', onClick: "navigateTo('app-monitor')" },
-            { type: 'custom', text: '统计配置', icon: 'fa-bar-chart', onClick: "navigateTo('app-statistics')" },
+            { type: 'custom', text: '监测配置', icon: 'fa-line-chart', onClick: "navigateToPage('app-monitor')" },
+            { type: 'custom', text: '统计配置', icon: 'fa-bar-chart', onClick: "navigateToPage('app-statistics')" },
             { type: 'batchDelete' },
             { type: 'custom', text: '列设置', icon: 'fa-cog', onClick: "showToast('列设置','info')" },
         ],
@@ -2545,6 +2531,20 @@ function renderPage(pageKey) {
         main.innerHTML = renderAppStatisticsPage();
         return;
     }
+    if (config.type === 'user-drawer') {
+        main.innerHTML = renderListPage(pageKey, false);
+        renderTable('tableContainer_' + pageKey, config.columns, getPageData(pageKey), pageKey);
+        return;
+    }
+    if (config.type === 'org-drawer') {
+        main.innerHTML = renderOrgDrawerPage(pageKey);
+        renderOrgDrawerTable(pageKey);
+        return;
+    }
+    if (config.type === 'role-perm-config') {
+        main.innerHTML = renderRolePermConfigPage();
+        return;
+    }
     if (config.type === 'monitor-tab-table') {
         main.innerHTML = renderMonitorTabTablePage(pageKey);
         return;
@@ -2912,8 +2912,573 @@ function switchTab(pageKey, tabKey) {
 }
 
 /* ============================================================
+ * 用户抽屉详情 & 机构抽屉详情
+ * ============================================================ */
+
+var currentDrawerTab = {};
+
+/** 打开用户详情抽屉 */
+function openUserDrawer(userId) {
+    var config = pageConfigs['user'];
+    var user = null;
+    for (var i = 0; i < config.data.length; i++) {
+        if (config.data[i].id === userId) { user = config.data[i]; break; }
+    }
+    if (!user) return;
+
+    var tabs = config.drawerTabs || [];
+    var firstTab = tabs[0] ? tabs[0].key : 'basic';
+    currentDrawerTab['user'] = firstTab;
+
+    var title = '<i class="fa fa-user-circle" style="color:#165DFF;"></i> 用户详情 - ' + user.name;
+    var bodyHtml = renderUserDrawerBody(user, firstTab);
+    var footerHtml = '<button class="btn btn-default btn-sm" onclick="closeDrawer(\'userDrawer\')">关闭</button>';
+
+    openDrawer('userDrawer', title, bodyHtml, footerHtml, '780px');
+}
+
+/** 渲染用户抽屉内容（Tab切换） */
+function renderUserDrawerBody(user, activeTab) {
+    var config = pageConfigs['user'];
+    var tabs = config.drawerTabs || [];
+    var drawerData = config.drawerData || {};
+
+    var html = '<div class="drawer-tabs">';
+    for (var i = 0; i < tabs.length; i++) {
+        var tab = tabs[i];
+        var activeCls = tab.key === activeTab ? ' active' : '';
+        html += '<div class="drawer-tab-item' + activeCls + '" onclick="switchUserDrawerTab(\'' + tab.key + '\')">' + tab.label + '</div>';
+    }
+    html += '</div>';
+    html += '<div class="drawer-tab-content">';
+    html += renderUserDrawerTabContent(user, activeTab, drawerData);
+    html += '</div>';
+    return html;
+}
+
+/** 切换用户抽屉Tab */
+function switchUserDrawerTab(tabKey) {
+    var config = pageConfigs['user'];
+    var user = null;
+    // 从当前选中或第一条数据获取
+    var userId = state.selectedRows['user'] && state.selectedRows['user'].size > 0
+        ? Array.from(state.selectedRows['user'])[0]
+        : (config.data[0] ? config.data[0].id : null);
+    for (var i = 0; i < config.data.length; i++) {
+        if (config.data[i].id === userId) { user = config.data[i]; break; }
+    }
+    if (!user && config.data[0]) user = config.data[0];
+    if (!user) return;
+
+    currentDrawerTab['user'] = tabKey;
+    var drawer = document.querySelector('#userDrawer .drawer-body');
+    if (drawer) {
+        drawer.innerHTML = renderUserDrawerBody(user, tabKey);
+    }
+}
+
+/** 渲染用户抽屉各Tab内容 */
+function renderUserDrawerTabContent(user, tabKey, drawerData) {
+    var html = '';
+    if (tabKey === 'basic') {
+        var basicFields = typeof drawerData.basic === 'function' ? drawerData.basic(user) : drawerData.basic || [];
+        html += '<div class="drawer-info-section">';
+        html += '<div class="drawer-section-title">基本信息</div>';
+        html += '<div class="drawer-info-grid">';
+        for (var i = 0; i < basicFields.length; i++) {
+            var f = basicFields[i];
+            var val = f.type === 'tag'
+                ? '<span class="tag tag-' + (f.tagColor || 'blue') + '">' + f.value + '</span>'
+                : f.value;
+            html += '<div class="drawer-info-item"><div class="drawer-info-label">' + f.label + '</div><div class="drawer-info-value">' + val + '</div></div>';
+        }
+        html += '</div></div>';
+    } else if (tabKey === 'extend') {
+        html += '<div class="drawer-info-section">';
+        html += '<div class="drawer-section-title">拓展信息</div>';
+        html += '<table class="drawer-sub-table"><thead><tr><th>字段名称</th><th>字段值</th><th>字段类型</th><th>更新时间</th></tr></thead><tbody>';
+        var extData = drawerData.extend || [];
+        for (var j = 0; j < extData.length; j++) {
+            html += '<tr><td>' + extData[j].fieldName + '</td><td>' + extData[j].fieldValue + '</td><td>' + extData[j].fieldType + '</td><td>' + extData[j].updateTime + '</td></tr>';
+        }
+        html += '</tbody></table></div>';
+    } else if (tabKey === 'orgLink') {
+        html += '<div class="drawer-info-section">';
+        html += '<div class="drawer-section-title">机构关联</div>';
+        html += '<table class="drawer-sub-table"><thead><tr><th>机构名称</th><th>机构路径</th><th>主机构</th><th>关联时间</th></tr></thead><tbody>';
+        var orgData = drawerData.orgLink || [];
+        for (var k = 0; k < orgData.length; k++) {
+            var isMainTag = orgData[k].isMain
+                ? '<span class="tag tag-green">是</span>'
+                : '<span class="tag tag-gray">否</span>';
+            html += '<tr><td>' + orgData[k].orgName + '</td><td>' + orgData[k].orgPath + '</td><td>' + isMainTag + '</td><td>' + orgData[k].linkTime + '</td></tr>';
+        }
+        html += '</tbody></table></div>';
+    } else if (tabKey === 'position') {
+        html += '<div class="drawer-info-section">';
+        html += '<div class="drawer-section-title">岗位关联</div>';
+        html += '<table class="drawer-sub-table"><thead><tr><th>岗位名称</th><th>岗位类型</th><th>任职时间</th></tr></thead><tbody>';
+        var posData = drawerData.position || [];
+        for (var m = 0; m < posData.length; m++) {
+            html += '<tr><td>' + posData[m].positionName + '</td><td>' + posData[m].positionType + '</td><td>' + posData[m].linkTime + '</td></tr>';
+        }
+        html += '</tbody></table></div>';
+    } else if (tabKey === 'title') {
+        html += '<div class="drawer-info-section">';
+        html += '<div class="drawer-section-title">职称关联</div>';
+        html += '<table class="drawer-sub-table"><thead><tr><th>职称名称</th><th>级别</th><th>证书编号</th><th>授予时间</th></tr></thead><tbody>';
+        var titleData = drawerData.title || [];
+        for (var n = 0; n < titleData.length; n++) {
+            html += '<tr><td>' + titleData[n].titleName + '</td><td>' + titleData[n].rank + '</td><td>' + titleData[n].certNo + '</td><td>' + titleData[n].grantDate + '</td></tr>';
+        }
+        html += '</tbody></table></div>';
+    } else if (tabKey === 'level') {
+        html += '<div class="drawer-info-section">';
+        html += '<div class="drawer-section-title">职级关联</div>';
+        html += '<table class="drawer-sub-table"><thead><tr><th>职级名称</th><th>级别</th><th>任职时间</th></tr></thead><tbody>';
+        var levelData = drawerData.level || [];
+        for (var p = 0; p < levelData.length; p++) {
+            html += '<tr><td>' + levelData[p].levelName + '</td><td>' + levelData[p].rank + '</td><td>' + levelData[p].appointDate + '</td></tr>';
+        }
+        html += '</tbody></table></div>';
+    } else if (tabKey === 'duty') {
+        html += '<div class="drawer-info-section">';
+        html += '<div class="drawer-section-title">职务关联</div>';
+        html += '<table class="drawer-sub-table"><thead><tr><th>职务名称</th><th>职务级别</th><th>任职机构</th><th>任职时间</th></tr></thead><tbody>';
+        var dutyData = drawerData.duty || [];
+        for (var q = 0; q < dutyData.length; q++) {
+            html += '<tr><td>' + dutyData[q].dutyName + '</td><td>' + dutyData[q].dutyLevel + '</td><td>' + dutyData[q].orgName + '</td><td>' + dutyData[q].appointDate + '</td></tr>';
+        }
+        html += '</tbody></table></div>';
+    } else if (tabKey === 'approval') {
+        html += '<div class="drawer-info-section">';
+        html += '<div class="drawer-section-title">任职审批</div>';
+        html += '<table class="drawer-sub-table"><thead><tr><th>审批类型</th><th>目标机构</th><th>审批状态</th><th>审批人</th><th>审批时间</th></tr></thead><tbody>';
+        var apprData = drawerData.approval || [];
+        for (var r = 0; r < apprData.length; r++) {
+            var statusTag = '';
+            if (apprData[r].status === 'approved') statusTag = '<span class="tag tag-green">已通过</span>';
+            else if (apprData[r].status === 'rejected') statusTag = '<span class="tag tag-red">已驳回</span>';
+            else statusTag = '<span class="tag tag-orange">审批中</span>';
+            html += '<tr><td>' + apprData[r].approvalType + '</td><td>' + apprData[r].targetOrg + '</td><td>' + statusTag + '</td><td>' + apprData[r].approver + '</td><td>' + apprData[r].approveTime + '</td></tr>';
+        }
+        html += '</tbody></table></div>';
+    }
+    return html;
+}
+
+/* ============================================================
  * 应用监测数据 & 渲染
  * ============================================================ */
+
+/** 渲染机构抽屉页面（左树右表布局） */
+function renderOrgDrawerPage(pageKey) {
+    var config = pageConfigs[pageKey];
+    var html = '<div class="p-4">';
+    html += renderBreadcrumb(config.breadcrumb);
+    html += '<div class="bg-white rounded mt-3" style="display:flex;height:calc(100vh - 160px);">';
+    // 左侧树
+    html += '<div style="width:260px;border-right:1px solid #E8E8E8;padding:12px;overflow-y:auto;flex-shrink:0;">';
+    html += '<div style="font-weight:600;font-size:14px;margin-bottom:10px;color:#1D2129;">机构树</div>';
+    html += '<div id="orgTree_' + pageKey + '">';
+    html += renderOrgTreeNodes(config.treeData || [], 0);
+    html += '</div>';
+    html += '</div>';
+    // 右侧表格
+    html += '<div style="flex:1;padding:16px;overflow-y:auto;">';
+    html += renderQueryArea(pageKey, config);
+    html += renderToolbar(pageKey, config);
+    html += '<div id="tableContainer_' + pageKey + '" style="border:1px solid #E8E8E8;border-radius:4px;overflow:hidden;">';
+    html += '<table class="data-table" style="margin:0;"><thead><tr>';
+    var cols = config.columns || [];
+    for (var c = 0; c < cols.length; c++) {
+        var col = cols[c];
+        if (col.type === 'checkbox') {
+            html += '<th style="width:40px;"><input type="checkbox" onclick="toggleAllCheckboxes(this)" /></th>';
+        } else if (col.type === 'actions') {
+            html += '<th style="width:200px;">' + (col.title || '操作') + '</th>';
+        } else {
+            html += '<th>' + (col.title || col.key) + '</th>';
+        }
+    }
+    html += '</tr></thead><tbody>';
+    html += '<tr><td colspan="' + cols.length + '" style="text-align:center;color:var(--text-tertiary);padding:30px;">请选择左侧机构节点</td></tr>';
+    html += '</tbody></table>';
+    html += '</div>';
+    html += '</div>';
+    html += '</div></div>';
+    return html;
+}
+
+/** 渲染机构树节点 */
+function renderOrgTreeNodes(nodes, level) {
+    var html = '';
+    for (var i = 0; i < nodes.length; i++) {
+        var node = nodes[i];
+        var hasChildren = node.children && node.children.length > 0;
+        html += '<div class="tree-node" style="padding-left:' + (level * 16) + 'px;">';
+        html += '<div class="tree-node-label" style="padding:6px 8px;cursor:pointer;border-radius:4px;display:flex;align-items:center;gap:6px;font-size:13px;" onclick="selectOrgNode(' + node.id + ', this)">';
+        if (hasChildren) {
+            html += '<i class="fa fa-caret-right tree-toggle" style="font-size:10px;color:#999;" onclick="toggleTreeNode(this);event.stopPropagation();"></i>';
+        } else {
+            html += '<span style="width:10px;"></span>';
+        }
+        html += '<i class="fa fa-sitemap" style="color:#165DFF;"></i>';
+        html += '<span>' + node.name + '</span>';
+        html += '</div>';
+        if (hasChildren) {
+            html += '<div class="tree-children" style="display:none;">';
+            html += renderOrgTreeNodes(node.children, level + 1);
+            html += '</div>';
+        }
+        html += '</div>';
+    }
+    return html;
+}
+
+/** 选择机构节点 */
+function selectOrgNode(orgId, el) {
+    var labels = document.querySelectorAll('#orgTree_org .tree-node-label');
+    for (var i = 0; i < labels.length; i++) {
+        labels[i].style.background = '';
+        labels[i].style.color = '';
+    }
+    el.style.background = '#E8F3FF';
+    el.style.color = '#165DFF';
+    renderOrgDrawerTable('org');
+}
+
+/** 渲染机构抽屉表格 */
+function renderOrgDrawerTable(pageKey) {
+    var config = pageConfigs[pageKey];
+    var data = flattenOrgTree(config.treeData || []);
+    renderTable('tableContainer_' + pageKey, config.columns, data, pageKey);
+}
+
+/** 扁平化为表格数据 */
+function flattenOrgTree(nodes) {
+    var result = [];
+    for (var i = 0; i < nodes.length; i++) {
+        var node = Object.assign({}, nodes[i]);
+        delete node.children;
+        result.push(node);
+        if (nodes[i].children && nodes[i].children.length > 0) {
+            result = result.concat(flattenOrgTree(nodes[i].children));
+        }
+    }
+    return result;
+}
+
+/** 打开机构详情抽屉 */
+function openOrgDrawer(orgId) {
+    var config = pageConfigs['org'];
+    var allOrgs = flattenOrgTree(config.treeData || []);
+    var org = null;
+    for (var i = 0; i < allOrgs.length; i++) {
+        if (allOrgs[i].id === orgId) { org = allOrgs[i]; break; }
+    }
+    if (!org) return;
+
+    var tabs = config.drawerTabs || [];
+    var firstTab = tabs[0] ? tabs[0].key : 'basic';
+    currentDrawerTab['org'] = firstTab;
+
+    var title = '<i class="fa fa-sitemap" style="color:#165DFF;"></i> 机构详情 - ' + org.name;
+    var bodyHtml = renderOrgDrawerBody(org, firstTab);
+    var footerHtml = '<button class="btn btn-default btn-sm" onclick="closeDrawer(\'orgDrawer\')">关闭</button>';
+
+    openDrawer('orgDrawer', title, bodyHtml, footerHtml, '720px');
+}
+
+/** 渲染机构抽屉内容 */
+function renderOrgDrawerBody(org, activeTab) {
+    var config = pageConfigs['org'];
+    var tabs = config.drawerTabs || [];
+    var drawerData = config.drawerData || {};
+
+    var html = '<div class="drawer-tabs">';
+    for (var i = 0; i < tabs.length; i++) {
+        var tab = tabs[i];
+        var activeCls = tab.key === activeTab ? ' active' : '';
+        html += '<div class="drawer-tab-item' + activeCls + '" onclick="switchOrgDrawerTab(\'' + tab.key + '\')">' + tab.label + '</div>';
+    }
+    html += '</div>';
+    html += '<div class="drawer-tab-content">';
+    html += renderOrgDrawerTabContent(org, activeTab, drawerData);
+    html += '</div>';
+    return html;
+}
+
+/** 切换机构抽屉Tab */
+function switchOrgDrawerTab(tabKey) {
+    var config = pageConfigs['org'];
+    var allOrgs = flattenOrgTree(config.treeData || []);
+    var org = allOrgs[0] || null;
+    if (!org) return;
+
+    currentDrawerTab['org'] = tabKey;
+    var drawer = document.querySelector('#orgDrawer .drawer-body');
+    if (drawer) {
+        drawer.innerHTML = renderOrgDrawerBody(org, tabKey);
+    }
+}
+
+/** 渲染机构抽屉各Tab内容 */
+function renderOrgDrawerTabContent(org, tabKey, drawerData) {
+    var html = '';
+    if (tabKey === 'basic') {
+        var basicFields = typeof drawerData.basic === 'function' ? drawerData.basic(org) : drawerData.basic || [];
+        html += '<div class="drawer-info-section">';
+        html += '<div class="drawer-section-title">基本信息</div>';
+        html += '<div class="drawer-info-grid">';
+        for (var i = 0; i < basicFields.length; i++) {
+            var f = basicFields[i];
+            var val = f.type === 'tag'
+                ? '<span class="tag tag-' + (f.tagColor || 'blue') + '">' + f.value + '</span>'
+                : f.value;
+            html += '<div class="drawer-info-item"><div class="drawer-info-label">' + f.label + '</div><div class="drawer-info-value">' + val + '</div></div>';
+        }
+        html += '</div></div>';
+    } else if (tabKey === 'extend') {
+        html += '<div class="drawer-info-section">';
+        html += '<div class="drawer-section-title">拓展信息</div>';
+        html += '<table class="drawer-sub-table"><thead><tr><th>字段名称</th><th>字段值</th><th>字段类型</th><th>更新时间</th></tr></thead><tbody>';
+        var extData = drawerData.extend || [];
+        for (var j = 0; j < extData.length; j++) {
+            html += '<tr><td>' + extData[j].fieldName + '</td><td>' + extData[j].fieldValue + '</td><td>' + extData[j].fieldType + '</td><td>' + extData[j].updateTime + '</td></tr>';
+        }
+        html += '</tbody></table></div>';
+    }
+    return html;
+}
+
+/* ============================================================
+ * 角色权限组关联 - 主从布局渲染
+ * ============================================================ */
+
+var currentRolePermAuthType = 'role';
+var currentRolePermSelectedId = null;
+
+/** 渲染角色权限组关联页面 */
+function renderRolePermConfigPage() {
+    var config = pageConfigs['role-perm'];
+    var authTypes = config.authTypes || [];
+    var currentType = currentRolePermAuthType;
+
+    var html = '<div class="p-4">';
+    html += renderBreadcrumb(config.breadcrumb);
+    html += '<div class="bg-white rounded mt-3" style="height:calc(100vh - 160px);display:flex;flex-direction:column;">';
+
+    // 顶部：授权类型切换
+    html += '<div style="padding:16px;border-bottom:1px solid #E8E8E8;display:flex;align-items:center;gap:16px;flex-shrink:0;">';
+    html += '<span style="font-weight:500;color:#4E5969;font-size:13px;">授权类型：</span>';
+    html += '<div class="flex gap-4">';
+    for (var t = 0; t < authTypes.length; t++) {
+        var at = authTypes[t];
+        var checked = at.key === currentType ? 'checked' : '';
+        html += '<label style="display:flex;align-items:center;gap:6px;cursor:pointer;font-size:13px;color:#1D2129;">';
+        html += '<input type="radio" name="rolePermAuthType" value="' + at.key + '" ' + checked + ' onchange="switchRolePermAuthType(\'' + at.key + '\')" />';
+        html += '<span>' + at.label + '</span>';
+        html += '</label>';
+    }
+    html += '</div>';
+    html += '</div>';
+
+    // 主体：左列表 + 右权限树
+    html += '<div style="flex:1;display:flex;overflow:hidden;">';
+
+    // 左侧列表
+    html += '<div style="width:300px;border-right:1px solid #E8E8E8;display:flex;flex-direction:column;flex-shrink:0;">';
+    html += '<div style="padding:12px 16px;border-bottom:1px solid #F2F3F5;font-weight:600;font-size:14px;color:#1D2129;display:flex;justify-content:space-between;align-items:center;">';
+    html += '<span id="rolePermListTitle">角色列表</span>';
+    html += '<button class="btn btn-primary btn-sm" onclick="showToast(\'新增\',\'success\')" style="height:28px;padding:0 12px;font-size:12px;"><i class="fa fa-plus"></i> 新增</button>';
+    html += '</div>';
+    html += '<div id="rolePermList" style="flex:1;overflow-y:auto;padding:8px;">';
+    html += renderRolePermList();
+    html += '</div>';
+    html += '</div>';
+
+    // 右侧权限树
+    html += '<div style="flex:1;display:flex;flex-direction:column;overflow:hidden;">';
+    html += '<div style="padding:12px 16px;border-bottom:1px solid #F2F3F5;display:flex;justify-content:space-between;align-items:center;flex-shrink:0;">';
+    html += '<span id="rolePermRightTitle" style="font-weight:600;font-size:14px;color:#1D2129;">权限配置</span>';
+    html += '<div style="display:flex;gap:8px;">';
+    html += '<button class="btn btn-primary btn-sm" onclick="saveRolePermConfig()" style="height:28px;padding:0 16px;font-size:12px;"><i class="fa fa-save"></i> 保存配置</button>';
+    html += '<button class="btn btn-default btn-sm" onclick="resetRolePermConfig()" style="height:28px;padding:0 16px;font-size:12px;">重置</button>';
+    html += '</div>';
+    html += '</div>';
+    html += '<div id="rolePermTree" style="flex:1;overflow-y:auto;padding:16px;">';
+    html += '<div style="text-align:center;color:#86909C;padding:60px 0;">请先选择左侧角色或权限组</div>';
+    html += '</div>';
+    html += '</div>';
+
+    html += '</div>';
+    html += '</div></div>';
+    return html;
+}
+
+/** 渲染左侧列表 */
+function renderRolePermList() {
+    var config = pageConfigs['role-perm'];
+    var list = currentRolePermAuthType === 'role' ? config.roleList : config.roleGroupList;
+    var html = '';
+    for (var i = 0; i < list.length; i++) {
+        var item = list[i];
+        var activeCls = currentRolePermSelectedId === item.id ? 'role-perm-item-active' : '';
+        html += '<div class="role-perm-item ' + activeCls + '" style="padding:12px;border-radius:6px;cursor:pointer;margin-bottom:4px;transition:all 0.2s;" onclick="selectRolePermItem(' + item.id + ', this)">';
+        html += '<div style="display:flex;justify-content:space-between;align-items:center;">';
+        html += '<div style="font-weight:500;font-size:13px;color:#1D2129;">' + item.name + '</div>';
+        html += item.status
+            ? '<span style="font-size:11px;padding:2px 6px;background:#F6FFED;color:#52C41A;border-radius:4px;">启用</span>'
+            : '<span style="font-size:11px;padding:2px 6px;background:#F2F3F5;color:#86909C;border-radius:4px;">停用</span>';
+        html += '</div>';
+        html += '<div style="font-size:12px;color:#86909C;margin-top:4px;">' + item.code + '</div>';
+        html += '<div style="font-size:12px;color:#C9CDD4;margin-top:2px;">' + (item.desc || '') + '</div>';
+        html += '</div>';
+    }
+    return html;
+}
+
+/** 切换授权类型 */
+function switchRolePermAuthType(type) {
+    currentRolePermAuthType = type;
+    currentRolePermSelectedId = null;
+    document.getElementById('rolePermListTitle').innerText = type === 'role' ? '角色列表' : '角色权限组列表';
+    document.getElementById('rolePermRightTitle').innerText = '权限配置';
+    document.getElementById('rolePermList').innerHTML = renderRolePermList();
+    document.getElementById('rolePermTree').innerHTML = '<div style="text-align:center;color:#86909C;padding:60px 0;">请先选择左侧' + (type === 'role' ? '角色' : '权限组') + '</div>';
+}
+
+/** 选择左侧项 */
+function selectRolePermItem(itemId, el) {
+    currentRolePermSelectedId = itemId;
+    var items = document.querySelectorAll('#rolePermList .role-perm-item');
+    for (var i = 0; i < items.length; i++) {
+        items[i].classList.remove('role-perm-item-active');
+        items[i].style.background = '';
+    }
+    el.classList.add('role-perm-item-active');
+    el.style.background = '#E8F3FF';
+    el.style.borderLeft = '3px solid #165DFF';
+
+    // 更新右侧标题
+    var config = pageConfigs['role-perm'];
+    var list = currentRolePermAuthType === 'role' ? config.roleList : config.roleGroupList;
+    var item = null;
+    for (var j = 0; j < list.length; j++) {
+        if (list[j].id === itemId) { item = list[j]; break; }
+    }
+    if (item) {
+        document.getElementById('rolePermRightTitle').innerText = '权限配置 - ' + item.name;
+    }
+
+    // 渲染权限树
+    document.getElementById('rolePermTree').innerHTML = renderRolePermTree();
+}
+
+/** 渲染权限树 */
+function renderRolePermTree() {
+    var config = pageConfigs['role-perm'];
+    var tree = config.permissionTree || [];
+    var permMap = currentRolePermAuthType === 'role'
+        ? (config.rolePermissions[currentRolePermSelectedId] || [])
+        : (config.groupPermissions[currentRolePermSelectedId] || []);
+    var checkedSet = new Set(permMap);
+
+    var html = '<div class="perm-tree" style="font-size:13px;">';
+    html += renderPermTreeNodes(tree, 0, checkedSet);
+    html += '</div>';
+
+    // 添加样式
+    html += '<style>';
+    html += '.role-perm-item-active { background:#E8F3FF !important; border-left:3px solid #165DFF; padding-left:9px !important; }';
+    html += '.perm-tree-node { padding:6px 0; display:flex; align-items:center; gap:6px; }';
+    html += '.perm-tree-children { padding-left:24px; }';
+    html += '.perm-tree-label { cursor:pointer; user-select:none; }';
+    html += '.perm-tree-label:hover { color:#165DFF; }';
+    html += '.perm-type-tag { font-size:11px;padding:1px 6px;border-radius:3px;margin-left:6px; }';
+    html += '.perm-type-menu { background:#E8F3FF;color:#165DFF; }';
+    html += '.perm-type-button { background:#FFF7E6;color:#FA8C16; }';
+    html += '</style>';
+
+    return html;
+}
+
+/** 渲染权限树节点 */
+function renderPermTreeNodes(nodes, level, checkedSet) {
+    var html = '';
+    for (var i = 0; i < nodes.length; i++) {
+        var node = nodes[i];
+        var hasChildren = node.children && node.children.length > 0;
+        var checked = checkedSet.has(node.id) ? 'checked' : '';
+        var typeTag = node.type === 'menu'
+            ? '<span class="perm-type-tag perm-type-menu">菜单</span>'
+            : '<span class="perm-type-tag perm-type-button">按钮</span>';
+
+        html += '<div class="perm-tree-node">';
+        if (hasChildren) {
+            html += '<i class="fa fa-caret-down" style="font-size:10px;color:#999;width:14px;cursor:pointer;" onclick="togglePermTreeNode(this)"></i>';
+        } else {
+            html += '<span style="width:14px;"></span>';
+        }
+        html += '<input type="checkbox" ' + checked + ' onchange="togglePermCheck(' + node.id + ', this)" />';
+        html += '<span class="perm-tree-label">' + node.name + '</span>';
+        html += typeTag;
+        html += '</div>';
+
+        if (hasChildren) {
+            html += '<div class="perm-tree-children">';
+            html += renderPermTreeNodes(node.children, level + 1, checkedSet);
+            html += '</div>';
+        }
+    }
+    return html;
+}
+
+/** 折叠/展开权限树节点 */
+function togglePermTreeNode(el) {
+    var childrenDiv = el.parentElement.nextElementSibling;
+    if (childrenDiv && childrenDiv.classList.contains('perm-tree-children')) {
+        if (childrenDiv.style.display === 'none') {
+            childrenDiv.style.display = 'block';
+            el.classList.remove('fa-caret-right');
+            el.classList.add('fa-caret-down');
+        } else {
+            childrenDiv.style.display = 'none';
+            el.classList.remove('fa-caret-down');
+            el.classList.add('fa-caret-right');
+        }
+    }
+}
+
+/** 权限树勾选 */
+function togglePermCheck(permId, el) {
+    // 这里只是前端交互模拟
+    var checked = el.checked;
+    // 联动子节点
+    var nodeDiv = el.parentElement;
+    var childrenDiv = nodeDiv.nextElementSibling;
+    if (childrenDiv && childrenDiv.classList.contains('perm-tree-children')) {
+        var childChecks = childrenDiv.querySelectorAll('input[type="checkbox"]');
+        for (var i = 0; i < childChecks.length; i++) {
+            childChecks[i].checked = checked;
+        }
+    }
+}
+
+/** 保存权限配置 */
+function saveRolePermConfig() {
+    showToast('权限配置保存成功', 'success');
+}
+
+/** 重置权限配置 */
+function resetRolePermConfig() {
+    if (currentRolePermSelectedId) {
+        document.getElementById('rolePermTree').innerHTML = renderRolePermTree();
+        showToast('已重置为初始配置', 'info');
+    }
+}
+
 var monitorData = {
     // 使用监测 - 应用日使用次数
     'usage_useCount': {
@@ -5547,7 +6112,10 @@ function handleAction(actionKey, pageKey, rowId) {
     switch (actionKey) {
         case 'edit': openEditModal(pageKey, rowId); break;
         case 'delete': openDeleteConfirm(pageKey, rowId); break;
-        case 'view': openViewModal(pageKey, rowId); break;
+        case 'view':
+            if (pageKey === 'user') { openUserDrawer(rowId); break; }
+            if (pageKey === 'org') { openOrgDrawer(rowId); break; }
+            openViewModal(pageKey, rowId); break;
         case 'approval': openApprovalModal(pageKey, rowId); break;
         case 'permAssign': openPermAssignModal(pageKey, rowId); break;
         case 'accountLink': openTransferModal(pageKey, rowId); break;
@@ -5606,6 +6174,47 @@ function openModal(id, title, bodyHtml, footerHtml, size) {
 function closeModal(id) {
     const modal = $(id);
     if (modal) modal.remove();
+}
+
+/** 通用右侧抽屉打开 */
+function openDrawer(id, title, bodyHtml, footerHtml, width) {
+    closeDrawer(id);
+    var drawerWidth = width || '720px';
+    modalZIndex += 10;
+    var currentZ = modalZIndex;
+
+    // 遮罩层
+    var mask = document.createElement('div');
+    mask.className = 'drawer-mask show';
+    mask.id = 'mask_' + id;
+    mask.style.zIndex = currentZ;
+    mask.addEventListener('click', function() { closeDrawer(id); });
+
+    // 抽屉
+    var drawer = document.createElement('div');
+    drawer.className = 'drawer show';
+    drawer.id = id;
+    drawer.style.zIndex = currentZ + 1;
+    drawer.style.width = drawerWidth;
+    drawer.innerHTML = `
+        <div class="drawer-header">
+            <span class="drawer-title">${title}</span>
+            <div class="drawer-close" onclick="closeDrawer('${id}')"><i class="fa fa-times"></i></div>
+        </div>
+        <div class="drawer-body">${bodyHtml}</div>
+        ${footerHtml ? `<div class="drawer-footer">${footerHtml}</div>` : ''}
+    `;
+
+    $('modalLayer').appendChild(mask);
+    $('modalLayer').appendChild(drawer);
+}
+
+/** 通用右侧抽屉关闭 */
+function closeDrawer(id) {
+    var drawer = $(id);
+    var mask = $('mask_' + id);
+    if (drawer) drawer.remove();
+    if (mask) mask.remove();
 }
 
 /** 通用表单字段生成 */
@@ -8684,6 +9293,7 @@ var pageList = [
     { key: 'app-audit', name: '应用审核', group: '应用管理' },
     { key: 'app-list', name: '应用列表', group: '应用管理' },
     { key: 'app-monitor', name: '应用监测', group: '应用管理' },
+    { key: 'app-statistics', name: '应用统计', group: '应用管理' },
     { key: 'app-log', name: '应用日志', group: '应用管理' },
     { key: 'todo-manage', name: '待办管理', group: '通知待办' },
     { key: 'ticket-center', name: '办件中心', group: '工单中心' },
@@ -9144,19 +9754,18 @@ var prdData = {
         acceptance: '1.新增功能正常 2.编辑功能正常 3.单条删除有二次确认 4.批量删除有二次确认 5.查询条件完整可用 6.表头可排序 7.详情查看正常 8.分页功能正常'
     },
     'role-perm': {
-        background: '【模式A+B】增加角色权限组关联批量删除和查询字段排序功能。角色权限组关联是权限管理的子模块。走查覆盖2项功能点：①角色权限组关联批量删除（符合，增加该功能）②角色权限组关联查询字段排序（符合，增加该功能）。原型实现：角色权限组关联列表支持复选框全选+批量删除、表头点击排序（角色名称、关联时间）。',
+        background: '【模式A+B+授权配置】角色权限组关联支持授权类型动态切换及权限树可视化配置。角色权限组关联是权限管理的核心模块，负责角色与权限组、权限之间的关联配置。走查覆盖2项功能点：①角色权限组关联批量删除（符合，增加该功能）②角色权限组关联查询字段排序（符合，增加该功能）。原型实现：采用顶部授权类型切换（角色/角色权限组）+ 左侧列表 + 右侧权限树的主从布局；切换授权类型后左侧列表动态切换为角色列表或角色权限组列表；点击左侧列表项，右侧展示对应权限树，支持按菜单层级展开/折叠，菜单和按钮权限以不同标签区分；权限树支持勾选配置，父节点勾选联动子节点，支持保存配置和重置操作。',
         targetUsers: '系统管理员',
-        coreFeatures: '1.多条件组合查询 2.列表字段排序 3.批量删除',
-        businessFlow: '进入角色权限组关联页 → 设置查询条件 → 查看列表数据 → 勾选多条 → 批量删除 → 二次确认',
-        pageInfo: '支持多条件查询；支持字段排序；支持批量删除',
-        dataModel: '核心实体：角色权限组关联（id/名称/编码/排序号/状态/创建时间/创建人）；支持删除操作；支持批量操作。',
-        deleteFlow: '批量删除：勾选多条记录 → 点击"批量删除"按钮 → 弹出二次确认弹窗（显示选中数量）→ 确认删除 → 批量逻辑删除 → Toast提示成功删除数量。删除约束：已被引用的数据不可删除，需先解除引用关系；启用状态的数据删除时有拦截提示；删除操作记录操作日志。',
-        queryFlow: '支持多条件组合查询，多条件为AND关系。查询操作：输入/选择条件后点击"查询"按钮 → 列表按条件过滤显示 → 点击"重置"按钮清空所有条件，恢复默认列表。支持分页查询，默认10条/页，可切换每页条数（10/20/50/100）。',
-        sortConfig: '支持列表字段排序。排序方式：点击表头切换排序状态，顺序为 无排序→升序→降序→无排序 循环切换；排序状态用箭头图标标识（↑升序，↓降序）；默认按排序号升序排列，无排序号字段则按创建时间降序。仅支持单列排序。',
-        exceptionHandling: '1.删除被引用数据：拦截删除并提示"该数据已被引用，无法删除，请先解除引用" 2.批量删除含被引用数据：自动跳过被引用数据，提示"成功删除N条，M条因被引用已跳过" 3.空数据状态：列表显示空状态占位图+提示文字"暂无数据" 4.网络异常：Toast提示"网络连接失败，请稍后重试" 5.数据加载失败：显示"加载失败，点击重试"按钮',
-        permissionReq: '1.系统管理员：拥有全部权限（批量删除/查询/排序） 2.平台管理员：拥有全部权限 3.分级管理员：仅查询权限，不可新增、编辑、删除 4.普通用户：无访问权限，菜单不可见',
-        interaction: '多条件组合查询；表头点击排序；复选框多选+批量操作',
-        acceptance: '1.批量删除有二次确认 2.查询条件完整可用 3.表头可排序 4.分页功能正常'
+        coreFeatures: '1.授权类型切换（角色/角色权限组） 2.左侧角色/权限组列表 3.右侧权限树可视化配置 4.菜单/按钮权限分类展示 5.父子节点联动勾选 6.保存配置/重置',
+        businessFlow: '进入角色权限组关联页 → 选择授权类型（角色/角色权限组） → 左侧列表展示对应数据 → 点击选择具体角色或权限组 → 右侧展示权限树 → 展开/折叠菜单层级 → 勾选/取消权限 → 父子联动 → 点击保存配置 → 保存成功 → 点击重置恢复初始配置',
+        pageInfo: '主从布局（顶部授权类型切换 + 左侧列表 + 右侧权限树）；支持角色/角色权限组两种授权模式切换；权限树支持展开折叠、勾选配置、父子联动、保存重置',
+        dataModel: '核心实体：角色（id/名称/编码/描述/状态）、角色权限组（id/名称/编码/描述/状态）、权限树（id/名称/类型/图标/子节点）、授权关系（角色ID/权限组ID/权限ID集合）。',
+        configFlow: '选择授权类型 → 选择左侧角色/权限组 → 右侧加载对应权限树 → 勾选菜单权限（自动联动子按钮权限） → 勾选具体按钮权限 → 点击"保存配置" → 前端校验 → 后端保存授权关系 → Toast提示"保存成功" → 权限树保持已配置状态',
+        queryFlow: '左侧列表支持滚动浏览；权限树支持按菜单层级展开折叠快速定位；支持通过菜单名称快速查找权限节点。',
+        exceptionHandling: '1.保存时权限为空：提示"至少选择一项权限" 2.权限被引用不可取消：拦截并提示"该权限已被其他功能引用，不可取消" 3.空数据状态：权限树显示空状态提示 4.网络异常：Toast提示"网络连接失败，请稍后重试" 5.配置未保存关闭：弹出确认提示"配置尚未保存，确定离开？"',
+        permissionReq: '1.系统管理员：拥有全部权限（配置/保存/重置/查询） 2.平台管理员：拥有全部权限 3.分级管理员：仅查询权限，不可配置 4.普通用户：无访问权限，菜单不可见',
+        interaction: '授权类型单选切换；左侧列表点击选中高亮；权限树展开折叠；复选框父子联动勾选；保存/重置操作',
+        acceptance: '1.授权类型切换正常 2.左侧列表加载正确 3.权限树展示完整 4.菜单/按钮标签区分正确 5.父子联动勾选正常 6.保存配置提示成功 7.重置恢复初始状态'
     },
     'menu': {
         background: '【模式A】增加菜单查询字段排序功能。菜单管理是权限管理的子模块。走查覆盖1项功能点：①菜单查询字段排序（符合，增加排序功能）。原型实现：菜单树形列表表头支持点击排序（菜单名称、排序号等字段），升降序可切换。',
@@ -9173,26 +9782,26 @@ var prdData = {
         acceptance: '1.查询条件完整可用 2.表头可排序 3.分页功能正常'
     },
     'org': {
-        background: '【模式A+F+G】机构查询字段排序、多Excel文件批量导入、拓展信息管理。机构管理是组织机构管理的核心模块。走查覆盖4项功能点：①机构查询字段排序（符合，新增）②批量导入（符合，改成上传多个Excel文件）③机构拓展信息编辑（符合，新增）④机构拓展信息查询字段排序（符合，新增）。原型实现：采用Tab布局，包含"基本信息"和"拓展信息"两个Tab页；基本信息Tab支持机构增删改查、批量删除、导入导出、同步及列表字段排序；拓展信息Tab展示机构拓展字段数据，支持编辑及查询字段排序。',
+        background: '【模式A+F+G】机构查询字段排序、多Excel文件批量导入、拓展信息管理。机构管理是组织机构管理的核心模块。走查覆盖4项功能点：①机构查询字段排序（符合，新增）②批量导入（符合，改成上传多个Excel文件）③机构拓展信息编辑（符合，新增）④机构拓展信息查询字段排序（符合，新增）。原型实现：采用左侧机构树+右侧列表+右侧抽屉详情的布局；机构树支持层级展开/折叠，点击节点筛选右侧列表；列表支持机构增删改查、批量删除、导入导出、同步及列表字段排序；点击操作列"查看"打开右侧抽屉详情，抽屉内含"基本信息"和"拓展信息"两个Tab页，基本信息展示机构核心属性，拓展信息Tab展示机构拓展字段数据，支持编辑及查询字段排序。',
         targetUsers: '系统管理员、分级管理员',
-        coreFeatures: '1.Tab页布局（基本信息/拓展信息） 2.多条件组合查询 3.列表字段排序 4.机构增删改管理 5.批量删除 6.Excel导入导出 7.拓展信息编辑',
-        businessFlow: '进入机构管理页 → 切换Tab页 → 基本信息Tab：设置查询条件 → 查看列表 → 新增/编辑/删除/批量删除 → 导入导出 → 拓展信息Tab：按机构查询拓展字段 → 编辑拓展信息 → 保存',
-        pageInfo: 'Tab布局（基本信息+拓展信息）；支持多条件查询；支持字段排序；支持增删改；支持批量删除；支持导入导出；支持拓展信息编辑',
+        coreFeatures: '1.左侧机构树 + 右侧列表 + 右侧抽屉详情（2个Tab：基本信息/拓展信息） 2.多条件组合查询 3.列表字段排序 4.机构增删改管理 5.批量删除 6.Excel导入导出 7.拓展信息编辑',
+        businessFlow: '进入机构管理页 → 左侧选择机构树节点 → 右侧列表显示对应机构 → 设置查询条件 → 新增/编辑/删除/批量删除 → 导入导出 → 点击查看 → 打开右侧抽屉详情 → 切换Tab查看基本信息/拓展信息 → 编辑拓展信息 → 保存',
+        pageInfo: '机构树+列表+右侧抽屉详情（基本信息+拓展信息）；支持多条件查询；支持字段排序；支持增删改；支持批量删除；支持导入导出；支持拓展信息编辑',
         dataModel: '核心实体：机构管理（id/名称/编码/排序号/状态/创建时间/创建人）；支持编辑操作；支持Excel数据导入。',
         editFlow: '点击操作列"编辑" → 打开编辑弹窗 → 回显所有字段信息 → 修改可编辑字段 → 点击保存 → 前端格式校验 → 后端数据一致性校验 → 更新成功，Toast提示 → 列表刷新。编辑约束：编码创建后不可修改；状态切换即时生效并记录操作日志。',
         queryFlow: '支持多条件组合查询，多条件为AND关系。查询操作：输入/选择条件后点击"查询"按钮 → 列表按条件过滤显示 → 点击"重置"按钮清空所有条件，恢复默认列表。支持分页查询，默认10条/页，可切换每页条数（10/20/50/100）。',
         sortConfig: '支持列表字段排序。排序方式：点击表头切换排序状态，顺序为 无排序→升序→降序→无排序 循环切换；排序状态用箭头图标标识（↑升序，↓降序）；默认按排序号升序排列，无排序号字段则按创建时间降序。仅支持单列排序。',
         exceptionHandling: '1.名称重复：保存时提示"名称已存在，请重新输入" 2.编码重复：保存时提示"编码已存在，请重新输入" 3.编码格式错误：提示"编码只能包含字母、数字和下划线" 4.导入文件格式错误：提示"请上传正确格式的Excel文件" 5.导入数据校验失败：显示失败详情列表，支持下载错误报告 6.空数据状态：列表显示空状态占位图+提示文字"暂无数据" 7.网络异常：Toast提示"网络连接失败，请稍后重试" 8.数据加载失败：显示"加载失败，点击重试"按钮',
         permissionReq: '1.系统管理员：拥有全部权限（编辑/查询/排序/导入） 2.平台管理员：拥有全部权限 3.分级管理员：仅查询权限，不可新增、编辑、删除 4.普通用户：无访问权限，菜单不可见',
-        interaction: '多条件组合查询；表头点击排序；编辑弹窗表单；Excel文件导入',
-        acceptance: '1.编辑功能正常 2.查询条件完整可用 3.表头可排序 4.导入功能正常 5.分页功能正常'
+        interaction: '机构树展开折叠；多条件组合查询；表头点击排序；编辑弹窗表单；Excel文件导入；右侧抽屉详情（2Tab切换）',
+        acceptance: '1.编辑功能正常 2.查询条件完整可用 3.表头可排序 4.导入功能正常 5.分页功能正常 6.机构树交互正常 7.右侧抽屉详情2Tab切换正常'
     },
     'user': {
-        background: '【模式A+B+F+任职管理】用户查询字段排序、批量删除、多Excel文件导入 + 用户任职全生命周期管理。用户管理是组织机构管理中功能点最多的模块。走查覆盖23项功能点：①用户批量删除（符合，新增）②用户查询字段排序（符合，新增）③批量导入（符合，改成上传多个Excel文件）④用户机构关联批量删除（符合，新增）⑤用户机构关联查询字段排序（符合，新增）⑥用户拓展信息编辑（符合，新增）⑦用户拓展信息查询字段排序（符合，新增）⑧用户岗位关联查询字段排序（符合，新增）⑨用户职称关联批量删除（符合，新增）⑩用户职称关联查询字段排序（符合，新增）⑪用户职称关联查询（符合，新增）⑫用户职级关联批量删除（符合，新增）⑬用户职级关联查询字段排序（符合，新增）⑭用户职级关联查询（符合，新增）⑮用户职务关联查询字段排序（符合，新增）⑯用户职务关联查询（符合，新增）⑰用户任职审批信息查询（符合，新增）⑱调整任职（符合，新增）⑲添加任职（符合，新增）⑳编辑任职（符合，新增）㉑解职/批量解职（符合，新增）㉒主职/兼职管理（符合，新增）㉓兼职方式配置（内部/外部/临时兼职）（符合，新增）。原型实现：列表支持批量删除+表头排序+多文件导入；查看弹窗含8个Tab页签（基本信息/机构关联/岗位关联/职称关联/职级关联/职务关联/拓展信息/任职审批信息），各Tab子表格支持批量删除+排序+查询；调整任职弹窗采用双Tab结构（编辑用户/所属机构），所属机构Tab支持任职列表管理（添加任职、批量解职、编辑、解职），支持主职/兼职两种任职类型，兼职支持内部兼职/外部兼职/临时兼职三种方式。',
+        background: '【模式A+B+F+任职管理】用户查询字段排序、批量删除、多Excel文件导入 + 用户任职全生命周期管理。用户管理是组织机构管理中功能点最多的模块。走查覆盖23项功能点：①用户批量删除（符合，新增）②用户查询字段排序（符合，新增）③批量导入（符合，改成上传多个Excel文件）④用户机构关联批量删除（符合，新增）⑤用户机构关联查询字段排序（符合，新增）⑥用户拓展信息编辑（符合，新增）⑦用户拓展信息查询字段排序（符合，新增）⑧用户岗位关联查询字段排序（符合，新增）⑨用户职称关联批量删除（符合，新增）⑩用户职称关联查询字段排序（符合，新增）⑪用户职称关联查询（符合，新增）⑫用户职级关联批量删除（符合，新增）⑬用户职级关联查询字段排序（符合，新增）⑭用户职级关联查询（符合，新增）⑮用户职务关联查询字段排序（符合，新增）⑯用户职务关联查询（符合，新增）⑰用户任职审批信息查询（符合，新增）⑱调整任职（符合，新增）⑲添加任职（符合，新增）⑳编辑任职（符合，新增）㉑解职/批量解职（符合，新增）㉒主职/兼职管理（符合，新增）㉓兼职方式配置（内部/外部/临时兼职）（符合，新增）。原型实现：用户列表页支持批量删除+表头排序+多文件导入；点击操作列"查看"或行点击打开右侧抽屉详情，抽屉内含8个Tab页签（基本信息/拓展信息/机构关联/岗位关联/职称关联/职级关联/职务关联/任职审批），各Tab子表格展示对应关联数据；调整任职采用抽屉+Tab结构，支持任职列表管理（添加任职、批量解职、编辑、解职），支持主职/兼职两种任职类型，兼职支持内部兼职/外部兼职/临时兼职三种方式。',
         targetUsers: '系统管理员、分级管理员',
-        coreFeatures: '1.Tab页布局（8个Tab：基本信息/拓展信息/机构关联/岗位关联/职称关联/职级关联/职务关联/任职审批） 2.多条件组合查询 3.列表字段排序 4.编辑用户管理 5.批量删除 6.Excel导入 7.用户任职全生命周期管理',
-        businessFlow: '进入用户管理页 → 切换Tab页 → 基本信息Tab：查询/编辑/批量删除/导入 → 拓展信息Tab：查看编辑拓展字段 → 机构关联Tab：批量删除/排序 → 岗位关联Tab：排序查询 → 职称关联Tab：批量删除/排序/查询 → 职级关联Tab：批量删除/排序/查询 → 职务关联Tab：排序/查询 → 任职审批Tab：审批信息查询',
-        pageInfo: 'Tab布局（8个Tab页）；支持多条件查询；支持字段排序；支持编辑；支持批量删除；支持导入；支持任职全生命周期管理',
+        coreFeatures: '1.用户列表 + 右侧抽屉详情（8个Tab：基本信息/拓展信息/机构关联/岗位关联/职称关联/职级关联/职务关联/任职审批） 2.多条件组合查询 3.列表字段排序 4.编辑用户管理 5.批量删除 6.Excel导入 7.用户任职全生命周期管理',
+        businessFlow: '进入用户管理页 → 查询筛选用户列表 → 点击查看/行点击 → 打开右侧抽屉详情 → 切换Tab查看各维度信息（基本信息/拓展信息/机构关联/岗位关联/职称关联/职级关联/职务关联/任职审批） → 编辑用户信息 → 保存 → 批量删除用户 → 二次确认',
+        pageInfo: '列表页 + 右侧抽屉详情（8个Tab页）；支持多条件查询；支持字段排序；支持编辑；支持批量删除；支持导入；支持任职全生命周期管理',
         dataModel: '核心实体：用户管理（id/名称/编码/排序号/状态/创建时间/创建人）；支持编辑/删除操作；支持Excel数据导入；支持批量操作。',
         editFlow: '点击操作列"编辑" → 打开编辑弹窗 → 回显所有字段信息 → 修改可编辑字段 → 点击保存 → 前端格式校验 → 后端数据一致性校验 → 更新成功，Toast提示 → 列表刷新。编辑约束：编码创建后不可修改；状态切换即时生效并记录操作日志。',
         deleteFlow: '批量删除：勾选多条记录 → 点击"批量删除"按钮 → 弹出二次确认弹窗（显示选中数量）→ 确认删除 → 批量逻辑删除 → Toast提示成功删除数量。删除约束：已被引用的数据不可删除，需先解除引用关系；启用状态的数据删除时有拦截提示；删除操作记录操作日志。',
@@ -9200,8 +9809,8 @@ var prdData = {
         sortConfig: '支持列表字段排序。排序方式：点击表头切换排序状态，顺序为 无排序→升序→降序→无排序 循环切换；排序状态用箭头图标标识（↑升序，↓降序）；默认按排序号升序排列，无排序号字段则按创建时间降序。仅支持单列排序。',
         exceptionHandling: '1.名称重复：保存时提示"名称已存在，请重新输入" 2.编码重复：保存时提示"编码已存在，请重新输入" 3.编码格式错误：提示"编码只能包含字母、数字和下划线" 4.删除被引用数据：拦截删除并提示"该数据已被引用，无法删除，请先解除引用" 5.批量删除含被引用数据：自动跳过被引用数据，提示"成功删除N条，M条因被引用已跳过" 6.导入文件格式错误：提示"请上传正确格式的Excel文件" 7.导入数据校验失败：显示失败详情列表，支持下载错误报告 8.空数据状态：列表显示空状态占位图+提示文字"暂无数据" 9.网络异常：Toast提示"网络连接失败，请稍后重试" 10.数据加载失败：显示"加载失败，点击重试"按钮',
         permissionReq: '1.系统管理员：拥有全部权限（编辑/批量删除/查询/排序/导入） 2.平台管理员：拥有全部权限 3.分级管理员：仅查询权限，不可新增、编辑、删除 4.普通用户：无访问权限，菜单不可见',
-        interaction: '多条件组合查询；表头点击排序；复选框多选+批量操作；编辑弹窗表单；Excel文件导入',
-        acceptance: '1.编辑功能正常 2.批量删除有二次确认 3.查询条件完整可用 4.表头可排序 5.导入功能正常 6.分页功能正常'
+        interaction: '多条件组合查询；表头点击排序；复选框多选+批量操作；编辑弹窗表单；Excel文件导入；右侧抽屉详情（8Tab切换）',
+        acceptance: '1.编辑功能正常 2.批量删除有二次确认 3.查询条件完整可用 4.表头可排序 5.导入功能正常 6.分页功能正常 7.右侧抽屉详情8Tab切换正常'
     },
     'title-level': {
         background: '【模式A+B+F】岗位管理完整CRUD + 职称/职级查询排序 + 多文件导入。职级职称管理是组织机构设置的子模块，包含岗位管理、职称管理、职级管理三个Tab页。走查覆盖：岗位管理7项（①新增②编辑③删除④批量删除⑤查看⑥查询⑦查询字段排序）、职称管理3项（①查询字段排序②导入③批量删除）、职级管理3项（①查询字段排序②导入③批量删除）。原型实现：Tab布局，岗位管理Tab支持完整CRUD+批量删除+查询排序+查看；职称/职级Tab支持查询排序+多文件导入+批量删除。',
