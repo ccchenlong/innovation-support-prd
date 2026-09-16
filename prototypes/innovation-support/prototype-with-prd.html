@@ -548,6 +548,7 @@ var navConfig = [
             { key: 'ticket-cc', label: '工单抄送管理', type: 'page' },
             { key: 'ticket-center', label: '办件中心', type: 'page' },
             { key: 'ticket-record', label: '办件记录', type: 'page' },
+            { key: 'ticket-evaluation', label: '工单评价管理', type: 'page' },
         ]
     },
     {
@@ -568,12 +569,15 @@ var navConfig = [
             { key: 'app-list', label: '应用列表', type: 'page' },
             { key: 'app-monitor', label: '应用监测', type: 'page' },
             { key: 'app-statistics', label: '应用统计', type: 'page' },
+            { key: 'app-access-flow', label: '应用接入流程审批', type: 'page' },
+            { key: 'app-change-flow', label: '应用变更流程审批', type: 'page' },
         ]
     },
     {
         key: 'g-notice-todo', label: '通知待办', icon: 'fa-bell', type: 'group',
         children: [
             { key: 'todo-manage', label: '待办管理', type: 'page' },
+            { key: 'manual-notice', label: '手动通知管理', type: 'page' },
         ]
     },
     {
@@ -603,6 +607,7 @@ var navConfig = [
                 children: [
                     { key: 'admin-auth', label: '管理员授权', type: 'page' },
                     { key: 'role-perm', label: '角色权限组关联', type: 'page' },
+                    { key: 'user-perm-group', label: '用户权限组关联', type: 'page' },
                 ]
             },
             { key: 'menu', label: '菜单管理', type: 'page' },
@@ -613,6 +618,9 @@ var navConfig = [
         children: [
             { key: 'dict-manage', label: '字典管理', type: 'page' },
             { key: 'sys-log', label: '日志管理', type: 'page' },
+            { key: 'sys-basic-settings', label: '基础设置', type: 'page' },
+            { key: 'sys-online-user', label: '在线用户管理', type: 'page' },
+            { key: 'sys-sync-app', label: '同步应用管理', type: 'page' },
         ]
     },
     {
@@ -797,31 +805,98 @@ var pageConfigs = {
         ],
     },
 
-    /* ---------- 工单抄送管理 ---------- */
+    /* ---------- 工单抄送管理（3Tab结构） ---------- */
     'ticket-cc': {
+        type: 'tab-table',
         breadcrumb: ['工单中心', '工单抄送管理'],
-        query: [
-            { key: 'name', label: '规则名称', type: 'input', placeholder: '请输入规则名称' },
-            { key: 'type', label: '工单类型', type: 'select', placeholder: '请选择', options: [{ value: '', label: '全部' }, { value: 'general', label: '通用工单' }, { value: 'equipment', label: '设备申请' }, { value: 'auth', label: '权限申请' }] },
+        tabs: [
+            { key: 'default', label: '默认抄送记录' },
+            { key: 'custom', label: '自定义抄送设置' },
+            { key: 'customRecord', label: '自定义抄送记录' },
         ],
-        toolbar: [{ type: 'add', text: '新增抄送规则' }, { type: 'batchDelete' }],
-        columns: [
-            { type: 'checkbox' },
-            { type: 'index', title: '序号' },
-            { key: 'name', title: '规则名称', sortable: true },
-            { key: 'ticketType', title: '工单类型' },
-            { key: 'ccLevel', title: '抄送层级', type: 'tag', tagMap: { 'line': { text: '条线管理员', color: 'blue' }, 'graded': { text: '分级管理员', color: 'green' }, 'system': { text: '系统管理员', color: 'orange' } } },
-            { key: 'ccTime', title: '抄送时机' },
-            { key: 'status', title: '状态', type: 'toggle' },
-            { key: 'createTime', title: '创建时间', sortable: true },
-            { type: 'actions', title: '操作', actions: [{ key: 'edit', label: '编辑' }, { key: 'delete', label: '删除', danger: true }, { key: 'view', label: '查看' }] },
-        ],
-        data: [
-            { id: 1, name: '通用工单提交抄送', ticketType: '通用工单', ccLevel: 'line', ccTime: '提交时', status: true, createTime: '2025-03-01 10:00:00' },
-            { id: 2, name: '设备申请审批抄送', ticketType: '设备申请', ccLevel: 'graded', ccTime: '审批通过时', status: true, createTime: '2025-03-02 14:30:00' },
-            { id: 3, name: '权限申请完成抄送', ticketType: '权限申请', ccLevel: 'system', ccTime: '完成时', status: true, createTime: '2025-03-03 09:15:00' },
-            { id: 4, name: '通用工单审批抄送', ticketType: '通用工单', ccLevel: 'graded', ccTime: '审批通过时', status: false, createTime: '2025-03-04 16:45:00' },
-        ],
+        tabConfigs: {
+            'default': {
+                query: [
+                    { key: 'name', label: '规则名称', type: 'input', placeholder: '请输入规则名称' },
+                    { key: 'ticketType', label: '工单类型', type: 'select', placeholder: '请选择', options: [{ value: '', label: '全部' }, { value: 'general', label: '通用工单' }, { value: 'equipment', label: '设备申请' }, { value: 'auth', label: '权限申请' }] },
+                ],
+                toolbar: [{ type: 'add', text: '新增' }, { type: 'batchDelete' }],
+                columns: [
+                    { type: 'checkbox' },
+                    { type: 'index', title: '序号' },
+                    { key: 'name', title: '规则名称', sortable: true },
+                    { key: 'ticketType', title: '工单类型', type: 'tag', tagMap: { 'general': { text: '通用工单', color: 'blue' }, 'equipment': { text: '设备申请', color: 'green' }, 'auth': { text: '权限申请', color: 'orange' } } },
+                    { key: 'ccTarget', title: '抄送对象' },
+                    { key: 'ccMethod', title: '抄送方式', type: 'tag', tagMap: { '站内信': { text: '站内信', color: 'blue' }, '邮件': { text: '邮件', color: 'green' }, '短信': { text: '短信', color: 'orange' } } },
+                    { key: 'status', title: '状态', type: 'tag', tagMap: { true: { text: '启用', color: 'green' }, false: { text: '停用', color: 'red' } } },
+                    { key: 'createTime', title: '创建时间', sortable: true },
+                    { type: 'actions', title: '操作', actions: [{ key: 'edit', label: '编辑' }, { key: 'delete', label: '删除', danger: true }] },
+                ],
+                data: [
+                    { id: 1, name: '通用工单提交抄送', ticketType: 'general', ccTarget: '部门领导', ccMethod: '站内信', status: true, createTime: '2025-03-01 10:00:00' },
+                    { id: 2, name: '设备申请审批抄送', ticketType: 'equipment', ccTarget: '分管领导', ccMethod: '邮件', status: true, createTime: '2025-03-02 14:30:00' },
+                    { id: 3, name: '权限申请完成抄送', ticketType: 'auth', ccTarget: '系统管理员', ccMethod: '站内信', status: true, createTime: '2025-03-03 09:15:00' },
+                    { id: 4, name: '通用工单审批抄送', ticketType: 'general', ccTarget: '分级管理员', ccMethod: '短信', status: false, createTime: '2025-03-04 16:45:00' },
+                    { id: 5, name: '设备申请驳回抄送', ticketType: 'equipment', ccTarget: '申请人+部门领导', ccMethod: '站内信+邮件', status: true, createTime: '2025-03-05 11:20:00' },
+                    { id: 6, name: '权限申请审批抄送', ticketType: 'auth', ccTarget: '条线管理员', ccMethod: '邮件', status: true, createTime: '2025-03-06 08:30:00' },
+                ],
+            },
+            'custom': {
+                query: [
+                    { key: 'name', label: '设置名称', type: 'input', placeholder: '请输入设置名称' },
+                    { key: 'ticketType', label: '工单类型', type: 'select', placeholder: '请选择', options: [{ value: '', label: '全部' }, { value: 'general', label: '通用工单' }, { value: 'equipment', label: '设备申请' }, { value: 'auth', label: '权限申请' }] },
+                ],
+                toolbar: [{ type: 'add', text: '新增' }, { type: 'batchDelete' }],
+                columns: [
+                    { type: 'checkbox' },
+                    { type: 'index', title: '序号' },
+                    { key: 'name', title: '设置名称', sortable: true },
+                    { key: 'ticketType', title: '工单类型', type: 'tag', tagMap: { 'general': { text: '通用工单', color: 'blue' }, 'equipment': { text: '设备申请', color: 'green' }, 'auth': { text: '权限申请', color: 'orange' } } },
+                    { key: 'triggerNode', title: '触发节点', type: 'tag', tagMap: { 'submit': { text: '提交时', color: 'blue' }, 'approve': { text: '审批通过时', color: 'green' }, 'reject': { text: '驳回时', color: 'red' } } },
+                    { key: 'ccTargetType', title: '抄送对象类型', type: 'tag', tagMap: { 'user': { text: '指定人员', color: 'blue' }, 'role': { text: '角色', color: 'green' }, 'dept': { text: '部门', color: 'orange' } } },
+                    { key: 'status', title: '状态', type: 'tag', tagMap: { true: { text: '启用', color: 'green' }, false: { text: '停用', color: 'red' } } },
+                    { key: 'createTime', title: '创建时间', sortable: true },
+                    { type: 'actions', title: '操作', actions: [{ key: 'edit', label: '编辑' }, { key: 'delete', label: '删除', danger: true }] },
+                ],
+                data: [
+                    { id: 11, name: '紧急工单提交抄送', ticketType: 'general', triggerNode: 'submit', ccTargetType: 'role', status: true, createTime: '2025-03-01 10:00:00' },
+                    { id: 12, name: '设备申请通过抄送', ticketType: 'equipment', triggerNode: 'approve', ccTargetType: 'user', status: true, createTime: '2025-03-02 14:30:00' },
+                    { id: 13, name: '权限申请驳回通知', ticketType: 'auth', triggerNode: 'reject', ccTargetType: 'dept', status: true, createTime: '2025-03-03 09:15:00' },
+                    { id: 14, name: '通用工单办结抄送', ticketType: 'general', triggerNode: 'approve', ccTargetType: 'role', status: false, createTime: '2025-03-04 16:45:00' },
+                    { id: 15, name: '设备申请提交抄送', ticketType: 'equipment', triggerNode: 'submit', ccTargetType: 'dept', status: true, createTime: '2025-03-05 11:20:00' },
+                    { id: 16, name: '权限变更审批抄送', ticketType: 'auth', triggerNode: 'approve', ccTargetType: 'user', status: true, createTime: '2025-03-06 08:30:00' },
+                ],
+            },
+            'customRecord': {
+                query: [
+                    { key: 'name', label: '记录名称', type: 'input', placeholder: '请输入记录名称' },
+                    { key: 'ticketType', label: '工单类型', type: 'select', placeholder: '请选择', options: [{ value: '', label: '全部' }, { value: 'general', label: '通用工单' }, { value: 'equipment', label: '设备申请' }, { value: 'auth', label: '权限申请' }] },
+                    { key: 'ccStatus', label: '状态', type: 'select', placeholder: '请选择', options: [{ value: '', label: '全部' }, { value: 'success', label: '成功' }, { value: 'failed', label: '失败' }] },
+                ],
+                toolbar: [{ type: 'add', text: '新增' }, { type: 'batchDelete' }],
+                columns: [
+                    { type: 'checkbox' },
+                    { type: 'index', title: '序号' },
+                    { key: 'name', title: '记录名称', sortable: true },
+                    { key: 'relatedTicket', title: '关联工单' },
+                    { key: 'ticketType', title: '工单类型', type: 'tag', tagMap: { 'general': { text: '通用工单', color: 'blue' }, 'equipment': { text: '设备申请', color: 'green' }, 'auth': { text: '权限申请', color: 'orange' } } },
+                    { key: 'ccUser', title: '抄送人' },
+                    { key: 'ccTime', title: '抄送时间', sortable: true },
+                    { key: 'ccStatus', title: '抄送状态', type: 'tag', tagMap: { 'success': { text: '成功', color: 'green' }, 'failed': { text: '失败', color: 'red' } } },
+                    { type: 'actions', title: '操作', actions: [{ key: 'view', label: '查看' }, { key: 'delete', label: '删除', danger: true }] },
+                ],
+                data: [
+                    { id: 21, name: '紧急工单提交抄送记录', relatedTicket: 'GD202503150001', ticketType: 'general', ccUser: '张经理', ccTime: '2025-03-15 10:30:00', ccStatus: 'success' },
+                    { id: 22, name: '设备申请通过抄送记录', relatedTicket: 'GD202503160002', ticketType: 'equipment', ccUser: '李主任', ccTime: '2025-03-16 14:20:00', ccStatus: 'success' },
+                    { id: 23, name: '权限申请驳回通知记录', relatedTicket: 'GD202503170003', ticketType: 'auth', ccUser: '王科长', ccTime: '2025-03-17 09:15:00', ccStatus: 'success' },
+                    { id: 24, name: '通用工单办结抄送记录', relatedTicket: 'GD202503180004', ticketType: 'general', ccUser: '赵处长', ccTime: '2025-03-18 11:00:00', ccStatus: 'failed' },
+                    { id: 25, name: '设备申请提交抄送记录', relatedTicket: 'GD202503190005', ticketType: 'equipment', ccUser: '钱主任', ccTime: '2025-03-19 15:40:00', ccStatus: 'success' },
+                    { id: 26, name: '权限变更审批抄送记录', relatedTicket: 'GD202503200006', ticketType: 'auth', ccUser: '孙经理', ccTime: '2025-03-20 08:50:00', ccStatus: 'success' },
+                    { id: 27, name: '投诉工单转办抄送', relatedTicket: 'GD202503210007', ticketType: 'general', ccUser: '周主管', ccTime: '2025-03-21 13:25:00', ccStatus: 'success' },
+                    { id: 28, name: '系统升级通知抄送', relatedTicket: 'GD202503220008', ticketType: 'general', ccUser: '吴专员', ccTime: '2025-03-22 10:10:00', ccStatus: 'failed' },
+                ],
+            },
+        },
     },
 
     /* ---------- 通知公告管理 ---------- */
@@ -1310,6 +1385,7 @@ var pageConfigs = {
             { key: 'position', label: '岗位管理' },
             { key: 'title', label: '职称管理' },
             { key: 'level', label: '职级管理' },
+            { key: 'duty', label: '职务管理' },
         ],
         tabConfigs: {
             'position': {
@@ -1394,6 +1470,37 @@ var pageConfigs = {
                     { id: 16, name: '副科级', code: 'LEVEL_06', rank: '副科', sort: 6, status: false, createTime: '2025-02-10 08:30:00' },
                     { id: 17, name: '科员', code: 'LEVEL_07', rank: '科员', sort: 7, status: true, createTime: '2025-02-15 13:45:00' },
                     { id: 18, name: '办事员', code: 'LEVEL_08', rank: '办事员', sort: 8, status: true, createTime: '2025-03-01 10:10:00' },
+                ],
+            },
+            'duty': {
+                query: [
+                    { key: 'name', label: '职务名称', type: 'input', placeholder: '请输入职务名称' },
+                    { key: 'dutyType', label: '职务类型', type: 'select', placeholder: '请选择', options: [{ value: '', label: '全部' }, { value: 'manage', label: '管理岗' }, { value: 'tech', label: '技术岗' }, { value: 'admin', label: '行政岗' }] },
+                    { key: 'status', label: '状态', type: 'select', placeholder: '请选择', options: [{ value: '', label: '全部' }, { value: 'true', label: '启用' }, { value: 'false', label: '停用' }] },
+                ],
+                toolbar: [{ type: 'add', text: '新增职务' }, { type: 'import' }, { type: 'batchDelete' }],
+                columns: [
+                    { type: 'checkbox' },
+                    { type: 'index', title: '序号' },
+                    { key: 'name', title: '职务名称', sortable: true },
+                    { key: 'code', title: '职务编码', sortable: true },
+                    { key: 'dutyType', title: '职务类型', type: 'tag', tagMap: { 'manage': { text: '管理岗', color: 'blue' }, 'tech': { text: '技术岗', color: 'green' }, 'admin': { text: '行政岗', color: 'orange' } } },
+                    { key: 'sort', title: '排序号', sortable: true },
+                    { key: 'status', title: '状态', type: 'tag', tagMap: { true: { text: '启用', color: 'green' }, false: { text: '停用', color: 'red' } } },
+                    { key: 'remark', title: '备注' },
+                    { key: 'createTime', title: '创建时间', sortable: true },
+                    { key: 'creator', title: '创建人' },
+                    { type: 'actions', title: '操作', actions: [{ key: 'view', label: '查看' }, { key: 'edit', label: '编辑' }, { key: 'delete', label: '删除', danger: true }] },
+                ],
+                data: [
+                    { id: 201, name: '总经理', code: 'DUTY_001', dutyType: 'manage', sort: 1, status: true, remark: '公司最高管理者', createTime: '2025-01-10 10:00:00', creator: '张三' },
+                    { id: 202, name: '副总经理', code: 'DUTY_002', dutyType: 'manage', sort: 2, status: true, remark: '协助总经理工作', createTime: '2025-01-12 14:30:00', creator: '张三' },
+                    { id: 203, name: '部门经理', code: 'DUTY_003', dutyType: 'manage', sort: 3, status: true, remark: '部门负责人', createTime: '2025-01-15 09:15:00', creator: '李四' },
+                    { id: 204, name: '高级工程师', code: 'DUTY_004', dutyType: 'tech', sort: 4, status: true, remark: '技术专家岗', createTime: '2025-01-18 16:45:00', creator: '李四' },
+                    { id: 205, name: '工程师', code: 'DUTY_005', dutyType: 'tech', sort: 5, status: true, remark: '技术岗', createTime: '2025-02-01 11:20:00', creator: '王五' },
+                    { id: 206, name: '行政主管', code: 'DUTY_006', dutyType: 'admin', sort: 6, status: true, remark: '行政管理岗', createTime: '2025-02-10 08:30:00', creator: '王五' },
+                    { id: 207, name: '人事专员', code: 'DUTY_007', dutyType: 'admin', sort: 7, status: false, remark: '人事行政岗', createTime: '2025-02-15 13:45:00', creator: '赵六' },
+                    { id: 208, name: '技术总监', code: 'DUTY_008', dutyType: 'manage', sort: 8, status: true, remark: '技术部门负责人', createTime: '2025-03-01 10:10:00', creator: '赵六' },
                 ],
             },
         },
@@ -1918,8 +2025,243 @@ var pageConfigs = {
 
     /* ---------- 应用日志 ---------- */
     'app-log': {
-        type: 'app-log',
+        type: 'tab-table',
         breadcrumb: ['应用管理', '应用日志'],
+        tabs: [
+            { key: 'opConfig', label: '操作日志配置' },
+            { key: 'subConfig', label: '订阅日志配置' },
+            { key: 'fullPushConfig', label: '全量推送日志配置' },
+            { key: 'incPushConfig', label: '增量推送日志配置' },
+            { key: 'opLog', label: '操作日志' },
+            { key: 'subLog', label: '订阅日志' },
+            { key: 'fullPushLog', label: '全量推送日志' },
+            { key: 'incPushLog', label: '增量推送日志' },
+        ],
+        tabConfigs: {
+            'opConfig': {
+                query: [
+                    { key: 'name', label: '配置名称', type: 'input', placeholder: '请输入配置名称' },
+                    { key: 'collectType', label: '采集方式', type: 'select', placeholder: '请选择', options: [{ value: '', label: '全部' }, { value: 'auto', label: '自动采集' }, { value: 'manual', label: '手动采集' }] },
+                    { key: 'status', label: '状态', type: 'select', placeholder: '请选择', options: [{ value: '', label: '全部' }, { value: 'true', label: '启用' }, { value: 'false', label: '停用' }] },
+                ],
+                toolbar: [{ type: 'add', text: '新增配置' }, { type: 'batchDelete' }],
+                columns: [
+                    { type: 'checkbox' },
+                    { type: 'index', title: '序号' },
+                    { key: 'name', title: '配置名称', sortable: true },
+                    { key: 'logType', title: '日志类型' },
+                    { key: 'collectType', title: '采集方式' },
+                    { key: 'retentionDays', title: '保留天数', sortable: true },
+                    { key: 'status', title: '状态', type: 'tag', tagMap: { true: { text: '启用', color: 'green' }, false: { text: '停用', color: 'red' } } },
+                    { key: 'createTime', title: '创建时间', sortable: true },
+                    { type: 'actions', title: '操作', actions: [{ key: 'view', label: '查看' }, { key: 'edit', label: '编辑' }, { key: 'delete', label: '删除', danger: true }] },
+                ],
+                data: [
+                    { id: 1, name: '用户操作日志配置', logType: '操作日志', collectType: '自动采集', retentionDays: 90, status: true, createTime: '2025-01-10 10:00:00' },
+                    { id: 2, name: '管理员操作日志配置', logType: '操作日志', collectType: '自动采集', retentionDays: 180, status: true, createTime: '2025-01-12 14:30:00' },
+                    { id: 3, name: '登录操作日志配置', logType: '操作日志', collectType: '自动采集', retentionDays: 90, status: true, createTime: '2025-01-15 09:15:00' },
+                    { id: 4, name: 'API调用日志配置', logType: '操作日志', collectType: '手动采集', retentionDays: 60, status: false, createTime: '2025-01-18 16:45:00' },
+                    { id: 5, name: '数据操作日志配置', logType: '操作日志', collectType: '自动采集', retentionDays: 365, status: true, createTime: '2025-02-01 11:20:00' },
+                    { id: 6, name: '系统操作日志配置', logType: '操作日志', collectType: '自动采集', retentionDays: 90, status: true, createTime: '2025-02-10 08:30:00' },
+                ],
+            },
+            'subConfig': {
+                query: [
+                    { key: 'name', label: '配置名称', type: 'input', placeholder: '请输入配置名称' },
+                    { key: 'pushType', label: '推送方式', type: 'select', placeholder: '请选择', options: [{ value: '', label: '全部' }, { value: 'webhook', label: 'Webhook' }, { value: 'email', label: '邮件' }, { value: 'sms', label: '短信' }] },
+                    { key: 'status', label: '状态', type: 'select', placeholder: '请选择', options: [{ value: '', label: '全部' }, { value: 'true', label: '启用' }, { value: 'false', label: '停用' }] },
+                ],
+                toolbar: [{ type: 'add', text: '新增配置' }, { type: 'batchDelete' }],
+                columns: [
+                    { type: 'checkbox' },
+                    { type: 'index', title: '序号' },
+                    { key: 'name', title: '配置名称', sortable: true },
+                    { key: 'topic', title: '订阅主题' },
+                    { key: 'pushType', title: '推送方式', type: 'tag', tagMap: { 'webhook': { text: 'Webhook', color: 'blue' }, 'email': { text: '邮件', color: 'green' }, 'sms': { text: '短信', color: 'orange' } } },
+                    { key: 'pushAddress', title: '推送地址' },
+                    { key: 'status', title: '状态', type: 'tag', tagMap: { true: { text: '启用', color: 'green' }, false: { text: '停用', color: 'red' } } },
+                    { key: 'createTime', title: '创建时间', sortable: true },
+                    { type: 'actions', title: '操作', actions: [{ key: 'view', label: '查看' }, { key: 'edit', label: '编辑' }, { key: 'delete', label: '删除', danger: true }] },
+                ],
+                data: [
+                    { id: 11, name: '应用更新订阅配置', topic: '应用更新', pushType: 'webhook', pushAddress: 'https://api.example.com/webhook', status: true, createTime: '2025-01-10 10:00:00' },
+                    { id: 12, name: '告警通知订阅', topic: '系统告警', pushType: 'email', pushAddress: 'admin@example.com', status: true, createTime: '2025-01-12 14:30:00' },
+                    { id: 13, name: '工单状态订阅', topic: '工单状态变更', pushType: 'sms', pushAddress: '138****1234', status: true, createTime: '2025-01-15 09:15:00' },
+                    { id: 14, name: '数据同步订阅', topic: '数据同步', pushType: 'webhook', pushAddress: 'https://api.example.com/sync', status: false, createTime: '2025-01-18 16:45:00' },
+                    { id: 15, name: '审批结果订阅', topic: '审批结果', pushType: 'email', pushAddress: 'approve@example.com', status: true, createTime: '2025-02-01 11:20:00' },
+                    { id: 16, name: '消息提醒订阅', topic: '消息提醒', pushType: 'sms', pushAddress: '139****5678', status: true, createTime: '2025-02-10 08:30:00' },
+                ],
+            },
+            'fullPushConfig': {
+                query: [
+                    { key: 'name', label: '配置名称', type: 'input', placeholder: '请输入配置名称' },
+                    { key: 'pushCycle', label: '推送周期', type: 'select', placeholder: '请选择', options: [{ value: '', label: '全部' }, { value: 'daily', label: '每日' }, { value: 'weekly', label: '每周' }, { value: 'monthly', label: '每月' }] },
+                    { key: 'status', label: '状态', type: 'select', placeholder: '请选择', options: [{ value: '', label: '全部' }, { value: 'true', label: '启用' }, { value: 'false', label: '停用' }] },
+                ],
+                toolbar: [{ type: 'add', text: '新增配置' }, { type: 'batchDelete' }],
+                columns: [
+                    { type: 'checkbox' },
+                    { type: 'index', title: '序号' },
+                    { key: 'name', title: '配置名称', sortable: true },
+                    { key: 'pushCycle', title: '推送周期', type: 'tag', tagMap: { 'daily': { text: '每日', color: 'blue' }, 'weekly': { text: '每周', color: 'green' }, 'monthly': { text: '每月', color: 'orange' } } },
+                    { key: 'pushTime', title: '推送时间' },
+                    { key: 'pushTarget', title: '推送目标' },
+                    { key: 'status', title: '状态', type: 'tag', tagMap: { true: { text: '启用', color: 'green' }, false: { text: '停用', color: 'red' } } },
+                    { key: 'createTime', title: '创建时间', sortable: true },
+                    { type: 'actions', title: '操作', actions: [{ key: 'view', label: '查看' }, { key: 'edit', label: '编辑' }, { key: 'delete', label: '删除', danger: true }] },
+                ],
+                data: [
+                    { id: 21, name: '每日全量日志推送', pushCycle: 'daily', pushTime: '00:00', pushTarget: '数据中心', status: true, createTime: '2025-01-10 10:00:00' },
+                    { id: 22, name: '每周汇总推送', pushCycle: 'weekly', pushTime: '周一 08:00', pushTarget: '管理平台', status: true, createTime: '2025-01-12 14:30:00' },
+                    { id: 23, name: '月度报表推送', pushCycle: 'monthly', pushTime: '每月1日 09:00', pushTarget: '报表系统', status: true, createTime: '2025-01-15 09:15:00' },
+                    { id: 24, name: '全量备份推送', pushCycle: 'daily', pushTime: '02:00', pushTarget: '备份中心', status: false, createTime: '2025-01-18 16:45:00' },
+                    { id: 25, name: '审计日志推送', pushCycle: 'daily', pushTime: '23:59', pushTarget: '审计系统', status: true, createTime: '2025-02-01 11:20:00' },
+                    { id: 26, name: '季度归档推送', pushCycle: 'monthly', pushTime: '每季度首日', pushTarget: '归档系统', status: true, createTime: '2025-02-10 08:30:00' },
+                ],
+            },
+            'incPushConfig': {
+                query: [
+                    { key: 'name', label: '配置名称', type: 'input', placeholder: '请输入配置名称' },
+                    { key: 'triggerType', label: '触发条件', type: 'select', placeholder: '请选择', options: [{ value: '', label: '全部' }, { value: 'realtime', label: '实时触发' }, { value: 'timed', label: '定时触发' }, { value: 'event', label: '事件触发' }] },
+                    { key: 'status', label: '状态', type: 'select', placeholder: '请选择', options: [{ value: '', label: '全部' }, { value: 'true', label: '启用' }, { value: 'false', label: '停用' }] },
+                ],
+                toolbar: [{ type: 'add', text: '新增配置' }, { type: 'batchDelete' }],
+                columns: [
+                    { type: 'checkbox' },
+                    { type: 'index', title: '序号' },
+                    { key: 'name', title: '配置名称', sortable: true },
+                    { key: 'triggerType', title: '触发条件', type: 'tag', tagMap: { 'realtime': { text: '实时触发', color: 'blue' }, 'timed': { text: '定时触发', color: 'green' }, 'event': { text: '事件触发', color: 'orange' } } },
+                    { key: 'pushTarget', title: '推送目标' },
+                    { key: 'status', title: '状态', type: 'tag', tagMap: { true: { text: '启用', color: 'green' }, false: { text: '停用', color: 'red' } } },
+                    { key: 'createTime', title: '创建时间', sortable: true },
+                    { type: 'actions', title: '操作', actions: [{ key: 'view', label: '查看' }, { key: 'edit', label: '编辑' }, { key: 'delete', label: '删除', danger: true }] },
+                ],
+                data: [
+                    { id: 31, name: '实时增量推送', triggerType: 'realtime', pushTarget: '数据中心', status: true, createTime: '2025-01-10 10:00:00' },
+                    { id: 32, name: '定时增量推送', triggerType: 'timed', pushTarget: '管理平台', status: true, createTime: '2025-01-12 14:30:00' },
+                    { id: 33, name: '事件触发推送', triggerType: 'event', pushTarget: '告警系统', status: true, createTime: '2025-01-15 09:15:00' },
+                    { id: 34, name: '增量同步推送', triggerType: 'realtime', pushTarget: '同步平台', status: false, createTime: '2025-01-18 16:45:00' },
+                    { id: 35, name: '变更推送配置', triggerType: 'event', pushTarget: '变更系统', status: true, createTime: '2025-02-01 11:20:00' },
+                    { id: 36, name: '小时级增量推送', triggerType: 'timed', pushTarget: '报表系统', status: true, createTime: '2025-02-10 08:30:00' },
+                ],
+            },
+            'opLog': {
+                query: [
+                    { key: 'operator', label: '操作人', type: 'input', placeholder: '请输入操作人' },
+                    { key: 'opType', label: '操作类型', type: 'select', placeholder: '请选择', options: [{ value: '', label: '全部' }, { value: '新增', label: '新增' }, { value: '修改', label: '修改' }, { value: '删除', label: '删除' }, { value: '查询', label: '查询' }] },
+                    { key: 'dateRange', label: '时间范围', type: 'input', placeholder: '开始时间 - 结束时间' },
+                ],
+                toolbar: [{ type: 'export' }],
+                columns: [
+                    { type: 'index', title: '序号' },
+                    { key: 'logId', title: '日志ID', sortable: true },
+                    { key: 'operator', title: '操作人' },
+                    { key: 'opType', title: '操作类型', type: 'tag', tagMap: { '新增': { text: '新增', color: 'green' }, '修改': { text: '修改', color: 'blue' }, '删除': { text: '删除', color: 'red' }, '查询': { text: '查询', color: 'gray' }, '登录': { text: '登录', color: 'orange' } } },
+                    { key: 'content', title: '操作内容' },
+                    { key: 'opTime', title: '操作时间', sortable: true },
+                    { key: 'ip', title: 'IP地址' },
+                    { key: 'appName', title: '应用名称' },
+                ],
+                data: [
+                    { id: 101, logId: 'LOG202503200001', operator: '张三', opType: '新增', content: '新增应用"智慧办公系统"', opTime: '2025-03-20 10:30:00', ip: '192.168.1.101', appName: '应用管理' },
+                    { id: 102, logId: 'LOG202503200002', operator: '李四', opType: '修改', content: '修改工单流程配置', opTime: '2025-03-20 10:25:00', ip: '192.168.1.102', appName: '工单中心' },
+                    { id: 103, logId: 'LOG202503200003', operator: '王五', opType: '删除', content: '删除过期字典项', opTime: '2025-03-20 10:20:00', ip: '192.168.1.103', appName: '系统管理' },
+                    { id: 104, logId: 'LOG202503200004', operator: '赵六', opType: '查询', content: '查询应用列表', opTime: '2025-03-20 10:15:00', ip: '192.168.1.104', appName: '应用管理' },
+                    { id: 105, logId: 'LOG202503200005', operator: '钱七', opType: '新增', content: '新增角色"业务管理员"', opTime: '2025-03-20 10:10:00', ip: '192.168.1.105', appName: '权限管理' },
+                    { id: 106, logId: 'LOG202503200006', operator: '孙八', opType: '修改', content: '修改用户信息', opTime: '2025-03-20 10:05:00', ip: '192.168.1.106', appName: '组织机构' },
+                    { id: 107, logId: 'LOG202503200007', operator: '周九', opType: '登录', content: '用户登录系统', opTime: '2025-03-20 09:55:00', ip: '192.168.1.107', appName: '系统' },
+                    { id: 108, logId: 'LOG202503200008', operator: '吴十', opType: '删除', content: '删除权限组', opTime: '2025-03-20 09:50:00', ip: '192.168.1.108', appName: '权限管理' },
+                    { id: 109, logId: 'LOG202503200009', operator: '郑十一', opType: '查询', content: '查询日志记录', opTime: '2025-03-20 09:45:00', ip: '192.168.1.109', appName: '系统管理' },
+                    { id: 110, logId: 'LOG202503200010', operator: '冯十二', opType: '修改', content: '修改系统配置', opTime: '2025-03-20 09:40:00', ip: '192.168.1.110', appName: '系统管理' },
+                ],
+            },
+            'subLog': {
+                query: [
+                    { key: 'topic', label: '订阅主题', type: 'input', placeholder: '请输入订阅主题' },
+                    { key: 'pushType', label: '推送方式', type: 'select', placeholder: '请选择', options: [{ value: '', label: '全部' }, { value: 'Webhook', label: 'Webhook' }, { value: '邮件', label: '邮件' }, { value: '短信', label: '短信' }] },
+                    { key: 'pushStatus', label: '推送状态', type: 'select', placeholder: '请选择', options: [{ value: '', label: '全部' }, { value: 'success', label: '成功' }, { value: 'failed', label: '失败' }] },
+                ],
+                toolbar: [{ type: 'export' }],
+                columns: [
+                    { type: 'index', title: '序号' },
+                    { key: 'logId', title: '日志ID', sortable: true },
+                    { key: 'topic', title: '订阅主题' },
+                    { key: 'pushType', title: '推送方式', type: 'tag', tagMap: { 'Webhook': { text: 'Webhook', color: 'blue' }, '邮件': { text: '邮件', color: 'green' }, '短信': { text: '短信', color: 'orange' } } },
+                    { key: 'pushStatus', title: '推送状态', type: 'tag', tagMap: { 'success': { text: '成功', color: 'green' }, 'failed': { text: '失败', color: 'red' } } },
+                    { key: 'pushTime', title: '推送时间', sortable: true },
+                    { key: 'receiver', title: '接收人' },
+                ],
+                data: [
+                    { id: 201, logId: 'SUB202503200001', topic: '应用更新', pushType: 'Webhook', pushStatus: 'success', pushTime: '2025-03-20 10:30:00', receiver: '数据中心' },
+                    { id: 202, logId: 'SUB202503200002', topic: '系统告警', pushType: '邮件', pushStatus: 'success', pushTime: '2025-03-20 10:25:00', receiver: 'admin@example.com' },
+                    { id: 203, logId: 'SUB202503200003', topic: '工单状态变更', pushType: '短信', pushStatus: 'success', pushTime: '2025-03-20 10:20:00', receiver: '138****1234' },
+                    { id: 204, logId: 'SUB202503200004', topic: '数据同步', pushType: 'Webhook', pushStatus: 'failed', pushTime: '2025-03-20 10:15:00', receiver: '同步平台' },
+                    { id: 205, logId: 'SUB202503200005', topic: '审批结果', pushType: '邮件', pushStatus: 'success', pushTime: '2025-03-20 10:10:00', receiver: 'approve@example.com' },
+                    { id: 206, logId: 'SUB202503200006', topic: '消息提醒', pushType: '短信', pushStatus: 'success', pushTime: '2025-03-20 10:05:00', receiver: '139****5678' },
+                    { id: 207, logId: 'SUB202503200007', topic: '应用更新', pushType: '邮件', pushStatus: 'success', pushTime: '2025-03-20 10:00:00', receiver: 'user@example.com' },
+                    { id: 208, logId: 'SUB202503200008', topic: '系统告警', pushType: '短信', pushStatus: 'failed', pushTime: '2025-03-20 09:55:00', receiver: '137****9012' },
+                    { id: 209, logId: 'SUB202503200009', topic: '工单状态变更', pushType: 'Webhook', pushStatus: 'success', pushTime: '2025-03-20 09:50:00', receiver: '工单系统' },
+                    { id: 210, logId: 'SUB202503200010', topic: '数据同步', pushType: '邮件', pushStatus: 'success', pushTime: '2025-03-20 09:45:00', receiver: 'data@example.com' },
+                ],
+            },
+            'fullPushLog': {
+                query: [
+                    { key: 'taskName', label: '推送任务名称', type: 'input', placeholder: '请输入任务名称' },
+                    { key: 'pushCycle', label: '推送周期', type: 'select', placeholder: '请选择', options: [{ value: '', label: '全部' }, { value: '每日', label: '每日' }, { value: '每周', label: '每周' }, { value: '每月', label: '每月' }] },
+                    { key: 'pushStatus', label: '推送状态', type: 'select', placeholder: '请选择', options: [{ value: '', label: '全部' }, { value: 'success', label: '成功' }, { value: 'failed', label: '失败' }, { value: 'processing', label: '进行中' }] },
+                ],
+                toolbar: [{ type: 'export' }],
+                columns: [
+                    { type: 'index', title: '序号' },
+                    { key: 'logId', title: '日志ID', sortable: true },
+                    { key: 'taskName', title: '推送任务名称' },
+                    { key: 'pushCycle', title: '推送周期', type: 'tag', tagMap: { '每日': { text: '每日', color: 'blue' }, '每周': { text: '每周', color: 'green' }, '每月': { text: '每月', color: 'orange' } } },
+                    { key: 'pushTime', title: '推送时间', sortable: true },
+                    { key: 'pushStatus', title: '推送状态', type: 'tag', tagMap: { 'success': { text: '成功', color: 'green' }, 'failed': { text: '失败', color: 'red' }, 'processing': { text: '进行中', color: 'blue' } } },
+                    { key: 'pushCount', title: '推送数量' },
+                ],
+                data: [
+                    { id: 301, logId: 'FUL202503200001', taskName: '每日全量日志推送', pushCycle: '每日', pushTime: '2025-03-20 00:00:00', pushStatus: 'success', pushCount: 15234 },
+                    { id: 302, logId: 'FUL202503200002', taskName: '每周汇总推送', pushCycle: '每周', pushTime: '2025-03-17 08:00:00', pushStatus: 'success', pushCount: 85621 },
+                    { id: 303, logId: 'FUL202503200003', taskName: '月度报表推送', pushCycle: '每月', pushTime: '2025-03-01 09:00:00', pushStatus: 'success', pushCount: 256789 },
+                    { id: 304, logId: 'FUL202503200004', taskName: '全量备份推送', pushCycle: '每日', pushTime: '2025-03-20 02:00:00', pushStatus: 'failed', pushCount: 0 },
+                    { id: 305, logId: 'FUL202503200005', taskName: '审计日志推送', pushCycle: '每日', pushTime: '2025-03-20 23:59:00', pushStatus: 'processing', pushCount: 5678 },
+                    { id: 306, logId: 'FUL202503200006', taskName: '季度归档推送', pushCycle: '每月', pushTime: '2025-03-01 00:00:00', pushStatus: 'success', pushCount: 512345 },
+                    { id: 307, logId: 'FUL202503200007', taskName: '每日全量日志推送', pushCycle: '每日', pushTime: '2025-03-19 00:00:00', pushStatus: 'success', pushCount: 14890 },
+                    { id: 308, logId: 'FUL202503200008', taskName: '每周汇总推送', pushCycle: '每周', pushTime: '2025-03-10 08:00:00', pushStatus: 'success', pushCount: 82103 },
+                    { id: 309, logId: 'FUL202503200009', taskName: '月度报表推送', pushCycle: '每月', pushTime: '2025-02-01 09:00:00', pushStatus: 'success', pushCount: 245678 },
+                    { id: 310, logId: 'FUL202503200010', taskName: '审计日志推送', pushCycle: '每日', pushTime: '2025-03-19 23:59:00', pushStatus: 'success', pushCount: 12345 },
+                ],
+            },
+            'incPushLog': {
+                query: [
+                    { key: 'triggerType', label: '触发条件', type: 'select', placeholder: '请选择', options: [{ value: '', label: '全部' }, { value: '实时触发', label: '实时触发' }, { value: '定时触发', label: '定时触发' }, { value: '事件触发', label: '事件触发' }] },
+                    { key: 'pushStatus', label: '推送状态', type: 'select', placeholder: '请选择', options: [{ value: '', label: '全部' }, { value: 'success', label: '成功' }, { value: 'failed', label: '失败' }] },
+                    { key: 'dateRange', label: '时间范围', type: 'input', placeholder: '开始时间 - 结束时间' },
+                ],
+                toolbar: [{ type: 'export' }],
+                columns: [
+                    { type: 'index', title: '序号' },
+                    { key: 'logId', title: '日志ID', sortable: true },
+                    { key: 'triggerType', title: '触发条件', type: 'tag', tagMap: { '实时触发': { text: '实时触发', color: 'blue' }, '定时触发': { text: '定时触发', color: 'green' }, '事件触发': { text: '事件触发', color: 'orange' } } },
+                    { key: 'pushTime', title: '推送时间', sortable: true },
+                    { key: 'pushStatus', title: '推送状态', type: 'tag', tagMap: { 'success': { text: '成功', color: 'green' }, 'failed': { text: '失败', color: 'red' } } },
+                    { key: 'pushCount', title: '推送数量' },
+                ],
+                data: [
+                    { id: 401, logId: 'INC202503200001', triggerType: '实时触发', pushTime: '2025-03-20 10:30:00', pushStatus: 'success', pushCount: 128 },
+                    { id: 402, logId: 'INC202503200002', triggerType: '定时触发', pushTime: '2025-03-20 10:00:00', pushStatus: 'success', pushCount: 256 },
+                    { id: 403, logId: 'INC202503200003', triggerType: '事件触发', pushTime: '2025-03-20 09:45:00', pushStatus: 'success', pushCount: 64 },
+                    { id: 404, logId: 'INC202503200004', triggerType: '实时触发', pushTime: '2025-03-20 09:30:00', pushStatus: 'failed', pushCount: 0 },
+                    { id: 405, logId: 'INC202503200005', triggerType: '定时触发', pushTime: '2025-03-20 09:00:00', pushStatus: 'success', pushCount: 512 },
+                    { id: 406, logId: 'INC202503200006', triggerType: '事件触发', pushTime: '2025-03-20 08:45:00', pushStatus: 'success', pushCount: 32 },
+                    { id: 407, logId: 'INC202503200007', triggerType: '实时触发', pushTime: '2025-03-20 08:30:00', pushStatus: 'success', pushCount: 192 },
+                    { id: 408, logId: 'INC202503200008', triggerType: '定时触发', pushTime: '2025-03-20 08:00:00', pushStatus: 'success', pushCount: 384 },
+                    { id: 409, logId: 'INC202503200009', triggerType: '事件触发', pushTime: '2025-03-20 07:30:00', pushStatus: 'failed', pushCount: 0 },
+                    { id: 410, logId: 'INC202503200010', triggerType: '实时触发', pushTime: '2025-03-20 07:00:00', pushStatus: 'success', pushCount: 256 },
+                ],
+            },
+        },
     },
 
     /* ---------- 待办管理 ---------- */
@@ -1999,7 +2341,7 @@ var pageConfigs = {
         breadcrumb: ['工单中心', '办件记录'],
         query: [
             { key: 'keyword', label: '工单标题/编号', type: 'input', placeholder: '请输入工单标题或编号' },
-            { key: 'handleType', label: '操作类型', type: 'select', placeholder: '请选择', options: [{ value: '', label: '全部' }, { value: 'create', label: '创建' }, { value: 'approve', label: '审批' }, { value: 'transfer', label: '转办' }, { value: 'close', label: '办结' }] },
+            { key: 'handleType', label: '操作类型', type: 'select', placeholder: '请选择', options: [{ value: '', label: '全部' }, { value: 'create', label: '创建' }, { value: 'approve', label: '审批' }, { value: 'transfer', label: '转办' }, { value: 'reject', label: '退回' }, { value: 'close', label: '办结' }] },
         ],
         toolbar: [{ type: 'add', text: '新增' }, { type: 'batchDelete' }, { type: 'export' }],
         columns: [
@@ -2007,20 +2349,24 @@ var pageConfigs = {
             { type: 'index', title: '序号' },
             { key: 'ticketNo', title: '工单编号', sortable: true },
             { key: 'title', title: '工单标题' },
-            { key: 'handleType', title: '操作类型', type: 'tag', tagMap: { 'create': { text: '创建', color: 'blue' }, 'approve': { text: '审批', color: 'green' }, 'transfer': { text: '转办', color: 'orange' }, 'close': { text: '办结', color: 'gray' } } },
+            { key: 'handleType', title: '操作类型', type: 'tag', tagMap: { 'create': { text: '创建', color: 'blue' }, 'approve': { text: '审批', color: 'green' }, 'transfer': { text: '转办', color: 'orange' }, 'reject': { text: '退回', color: 'red' }, 'close': { text: '办结', color: 'gray' } } },
             { key: 'handler', title: '操作人' },
             { key: 'handleTime', title: '操作时间', sortable: true },
+            { key: 'handleRemark', title: '操作备注' },
+            { key: 'handleIp', title: '操作IP' },
             { type: 'actions', title: '操作', actions: [{ key: 'view', label: '查看' }, { key: 'edit', label: '编辑' }, { key: 'delete', label: '删除', danger: true }] },
         ],
         data: [
-            { id: 1, ticketNo: '1787233932395', title: '测试', handleType: 'create', handler: '张子俊', handleTime: '2026-08-20 21:52:12' },
-            { id: 2, ticketNo: '1787233899541', title: '测试', handleType: 'approve', handler: '刘述涛', handleTime: '2026-08-20 22:10:00' },
-            { id: 3, ticketNo: '1787231656829', title: '测试', handleType: 'transfer', handler: '李凌云', handleTime: '2026-08-21 09:15:00' },
-            { id: 4, ticketNo: '1787213862744', title: '搜索问题', handleType: 'create', handler: '熊欣果', handleTime: '2026-08-21 10:30:00' },
-            { id: 5, ticketNo: '1787213839986', title: '系统操作', handleType: 'close', handler: '许明哲', handleTime: '2026-08-22 14:20:00' },
-            { id: 6, ticketNo: '1786071569844', title: '工单转发测试', handleType: 'transfer', handler: '钱健', handleTime: '2026-08-23 11:00:00' },
-            { id: 7, ticketNo: '1785809739240', title: '功能优化', handleType: 'approve', handler: '陈运贞', handleTime: '2026-08-24 16:45:00' },
-            { id: 8, ticketNo: '1783673158054', title: '纪检标签看不到单位内部其...', handleType: 'create', handler: '黄牟成', handleTime: '2026-08-25 08:30:00' },
+            { id: 1, ticketNo: '1787233932395', title: '办公系统登录异常问题', handleType: 'create', handler: '张子俊', handleTime: '2026-08-20 21:52:12', handleRemark: '用户提交工单', handleIp: '192.168.1.101' },
+            { id: 2, ticketNo: '1787233899541', title: '民生服务平台功能建议', handleType: 'approve', handler: '刘述涛', handleTime: '2026-08-20 22:10:00', handleRemark: '审批通过', handleIp: '192.168.1.102' },
+            { id: 3, ticketNo: '1787231656829', title: '市场监管数据更新申请', handleType: 'transfer', handler: '李凌云', handleTime: '2026-08-21 09:15:00', handleRemark: '转办至数据组', handleIp: '192.168.1.103' },
+            { id: 4, ticketNo: '1787213862744', title: '搜索功能优化需求', handleType: 'create', handler: '熊欣果', handleTime: '2026-08-21 10:30:00', handleRemark: '提交功能优化申请', handleIp: '192.168.1.104' },
+            { id: 5, ticketNo: '1787213839986', title: '系统操作权限变更', handleType: 'close', handler: '许明哲', handleTime: '2026-08-22 14:20:00', handleRemark: '工单办结', handleIp: '192.168.1.105' },
+            { id: 6, ticketNo: '1786071569844', title: '工单转发测试', handleType: 'transfer', handler: '钱健', handleTime: '2026-08-23 11:00:00', handleRemark: '转办至测试组', handleIp: '192.168.1.106' },
+            { id: 7, ticketNo: '1785809739240', title: '功能优化建议反馈', handleType: 'approve', handler: '陈运贞', handleTime: '2026-08-24 16:45:00', handleRemark: '审批通过，已转研发', handleIp: '192.168.1.107' },
+            { id: 8, ticketNo: '1783673158054', title: '纪检标签看不到单位内部其他部门', handleType: 'reject', handler: '黄牟成', handleTime: '2026-08-25 08:30:00', handleRemark: '信息不全，退回补充', handleIp: '192.168.1.108' },
+            { id: 9, ticketNo: '1782934567890', title: '应急系统模块故障报修', handleType: 'create', handler: '周宇恒', handleTime: '2026-08-26 09:45:00', handleRemark: '系统故障紧急报修', handleIp: '192.168.1.109' },
+            { id: 10, ticketNo: '1781876543210', title: '数据导出功能异常', handleType: 'close', handler: '吴思远', handleTime: '2026-08-27 15:30:00', handleRemark: '问题已修复，工单办结', handleIp: '192.168.1.110' },
         ],
     },
 
@@ -2282,6 +2628,400 @@ var pageConfigs = {
                 { id: 3, time: '2025-03-20 10:20:00', operator: '系统', opType: '验证码', content: '发送验证码短信至137****9012', ip: '系统' },
                 { id: 4, time: '2025-03-20 10:15:00', operator: '系统', opType: '通知', content: '发送审批通知短信至136****3456', ip: '系统' },
             ],
+        },
+    },
+
+    /* ---------- 用户权限组关联 ---------- */
+    'user-perm-group': {
+        breadcrumb: ['权限管理', '授权管理', '用户权限组关联'],
+        query: [
+            { key: 'name', label: '权限组名称', type: 'input', placeholder: '请输入权限组名称' },
+            { key: 'code', label: '权限组编码', type: 'input', placeholder: '请输入权限组编码' },
+            { key: 'status', label: '状态', type: 'select', placeholder: '请选择', options: [{ value: '', label: '全部' }, { value: 'true', label: '启用' }, { value: 'false', label: '停用' }] },
+        ],
+        toolbar: [{ type: 'add', text: '新增关联' }, { type: 'batchDelete' }],
+        columns: [
+            { type: 'checkbox' },
+            { type: 'index', title: '序号' },
+            { key: 'name', title: '权限组名称', sortable: true },
+            { key: 'code', title: '权限组编码', sortable: true },
+            { key: 'permType', title: '权限类型', type: 'tag', tagMap: { 'user': { text: '用户权限组', color: 'blue' } } },
+            { key: 'userCount', title: '关联用户数' },
+            { key: 'status', title: '状态', type: 'tag', tagMap: { true: { text: '启用', color: 'green' }, false: { text: '停用', color: 'red' } } },
+            { key: 'description', title: '描述' },
+            { key: 'createTime', title: '创建时间', sortable: true },
+            { key: 'creator', title: '创建人' },
+            { type: 'actions', title: '操作', actions: [{ key: 'view', label: '查看' }, { key: 'edit', label: '编辑' }, { key: 'configPerm', label: '配置权限' }, { key: 'delete', label: '删除', danger: true }] },
+        ],
+        data: [
+            { id: 1, name: '普通用户权限组', code: 'UPG_001', permType: 'user', userCount: 128, status: true, description: '普通用户基础权限', createTime: '2025-01-10 10:00:00', creator: '张三' },
+            { id: 2, name: '业务办理权限组', code: 'UPG_002', permType: 'user', userCount: 56, status: true, description: '业务办理相关权限', createTime: '2025-01-12 14:30:00', creator: '张三' },
+            { id: 3, name: '数据查询权限组', code: 'UPG_003', permType: 'user', userCount: 89, status: true, description: '数据查询只读权限', createTime: '2025-01-15 09:15:00', creator: '李四' },
+            { id: 4, name: '审批管理权限组', code: 'UPG_004', permType: 'user', userCount: 34, status: true, description: '审批流程管理权限', createTime: '2025-01-18 16:45:00', creator: '李四' },
+            { id: 5, name: '系统只读权限组', code: 'UPG_005', permType: 'user', userCount: 210, status: false, description: '系统只读查看权限', createTime: '2025-02-01 11:20:00', creator: '王五' },
+            { id: 6, name: '高级用户权限组', code: 'UPG_006', permType: 'user', userCount: 15, status: true, description: '高级功能操作权限', createTime: '2025-02-10 08:30:00', creator: '王五' },
+        ],
+    },
+
+    /* ---------- 应用接入流程审批 ---------- */
+    'app-access-flow': {
+        type: 'tab-table',
+        breadcrumb: ['应用管理', '应用接入流程审批'],
+        tabs: [
+            { key: 'config', label: '流程配置' },
+            { key: 'list', label: '流程列表' },
+        ],
+        tabConfigs: {
+            'config': {
+                query: [
+                    { key: 'name', label: '流程名称', type: 'input', placeholder: '请输入流程名称' },
+                    { key: 'appType', label: '适用应用类型', type: 'select', placeholder: '请选择', options: [{ value: '', label: '全部' }, { value: 'business', label: '业务应用' }, { value: 'office', label: '办公应用' }, { value: 'service', label: '服务应用' }] },
+                    { key: 'status', label: '状态', type: 'select', placeholder: '请选择', options: [{ value: '', label: '全部' }, { value: 'true', label: '启用' }, { value: 'false', label: '停用' }] },
+                ],
+                toolbar: [{ type: 'add', text: '新增流程' }, { type: 'batchDelete' }],
+                columns: [
+                    { type: 'checkbox' },
+                    { type: 'index', title: '序号' },
+                    { key: 'name', title: '流程名称', sortable: true },
+                    { key: 'code', title: '流程编码', sortable: true },
+                    { key: 'appType', title: '适用应用类型', type: 'tag', tagMap: { 'business': { text: '业务应用', color: 'blue' }, 'office': { text: '办公应用', color: 'green' }, 'service': { text: '服务应用', color: 'orange' } } },
+                    { key: 'nodeCount', title: '审批节点数' },
+                    { key: 'status', title: '状态', type: 'tag', tagMap: { true: { text: '启用', color: 'green' }, false: { text: '停用', color: 'red' } } },
+                    { key: 'createTime', title: '创建时间', sortable: true },
+                    { type: 'actions', title: '操作', actions: [{ key: 'view', label: '查看' }, { key: 'edit', label: '编辑' }, { key: 'delete', label: '删除', danger: true }] },
+                ],
+                data: [
+                    { id: 1, name: '标准应用接入流程', code: 'AAC_001', appType: 'business', nodeCount: 3, status: true, createTime: '2025-01-10 10:00:00' },
+                    { id: 2, name: '办公应用接入流程', code: 'AAC_002', appType: 'office', nodeCount: 2, status: true, createTime: '2025-01-12 14:30:00' },
+                    { id: 3, name: '服务应用接入流程', code: 'AAC_003', appType: 'service', nodeCount: 4, status: true, createTime: '2025-01-15 09:15:00' },
+                    { id: 4, name: '快速接入流程', code: 'AAC_004', appType: 'business', nodeCount: 1, status: false, createTime: '2025-01-18 16:45:00' },
+                    { id: 5, name: '重点应用接入流程', code: 'AAC_005', appType: 'business', nodeCount: 5, status: true, createTime: '2025-02-01 11:20:00' },
+                    { id: 6, name: '测试应用接入流程', code: 'AAC_006', appType: 'office', nodeCount: 2, status: false, createTime: '2025-02-10 08:30:00' },
+                ],
+            },
+            'list': {
+                query: [
+                    { key: 'appName', label: '应用名称', type: 'input', placeholder: '请输入应用名称' },
+                    { key: 'status', label: '流程状态', type: 'select', placeholder: '请选择', options: [{ value: '', label: '全部' }, { value: 'pending', label: '待审批' }, { value: 'processing', label: '审批中' }, { value: 'approved', label: '已通过' }, { value: 'rejected', label: '已驳回' }] },
+                    { key: 'applicant', label: '申请人', type: 'input', placeholder: '请输入申请人' },
+                ],
+                toolbar: [{ type: 'batchDelete' }],
+                columns: [
+                    { type: 'checkbox' },
+                    { type: 'index', title: '序号' },
+                    { key: 'instanceId', title: '流程实例ID', sortable: true },
+                    { key: 'appName', title: '应用名称' },
+                    { key: 'status', title: '流程状态', type: 'tag', tagMap: { 'pending': { text: '待审批', color: 'orange' }, 'processing': { text: '审批中', color: 'blue' }, 'approved': { text: '已通过', color: 'green' }, 'rejected': { text: '已驳回', color: 'red' } } },
+                    { key: 'currentNode', title: '当前节点' },
+                    { key: 'applicant', title: '申请人' },
+                    { key: 'applyTime', title: '申请时间', sortable: true },
+                    { type: 'actions', title: '操作', actions: [{ key: 'view', label: '查看' }] },
+                ],
+                data: [
+                    { id: 11, instanceId: 'FLW202503001', appName: '智慧办公系统', status: 'approved', currentNode: '已完成', applicant: '张三', applyTime: '2025-03-01 10:00:00' },
+                    { id: 12, instanceId: 'FLW202503002', appName: '民生服务平台', status: 'processing', currentNode: '二级审批', applicant: '李四', applyTime: '2025-03-05 14:30:00' },
+                    { id: 13, instanceId: 'FLW202503003', appName: '经济运行监测系统', status: 'pending', currentNode: '待提交', applicant: '王五', applyTime: '2025-03-10 09:15:00' },
+                    { id: 14, instanceId: 'FLW202503004', appName: '政务协同平台', status: 'rejected', currentNode: '已驳回', applicant: '赵六', applyTime: '2025-03-12 16:45:00' },
+                    { id: 15, instanceId: 'FLW202503005', appName: '应急指挥系统', status: 'processing', currentNode: '一级审批', applicant: '钱七', applyTime: '2025-03-15 11:20:00' },
+                    { id: 16, instanceId: 'FLW202503006', appName: '数据分析平台', status: 'approved', currentNode: '已完成', applicant: '孙八', applyTime: '2025-03-18 08:30:00' },
+                ],
+            },
+        },
+    },
+
+    /* ---------- 应用变更流程审批 ---------- */
+    'app-change-flow': {
+        type: 'tab-table',
+        breadcrumb: ['应用管理', '应用变更流程审批'],
+        tabs: [
+            { key: 'config', label: '流程配置' },
+            { key: 'list', label: '流程列表' },
+        ],
+        tabConfigs: {
+            'config': {
+                query: [
+                    { key: 'name', label: '流程名称', type: 'input', placeholder: '请输入流程名称' },
+                    { key: 'changeType', label: '变更类型', type: 'select', placeholder: '请选择', options: [{ value: '', label: '全部' }, { value: 'info', label: '信息变更' }, { value: 'version', label: '版本升级' }, { value: 'scope', label: '范围变更' }] },
+                    { key: 'status', label: '状态', type: 'select', placeholder: '请选择', options: [{ value: '', label: '全部' }, { value: 'true', label: '启用' }, { value: 'false', label: '停用' }] },
+                ],
+                toolbar: [{ type: 'add', text: '新增流程' }, { type: 'batchDelete' }],
+                columns: [
+                    { type: 'checkbox' },
+                    { type: 'index', title: '序号' },
+                    { key: 'name', title: '流程名称', sortable: true },
+                    { key: 'code', title: '流程编码', sortable: true },
+                    { key: 'changeType', title: '变更类型', type: 'tag', tagMap: { 'info': { text: '信息变更', color: 'blue' }, 'version': { text: '版本升级', color: 'green' }, 'scope': { text: '范围变更', color: 'orange' } } },
+                    { key: 'nodeCount', title: '审批节点数' },
+                    { key: 'status', title: '状态', type: 'tag', tagMap: { true: { text: '启用', color: 'green' }, false: { text: '停用', color: 'red' } } },
+                    { key: 'createTime', title: '创建时间', sortable: true },
+                    { type: 'actions', title: '操作', actions: [{ key: 'view', label: '查看' }, { key: 'edit', label: '编辑' }, { key: 'delete', label: '删除', danger: true }] },
+                ],
+                data: [
+                    { id: 1, name: '应用信息变更流程', code: 'ACC_001', changeType: 'info', nodeCount: 2, status: true, createTime: '2025-01-10 10:00:00' },
+                    { id: 2, name: '应用版本升级流程', code: 'ACC_002', changeType: 'version', nodeCount: 3, status: true, createTime: '2025-01-12 14:30:00' },
+                    { id: 3, name: '应用范围变更流程', code: 'ACC_003', changeType: 'scope', nodeCount: 3, status: true, createTime: '2025-01-15 09:15:00' },
+                    { id: 4, name: '简单变更流程', code: 'ACC_004', changeType: 'info', nodeCount: 1, status: false, createTime: '2025-01-18 16:45:00' },
+                    { id: 5, name: '重大版本升级流程', code: 'ACC_005', changeType: 'version', nodeCount: 4, status: true, createTime: '2025-02-01 11:20:00' },
+                    { id: 6, name: '停用应用变更流程', code: 'ACC_006', changeType: 'scope', nodeCount: 2, status: false, createTime: '2025-02-10 08:30:00' },
+                ],
+            },
+            'list': {
+                query: [
+                    { key: 'appName', label: '应用名称', type: 'input', placeholder: '请输入应用名称' },
+                    { key: 'status', label: '流程状态', type: 'select', placeholder: '请选择', options: [{ value: '', label: '全部' }, { value: 'pending', label: '待审批' }, { value: 'processing', label: '审批中' }, { value: 'approved', label: '已通过' }, { value: 'rejected', label: '已驳回' }] },
+                    { key: 'applicant', label: '申请人', type: 'input', placeholder: '请输入申请人' },
+                ],
+                toolbar: [{ type: 'batchDelete' }],
+                columns: [
+                    { type: 'checkbox' },
+                    { type: 'index', title: '序号' },
+                    { key: 'instanceId', title: '流程实例ID', sortable: true },
+                    { key: 'appName', title: '应用名称' },
+                    { key: 'status', title: '流程状态', type: 'tag', tagMap: { 'pending': { text: '待审批', color: 'orange' }, 'processing': { text: '审批中', color: 'blue' }, 'approved': { text: '已通过', color: 'green' }, 'rejected': { text: '已驳回', color: 'red' } } },
+                    { key: 'currentNode', title: '当前节点' },
+                    { key: 'applicant', title: '申请人' },
+                    { key: 'applyTime', title: '申请时间', sortable: true },
+                    { type: 'actions', title: '操作', actions: [{ key: 'view', label: '查看' }] },
+                ],
+                data: [
+                    { id: 21, instanceId: 'CHG202503001', appName: '智慧办公系统', status: 'approved', currentNode: '已完成', applicant: '张三', applyTime: '2025-03-02 10:00:00' },
+                    { id: 22, instanceId: 'CHG202503002', appName: '民生服务平台', status: 'processing', currentNode: '二级审批', applicant: '李四', applyTime: '2025-03-06 14:30:00' },
+                    { id: 23, instanceId: 'CHG202503003', appName: '经济运行监测系统', status: 'pending', currentNode: '待提交', applicant: '王五', applyTime: '2025-03-11 09:15:00' },
+                    { id: 24, instanceId: 'CHG202503004', appName: '政务协同平台', status: 'rejected', currentNode: '已驳回', applicant: '赵六', applyTime: '2025-03-13 16:45:00' },
+                    { id: 25, instanceId: 'CHG202503005', appName: '应急指挥系统', status: 'processing', currentNode: '一级审批', applicant: '钱七', applyTime: '2025-03-16 11:20:00' },
+                    { id: 26, instanceId: 'CHG202503006', appName: '数据分析平台', status: 'approved', currentNode: '已完成', applicant: '孙八', applyTime: '2025-03-19 08:30:00' },
+                ],
+            },
+        },
+    },
+
+    /* ---------- 在线用户管理 ---------- */
+    'sys-online-user': {
+        breadcrumb: ['系统管理', '在线用户管理'],
+        query: [
+            { key: 'account', label: '用户账号', type: 'input', placeholder: '请输入用户账号' },
+            { key: 'userName', label: '用户姓名', type: 'input', placeholder: '请输入用户姓名' },
+            { key: 'orgName', label: '所属机构', type: 'input', placeholder: '请输入机构名称' },
+            { key: 'clientType', label: '客户端类型', type: 'select', placeholder: '请选择', options: [{ value: '', label: '全部' }, { value: 'web', label: 'Web端' }, { value: 'mobile', label: '移动端' }, { value: 'desktop', label: '桌面端' }] },
+        ],
+        toolbar: [],
+        columns: [
+            { type: 'index', title: '序号' },
+            { key: 'account', title: '用户账号', sortable: true },
+            { key: 'userName', title: '用户姓名' },
+            { key: 'orgName', title: '所属机构' },
+            { key: 'loginIp', title: '登录IP' },
+            { key: 'loginTime', title: '登录时间', sortable: true },
+            { key: 'lastActiveTime', title: '最后活跃时间', sortable: true },
+            { key: 'clientType', title: '客户端类型', type: 'tag', tagMap: { 'web': { text: 'Web端', color: 'blue' }, 'mobile': { text: '移动端', color: 'green' }, 'desktop': { text: '桌面端', color: 'orange' } } },
+            { type: 'actions', title: '操作', actions: [{ key: 'forceLogout', label: '强制下线', danger: true }] },
+        ],
+        data: [
+            { id: 1, account: 'zhangsan', userName: '张三', orgName: '省政务信息中心', loginIp: '192.168.1.101', loginTime: '2025-03-20 08:30:00', lastActiveTime: '2025-03-20 10:45:00', clientType: 'web' },
+            { id: 2, account: 'lisi', userName: '李四', orgName: '省政务信息中心', loginIp: '192.168.1.102', loginTime: '2025-03-20 08:45:00', lastActiveTime: '2025-03-20 10:40:00', clientType: 'web' },
+            { id: 3, account: 'wangwu', userName: '王五', orgName: '南昌市人民政府', loginIp: '192.168.2.101', loginTime: '2025-03-20 09:00:00', lastActiveTime: '2025-03-20 10:30:00', clientType: 'mobile' },
+            { id: 4, account: 'zhaoliu', userName: '赵六', orgName: '赣州市人民政府', loginIp: '192.168.3.101', loginTime: '2025-03-20 09:15:00', lastActiveTime: '2025-03-20 10:20:00', clientType: 'web' },
+            { id: 5, account: 'qianqi', userName: '钱七', orgName: '九江市人民政府', loginIp: '192.168.4.101', loginTime: '2025-03-20 09:30:00', lastActiveTime: '2025-03-20 10:15:00', clientType: 'desktop' },
+            { id: 6, account: 'sunba', userName: '孙八', orgName: '省政务信息中心', loginIp: '192.168.1.103', loginTime: '2025-03-20 09:45:00', lastActiveTime: '2025-03-20 10:10:00', clientType: 'mobile' },
+            { id: 7, account: 'zhoujiu', userName: '周九', orgName: '宜春市人民政府', loginIp: '192.168.5.101', loginTime: '2025-03-20 10:00:00', lastActiveTime: '2025-03-20 10:05:00', clientType: 'web' },
+            { id: 8, account: 'wushi', userName: '吴十', orgName: '上饶市人民政府', loginIp: '192.168.6.101', loginTime: '2025-03-20 08:00:00', lastActiveTime: '2025-03-20 09:55:00', clientType: 'web' },
+            { id: 9, account: 'zhengshi', userName: '郑十一', orgName: '吉安市人民政府', loginIp: '192.168.7.101', loginTime: '2025-03-20 08:15:00', lastActiveTime: '2025-03-20 09:50:00', clientType: 'mobile' },
+            { id: 10, account: 'fengshier', userName: '冯十二', orgName: '抚州市人民政府', loginIp: '192.168.8.101', loginTime: '2025-03-20 08:20:00', lastActiveTime: '2025-03-20 09:45:00', clientType: 'desktop' },
+            { id: 11, account: 'chenshisan', userName: '陈十三', orgName: '景德镇市人民政府', loginIp: '192.168.9.101', loginTime: '2025-03-20 08:35:00', lastActiveTime: '2025-03-20 09:40:00', clientType: 'web' },
+            { id: 12, account: 'yangshisi', userName: '杨十四', orgName: '萍乡市人民政府', loginIp: '192.168.10.101', loginTime: '2025-03-20 08:50:00', lastActiveTime: '2025-03-20 09:35:00', clientType: 'mobile' },
+        ],
+    },
+
+    /* ---------- 同步应用管理 ---------- */
+    'sys-sync-app': {
+        breadcrumb: ['系统管理', '同步应用管理'],
+        query: [
+            { key: 'appName', label: '应用名称', type: 'input', placeholder: '请输入应用名称' },
+            { key: 'syncMode', label: '同步方式', type: 'select', placeholder: '请选择', options: [{ value: '', label: '全部' }, { value: 'api', label: 'API接口' }, { value: 'db', label: '数据库直连' }, { value: 'file', label: '文件同步' }] },
+            { key: 'syncStatus', label: '同步状态', type: 'select', placeholder: '请选择', options: [{ value: '', label: '全部' }, { value: 'success', label: '同步成功' }, { value: 'failed', label: '同步失败' }, { value: 'syncing', label: '同步中' }] },
+        ],
+        toolbar: [{ type: 'add', text: '新增配置' }],
+        columns: [
+            { type: 'index', title: '序号' },
+            { key: 'appName', title: '应用名称', sortable: true },
+            { key: 'appCode', title: '应用编码', sortable: true },
+            { key: 'syncMode', title: '同步方式', type: 'tag', tagMap: { 'api': { text: 'API接口', color: 'blue' }, 'db': { text: '数据库直连', color: 'green' }, 'file': { text: '文件同步', color: 'orange' } } },
+            { key: 'syncPeriod', title: '同步周期' },
+            { key: 'lastSyncTime', title: '上次同步时间', sortable: true },
+            { key: 'syncStatus', title: '同步状态', type: 'tag', tagMap: { 'success': { text: '同步成功', color: 'green' }, 'failed': { text: '同步失败', color: 'red' }, 'syncing': { text: '同步中', color: 'blue' } } },
+            { type: 'actions', title: '操作', actions: [{ key: 'syncNow', label: '立即同步' }, { key: 'edit', label: '编辑' }, { key: 'delete', label: '删除', danger: true }] },
+        ],
+        data: [
+            { id: 1, appName: '智慧办公系统', appCode: 'APP_001', syncMode: 'api', syncPeriod: '每小时', lastSyncTime: '2025-03-20 10:00:00', syncStatus: 'success' },
+            { id: 2, appName: '民生服务平台', appCode: 'APP_002', syncMode: 'db', syncPeriod: '每日', lastSyncTime: '2025-03-20 08:00:00', syncStatus: 'success' },
+            { id: 3, appName: '经济运行监测系统', appCode: 'APP_003', syncMode: 'api', syncPeriod: '每30分钟', lastSyncTime: '2025-03-20 10:30:00', syncStatus: 'syncing' },
+            { id: 4, appName: '政务协同平台', appCode: 'APP_004', syncMode: 'file', syncPeriod: '每日', lastSyncTime: '2025-03-19 23:00:00', syncStatus: 'failed' },
+            { id: 5, appName: '应急指挥系统', appCode: 'APP_005', syncMode: 'api', syncPeriod: '每15分钟', lastSyncTime: '2025-03-20 10:45:00', syncStatus: 'success' },
+            { id: 6, appName: '数据分析平台', appCode: 'APP_006', syncMode: 'db', syncPeriod: '每小时', lastSyncTime: '2025-03-20 10:00:00', syncStatus: 'success' },
+            { id: 7, appName: '政务服务网', appCode: 'APP_007', syncMode: 'api', syncPeriod: '每日', lastSyncTime: '2025-03-20 06:00:00', syncStatus: 'success' },
+            { id: 8, appName: '信用信息平台', appCode: 'APP_008', syncMode: 'file', syncPeriod: '每周', lastSyncTime: '2025-03-17 00:00:00', syncStatus: 'failed' },
+        ],
+    },
+
+    /* ---------- 手动通知管理 ---------- */
+    'manual-notice': {
+        breadcrumb: ['通知待办', '手动通知管理'],
+        query: [
+            { key: 'title', label: '通知标题', type: 'input', placeholder: '请输入通知标题' },
+            { key: 'noticeType', label: '通知类型', type: 'select', placeholder: '请选择', options: [{ value: '', label: '全部' }, { value: 'system', label: '系统通知' }, { value: 'business', label: '业务通知' }, { value: 'urgent', label: '紧急通知' }] },
+            { key: 'status', label: '状态', type: 'select', placeholder: '请选择', options: [{ value: '', label: '全部' }, { value: 'sent', label: '已发送' }, { value: 'draft', label: '草稿' }] },
+        ],
+        toolbar: [{ type: 'add', text: '新增通知' }],
+        columns: [
+            { type: 'index', title: '序号' },
+            { key: 'title', title: '通知标题', sortable: true },
+            { key: 'noticeType', title: '通知类型', type: 'tag', tagMap: { 'system': { text: '系统通知', color: 'blue' }, 'business': { text: '业务通知', color: 'green' }, 'urgent': { text: '紧急通知', color: 'red' } } },
+            { key: 'sender', title: '发送人' },
+            { key: 'sendTime', title: '发送时间', sortable: true },
+            { key: 'receiverCount', title: '接收人数' },
+            { key: 'status', title: '状态', type: 'tag', tagMap: { 'sent': { text: '已发送', color: 'green' }, 'draft': { text: '草稿', color: 'gray' } } },
+            { type: 'actions', title: '操作', actions: [{ key: 'view', label: '查看' }, { key: 'notifyUser', label: '通知用户' }] },
+        ],
+        data: [
+            { id: 1, title: '系统升级维护通知', noticeType: 'system', sender: '张三', sendTime: '2025-03-15 10:00:00', receiverCount: 256, status: 'sent' },
+            { id: 2, title: '新功能上线公告', noticeType: 'business', sender: '李四', sendTime: '2025-03-16 14:30:00', receiverCount: 512, status: 'sent' },
+            { id: 3, title: '紧急安全漏洞修复通知', noticeType: 'urgent', sender: '王五', sendTime: '2025-03-17 09:15:00', receiverCount: 128, status: 'sent' },
+            { id: 4, title: '月度工作汇报模板更新', noticeType: 'business', sender: '赵六', sendTime: '2025-03-18 16:45:00', receiverCount: 64, status: 'sent' },
+            { id: 5, title: '系统性能优化通知', noticeType: 'system', sender: '钱七', sendTime: '', receiverCount: 0, status: 'draft' },
+            { id: 6, title: '节假日值班安排通知', noticeType: 'business', sender: '孙八', sendTime: '2025-03-19 11:20:00', receiverCount: 32, status: 'sent' },
+            { id: 7, title: '数据迁移紧急通知', noticeType: 'urgent', sender: '周九', sendTime: '', receiverCount: 0, status: 'draft' },
+            { id: 8, title: '账号安全提醒', noticeType: 'system', sender: '吴十', sendTime: '2025-03-20 08:30:00', receiverCount: 1024, status: 'sent' },
+        ],
+    },
+
+    /* ---------- 工单评价管理 ---------- */
+    'ticket-evaluation': {
+        breadcrumb: ['工单中心', '工单评价管理'],
+        query: [
+            { key: 'name', label: '评价名称', type: 'input', placeholder: '请输入评价名称' },
+            { key: 'evalType', label: '评价类型', type: 'select', placeholder: '请选择', options: [{ value: '', label: '全部' }, { value: 'satisfaction', label: '满意度' }, { value: 'quality', label: '服务质量' }, { value: 'efficiency', label: '效率' }] },
+            { key: 'status', label: '是否启用', type: 'select', placeholder: '请选择', options: [{ value: '', label: '全部' }, { value: 'true', label: '启用' }, { value: 'false', label: '停用' }] },
+        ],
+        toolbar: [{ type: 'add', text: '新增评价' }],
+        columns: [
+            { type: 'index', title: '序号' },
+            { key: 'name', title: '评价名称', sortable: true },
+            { key: 'evalType', title: '评价类型', type: 'tag', tagMap: { 'satisfaction': { text: '满意度', color: 'blue' }, 'quality': { text: '服务质量', color: 'green' }, 'efficiency': { text: '效率', color: 'orange' } } },
+            { key: 'dimension', title: '评价维度' },
+            { key: 'status', title: '是否启用', type: 'tag', tagMap: { true: { text: '启用', color: 'green' }, false: { text: '停用', color: 'red' } } },
+            { key: 'createTime', title: '创建时间', sortable: true },
+            { type: 'actions', title: '操作', actions: [{ key: 'edit', label: '编辑' }, { key: 'paramConfig', label: '参数设置' }, { key: 'delete', label: '删除', danger: true }] },
+        ],
+        data: [
+            { id: 1, name: '工单满意度评价', evalType: 'satisfaction', dimension: '整体满意度', status: true, createTime: '2025-01-10 10:00:00' },
+            { id: 2, name: '服务质量评价', evalType: 'quality', dimension: '服务态度、专业能力、响应速度', status: true, createTime: '2025-01-12 14:30:00' },
+            { id: 3, name: '处理效率评价', evalType: 'efficiency', dimension: '处理时效、解决时长', status: true, createTime: '2025-01-15 09:15:00' },
+            { id: 4, name: '综合评价', evalType: 'satisfaction', dimension: '满意度、质量、效率综合', status: false, createTime: '2025-01-18 16:45:00' },
+            { id: 5, name: '首次响应评价', evalType: 'efficiency', dimension: '首次响应时间', status: true, createTime: '2025-02-01 11:20:00' },
+            { id: 6, name: '问题解决评价', evalType: 'quality', dimension: '问题是否解决、解决彻底性', status: true, createTime: '2025-02-10 08:30:00' },
+        ],
+    },
+
+    /* ---------- 基础设置 ---------- */
+    'sys-basic-settings': {
+        type: 'tab-table',
+        breadcrumb: ['系统管理', '基础设置'],
+        tabs: [
+            { key: 'accountSecurity', label: '账号安全设置' },
+            { key: 'infoEncrypt', label: '信息加密设置' },
+            { key: 'apiSettings', label: 'API设置' },
+            { key: 'ipBlacklist', label: 'IP黑名单设置' },
+            { key: 'sysInfo', label: '系统信息设置' },
+        ],
+        tabConfigs: {
+            'accountSecurity': {
+                toolbar: [{ type: 'add', text: '新增设置' }],
+                columns: [
+                    { type: 'index', title: '序号' },
+                    { key: 'settingItem', title: '设置项', sortable: true },
+                    { key: 'settingValue', title: '设置值' },
+                    { key: 'description', title: '说明' },
+                    { key: 'updateTime', title: '更新时间', sortable: true },
+                    { type: 'actions', title: '操作', actions: [{ key: 'edit', label: '修改' }] },
+                ],
+                data: [
+                    { id: 1, settingItem: '密码最小长度', settingValue: '8位', description: '用户密码的最小字符长度限制', updateTime: '2025-01-10 10:00:00' },
+                    { id: 2, settingItem: '密码复杂度', settingValue: '必须包含大小写字母+数字+特殊字符', description: '密码必须同时包含大写字母、小写字母、数字和特殊字符', updateTime: '2025-01-10 10:00:00' },
+                    { id: 3, settingItem: '密码有效期', settingValue: '90天', description: '密码使用90天后需强制修改', updateTime: '2025-01-10 10:00:00' },
+                    { id: 4, settingItem: '登录失败锁定次数', settingValue: '5次', description: '连续登录失败5次后账号自动锁定', updateTime: '2025-01-10 10:00:00' },
+                    { id: 5, settingItem: '锁定时长', settingValue: '30分钟', description: '账号被锁定后30分钟自动解锁', updateTime: '2025-01-10 10:00:00' },
+                    { id: 6, settingItem: '会话超时时间', settingValue: '30分钟', description: '用户30分钟无操作自动退出登录', updateTime: '2025-01-10 10:00:00' },
+                ],
+            },
+            'infoEncrypt': {
+                toolbar: [],
+                columns: [
+                    { type: 'index', title: '序号' },
+                    { key: 'encryptAlgorithm', title: '加密算法', sortable: true },
+                    { key: 'keyLength', title: '密钥长度' },
+                    { key: 'enabled', title: '是否启用', type: 'tag', tagMap: { true: { text: '启用', color: 'green' }, false: { text: '停用', color: 'red' } } },
+                    { key: 'updateTime', title: '更新时间', sortable: true },
+                ],
+                data: [
+                    { id: 1, encryptAlgorithm: 'AES-256', keyLength: '256位', enabled: true, updateTime: '2025-01-10 10:00:00' },
+                    { id: 2, encryptAlgorithm: 'RSA-2048', keyLength: '2048位', enabled: true, updateTime: '2025-01-10 10:00:00' },
+                    { id: 3, encryptAlgorithm: 'SM4', keyLength: '128位', enabled: true, updateTime: '2025-01-10 10:00:00' },
+                    { id: 4, encryptAlgorithm: 'SM2', keyLength: '256位', enabled: false, updateTime: '2025-01-10 10:00:00' },
+                ],
+            },
+            'apiSettings': {
+                toolbar: [{ type: 'add', text: '新增API' }],
+                query: [
+                    { key: 'apiName', label: 'API名称', type: 'input', placeholder: '请输入API名称' },
+                    { key: 'status', label: '状态', type: 'select', placeholder: '请选择', options: [{ value: '', label: '全部' }, { value: 'true', label: '启用' }, { value: 'false', label: '停用' }] },
+                ],
+                columns: [
+                    { type: 'index', title: '序号' },
+                    { key: 'apiName', title: 'API名称', sortable: true },
+                    { key: 'apiCode', title: 'API编码', sortable: true },
+                    { key: 'method', title: '请求方式', type: 'tag', tagMap: { 'GET': { text: 'GET', color: 'green' }, 'POST': { text: 'POST', color: 'blue' }, 'PUT': { text: 'PUT', color: 'orange' }, 'DELETE': { text: 'DELETE', color: 'red' } } },
+                    { key: 'requestUrl', title: '请求地址' },
+                    { key: 'authRequired', title: '是否鉴权', type: 'tag', tagMap: { true: { text: '是', color: 'green' }, false: { text: '否', color: 'gray' } } },
+                    { key: 'status', title: '状态', type: 'tag', tagMap: { true: { text: '启用', color: 'green' }, false: { text: '停用', color: 'red' } } },
+                    { type: 'actions', title: '操作', actions: [{ key: 'edit', label: '编辑' }, { key: 'delete', label: '删除', danger: true }] },
+                ],
+                data: [
+                    { id: 1, apiName: '获取用户信息', apiCode: 'API_USER_GET', method: 'GET', requestUrl: '/api/user/get', authRequired: true, status: true },
+                    { id: 2, apiName: '创建用户', apiCode: 'API_USER_CREATE', method: 'POST', requestUrl: '/api/user/create', authRequired: true, status: true },
+                    { id: 3, apiName: '更新用户', apiCode: 'API_USER_UPDATE', method: 'PUT', requestUrl: '/api/user/update', authRequired: true, status: true },
+                    { id: 4, apiName: '删除用户', apiCode: 'API_USER_DELETE', method: 'DELETE', requestUrl: '/api/user/delete', authRequired: true, status: false },
+                    { id: 5, apiName: '获取应用列表', apiCode: 'API_APP_LIST', method: 'GET', requestUrl: '/api/app/list', authRequired: false, status: true },
+                ],
+            },
+            'ipBlacklist': {
+                toolbar: [],
+                columns: [
+                    { type: 'index', title: '序号' },
+                    { key: 'settingItem', title: '设置项' },
+                    { key: 'settingValue', title: '开关', type: 'tag', tagMap: { '开': { text: '开启', color: 'green' }, '关': { text: '关闭', color: 'gray' } } },
+                    { key: 'description', title: '说明' },
+                ],
+                data: [
+                    { id: 1, settingItem: 'IP黑名单功能', settingValue: '关', description: '开启后，黑名单中的IP地址将无法访问系统' },
+                ],
+            },
+            'sysInfo': {
+                toolbar: [{ type: 'custom', text: '恢复默认', icon: 'fa-undo' }],
+                columns: [
+                    { type: 'index', title: '序号' },
+                    { key: 'settingItem', title: '设置项', sortable: true },
+                    { key: 'settingValue', title: '设置值' },
+                    { type: 'actions', title: '操作', actions: [{ key: 'edit', label: '修改' }] },
+                ],
+                data: [
+                    { id: 1, settingItem: '系统名称', settingValue: '赣政通创新支撑平台' },
+                    { id: 2, settingItem: '系统版本', settingValue: 'v1.1.0' },
+                    { id: 3, settingItem: '备案号', settingValue: '赣ICP备XXXXXXXX号' },
+                    { id: 4, settingItem: '客服电话', settingValue: '400-888-8888' },
+                    { id: 5, settingItem: '客服邮箱', settingValue: 'support@example.com' },
+                    { id: 6, settingItem: '系统Logo', settingValue: '[Logo图片]' },
+                ],
+            },
         },
     },
 };
@@ -9308,7 +10048,15 @@ var pageList = [
     { key: 'ticket-config-read-display', name: '待阅工单展示规则配置', group: '工单中心/配置管理' },
     { key: 'ticket-config-read-timer', name: '待阅工单定时器配置', group: '工单中心/配置管理' },
     { key: 'dict-manage', name: '字典管理', group: '系统管理' },
-    { key: 'sys-log', name: '日志管理', group: '系统管理' }
+    { key: 'sys-log', name: '日志管理', group: '系统管理' },
+    { key: 'sys-basic-settings', name: '基础设置', group: '系统管理' },
+    { key: 'sys-online-user', name: '在线用户管理', group: '系统管理' },
+    { key: 'sys-sync-app', name: '同步应用管理', group: '系统管理' },
+    { key: 'user-perm-group', name: '用户权限组关联', group: '权限管理' },
+    { key: 'app-access-flow', name: '应用接入流程审批', group: '应用管理' },
+    { key: 'app-change-flow', name: '应用变更流程审批', group: '应用管理' },
+    { key: 'manual-notice', name: '手动通知管理', group: '通知待办' },
+    { key: 'ticket-evaluation', name: '工单评价管理', group: '工单中心' }
 ];
 
 /* ============================================================
@@ -9666,20 +10414,19 @@ var prdData = {
         acceptance: '1.新增功能正常 2.编辑功能正常 3.单条删除有二次确认 4.查询条件完整可用 5.分页功能正常'
     },
     'ticket-cc': {
-        background: '【模式D】工单抄送规则自动匹配赣政通管理员层级。走查覆盖4项功能点：①默认抄送规则配置信息新增（部分符合，工单抄送规则自动匹配赣政通管理员层级体系）②默认抄送规则配置信息修改（部分符合，工单抄送规则自动匹配赣政通管理员层级体系）③默认抄送规则配置信息删除（部分符合，工单抄送规则自动匹配赣政通管理员层级体系）④默认抄送规则配置信息查询（部分符合，工单抄送规则自动匹配赣政通管理员层级体系）。原型实现：抄送规则列表，抄送层级字段使用三色Tag（条线管理员/分级管理员/系统管理员），抄送规则根据工单属性自动匹配对应层级管理员。',
-        targetUsers: '工单管理员、系统管理员',
-        coreFeatures: '1.多条件组合查询 2.新增工单抄送管理 3.编辑工单抄送管理 4.单条删除',
-        businessFlow: '进入工单抄送管理页 → 设置查询条件 → 查看列表数据 → 点击新增 → 填写表单 → 保存 → 点击编辑 → 修改信息 → 保存 → 点击删除 → 二次确认 → 删除成功',
-        pageInfo: '支持多条件查询；支持新增；支持编辑；支持单条删除',
-        dataModel: '核心实体：工单抄送管理（id/名称/编码/排序号/状态/创建时间/创建人）；支持新增/编辑/删除操作。',
-        addFlow: '点击"新增"按钮 → 打开新增弹窗 → 填写名称（必填，唯一校验）、编码（必填，唯一校验，字母数字下划线） → 选择状态（启用/停用，默认启用） → 设置排序号（数字，默认0） → 点击保存 → 前端校验通过 → 后端唯一性校验 → 新增成功，Toast提示 → 列表刷新显示新记录',
-        editFlow: '点击操作列"编辑" → 打开编辑弹窗 → 回显所有字段信息 → 修改可编辑字段 → 点击保存 → 前端格式校验 → 后端数据一致性校验 → 更新成功，Toast提示 → 列表刷新。编辑约束：编码创建后不可修改；状态切换即时生效并记录操作日志。',
-        deleteFlow: '单条删除：点击操作列"删除" → 弹出二次确认弹窗 → 确认删除 → 逻辑删除（修改状态为已删除，保留数据痕迹）→ Toast提示"删除成功" → 列表刷新。删除约束：已被引用的数据不可删除，需先解除引用关系；启用状态的数据删除时有拦截提示；删除操作记录操作日志。',
-        queryFlow: '支持多条件组合查询，多条件为AND关系。查询操作：输入/选择条件后点击"查询"按钮 → 列表按条件过滤显示 → 点击"重置"按钮清空所有条件，恢复默认列表。支持分页查询，默认10条/页，可切换每页条数（10/20/50/100）。',
-        exceptionHandling: '1.名称重复：保存时提示"名称已存在，请重新输入" 2.编码重复：保存时提示"编码已存在，请重新输入" 3.编码格式错误：提示"编码只能包含字母、数字和下划线" 4.删除被引用数据：拦截删除并提示"该数据已被引用，无法删除，请先解除引用" 5.空数据状态：列表显示空状态占位图+提示文字"暂无数据" 6.网络异常：Toast提示"网络连接失败，请稍后重试" 7.数据加载失败：显示"加载失败，点击重试"按钮',
-        permissionReq: '1.系统管理员：拥有全部权限（新增/编辑/删除/查询） 2.平台管理员：拥有全部权限 3.分级管理员：仅查询权限，不可新增、编辑、删除 4.普通用户：无访问权限，菜单不可见',
-        interaction: '多条件组合查询；新增弹窗表单；编辑弹窗表单；删除二次确认',
-        acceptance: '1.新增功能正常 2.编辑功能正常 3.单条删除有二次确认 4.查询条件完整可用 5.分页功能正常'
+        background: '【工单抄送管理】工单抄送管理是工单中心的核心配置模块，负责管理工单流程中的抄送规则和抄送记录。包含默认抄送记录、自定义抄送设置、自定义抄送记录3个Tab页，分别管理系统预设的抄送规则、用户自定义的抄送配置以及实际的抄送执行记录，实现全方位的工单抄送管理能力。',
+        targetUsers: '工单管理员、系统管理员、分级管理员',
+        coreFeatures: '1.默认抄送记录CRUD+批量删除 2.自定义抄送设置CRUD+批量删除 3.自定义抄送记录查询+查看+删除 4.三个Tab独立的查询条件和列表 5.抄送方式支持站内信/邮件/短信 6.触发节点支持提交时/审批通过时/驳回时',
+        businessFlow: '进入工单抄送管理页 -> 默认抄送记录Tab -> 新增/编辑/删除默认抄送规则 -> 设置抄送对象和方式 -> 保存；自定义抄送设置Tab -> 新增自定义抄送配置 -> 设置触发节点和抄送对象类型 -> 保存；自定义抄送记录Tab -> 查询抄送执行记录 -> 查看详情 -> 删除记录',
+        pageInfo: '3个Tab页（默认抄送记录/自定义抄送设置/自定义抄送记录）；默认抄送记录：支持规则名称/工单类型查询、新增、编辑、删除、批量删除；自定义抄送设置：支持设置名称/工单类型查询、新增、编辑、删除、批量删除；自定义抄送记录：支持记录名称/工单类型/状态查询、查看、删除、批量删除',
+        dataModel: '核心实体：默认抄送记录（id/规则名称/工单类型/抄送对象/抄送方式/状态/创建时间）、自定义抄送设置（id/设置名称/工单类型/触发节点/抄送对象类型/状态/创建时间）、自定义抄送记录（id/记录名称/关联工单/工单类型/抄送人/抄送时间/抄送状态）。枚举值：工单类型（通用工单/设备申请/权限申请）、抄送方式（站内信/邮件/短信）、触发节点（提交时/审批通过时/驳回时）、抄送对象类型（指定人员/角色/部门）、抄送状态（成功/失败）。',
+        addFlow: '默认抄送记录：点击"新增" -> 打开新增弹窗 -> 填写规则名称（必填） -> 选择工单类型 -> 设置抄送对象 -> 选择抄送方式（可多选） -> 设置状态（启用/停用） -> 点击保存 -> 校验通过 -> 新增成功。自定义抄送设置：点击"新增" -> 打开新增弹窗 -> 填写设置名称（必填） -> 选择工单类型 -> 选择触发节点 -> 选择抄送对象类型 -> 设置抄送对象（根据类型选择人员/角色/部门） -> 设置状态 -> 点击保存 -> 校验通过 -> 新增成功。自定义抄送记录：不支持手动新增，由系统自动生成。',
+        queryFlow: '默认抄送记录：支持规则名称（模糊）、工单类型（下拉）多条件查询，AND关系。自定义抄送设置：支持设置名称（模糊）、工单类型（下拉）多条件查询，AND关系。自定义抄送记录：支持记录名称（模糊）、工单类型（下拉）、状态（下拉）多条件查询，AND关系。各Tab独立查询，互不影响。均支持分页查询。',
+        sortConfig: '默认抄送记录：支持规则名称、创建时间字段排序。自定义抄送设置：支持设置名称、创建时间字段排序。自定义抄送记录：支持记录名称、抄送时间字段排序。点击表头切换升序/降序，箭头图标标识。',
+        exceptionHandling: '1.规则名称重复：提示"规则名称已存在，请重新输入" 2.设置名称重复：提示"设置名称已存在，请重新输入" 3.抄送失败：记录失败状态，支持查看失败原因 4.删除被引用的抄送规则：拦截提示"该规则正在被使用，无法删除" 5.批量删除含被引用数据：自动跳过被引用数据，提示成功删除数量和跳过数量 6.空数据状态：列表显示空状态占位图+提示文字"暂无数据" 7.网络异常：Toast提示"网络连接失败，请稍后重试"',
+        permissionReq: '1.系统管理员：拥有全部权限（新增/编辑/删除/批量删除/查询/查看） 2.工单管理员：拥有全部权限 3.分级管理员：仅查询权限，不可新增、编辑、删除 4.普通用户：无访问权限，菜单不可见',
+        interaction: 'Tab切换（3个Tab）；多条件组合查询；表头点击排序；复选框多选+批量操作；新增/编辑弹窗；删除二次确认；查看详情抽屉',
+        acceptance: '1.3个Tab切换正常 2.默认抄送记录CRUD功能完整 3.自定义抄送设置CRUD功能完整 4.自定义抄送记录查询查看正常 5.批量删除有二次确认 6.查询条件可用 7.表头可排序 8.分页功能正常 9.Tag标签显示正确'
     },
     'notice': {
         background: '【模式A】增加查询字段排序功能。通知公告管理是开放门户管理的子模块。走查覆盖1项功能点：①通知公告查询字段排序（符合，增加该功能）。原型实现：通知公告列表表头支持点击排序（公告标题、发布时间等字段），升降序可切换，排序状态有箭头图标标识。',
@@ -10266,7 +11013,189 @@ var prdData = {
         permissionReq: '1.系统管理员：拥有全部权限（导出） 2.平台管理员：拥有全部权限 3.分级管理员：仅查询权限，不可新增、编辑、删除 4.普通用户：无访问权限，菜单不可见',
         interaction: '按筛选条件导出',
         acceptance: '1.导出功能正常 2.分页功能正常'
-    }
+    },
+
+    /* ---------- 职务管理 ---------- */
+    'title-level-duty': {
+        background: '【职务管理】职务管理是组织机构管理子系统的基础配置模块，负责对职务信息进行分类管理。支持职务的新增、编辑、删除、批量删除、查询、字段排序、查看、导入导出等功能。职务类型分为管理岗、技术岗、行政岗三类。',
+        targetUsers: '系统管理员、组织机构管理员、HR管理员',
+        coreFeatures: '1.多条件组合查询 2.列表字段排序 3.新增职务 4.编辑职务 5.单条删除 6.批量删除 7.导入导出 8.查看详情',
+        businessFlow: '进入职务管理页 -> 设置查询条件 -> 查看列表数据 -> 点击新增 -> 填写表单 -> 保存 -> 点击编辑 -> 修改信息 -> 保存 -> 点击删除 -> 二次确认 -> 删除成功 -> 勾选多条 -> 批量删除 -> 二次确认 -> 导入/导出操作',
+        pageInfo: '支持多条件查询；支持字段排序；支持新增；支持编辑；支持单条删除；支持批量删除；支持导入导出；支持查看详情',
+        dataModel: '核心实体：职务管理（id/职务名称/职务编码/职务类型/排序号/状态/备注/创建时间/创建人）。枚举值：职务类型（管理岗/技术岗/行政岗）、状态（启用/停用）。',
+        addFlow: '点击"新增职务"按钮 -> 打开新增弹窗 -> 填写职务名称（必填，唯一校验）、职务编码（必填，唯一校验，字母数字下划线） -> 选择职务类型（必填，管理岗/技术岗/行政岗） -> 设置排序号（数字，默认0） -> 设置状态（启用/停用，默认启用） -> 填写备注 -> 点击保存 -> 校验通过 -> 新增成功',
+        editFlow: '点击操作列"编辑" -> 打开编辑弹窗 -> 回显所有字段信息 -> 修改可编辑字段 -> 点击保存 -> 校验通过 -> 更新成功',
+        deleteFlow: '单条删除：点击删除 -> 二次确认 -> 逻辑删除 -> Toast提示。批量删除：勾选多条 -> 点击批量删除 -> 二次确认 -> 批量逻辑删除。删除约束：已被用户关联的职务不可删除。',
+        queryFlow: '支持职务名称（模糊）、职务类型（下拉）、状态（下拉）多条件组合查询，AND关系。支持分页查询。',
+        sortConfig: '支持职务名称、职务编码、排序号、创建时间字段排序。点击表头切换升序/降序，箭头图标标识。',
+        interaction: '多条件组合查询；表头点击排序；复选框多选+批量操作；新增/编辑弹窗表单；删除二次确认；导入导出功能；查看详情弹窗',
+        exceptionHandling: '1.名称重复：提示"职务名称已存在" 2.编码重复：提示"职务编码已存在" 3.删除已关联职务：拦截提示"该职务已被用户关联，无法删除" 4.导入格式错误：提示具体错误行号和原因',
+        permissionReq: '1.系统管理员：拥有全部权限 2.组织机构管理员：拥有全部权限 3.HR管理员：拥有查看和编辑权限 4.普通用户：无访问权限',
+        acceptance: '1.新增功能正常 2.编辑功能正常 3.单条删除有二次确认 4.批量删除有二次确认 5.查询条件完整可用 6.表头可排序 7.导入导出正常 8.分页功能正常'
+    },
+
+    /* ---------- 用户权限组关联 ---------- */
+    'user-perm-group': {
+        background: '【用户权限组关联】用户权限组关联是权限管理子系统的重要模块，负责管理用户与权限组的关联关系。通过权限组的方式批量管理用户权限，提高权限管理效率。支持权限组的CRUD、批量删除、查询排序、查看详情、配置权限等功能。',
+        targetUsers: '系统管理员、平台管理员、安全管理员',
+        coreFeatures: '1.多条件组合查询 2.列表字段排序 3.新增权限组关联 4.编辑权限组关联 5.单条删除 6.批量删除 7.查看详情（含关联用户列表+权限树） 8.配置权限',
+        businessFlow: '进入用户权限组关联页 -> 设置查询条件 -> 查看列表 -> 点击新增 -> 填写权限组信息 -> 选择关联用户 -> 配置权限 -> 保存 -> 点击查看 -> 查看基本信息+关联用户+权限树 -> 点击配置权限 -> 打开权限配置弹窗 -> 调整权限 -> 保存',
+        pageInfo: '支持多条件查询；支持字段排序；支持新增；支持编辑；支持单条删除；支持批量删除；支持查看详情；支持配置权限',
+        dataModel: '核心实体：用户权限组（id/权限组名称/权限组编码/权限类型/关联用户数/状态/描述/创建时间/创建人）。关联实体：关联用户列表（权限组-用户多对多关系）、权限树（菜单权限、操作权限）。',
+        addFlow: '点击"新增关联"按钮 -> 打开新增弹窗 -> 填写权限组名称（必填）、编码（必填，唯一） -> 选择关联用户（穿梭框选择） -> 配置权限（权限树勾选） -> 填写描述 -> 点击保存 -> 校验通过 -> 新增成功',
+        editFlow: '点击操作列"编辑" -> 打开编辑弹窗 -> 回显权限组信息 -> 修改名称/描述/关联用户/权限配置 -> 点击保存 -> 校验通过 -> 更新成功',
+        deleteFlow: '单条删除：点击删除 -> 二次确认 -> 逻辑删除 -> Toast提示。批量删除：勾选多条 -> 点击批量删除 -> 二次确认 -> 批量逻辑删除。',
+        queryFlow: '支持权限组名称（模糊）、权限组编码（模糊）、状态（下拉）多条件查询，AND关系。支持分页查询。',
+        sortConfig: '支持权限组名称、权限组编码、创建时间字段排序。点击表头切换升序/降序。',
+        interaction: '多条件组合查询；表头点击排序；复选框多选+批量操作；新增/编辑弹窗；查看详情抽屉（基本信息+关联用户列表+权限树）；权限配置弹窗（树形选择）',
+        exceptionHandling: '1.名称重复：提示"权限组名称已存在" 2.编码重复：提示"权限组编码已存在" 3.删除含有关联用户的权限组：提示是否解除关联后删除',
+        permissionReq: '1.系统管理员：拥有全部权限 2.平台管理员：拥有全部权限 3.安全管理员：拥有查看和配置权限 4.普通用户：无访问权限',
+        acceptance: '1.新增功能正常 2.编辑功能正常 3.删除有二次确认 4.批量删除有二次确认 5.查询条件可用 6.表头可排序 7.查看详情含用户列表和权限树 8.权限配置正常'
+    },
+
+    /* ---------- 应用日志 ---------- */
+    'app-log': {
+        background: '【应用日志管理】应用日志管理是应用管理子系统的核心模块，负责对各类应用日志进行统一配置管理和查询导出。包含4类配置管理（操作日志配置、订阅日志配置、全量推送日志配置、增量推送日志配置）和4类日志查询（操作日志、订阅日志、全量推送日志、增量推送日志），共8个Tab页。',
+        targetUsers: '系统管理员、应用管理员、运维工程师',
+        coreFeatures: '1.操作日志配置CRUD+批量删除 2.订阅日志配置CRUD+批量删除 3.全量推送日志配置CRUD+批量删除 4.增量推送日志配置CRUD+批量删除 5.操作日志查询+导出 6.订阅日志查询+导出 7.全量推送日志查询+导出 8.增量推送日志查询+导出',
+        businessFlow: '进入应用日志页 -> 选择配置类Tab -> 配置对应日志参数 -> 保存 -> 选择日志查询类Tab -> 设置查询条件 -> 查看日志列表 -> 点击导出 -> 下载日志文件',
+        pageInfo: '8个Tab页（4个配置类+4个日志查询类）；配置类支持CRUD+批量删除+排序+查看；日志查询类支持条件查询+导出',
+        dataModel: '核心实体：日志配置（id/配置名称/日志类型/采集方式/保留天数/状态/创建时间）、日志记录（id/日志ID/相关字段/时间/状态）。枚举值：日志类型（操作/订阅/全量推送/增量推送）、推送方式（Webhook/邮件/短信）、推送状态（成功/失败/进行中）。',
+        addFlow: '操作日志配置：点击"新增配置" -> 打开新增弹窗 -> 填写配置名称（必填） -> 选择采集方式（自动采集/手动采集） -> 设置保留天数 -> 设置状态（启用/停用） -> 点击保存 -> 校验通过 -> 新增成功。订阅日志配置：点击"新增配置" -> 打开新增弹窗 -> 填写配置名称（必填） -> 填写订阅主题 -> 选择推送方式（Webhook/邮件/短信） -> 填写推送地址 -> 设置状态 -> 点击保存 -> 校验通过 -> 新增成功。全量推送日志配置：点击"新增配置" -> 打开新增弹窗 -> 填写配置名称（必填） -> 选择推送周期（每日/每周/每月） -> 设置推送时间 -> 设置推送目标 -> 设置状态 -> 点击保存 -> 校验通过 -> 新增成功。增量推送日志配置：点击"新增配置" -> 打开新增弹窗 -> 填写配置名称（必填） -> 选择触发条件（实时触发/定时触发/事件触发） -> 设置推送目标 -> 设置状态 -> 点击保存 -> 校验通过 -> 新增成功。日志查询类Tab不支持手动新增，由系统自动生成。',
+        queryFlow: '配置类：支持配置名称、类型、状态等多条件查询。日志类：支持关键词、时间范围、状态等多条件查询。均支持分页查询。',
+        sortConfig: '配置类：支持配置名称、保留天数、创建时间排序。日志类：支持日志时间、日志ID排序。点击表头切换升序/降序。',
+        interaction: 'Tab切换（8个Tab）；多条件组合查询；表头点击排序；复选框多选+批量操作；新增/编辑弹窗；日志导出功能',
+        exceptionHandling: '1.导出数据量过大：提示"数据量较大，建议缩小查询范围后导出" 2.配置名称重复：提示"配置名称已存在" 3.推送失败：日志记录失败原因，支持重试 4.空数据状态：列表显示空状态占位图+提示文字"暂无数据" 5.网络异常：Toast提示"网络连接失败，请稍后重试"',
+        permissionReq: '1.系统管理员：拥有全部权限 2.应用管理员：拥有配置和查询权限 3.运维工程师：拥有查询和导出权限 4.普通用户：无访问权限',
+        acceptance: '1.8个Tab切换正常 2.配置类CRUD功能完整 3.配置类批量删除有二次确认 4.日志查询功能正常 5.日志导出功能正常 6.查询条件可用 7.表头可排序 8.分页功能正常'
+    },
+
+    /* ---------- 应用接入流程审批 ---------- */
+    'app-access-flow': {
+        background: '【应用接入流程审批】应用接入流程审批是应用管理子系统的重要模块，负责管理应用接入的审批流程配置和流程实例。支持流程配置的CRUD管理，以及流程列表的查询跟踪。包含流程配置和流程列表两个Tab。',
+        targetUsers: '系统管理员、应用管理员、审批人员',
+        coreFeatures: '1.流程配置CRUD 2.流程配置批量删除 3.流程配置字段排序 4.流程配置查看 5.流程列表查询 6.流程列表字段排序 7.流程详情查看',
+        businessFlow: '进入应用接入流程审批页 -> 流程配置Tab -> 新增/编辑/删除流程配置 -> 设置审批节点 -> 保存 -> 流程列表Tab -> 查询流程实例 -> 查看流程详情 -> 跟踪审批进度',
+        pageInfo: '2个Tab页（流程配置+流程列表）；流程配置支持CRUD+批量删除+排序+查看；流程列表支持查询+排序+查看详情',
+        dataModel: '核心实体：流程配置（id/流程名称/流程编码/适用应用类型/审批节点数/状态/创建时间）、流程实例（id/实例ID/应用名称/流程状态/当前节点/申请人/申请时间）。枚举值：应用类型（业务应用/办公应用/服务应用）、流程状态（待审批/审批中/已通过/已驳回）。',
+        addFlow: '点击"新增流程" -> 打开新增弹窗 -> 填写流程名称（必填）、编码（必填，唯一） -> 选择适用应用类型 -> 配置审批节点（支持多级） -> 设置状态 -> 点击保存 -> 校验通过 -> 新增成功',
+        editFlow: '点击"编辑" -> 打开编辑弹窗 -> 回显流程信息 -> 修改可编辑字段 -> 点击保存 -> 校验通过 -> 更新成功',
+        deleteFlow: '单条删除：点击删除 -> 二次确认 -> 逻辑删除 -> Toast提示。批量删除：勾选多条 -> 点击批量删除 -> 二次确认 -> 批量逻辑删除。删除约束：已被使用的流程配置不可删除。',
+        queryFlow: '流程配置：支持流程名称、适用应用类型、状态查询。流程列表：支持应用名称、流程状态、申请人查询。均支持分页查询。',
+        sortConfig: '流程配置：支持流程名称、流程编码、创建时间排序。流程列表：支持流程实例ID、申请时间排序。点击表头切换升序/降序。',
+        interaction: 'Tab切换；多条件组合查询；表头点击排序；复选框多选+批量操作；新增/编辑弹窗；流程详情查看（含审批进度）',
+        exceptionHandling: '1.流程名称重复：提示"流程名称已存在" 2.流程编码重复：提示"流程编码已存在" 3.删除被使用的流程：拦截提示"该流程正在使用中，无法删除"',
+        permissionReq: '1.系统管理员：拥有全部权限 2.应用管理员：拥有流程配置和查看权限 3.审批人员：拥有流程列表查看和审批权限 4.普通用户：可发起申请',
+        acceptance: '1.流程配置CRUD完整 2.批量删除有二次确认 3.流程列表查询正常 4.Tab切换正常 5.表头可排序 6.分页功能正常 7.流程详情可查看'
+    },
+
+    /* ---------- 应用变更流程审批 ---------- */
+    'app-change-flow': {
+        background: '【应用变更流程审批】应用变更流程审批是应用管理子系统的重要模块，负责管理应用变更的审批流程配置和流程实例。应用变更包括信息变更、版本升级、范围变更等类型。包含流程配置和流程列表两个Tab。',
+        targetUsers: '系统管理员、应用管理员、审批人员',
+        coreFeatures: '1.流程配置CRUD 2.流程配置批量删除 3.流程配置字段排序 4.流程配置查看 5.流程列表查询 6.流程列表字段排序 7.流程详情查看',
+        businessFlow: '进入应用变更流程审批页 -> 流程配置Tab -> 新增/编辑/删除流程配置 -> 设置审批节点 -> 保存 -> 流程列表Tab -> 查询流程实例 -> 查看流程详情 -> 跟踪审批进度',
+        pageInfo: '2个Tab页（流程配置+流程列表）；流程配置支持CRUD+批量删除+排序+查看；流程列表支持查询+排序+查看详情',
+        dataModel: '核心实体：流程配置（id/流程名称/流程编码/变更类型/审批节点数/状态/创建时间）、流程实例（id/实例ID/应用名称/流程状态/当前节点/申请人/申请时间）。枚举值：变更类型（信息变更/版本升级/范围变更）、流程状态（待审批/审批中/已通过/已驳回）。',
+        addFlow: '点击"新增流程" -> 打开新增弹窗 -> 填写流程名称（必填）、编码（必填，唯一） -> 选择变更类型 -> 配置审批节点（支持多级） -> 设置状态 -> 点击保存 -> 校验通过 -> 新增成功',
+        editFlow: '点击"编辑" -> 打开编辑弹窗 -> 回显流程信息 -> 修改可编辑字段 -> 点击保存 -> 校验通过 -> 更新成功',
+        deleteFlow: '单条删除：点击删除 -> 二次确认 -> 逻辑删除 -> Toast提示。批量删除：勾选多条 -> 点击批量删除 -> 二次确认 -> 批量逻辑删除。',
+        queryFlow: '流程配置：支持流程名称、变更类型、状态查询。流程列表：支持应用名称、流程状态、申请人查询。均支持分页查询。',
+        sortConfig: '流程配置：支持流程名称、流程编码、创建时间排序。流程列表：支持流程实例ID、申请时间排序。',
+        interaction: 'Tab切换；多条件组合查询；表头点击排序；复选框多选+批量操作；新增/编辑弹窗；流程详情查看',
+        exceptionHandling: '1.流程名称重复：提示"流程名称已存在" 2.删除被使用的流程：拦截提示"该流程正在使用中"',
+        permissionReq: '1.系统管理员：拥有全部权限 2.应用管理员：拥有流程配置和查看权限 3.审批人员：拥有流程列表查看和审批权限 4.普通用户：可发起申请',
+        acceptance: '1.流程配置CRUD完整 2.批量删除有二次确认 3.流程列表查询正常 4.Tab切换正常 5.表头可排序 6.分页功能正常'
+    },
+
+    /* ---------- 基础设置 ---------- */
+    'sys-basic-settings': {
+        background: '【基础设置】基础设置是系统管理子系统的核心配置模块，负责管理系统运行的基础参数。包含账号安全设置、信息加密设置、API设置、IP黑名单设置、系统信息设置5个Tab页，涵盖系统运行所需的各类基础配置。',
+        targetUsers: '系统管理员、超级管理员',
+        coreFeatures: '1.账号安全设置（新增/修改） 2.信息加密设置（查询） 3.API设置（新增/编辑/删除） 4.IP黑名单设置（开关切换） 5.系统信息设置（新增/修改/恢复默认/上传Logo）',
+        businessFlow: '进入基础设置页 -> 选择对应Tab -> 账号安全：新增/修改安全策略 -> 保存；信息加密：查看加密配置；API设置：新增/编辑/删除API配置 -> 保存；IP黑名单：开关切换功能；系统信息：修改系统参数 -> 保存/恢复默认/上传Logo',
+        pageInfo: '5个Tab页（账号安全设置/信息加密设置/API设置/IP黑名单设置/系统信息设置）；各Tab功能不同，按配置类型分类管理',
+        dataModel: '核心实体：账号安全设置（设置项/设置值/说明/更新时间）、信息加密设置（加密算法/密钥长度/是否启用/更新时间）、API设置（API名称/API编码/请求方式/请求地址/是否鉴权/状态）、IP黑名单设置（开关/说明）、系统信息设置（系统名称/版本/备案号/客服电话/客服邮箱/Logo）。',
+        addFlow: '账号安全设置：点击"新增策略" -> 打开新增弹窗 -> 选择安全策略类型 -> 设置策略参数 -> 设置状态（启用/停用） -> 点击保存 -> 校验通过 -> 新增成功。API设置：点击"新增API" -> 打开新增弹窗 -> 填写API名称（必填）、API编码（必填，唯一） -> 选择请求方式（GET/POST/PUT/DELETE） -> 填写请求地址 -> 设置是否鉴权 -> 设置状态 -> 点击保存 -> 校验通过 -> 新增成功。系统信息设置：首次配置时点击"新增" -> 填写系统名称、版本、备案号等信息 -> 上传Logo -> 点击保存 -> 保存成功。',
+        queryFlow: '账号安全设置：支持策略名称（模糊）、状态（下拉）查询。信息加密设置：仅查看，无查询条件。API设置：支持API名称（模糊）、请求方式（下拉）、状态（下拉）查询。IP黑名单设置：仅开关切换，无查询。系统信息设置：仅查看和编辑，无查询。各Tab独立展示。',
+        sortConfig: '账号安全设置：支持策略名称、更新时间字段排序。API设置：支持API名称、API编码字段排序。其他Tab为单条记录或开关配置，无排序需求。点击表头切换升序/降序，箭头图标标识。',
+        interaction: 'Tab切换（5个Tab）；账号安全设置的新增/修改弹窗；API设置的CRUD操作；IP黑名单开关切换；系统信息设置的修改/恢复默认/上传Logo',
+        exceptionHandling: '1.API编码重复：提示"API编码已存在" 2.上传Logo格式错误：提示"仅支持PNG/JPG格式" 3.恢复默认：二次确认后恢复系统默认值 4.保存失败：Toast提示"保存失败，请稍后重试" 5.空数据状态：显示默认配置或空状态提示',
+        permissionReq: '1.超级管理员：拥有全部权限 2.系统管理员：拥有查看和修改权限 3.其他管理员：仅查看权限 4.普通用户：无访问权限',
+        acceptance: '1.5个Tab切换正常 2.账号安全设置新增/修改正常 3.信息加密设置可查看 4.API设置CRUD正常 5.IP黑名单开关可切换 6.系统信息设置可修改 7.恢复默认有确认 8.Logo可上传 9.排序功能正常 10.查询条件可用'
+    },
+
+    /* ---------- 在线用户管理 ---------- */
+    'sys-online-user': {
+        background: '【在线用户管理】在线用户管理是系统管理子系统的监控模块，用于实时查看当前在线用户信息，并支持强制下线操作。帮助管理员掌握系统使用情况，保障系统安全。',
+        targetUsers: '系统管理员、安全管理员、运维人员',
+        coreFeatures: '1.多条件组合查询 2.在线用户列表展示 3.强制下线操作（二次确认） 4.列表字段排序',
+        businessFlow: '进入在线用户管理页 -> 查看在线用户列表 -> 设置查询条件（账号/姓名/机构/客户端类型） -> 筛选用户 -> 点击"强制下线" -> 二次确认 -> 用户被强制下线 -> 该行从列表移除 -> Toast提示',
+        pageInfo: '支持多条件查询；支持字段排序；支持强制下线操作（二次确认）；实时展示在线用户信息',
+        dataModel: '核心实体：在线用户（用户账号/用户姓名/所属机构/登录IP/登录时间/最后活跃时间/客户端类型）。枚举值：客户端类型（Web端/移动端/桌面端）。',
+        addFlow: '在线用户为系统自动生成，不支持手动新增。用户登录系统后自动加入在线用户列表，用户登出或会话过期后自动从列表移除。管理员仅可查看和执行强制下线操作。',
+        queryFlow: '支持用户账号（模糊）、用户姓名（模糊）、所属机构（模糊）、客户端类型（下拉）多条件组合查询，AND关系。支持分页查询。',
+        sortConfig: '支持用户账号、登录时间、最后活跃时间字段排序。点击表头切换升序/降序，箭头图标标识。',
+        interaction: '多条件组合查询；表头点击排序；强制下线按钮（二次确认弹窗）；用户下线后自动从列表移除',
+        exceptionHandling: '1.强制下线失败：提示"操作失败，请稍后重试" 2.用户已下线：自动从列表中移除 3.查询无结果：显示空状态提示 4.网络异常：Toast提示"网络连接失败，请稍后重试"',
+        permissionReq: '1.系统管理员：拥有全部权限（查询+强制下线） 2.安全管理员：拥有全部权限 3.运维人员：仅查询权限 4.普通用户：无访问权限',
+        acceptance: '1.在线用户列表展示正常 2.多条件查询可用 3.表头可排序 4.强制下线有二次确认 5.下线后列表自动更新 6.Toast提示正常 7.分页功能正常'
+    },
+
+    /* ---------- 同步应用管理 ---------- */
+    'sys-sync-app': {
+        background: '【同步应用管理】同步应用管理是系统管理子系统的数据同步模块，负责管理与外部应用的数据同步配置。支持多种同步方式和同步周期，可手动触发立即同步。保障系统间数据的一致性。',
+        targetUsers: '系统管理员、数据管理员、运维人员',
+        coreFeatures: '1.多条件组合查询 2.新增同步配置 3.编辑同步配置 4.删除同步配置 5.立即同步 6.同步状态查看 7.列表字段排序',
+        businessFlow: '进入同步应用管理页 -> 查看同步配置列表 -> 点击"新增配置" -> 填写应用信息 -> 选择同步方式 -> 设置同步周期 -> 保存 -> 点击"立即同步" -> 触发同步任务 -> 查看同步状态 -> 同步完成后更新状态和时间',
+        pageInfo: '支持多条件查询；支持字段排序；支持新增/编辑/删除配置；支持立即同步操作；展示同步状态和上次同步时间',
+        dataModel: '核心实体：同步应用配置（id/应用名称/应用编码/同步方式/同步周期/上次同步时间/同步状态）。枚举值：同步方式（API接口/数据库直连/文件同步）、同步周期（每15分钟/每30分钟/每小时/每日/每周）、同步状态（同步成功/同步失败/同步中）。',
+        addFlow: '点击"新增配置" -> 打开新增弹窗 -> 填写应用名称（必填）、应用编码（必填，唯一） -> 选择同步方式（API接口/数据库直连/文件同步） -> 设置同步周期 -> 配置连接参数 -> 点击保存 -> 校验通过 -> 新增成功',
+        editFlow: '点击"编辑" -> 打开编辑弹窗 -> 回显配置信息 -> 修改可编辑字段 -> 点击保存 -> 校验通过 -> 更新成功',
+        deleteFlow: '点击"删除" -> 二次确认弹窗 -> 确认删除 -> 逻辑删除 -> Toast提示"删除成功"。删除约束：正在同步中的配置不可删除。',
+        queryFlow: '支持应用名称（模糊）、同步方式（下拉）、同步状态（下拉）多条件组合查询，AND关系。支持分页查询。',
+        sortConfig: '支持应用名称、应用编码、上次同步时间字段排序。点击表头切换升序/降序。',
+        interaction: '多条件组合查询；表头点击排序；新增/编辑弹窗；立即同步按钮（点击后状态变为同步中）；删除二次确认',
+        exceptionHandling: '1.应用名称重复：提示"应用名称已存在" 2.应用编码重复：提示"应用编码已存在" 3.同步失败：显示失败状态，支持查看失败原因 4.立即同步过于频繁：提示"同步操作过于频繁，请稍后再试"',
+        permissionReq: '1.系统管理员：拥有全部权限 2.数据管理员：拥有配置和同步权限 3.运维人员：拥有查询和立即同步权限 4.普通用户：无访问权限',
+        acceptance: '1.同步配置CRUD完整 2.立即同步功能正常 3.同步状态实时更新 4.多条件查询可用 5.表头可排序 6.分页功能正常 7.删除有二次确认'
+    },
+
+    /* ---------- 手动通知管理 ---------- */
+    'manual-notice': {
+        background: '【手动通知管理】手动通知管理是通知待办子系统的重要模块，用于管理人员手动发送各类通知消息。支持系统通知、业务通知、紧急通知三种类型，可通过穿梭框选择通知用户，实现精准的消息触达。',
+        targetUsers: '系统管理员、通知管理员、部门管理员',
+        coreFeatures: '1.多条件组合查询 2.新增通知 3.查看通知详情 4.通知用户（穿梭框选择） 5.列表字段排序 6.草稿/已发送状态管理',
+        businessFlow: '进入手动通知管理页 -> 点击"新增通知" -> 填写通知标题 -> 选择通知类型 -> 编辑通知内容 -> 保存为草稿/直接发送 -> 点击"通知用户" -> 打开选择用户弹窗 -> 穿梭框选择目标用户 -> 确认发送 -> 发送成功 -> 状态变为已发送',
+        pageInfo: '支持多条件查询；支持字段排序；支持新增通知；支持查看详情；支持通知用户操作（穿梭框选择用户）；管理通知状态（草稿/已发送）',
+        dataModel: '核心实体：手动通知（id/通知标题/通知类型/发送人/发送时间/接收人数/状态/内容）。枚举值：通知类型（系统通知/业务通知/紧急通知）、状态（已发送/草稿）。',
+        addFlow: '点击"新增通知"按钮 -> 打开新增弹窗 -> 填写通知标题（必填） -> 选择通知类型（必填） -> 编辑通知内容（必填，富文本） -> 选择保存为草稿或直接发送 -> 若直接发送则需选择接收用户 -> 确认后发送成功',
+        queryFlow: '支持通知标题（模糊）、通知类型（下拉）、状态（下拉）多条件组合查询，AND关系。支持分页查询。',
+        sortConfig: '支持通知标题、发送时间字段排序。点击表头切换升序/降序，箭头图标标识。',
+        interaction: '多条件组合查询；表头点击排序；新增通知弹窗（富文本编辑）；查看通知详情；通知用户弹窗（穿梭框选择用户+确认发送）',
+        exceptionHandling: '1.通知标题为空：提示"请输入通知标题" 2.通知内容为空：提示"请输入通知内容" 3.未选择接收用户：提示"请至少选择一位接收用户" 4.发送失败：提示"发送失败，请稍后重试"',
+        permissionReq: '1.系统管理员：拥有全部权限 2.通知管理员：拥有全部权限 3.部门管理员：仅可向本部门用户发送通知 4.普通用户：无访问权限',
+        acceptance: '1.新增通知功能正常 2.查询条件可用 3.表头可排序 4.查看详情正常 5.通知用户弹窗正常 6.穿梭框选择用户正常 7.发送后状态更新正确 8.分页功能正常'
+    },
+
+    /* ---------- 工单评价管理 ---------- */
+    'ticket-evaluation': {
+        background: '【工单评价管理】工单评价管理是工单中心的服务质量监控模块，用于管理工单的评价模板和评价参数。支持满意度、服务质量、效率三种评价类型，可配置评价维度和评价等级参数。帮助提升工单服务质量和用户满意度。',
+        targetUsers: '工单管理员、系统管理员、质量管理人员',
+        coreFeatures: '1.多条件组合查询 2.新增评价 3.编辑评价 4.删除评价 5.参数设置（评价等级/是否必填/是否允许追加评价） 6.列表字段排序',
+        businessFlow: '进入工单评价管理页 -> 点击"新增评价" -> 填写评价名称 -> 选择评价类型 -> 设置评价维度 -> 设置状态 -> 保存 -> 点击"参数设置" -> 打开参数设置弹窗 -> 设置评价等级（5级） -> 设置是否必填 -> 设置是否允许追加评价 -> 保存',
+        pageInfo: '支持多条件查询；支持字段排序；支持新增/编辑/删除评价；支持参数设置（评价等级、是否必填、是否允许追加评价）',
+        dataModel: '核心实体：工单评价（id/评价名称/评价类型/评价维度/是否启用/创建时间）。枚举值：评价类型（满意度/服务质量/效率）、评价等级（非常满意/满意/一般/不满意/非常不满意）。',
+        addFlow: '点击"新增评价"按钮 -> 打开新增弹窗 -> 填写评价名称（必填，唯一） -> 选择评价类型（必填，满意度/服务质量/效率） -> 设置评价维度（多选） -> 设置是否启用 -> 点击保存 -> 校验通过 -> 新增成功',
+        editFlow: '点击操作列"编辑" -> 打开编辑弹窗 -> 回显评价信息 -> 修改可编辑字段 -> 点击保存 -> 校验通过 -> 更新成功',
+        deleteFlow: '点击"删除" -> 二次确认弹窗 -> 确认删除 -> 逻辑删除 -> Toast提示"删除成功"。删除约束：已被使用的评价模板不可删除。',
+        queryFlow: '支持评价名称（模糊）、评价类型（下拉）、是否启用（下拉）多条件组合查询，AND关系。支持分页查询。',
+        sortConfig: '支持评价名称、创建时间字段排序。点击表头切换升序/降序。',
+        interaction: '多条件组合查询；表头点击排序；新增/编辑弹窗；删除二次确认；参数设置弹窗（评价等级配置、是否必填开关、是否允许追加评价开关）',
+        exceptionHandling: '1.评价名称重复：提示"评价名称已存在" 2.删除已使用的评价：拦截提示"该评价模板已被使用，无法删除" 3.未选择评价维度：提示"请至少选择一个评价维度"',
+        permissionReq: '1.系统管理员：拥有全部权限 2.工单管理员：拥有全部权限 3.质量管理人员：拥有查看和配置权限 4.普通用户：无访问权限',
+        acceptance: '1.评价CRUD功能完整 2.删除有二次确认 3.查询条件可用 4.表头可排序 5.参数设置弹窗正常 6.评价等级可配置 7.是否必填可设置 8.是否允许追加评价可设置 9.分页功能正常'
+    },
 };
 
 /* ============================================================
