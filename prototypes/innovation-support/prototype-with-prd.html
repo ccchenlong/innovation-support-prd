@@ -6698,10 +6698,16 @@ function _getModuleList() { return _overviewModules; }
 
 function renderOverviewPage() {
     const stats = [
-        { label: '总功能点', value: 173, color: 'var(--primary)', bg: '#E8F3FF' },
-        { label: '符合', value: 96, color: 'var(--success)', bg: '#F6FFED' },
-        { label: '不符合', value: 47, color: 'var(--danger)', bg: '#FFF1F0' },
-        { label: '部分符合', value: 30, color: 'var(--warning)', bg: '#FFF7E6' },
+        { label: '总功能点', value: 239, color: 'var(--primary)', bg: '#E8F3FF' },
+        { label: '新增功能', value: 36, color: '#F53F3F', bg: '#FFF1F0' },
+        { label: '涉及模块', value: 41, color: 'var(--warning)', bg: '#FFF7E6' },
+        { label: '新增页面', value: 4, color: 'var(--success)', bg: '#F6FFED' },
+    ];
+
+    // 新增需求提示 - v2走查记录
+    const newFeatures = [
+        { category: '开放门户管理', items: ['全局搜索管理（搜索配置+热搜词）', '通知公告管理-删除/查看', '接口示例管理-增删改查', '接口错误码管理-增删改查', '我的工单-填报/处理/审批', '应用案例管理-查看'] },
+        { category: '门户首页配置', items: ['通知公告首页配置', '轮播图首页配置', '接入步骤首页配置', '帮助中心首页-查看/查询', '应用案例首页-查看', '开发指南首页-查看/查询', '开发资源首页-查看/查询', '开放能力首页-删除/查询'] },
     ];
 
     const modes = [
@@ -6721,6 +6727,27 @@ function renderOverviewPage() {
     let html = '<div class="p-4">';
     html += renderBreadcrumb(['概览总览']);
 
+    // 新增需求提示横幅
+    html += '<div class="new-feature-banner mb-6 p-4 rounded-lg" style="background:linear-gradient(135deg,#FFF1F0 0%,#FFEDED 100%);border:1px solid #FFCCC7;">';
+    html += '<div class="flex items-start gap-3">';
+    html += '<div class="w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0" style="background:#F53F3F;">';
+    html += '<i class="fa fa-bullhorn text-white text-lg"></i>';
+    html += '</div>';
+    html += '<div class="flex-1">';
+    html += '<div class="flex items-center gap-2 mb-1">';
+    html += '<span class="text-base font-bold" style="color:#F53F3F;">v2 走查新增需求提示</span>';
+    html += '<span class="text-xs px-2 py-0.5 rounded-full" style="background:#F53F3F;color:#fff;">NEW</span>';
+    html += '<span class="text-xs ml-2" style="color:#8C8C8C;">共 36 个功能点 / 4 个新页面 / 41 个模块组</span>';
+    html += '</div>';
+    html += '<div class="text-sm" style="color:#CF1322;line-height:1.8;">';
+    html += '基于最新走查记录，新增 <b>全局搜索管理</b>、<b>轮播图首页配置</b>、<b>通知公告首页配置</b>、<b>接入步骤首页配置</b> 4个模块，';
+    html += '同时完善帮助中心/应用案例/开发指南/开发资源/开放能力首页配置、接口示例/错误码管理、我的工单、应用案例管理等模块功能点。';
+    html += '右侧PRD面板中 <span style="color:#F53F3F;font-weight:600;">红色字体</span> 标注的为走查记录中的需求项。';
+    html += '</div>';
+    html += '</div>';
+    html += '</div>';
+    html += '</div>';
+
     // 统计卡片
     html += '<div class="grid grid-cols-2 md:grid-cols-4 gap-4 mt-3 mb-6">';
     for (const s of stats) {
@@ -6729,6 +6756,29 @@ function renderOverviewPage() {
             <div class="text-sm mt-2" style="color:var(--text-secondary);">${s.label}</div>
             <div class="mt-2" style="height:3px;background:${s.bg};border-radius:2px;"></div>
         </div>`;
+    }
+    html += '</div>';
+
+    // 新增需求详情卡片
+    html += '<div class="text-base font-semibold mb-4 flex items-center gap-2" style="color:var(--text-primary);">';
+    html += '<i class="fa fa-star" style="color:#F53F3F;"></i> 新增需求清单';
+    html += '<span class="text-xs font-normal ml-1" style="color:var(--text-tertiary);">v2走查记录 - 红色标注项</span>';
+    html += '</div>';
+    html += '<div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">';
+    for (const nf of newFeatures) {
+        html += '<div class="bg-white rounded p-5" style="border:1px solid #FFE0DD;">';
+        html += '<div class="font-semibold text-sm mb-3 flex items-center gap-2" style="color:#F53F3F;">';
+        html += '<i class="fa fa-folder-open-o"></i>' + nf.category;
+        html += '<span class="text-xs px-2 py-0.5 rounded-full ml-auto" style="background:#FFF1F0;color:#F53F3F;">' + nf.items.length + '项</span>';
+        html += '</div>';
+        html += '<div class="flex flex-wrap gap-2">';
+        for (const item of nf.items) {
+            html += '<span class="text-xs px-2.5 py-1 rounded" style="background:#FFF7F6;color:#CF1322;border:1px solid #FFCCC7;">';
+            html += '<i class="fa fa-plus-circle mr-1" style="font-size:10px;"></i>' + item;
+            html += '</span>';
+        }
+        html += '</div>';
+        html += '</div>';
     }
     html += '</div>';
 
