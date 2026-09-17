@@ -12070,14 +12070,13 @@ function renderPrdCard(pageKey, pageName, prd) {
     html += '<div style="display:inline-flex;align-items:center;justify-content:center;width:24px;height:24px;background:#165DFF;color:#fff;border-radius:4px;font-size:11px;flex-shrink:0;"><i class="fa fa-file-text"></i></div>';
     html += '<div class="desc-title" style="font-size:14px;">PRD需求说明 - ' + pageName + '</div>';
     html += '</div>';
-    html += '<div style="color: #F53F3F;">';
-    html += '<div class="desc-section"><div class="desc-label" style="color:#F53F3F;">功能背景</div><div class="desc-text" style="color:#F53F3F;">' + prd.background + '</div></div>';
-    html += '<div class="desc-section"><div class="desc-label" style="color:#F53F3F;">目标用户</div><div class="desc-text" style="color:#F53F3F;">' + prd.targetUsers + '</div></div>';
+    html += '<div class="desc-section"><div class="desc-label">功能背景</div><div class="desc-text">' + prd.background + '</div></div>';
+    html += '<div class="desc-section"><div class="desc-label">目标用户</div><div class="desc-text">' + prd.targetUsers + '</div></div>';
     html += '<div class="desc-section"><div class="desc-label" style="color:#F53F3F;">核心功能点</div><div class="desc-text" style="color:#F53F3F;">' + prd.coreFeatures + '</div></div>';
     if (prd.dataModel) {
-        html += '<div class="desc-section"><div class="desc-label" style="color:#F53F3F;">数据模型</div><div class="desc-text" style="color:#F53F3F;">' + prd.dataModel + '</div></div>';
+        html += '<div class="desc-section"><div class="desc-label">数据模型</div><div class="desc-text">' + prd.dataModel + '</div></div>';
     }
-    html += '<div class="desc-section"><div class="desc-label" style="color:#F53F3F;">业务流程</div><div class="desc-text" style="color:#F53F3F;">' + prd.businessFlow + '</div></div>';
+    html += '<div class="desc-section"><div class="desc-label">业务流程</div><div class="desc-text">' + prd.businessFlow + '</div></div>';
     if (prd.addFlow) {
         html += '<div class="desc-section"><div class="desc-label" style="color:#F53F3F;">新增流程</div><div class="desc-text" style="color:#F53F3F;">' + prd.addFlow + '</div></div>';
     }
@@ -12087,11 +12086,17 @@ function renderPrdCard(pageKey, pageName, prd) {
     if (prd.deleteFlow) {
         html += '<div class="desc-section"><div class="desc-label" style="color:#F53F3F;">删除流程</div><div class="desc-text" style="color:#F53F3F;">' + prd.deleteFlow + '</div></div>';
     }
+    if (prd.batchDeleteFlow) {
+        html += '<div class="desc-section"><div class="desc-label" style="color:#F53F3F;">批量删除流程</div><div class="desc-text" style="color:#F53F3F;">' + prd.batchDeleteFlow + '</div></div>';
+    }
     if (prd.queryFlow) {
         html += '<div class="desc-section"><div class="desc-label" style="color:#F53F3F;">查询流程</div><div class="desc-text" style="color:#F53F3F;">' + prd.queryFlow + '</div></div>';
     }
     if (prd.sortConfig) {
         html += '<div class="desc-section"><div class="desc-label" style="color:#F53F3F;">排序功能</div><div class="desc-text" style="color:#F53F3F;">' + prd.sortConfig + '</div></div>';
+    }
+    if (prd.viewFlow) {
+        html += '<div class="desc-section"><div class="desc-label" style="color:#F53F3F;">查看流程</div><div class="desc-text" style="color:#F53F3F;">' + prd.viewFlow + '</div></div>';
     }
     if (prd.fieldRules) {
         html += '<div class="desc-section"><div class="desc-label">字段规则</div>';
@@ -12132,16 +12137,15 @@ function renderPrdCard(pageKey, pageName, prd) {
         }
         html += '</div>';
     }
-    html += '<div class="desc-section"><div class="desc-label" style="color:#F53F3F;">页面信息结构</div><div class="desc-text" style="color:#F53F3F;">' + prd.pageInfo + '</div></div>';
-    html += '<div class="desc-section"><div class="desc-label" style="color:#F53F3F;">交互逻辑</div><div class="desc-text" style="color:#F53F3F;">' + prd.interaction + '</div></div>';
+    html += '<div class="desc-section"><div class="desc-label">页面信息结构</div><div class="desc-text">' + prd.pageInfo + '</div></div>';
+    html += '<div class="desc-section"><div class="desc-label">交互逻辑</div><div class="desc-text">' + prd.interaction + '</div></div>';
     if (prd.exceptionHandling) {
-        html += '<div class="desc-section"><div class="desc-label" style="color:#F53F3F;">异常处理</div><div class="desc-text" style="color:#F53F3F;">' + prd.exceptionHandling + '</div></div>';
+        html += '<div class="desc-section"><div class="desc-label">异常处理</div><div class="desc-text">' + prd.exceptionHandling + '</div></div>';
     }
     if (prd.permissionReq) {
-        html += '<div class="desc-section"><div class="desc-label" style="color:#F53F3F;">权限要求</div><div class="desc-text" style="color:#F53F3F;">' + prd.permissionReq + '</div></div>';
+        html += '<div class="desc-section"><div class="desc-label">权限要求</div><div class="desc-text">' + prd.permissionReq + '</div></div>';
     }
-    html += '<div class="desc-section"><div class="desc-label" style="color:#F53F3F;">验收标准</div><div class="desc-text" style="color:#F53F3F;">' + prd.acceptance + '</div></div>';
-    html += '</div>';
+    html += '<div class="desc-section"><div class="desc-label">验收标准</div><div class="desc-text">' + prd.acceptance + '</div></div>';
     html += '</div>';
     return html;
 }
