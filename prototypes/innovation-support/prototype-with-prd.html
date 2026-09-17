@@ -543,6 +543,8 @@ var navConfig = [
                 key: 's-ticket-ops', label: '工单管理运营侧', type: 'subgroup',
                 children: [
                     { key: 'ticket-flow', label: '工单流程配置管理', type: 'page' },
+                    { key: 'ticket-my-todo', label: '我的代办', type: 'page' },
+                    { key: 'ticket-cc-mine', label: '抄送我的工单', type: 'page' },
                 ]
             },
             { key: 'ticket-cc', label: '工单抄送管理', type: 'page' },
@@ -836,6 +838,106 @@ var pageConfigs = {
             { id: 2, name: '设备申请流程', code: 'eqapp', ticketType: '设备申请', status: true, createTime: '2025-01-12 14:30:00' },
             { id: 3, name: '用户权限申请流程', code: 'auth001', ticketType: '权限申请', status: false, createTime: '2025-01-15 09:15:00' },
         ],
+    },
+
+    /* ---------- 我的代办 ---------- */
+    'ticket-my-todo': {
+        breadcrumb: ['工单中心', '工单管理运营侧', '我的代办'],
+        query: [
+            { key: 'title', label: '工单标题', type: 'input', placeholder: '请输入工单标题' },
+            { key: 'type', label: '工单类型', type: 'select', placeholder: '请选择', options: [{ value: '', label: '全部' }, { value: 'general', label: '通用工单' }, { value: 'equipment', label: '设备申请' }, { value: 'auth', label: '权限申请' }] },
+            { key: 'priority', label: '优先级', type: 'select', placeholder: '请选择', options: [{ value: '', label: '全部' }, { value: 'high', label: '高' }, { value: 'medium', label: '中' }, { value: 'low', label: '低' }] },
+            { key: 'status', label: '状态', type: 'select', placeholder: '请选择', options: [{ value: '', label: '全部' }, { value: 'pending', label: '待办理' }, { value: 'processing', label: '办理中' }, { value: 'done', label: '已完成' }, { value: 'returned', label: '已退回' }] },
+        ],
+        toolbar: [{ type: 'custom', text: '批量办理', icon: 'fa-check-square-o', onClick: "showToast('批量办理成功','success')" }, { type: 'export' }],
+        columns: [
+            { type: 'checkbox' },
+            { type: 'index', title: '序号' },
+            { key: 'ticketNo', title: '工单编号', sortable: true },
+            { key: 'title', title: '工单标题' },
+            { key: 'type', title: '工单类型', type: 'tag', tagMap: { 'general': { text: '通用工单', color: 'blue' }, 'equipment': { text: '设备申请', color: 'green' }, 'auth': { text: '权限申请', color: 'orange' } } },
+            { key: 'priority', title: '优先级', type: 'tag', tagMap: { 'high': { text: '高', color: 'red' }, 'medium': { text: '中', color: 'orange' }, 'low': { text: '低', color: 'blue' } } },
+            { key: 'submitter', title: '提交人' },
+            { key: 'submitTime', title: '提交时间', sortable: true },
+            { key: 'status', title: '状态', type: 'tag', tagMap: { 'pending': { text: '待办理', color: 'orange' }, 'processing': { text: '办理中', color: 'blue' }, 'done': { text: '已完成', color: 'green' }, 'returned': { text: '已退回', color: 'red' } } },
+            { key: 'remainTime', title: '剩余时间' },
+            { type: 'actions', title: '操作', actions: [{ key: 'handle', label: '办理' }, { key: 'view', label: '查看' }, { key: 'transfer', label: '移交' }] },
+        ],
+        data: [
+            { id: 1, ticketNo: 'DB202504010001', title: '办公系统登录异常问题处理', type: 'general', priority: 'high', submitter: '张明', submitTime: '2025-04-01 09:30:00', status: 'pending', remainTime: '2小时15分' },
+            { id: 2, ticketNo: 'DB202504010002', title: '服务器设备采购申请', type: 'equipment', priority: 'medium', submitter: '李华', submitTime: '2025-04-01 10:15:00', status: 'processing', remainTime: '1天3小时' },
+            { id: 3, ticketNo: 'DB202504020003', title: '数据查询权限申请', type: 'auth', priority: 'high', submitter: '王芳', submitTime: '2025-04-02 08:45:00', status: 'pending', remainTime: '45分钟' },
+            { id: 4, ticketNo: 'DB202504020004', title: '业务系统功能优化建议', type: 'general', priority: 'low', submitter: '刘强', submitTime: '2025-04-02 14:00:00', status: 'processing', remainTime: '2天5小时' },
+            { id: 5, ticketNo: 'DB202504030005', title: '打印机设备更换申请', type: 'equipment', priority: 'low', submitter: '陈静', submitTime: '2025-04-03 11:20:00', status: 'done', remainTime: '-' },
+            { id: 6, ticketNo: 'DB202504030006', title: '系统管理员权限申请', type: 'auth', priority: 'high', submitter: '赵伟', submitTime: '2025-04-03 15:30:00', status: 'returned', remainTime: '-' },
+            { id: 7, ticketNo: 'DB202504040007', title: '网络故障报修', type: 'general', priority: 'medium', submitter: '孙丽', submitTime: '2025-04-04 09:00:00', status: 'pending', remainTime: '6小时30分' },
+            { id: 8, ticketNo: 'DB202504040008', title: '办公软件安装申请', type: 'equipment', priority: 'low', submitter: '周杰', submitTime: '2025-04-04 16:00:00', status: 'processing', remainTime: '3天1小时' },
+        ],
+    },
+
+    /* ---------- 抄送我的工单 ---------- */
+    'ticket-cc-mine': {
+        type: 'tab-table',
+        breadcrumb: ['工单中心', '工单管理运营侧', '抄送我的工单'],
+        tabs: [
+            { key: 'stat', label: '抄送工单统计' },
+            { key: 'ccMine', label: '抄送我的工单' },
+        ],
+        tabConfigs: {
+            'stat': {
+                query: [
+                    { key: 'name', label: '统计名称', type: 'input', placeholder: '请输入统计名称' },
+                    { key: 'status', label: '状态', type: 'select', placeholder: '请选择', options: [{ value: '', label: '全部' }, { value: '1', label: '启用' }, { value: '0', label: '停用' }] },
+                ],
+                toolbar: [{ type: 'add', text: '新增' }, { type: 'batchDelete' }],
+                columns: [
+                    { type: 'checkbox' },
+                    { type: 'index', title: '序号' },
+                    { key: 'name', title: '统计名称', sortable: true },
+                    { key: 'period', title: '统计周期', type: 'tag', tagMap: { 'day': { text: '日', color: 'blue' }, 'week': { text: '周', color: 'green' }, 'month': { text: '月', color: 'orange' } } },
+                    { key: 'dimension', title: '统计维度', type: 'tag', tagMap: { 'type': { text: '按类型', color: 'blue' }, 'dept': { text: '按部门', color: 'green' }, 'person': { text: '按人员', color: 'orange' } } },
+                    { key: 'status', title: '状态', type: 'tag', tagMap: { true: { text: '启用', color: 'green' }, false: { text: '停用', color: 'red' } } },
+                    { key: 'createTime', title: '创建时间', sortable: true },
+                    { type: 'actions', title: '操作', actions: [{ key: 'edit', label: '编辑' }, { key: 'delete', label: '删除', danger: true }, { key: 'forward', label: '转发' }] },
+                ],
+                data: [
+                    { id: 1, name: '每日工单类型统计', period: 'day', dimension: 'type', status: true, createTime: '2025-03-01 10:00:00' },
+                    { id: 2, name: '每周部门工单统计', period: 'week', dimension: 'dept', status: true, createTime: '2025-03-02 14:30:00' },
+                    { id: 3, name: '每月人员工单统计', period: 'month', dimension: 'person', status: true, createTime: '2025-03-03 09:15:00' },
+                    { id: 4, name: '每日部门工单统计', period: 'day', dimension: 'dept', status: false, createTime: '2025-03-04 16:45:00' },
+                    { id: 5, name: '每周类型工单统计', period: 'week', dimension: 'type', status: true, createTime: '2025-03-05 11:20:00' },
+                    { id: 6, name: '每月类型工单统计', period: 'month', dimension: 'type', status: true, createTime: '2025-03-06 08:30:00' },
+                ],
+            },
+            'ccMine': {
+                query: [
+                    { key: 'title', label: '工单标题', type: 'input', placeholder: '请输入工单标题' },
+                    { key: 'type', label: '工单类型', type: 'select', placeholder: '请选择', options: [{ value: '', label: '全部' }, { value: 'general', label: '通用工单' }, { value: 'equipment', label: '设备申请' }, { value: 'auth', label: '权限申请' }] },
+                    { key: 'ccDateRange', label: '抄送时间范围', type: 'input', placeholder: '开始时间 - 结束时间' },
+                ],
+                toolbar: [{ type: 'custom', text: '批量标记已读', icon: 'fa-check-circle-o', onClick: "showToast('批量标记已读成功','success')" }, { type: 'export' }],
+                columns: [
+                    { type: 'checkbox' },
+                    { type: 'index', title: '序号' },
+                    { key: 'title', title: '工单标题' },
+                    { key: 'type', title: '工单类型', type: 'tag', tagMap: { 'general': { text: '通用工单', color: 'blue' }, 'equipment': { text: '设备申请', color: 'green' }, 'auth': { text: '权限申请', color: 'orange' } } },
+                    { key: 'initiator', title: '发起人' },
+                    { key: 'ccTime', title: '抄送时间', sortable: true },
+                    { key: 'isRead', title: '是否已读', type: 'tag', tagMap: { 'read': { text: '已读', color: 'gray' }, 'unread': { text: '未读', color: 'red' } } },
+                    { type: 'actions', title: '操作', actions: [{ key: 'view', label: '查看详情' }, { key: 'rate', label: '评分' }, { key: 'upload', label: '上传附件' }] },
+                ],
+                data: [
+                    { id: 1, title: '办公系统登录异常问题', type: 'general', initiator: '张明', ccTime: '2025-04-01 09:35:00', isRead: 'unread' },
+                    { id: 2, title: '服务器设备采购申请审批通过', type: 'equipment', initiator: '李华', ccTime: '2025-04-01 14:20:00', isRead: 'read' },
+                    { id: 3, title: '数据查询权限申请', type: 'auth', initiator: '王芳', ccTime: '2025-04-02 08:50:00', isRead: 'unread' },
+                    { id: 4, title: '业务系统功能优化建议反馈', type: 'general', initiator: '刘强', ccTime: '2025-04-02 16:30:00', isRead: 'read' },
+                    { id: 5, title: '打印机设备更换申请完成', type: 'equipment', initiator: '陈静', ccTime: '2025-04-03 10:15:00', isRead: 'read' },
+                    { id: 6, title: '系统管理员权限申请被退回', type: 'auth', initiator: '赵伟', ccTime: '2025-04-03 16:45:00', isRead: 'unread' },
+                    { id: 7, title: '网络故障报修处理进度', type: 'general', initiator: '孙丽', ccTime: '2025-04-04 09:10:00', isRead: 'unread' },
+                    { id: 8, title: '办公软件安装申请审批中', type: 'equipment', initiator: '周杰', ccTime: '2025-04-04 17:00:00', isRead: 'read' },
+                ],
+            },
+        },
     },
 
     /* ---------- 工单抄送管理（3Tab结构） ---------- */
@@ -6698,14 +6800,15 @@ function _getModuleList() { return _overviewModules; }
 
 function renderOverviewPage() {
     const stats = [
-        { label: '总功能点', value: 239, color: 'var(--primary)', bg: '#E8F3FF' },
-        { label: '新增功能', value: 36, color: '#F53F3F', bg: '#FFF1F0' },
-        { label: '涉及模块', value: 41, color: 'var(--warning)', bg: '#FFF7E6' },
-        { label: '新增页面', value: 4, color: 'var(--success)', bg: '#F6FFED' },
+        { label: '总功能点', value: 269, color: 'var(--primary)', bg: '#E8F3FF' },
+        { label: '新增功能', value: 66, color: '#F53F3F', bg: '#FFF1F0' },
+        { label: '涉及模块', value: 43, color: 'var(--warning)', bg: '#FFF7E6' },
+        { label: '新增页面', value: 6, color: 'var(--success)', bg: '#F6FFED' },
     ];
 
-    // 新增需求提示 - v2走查记录
+    // 新增需求提示 - v3走查记录
     const newFeatures = [
+        { category: '工单中心', items: ['我的代办（查询/办理/查看/移交/批量办理/导出）', '抄送我的工单-抄送工单统计（增删改查/转发）', '抄送我的工单-抄送工单列表（查看/评分/附件/标记已读/导出）', '工单类型管理-查询', '我的工单-修改/删除/排序', '工单抄送管理-信息管理（8项）', '办件中心-配置信息管理（3项）'] },
         { category: '开放门户管理', items: ['全局搜索管理（搜索配置+热搜词）', '通知公告管理-删除/查看', '接口示例管理-增删改查', '接口错误码管理-增删改查', '我的工单-填报/处理/审批', '应用案例管理-查看'] },
         { category: '门户首页配置', items: ['通知公告首页配置', '轮播图首页配置', '接入步骤首页配置', '帮助中心首页-查看/查询', '应用案例首页-查看', '开发指南首页-查看/查询', '开发资源首页-查看/查询', '开放能力首页-删除/查询'] },
     ];
@@ -6735,13 +6838,13 @@ function renderOverviewPage() {
     html += '</div>';
     html += '<div class="flex-1">';
     html += '<div class="flex items-center gap-2 mb-1">';
-    html += '<span class="text-base font-bold" style="color:#F53F3F;">v2 走查新增需求提示</span>';
+    html += '<span class="text-base font-bold" style="color:#F53F3F;">v3 走查新增需求提示</span>';
     html += '<span class="text-xs px-2 py-0.5 rounded-full" style="background:#F53F3F;color:#fff;">NEW</span>';
-    html += '<span class="text-xs ml-2" style="color:#8C8C8C;">共 36 个功能点 / 4 个新页面 / 41 个模块组</span>';
+    html += '<span class="text-xs ml-2" style="color:#8C8C8C;">共 66 个功能点 / 6 个新页面 / 43 个模块组</span>';
     html += '</div>';
     html += '<div class="text-sm" style="color:#CF1322;line-height:1.8;">';
-    html += '基于最新走查记录，新增 <b>全局搜索管理</b>、<b>轮播图首页配置</b>、<b>通知公告首页配置</b>、<b>接入步骤首页配置</b> 4个模块，';
-    html += '同时完善帮助中心/应用案例/开发指南/开发资源/开放能力首页配置、接口示例/错误码管理、我的工单、应用案例管理等模块功能点。';
+    html += '基于最新v3走查记录，新增 <b>我的代办</b>、<b>抄送我的工单</b> 2个工单中心运营侧页面，';
+    html += '同时完善工单类型管理、我的工单、工单抄送管理、办件中心等模块的信息管理类功能点。';
     html += '右侧PRD面板中 <span style="color:#F53F3F;font-weight:600;">红色字体</span> 标注的为走查记录中的需求项。';
     html += '</div>';
     html += '</div>';
@@ -6762,7 +6865,7 @@ function renderOverviewPage() {
     // 新增需求详情卡片
     html += '<div class="text-base font-semibold mb-4 flex items-center gap-2" style="color:var(--text-primary);">';
     html += '<i class="fa fa-star" style="color:#F53F3F;"></i> 新增需求清单';
-    html += '<span class="text-xs font-normal ml-1" style="color:var(--text-tertiary);">v2走查记录 - 红色标注项</span>';
+    html += '<span class="text-xs font-normal ml-1" style="color:var(--text-tertiary);">v3走查记录 - 红色标注项</span>';
     html += '</div>';
     html += '<div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">';
     for (const nf of newFeatures) {
@@ -10727,6 +10830,8 @@ var pageList = [
     { key: 'ticket-sort', name: '工单排序', group: '工单中心' },
     { key: 'ticket-type', name: '工单类型管理', group: '工单中心' },
     { key: 'ticket-flow', name: '工单流程配置管理', group: '工单中心' },
+    { key: 'ticket-my-todo', name: '我的代办', group: '工单中心/工单管理运营侧' },
+    { key: 'ticket-cc-mine', name: '抄送我的工单', group: '工单中心/工单管理运营侧' },
     { key: 'ticket-cc', name: '工单抄送管理', group: '工单中心' },
     { key: 'notice', name: '通知公告管理', group: '开放门户管理' },
     { key: 'provider', name: '软件服务商管理', group: '软件服务商工作台' },
@@ -11119,7 +11224,8 @@ var prdData = {
         exceptionHandling: '1.空数据状态：列表显示空状态占位图+提示文字"暂无数据" 2.网络异常：Toast提示"网络连接失败，请稍后重试" 3.数据加载失败：显示"加载失败，点击重试"按钮',
         permissionReq: '1.系统管理员：拥有全部权限（查询） 2.平台管理员：拥有全部权限 3.分级管理员：仅查询权限，不可新增、编辑、删除 4.普通用户：无访问权限，菜单不可见',
         interaction: '多条件组合查询',
-        acceptance: '1.查询条件完整可用 2.分页功能正常'
+        acceptance: '1.查询条件完整可用 2.分页功能正常',
+        redFields: ['queryFlow'],
     },
     'ticket-flow': {
         background: '【模式D】工单流程节点自动匹配赣政通管理员层级。走查覆盖5项功能点：①工单流程新增（部分符合，工单流程节点自动匹配赣政通管理员层级体系）②工单流程删除（部分符合，工单流程节点自动匹配赣政通管理员层级体系）③工单流程修改（部分符合，工单流程节点自动匹配赣政通管理员层级体系）④工单流程查询（部分符合，工单流程节点自动匹配赣政通管理员层级体系）⑤工单流程审批环节添加（部分符合，工单流程节点自动匹配赣政通管理员层级体系）。原型实现：工单流程配置列表+审批环节弹窗，审批环节绑定管理员层级（条线/分级/系统）而非具体人员，三色Tag区分层级类型，系统根据工单发起人所属条线/机构自动解析对应审批人。',
@@ -11136,6 +11242,50 @@ var prdData = {
         permissionReq: '1.系统管理员：拥有全部权限（新增/编辑/删除/查询） 2.平台管理员：拥有全部权限 3.分级管理员：仅查询权限，不可新增、编辑、删除 4.普通用户：无访问权限，菜单不可见',
         interaction: '多条件组合查询；新增弹窗表单；编辑弹窗表单；删除二次确认',
         acceptance: '1.新增功能正常 2.编辑功能正常 3.单条删除有二次确认 4.查询条件完整可用 5.分页功能正常'
+    },
+    'ticket-my-todo': {
+        background: '【我的代办】我的代办是工单管理运营侧的核心工作入口页面，集中展示当前用户需要办理的所有工单事项。支持按工单类型、优先级、状态等多维度筛选，提供批量办理和导出功能，帮助用户高效处理待办事项。走查覆盖6项功能点：工单列表查询、批量办理、导出、工单办理、工单查看、工单移交。',
+        targetUsers: '工单处理人员、工单管理员、各级审批人员',
+        coreFeatures: '1.多条件组合查询 2.工单列表展示 3.批量办理 4.单条办理 5.工单查看 6.工单移交 7.导出 8.剩余时间提醒',
+        businessFlow: '进入我的代办页 → 查看待办工单列表 → 设置查询条件筛选 → 点击"办理"进入工单处理 → 填写处理意见 → 提交办理 → 工单状态更新 → 或点击"移交" → 选择接收人 → 确认移交 → 工单转至新处理人 → 支持批量选择后批量办理 → 支持导出当前筛选结果',
+        pageInfo: '标准列表页；查询条件：工单标题、工单类型、优先级、状态；工具栏：批量办理、导出；表格列：复选框、序号、工单编号、工单标题、工单类型（标签）、优先级（标签-高红/中橙/低蓝）、提交人、提交时间、状态（标签）、剩余时间、操作（办理/查看/移交）；分页完整',
+        dataModel: '核心实体：代办工单（id/工单编号/工单标题/工单类型/优先级/提交人/提交时间/状态/剩余时间/处理人）。枚举值：工单类型（通用工单/设备申请/权限申请）、优先级（高/中/低）、状态（待办理/办理中/已完成/已退回）。',
+        queryFlow: '支持工单标题（模糊）、工单类型（下拉）、优先级（下拉）、状态（下拉）多条件组合查询，AND关系。查询操作：输入/选择条件后点击"查询"按钮 → 列表按条件过滤显示 → 点击"重置"按钮清空所有条件，恢复默认列表。支持分页查询，默认10条/页，可切换每页条数（10/20/50/100）。',
+        handleFlow: '【工单办理】在我的代办列表页 → 找到待办理工单 → 点击操作列"办理"按钮 → 打开工单办理抽屉/弹窗 → 查看工单完整信息（标题、类型、优先级、提交人、问题描述、附件等）→ 填写处理意见（必填，富文本）→ 上传处理附件（可选）→ 选择处理结果（已解决/待跟进/需用户补充信息）→ 点击"提交办理" → 工单状态更新为"办理中"或"已完成" → Toast提示"办理成功" → 列表刷新。',
+        viewFlow: '【工单查看】在我的代办列表页 → 点击工单标题或操作列"查看" → 打开工单详情抽屉 → 展示工单完整信息（编号、标题、类型、优先级、状态、提交时间、提交人、问题描述、处理记录、附件等）→ 可查看处理历史记录 → 支持关闭返回列表。查看模式下所有内容为只读状态，不可编辑。',
+        transferFlow: '【工单移交】在我的代办列表页 → 找到需移交的工单 → 点击操作列"移交"按钮 → 打开发送移交弹窗 → 选择接收人（支持搜索和机构树选择）→ 填写移交原因（选填）→ 点击确认 → 校验通过 → 工单移交成功 → Toast提示"移交成功" → 工单从当前用户待办列表中移除 → 接收人收到待办通知。',
+        batchHandleFlow: '【批量办理】勾选多条待办理工单 → 点击"批量办理"按钮 → 打开批量办理弹窗 → 统一填写处理意见 → 选择处理结果 → 点击确认 → 批量更新工单状态 → Toast提示成功处理数量 → 列表刷新。含不可批量处理的工单时自动跳过并提示跳过数量。',
+        exportFlow: '【导出】设置查询条件筛选工单 → 点击"导出"按钮 → 按当前筛选条件导出我的代办工单列表 → 导出字段：工单编号、工单标题、工单类型、优先级、提交人、提交时间、状态、剩余时间 → 导出格式为Excel → 大数据量导出时提示"数据量较大，请耐心等待" → 导出完成后自动下载文件。',
+        sortConfig: '支持工单编号、提交时间字段排序。点击表头切换升序/降序，箭头图标标识。默认按提交时间降序排列，优先级高的工单靠前展示。',
+        exceptionHandling: '1.移交时接收人为空：提示"请选择接收人" 2.批量办理含已完成工单：自动跳过并提示跳过数量 3.导出数据量过大：提示"数据量较大，导出可能需要较长时间，请耐心等待" 4.空数据状态：列表显示空状态占位图+提示文字"暂无待办工单" 5.网络异常：Toast提示"网络连接失败，请稍后重试"',
+        permissionReq: '1.工单处理人员：可查看和办理自己的待办工单 2.工单管理员：可查看和办理所有待办工单，可移交工单 3.系统管理员：拥有全部权限 4.普通用户：无访问权限',
+        interaction: '多条件组合查询；表头点击排序；复选框多选+批量操作；工单办理抽屉；工单详情抽屉；移交弹窗；批量办理弹窗；导出功能',
+        acceptance: '1.查询条件完整可用 2.工单办理功能正常 3.工单查看详情正常 4.工单移交功能正常 5.批量办理有二次确认 6.导出功能正常 7.表头可排序 8.剩余时间显示正常 9.Tag标签显示正确 10.分页功能正常',
+        redFields: ['queryFlow', 'handleFlow', 'viewFlow', 'transferFlow', 'batchHandleFlow', 'exportFlow', 'sortConfig'],
+    },
+    'ticket-cc-mine': {
+        background: '【抄送我的工单】抄送我的工单是工单管理运营侧的抄送信息管理页面，包含抄送工单统计和抄送我的工单两个Tab页。抄送工单统计支持配置各类抄送统计规则，抄送我的工单展示所有抄送给当前用户的工单，支持查看详情、评分和上传附件等操作。走查覆盖9项功能点：抄送统计CRUD、抄送工单查询、批量标记已读、导出、查看详情、评分、上传附件等。',
+        targetUsers: '工单管理员、各级管理人员、被抄送人员',
+        coreFeatures: '1.抄送工单统计CRUD 2.抄送工单查询 3.批量标记已读 4.导出 5.查看详情 6.工单评分 7.上传附件 8.统计转发 9.多Tab切换',
+        businessFlow: '进入抄送我的工单页 → 抄送工单统计Tab → 查看统计配置列表 → 新增/编辑/删除统计配置 → 或点击转发分享统计；抄送我的工单Tab → 查看抄送我的工单列表 → 设置查询条件筛选 → 点击"查看详情" → 打开抽屉查看工单完整信息 → 点击"评分" → 弹窗5星评分 → 点击"上传附件" → 弹窗上传相关附件 → 支持批量标记已读 → 支持导出',
+        pageInfo: '2个Tab页（抄送工单统计/抄送我的工单）；抄送工单统计：支持统计名称/状态查询、新增、批量删除；字段：复选框、序号、统计名称、统计周期（标签）、统计维度（标签）、状态、创建时间、操作（编辑/删除/转发）；抄送我的工单：支持工单标题/工单类型/抄送时间范围查询、批量标记已读、导出；字段：复选框、序号、工单标题、工单类型（标签）、发起人、抄送时间、是否已读（标签）、操作（查看详情/评分/上传附件）；分页完整',
+        dataModel: '核心实体：抄送工单统计（id/统计名称/统计周期/统计维度/状态/创建时间）、抄送工单记录（id/工单标题/工单类型/发起人/抄送时间/是否已读）。枚举值：统计周期（日/周/月）、统计维度（按类型/按部门/按人员）、工单类型（通用工单/设备申请/权限申请）、已读状态（已读/未读）。',
+        addFlow: '【抄送工单统计-新增】在抄送工单统计Tab页 → 点击"新增"按钮 → 打开新增弹窗 → 填写统计名称（必填）→ 选择统计周期（日/周/月）→ 选择统计维度（按类型/按部门/按人员）→ 设置状态（启用/停用，默认启用）→ 点击保存 → 校验通过 → 新增成功 → Toast提示 → 列表刷新。',
+        editFlow: '【抄送工单统计-编辑】点击操作列"编辑" → 打开编辑弹窗 → 回显统计配置信息 → 修改可编辑字段 → 点击保存 → 校验通过 → 更新成功 → Toast提示 → 列表刷新。',
+        deleteFlow: '【抄送工单统计-删除】单条删除：点击操作列"删除" → 弹出二次确认弹窗 → 确认删除 → 逻辑删除 → Toast提示"删除成功" → 列表刷新。批量删除：勾选多条统计配置 → 点击"批量删除"按钮 → 弹出二次确认弹窗（显示选中数量）→ 确认删除 → 批量逻辑删除 → Toast提示成功删除数量。',
+        queryFlow: '抄送工单统计：支持统计名称（模糊）、状态（下拉）多条件组合查询，AND关系。抄送我的工单：支持工单标题（模糊）、工单类型（下拉）、抄送时间范围多条件组合查询，AND关系。各Tab独立查询，互不影响。均支持分页查询。',
+        sortConfig: '抄送工单统计：支持统计名称、创建时间字段排序。抄送我的工单：支持抄送时间字段排序。点击表头切换升序/降序，箭头图标标识。',
+        viewFlow: '【查看详情】在抄送我的工单Tab页 → 点击工单标题或操作列"查看详情" → 打开工单详情抽屉 → 展示工单完整信息（编号、标题、类型、优先级、状态、发起人、抄送时间、问题描述、处理记录、附件等）→ 标记为已读 → 可查看处理历史记录 → 支持关闭返回列表。',
+        evaluateFlow: '【工单评分】点击操作列"评分" → 打开发起评分弹窗 → 显示工单基本信息 → 星级评分（1-5星，点击或拖动选择）→ 5星对应非常满意，1星对应非常不满意 → 填写评价内容（选填）→ 点击提交评价 → 评价成功，Toast提示 → 工单评分记录保存。',
+        uploadFlow: '【上传附件】点击操作列"上传附件" → 打开上传附件弹窗 → 选择文件（支持图片/文档/压缩包等格式）→ 显示文件列表和进度 → 可删除已选文件 → 填写备注（选填）→ 点击确认上传 → 上传成功，Toast提示 → 附件关联到工单。',
+        batchMarkReadFlow: '【批量标记已读】勾选多条未读工单 → 点击"批量标记已读"按钮 → 弹出确认弹窗 → 确认标记 → 批量更新已读状态 → Toast提示成功标记数量 → 列表刷新。已读工单自动跳过。',
+        exportFlow: '【导出】在抄送我的工单Tab页 → 设置查询条件筛选 → 点击"导出"按钮 → 按当前筛选条件导出抄送工单列表 → 导出字段：工单标题、工单类型、发起人、抄送时间、已读状态 → 导出格式为Excel → 导出完成后自动下载文件。',
+        forwardFlow: '【统计转发】在抄送工单统计Tab页 → 点击操作列"转发" → 打开转发弹窗 → 选择转发对象（人员/部门/角色）→ 填写转发说明（选填）→ 点击确认 → 转发成功，Toast提示 → 接收方收到统计消息。',
+        exceptionHandling: '1.统计名称重复：提示"统计名称已存在，请重新输入" 2.上传文件格式错误：提示"不支持该文件格式" 3.上传文件大小超限：提示"文件大小不能超过限制" 4.空数据状态：列表显示空状态占位图+提示文字"暂无数据" 5.网络异常：Toast提示"网络连接失败，请稍后重试"',
+        permissionReq: '1.工单管理员：拥有抄送统计配置管理权限（增删改查）、抄送工单查看和操作权限 2.各级管理人员：可查看抄送自己的工单，可评分和上传附件 3.系统管理员：拥有全部权限 4.普通用户：仅可查看抄送自己的工单',
+        interaction: 'Tab切换（2个Tab）；多条件组合查询；表头点击排序；复选框多选+批量操作；新增/编辑弹窗；删除二次确认；查看详情抽屉；评分弹窗；附件上传弹窗；批量标记已读；导出功能；转发功能',
+        acceptance: '1.2个Tab切换正常 2.抄送工单统计CRUD功能完整 3.抄送我的工单查询正常 4.查看详情抽屉正常 5.5星评分功能正常 6.附件上传功能正常 7.批量标记已读正常 8.导出功能正常 9.Tag标签显示正确 10.分页功能正常',
+        redFields: ['addFlow', 'editFlow', 'deleteFlow', 'queryFlow', 'sortConfig', 'viewFlow', 'evaluateFlow', 'uploadFlow', 'batchMarkReadFlow', 'exportFlow', 'forwardFlow', 'batchDeleteFlow'],
     },
     'ticket-cc': {
         background: '【工单抄送管理】工单抄送管理是工单中心的核心配置模块，负责管理工单流程中的抄送规则和抄送记录。包含默认抄送记录、自定义抄送设置、自定义抄送记录3个Tab页，分别管理系统预设的抄送规则、用户自定义的抄送配置以及实际的抄送执行记录，实现全方位的工单抄送管理能力。',
@@ -11163,7 +11313,13 @@ var prdData = {
         customRecordEditFlow: '【自定义抄送记录】系统生成的抄送记录不支持编辑。仅支持查看抄送详情。',
         customRecordDeleteFlow: '【自定义抄送记录】点击操作列"删除" → 弹出二次确认弹窗 → 确认删除 → 逻辑删除 → Toast提示"删除成功" → 列表刷新。删除的是记录本身，不影响已发送的通知。',
         customRecordQueryFlow: '【自定义抄送记录】支持记录名称（模糊）、工单类型（下拉）、抄送状态（下拉）多条件查询，AND关系。支持分页查询。',
-        redFields: ['defaultAddFlow', 'defaultEditFlow', 'defaultDeleteFlow', 'defaultQueryFlow', 'customSetAddFlow', 'customSetEditFlow', 'customSetDeleteFlow', 'customSetQueryFlow', 'customRecordAddFlow', 'customRecordEditFlow', 'customRecordDeleteFlow', 'customRecordQueryFlow'],
+        infoManageFlow: '【默认抄送规则配置信息管理】在默认抄送记录Tab页 → 支持对默认抄送规则的配置信息进行全生命周期管理 → 包括规则的新增配置、编辑修改、删除移除、查询筛选 → 每条规则包含规则名称、工单类型、抄送对象、抄送方式、触发节点、状态等完整信息 → 支持按规则名称模糊查询、按工单类型筛选查询 → 支持启用/停用状态切换 → 配置变更记录操作日志，可追溯操作人和操作时间。',
+        recordInfoFlow: '【默认抄送记录信息管理】在默认抄送记录Tab页 → 管理所有默认抄送规则的执行记录信息 → 记录包含抄送规则名称、关联工单、抄送人、抄送时间、抄送状态等信息 → 支持按记录名称、工单类型、抄送状态多条件查询 → 支持查看单条抄送记录详情 → 支持删除过期的抄送记录 → 记录信息支持按时间排序。',
+        ticketInfoAddFlow: '【工单信息新增】在工单抄送管理中 → 支持新增工单抄送相关的配置信息 → 包括默认抄送规则新增、自定义抄送设置新增 → 新增时需填写完整的配置信息 → 必填项校验通过后方可保存 → 新增成功后自动生成记录ID和创建时间 → 新增操作记录操作日志。',
+        ticketInfoEditFlow: '【工单信息修改】在工单抄送管理中 → 支持对已有的工单抄送配置信息进行修改 → 包括默认抄送规则编辑、自定义抄送设置编辑 → 点击操作列"编辑" → 打开编辑弹窗回显原有信息 → 修改可编辑字段后保存 → 校验通过后更新成功 → 部分关键字段（如编码）创建后不可修改 → 修改操作记录操作日志。',
+        ticketInfoDeleteFlow: '【工单信息删除】在工单抄送管理中 → 支持对工单抄送配置信息进行删除操作 → 包括默认抄送规则删除、自定义抄送设置删除、自定义抄送记录删除 → 单条删除：点击操作列"删除" → 弹出二次确认弹窗 → 确认后逻辑删除 → Toast提示成功 → 批量删除：勾选多条 → 点击批量删除 → 二次确认 → 批量逻辑删除 → 已被引用的配置不可删除，需先解除引用关系 → 删除操作记录操作日志。',
+        ticketInfoQueryFlow: '【工单信息查询】在工单抄送管理中 → 支持对工单抄送相关信息进行多条件组合查询 → 默认抄送记录：支持规则名称（模糊）、工单类型（下拉）查询 → 自定义抄送设置：支持设置名称（模糊）、工单类型（下拉）查询 → 自定义抄送记录：支持记录名称（模糊）、工单类型（下拉）、抄送状态（下拉）查询 → 各Tab独立查询，互不影响 → 多条件为AND关系 → 支持分页查询，默认10条/页 → 支持重置查询条件。',
+        redFields: ['defaultAddFlow', 'defaultEditFlow', 'defaultDeleteFlow', 'defaultQueryFlow', 'customSetAddFlow', 'customSetEditFlow', 'customSetDeleteFlow', 'customSetQueryFlow', 'customRecordAddFlow', 'customRecordEditFlow', 'customRecordDeleteFlow', 'customRecordQueryFlow', 'infoManageFlow', 'recordInfoFlow', 'ticketInfoAddFlow', 'ticketInfoEditFlow', 'ticketInfoDeleteFlow', 'ticketInfoQueryFlow'],
 },
     'notice': {
         background: '【模式A】增加查询字段排序功能。通知公告管理是开放门户管理的子模块。走查覆盖1项功能点：①通知公告查询字段排序（符合，增加该功能）。原型实现：通知公告列表表头支持点击排序（公告标题、发布时间等字段），升降序可切换，排序状态有箭头图标标识。',
@@ -11626,7 +11782,10 @@ var prdData = {
         timerConfigEditFlow: '【待阅工单定时器配置】点击操作列"编辑" → 打开编辑弹窗 → 回显定时器信息 → 修改可编辑字段 → 点击保存 → 校验通过 → 更新成功。',
         timerConfigDeleteFlow: '【待阅工单定时器配置】点击操作列"删除" → 弹出二次确认弹窗 → 确认删除 → 逻辑删除 → Toast提示"删除成功" → 列表刷新。',
         timerConfigQueryFlow: '【待阅工单定时器配置】支持定时器名称（模糊）、触发类型（下拉）、状态（下拉）多条件查询，AND关系。支持分页查询。',
-        redFields: ['statConfigAddFlow', 'statConfigEditFlow', 'statConfigDeleteFlow', 'statConfigQueryFlow', 'displayConfigAddFlow', 'displayConfigEditFlow', 'displayConfigDeleteFlow', 'displayConfigQueryFlow', 'timerConfigAddFlow', 'timerConfigEditFlow', 'timerConfigDeleteFlow', 'timerConfigQueryFlow'],
+        statInfoManageFlow: '【待阅工单事项统计配置信息管理】在办件中心的待阅工单管理中 → 支持对待阅工单统计配置信息进行全生命周期管理 → 包括统计配置的新增、编辑、删除、查询 → 配置信息包含配置名称、统计维度（按工单类型/按部门/按优先级）、统计周期（日/周/月）、展示顺序、状态等 → 支持按配置名称模糊查询、按状态筛选 → 支持启用/停用状态切换 → 配置变更记录操作日志，可追溯操作人和操作时间 → 统计配置用于生成待阅工单的各类统计报表和可视化图表。',
+        displayInfoManageFlow: '【待阅工单事项展示规则配置信息管理】在办件中心的待阅工单管理中 → 支持对待阅工单展示规则配置信息进行全生命周期管理 → 包括展示规则的新增、编辑、删除、查询 → 配置信息包含规则名称、适用角色、展示字段列表（可拖拽排序）、每页条数、默认排序字段、状态等 → 支持按规则名称模糊查询、按适用角色筛选 → 不同角色可配置不同的展示规则 → 支持默认规则设置 → 待阅展示侧重未读标红、已读置灰等视觉规则 → 配置变更记录操作日志。',
+        timerInfoManageFlow: '【待阅工单定时器配置信息管理】在办件中心的待阅工单管理中 → 支持对待阅工单定时器配置信息进行全生命周期管理 → 包括定时器配置的新增、编辑、删除、查询 → 配置信息包含定时器名称、触发类型（定时触发/间隔触发）、Cron表达式或间隔时间、执行动作（阅读率统计/未读提醒/自动标记已读）、状态等 → 支持按定时器名称模糊查询、按触发类型和状态筛选 → 支持手动触发测试 → 配置变更记录操作日志 → 定时器按设定时间自动执行待阅相关的定时任务。',
+        redFields: ['statConfigAddFlow', 'statConfigEditFlow', 'statConfigDeleteFlow', 'statConfigQueryFlow', 'displayConfigAddFlow', 'displayConfigEditFlow', 'displayConfigDeleteFlow', 'displayConfigQueryFlow', 'timerConfigAddFlow', 'timerConfigEditFlow', 'timerConfigDeleteFlow', 'timerConfigQueryFlow', 'statInfoManageFlow', 'displayInfoManageFlow', 'timerInfoManageFlow'],
 },
     'ticket-record': {
         background: '【模式C】办件记录信息新增/修改/删除。走查覆盖3项功能点：办件记录新增/修改/删除（全部不符合）。原型实现：办件记录列表，记录工单处理的全过程，包括提交、审批、转发、退回、办结等处理类型；支持按工单查看完整处理历史。',
@@ -12488,6 +12647,11 @@ function renderPrdCard(pageKey, pageName, prd) {
     html += renderSection('scoreFlow', '工单评分', prd.scoreFlow);
     html += renderSection('approveFlow', '工单审批-通过', prd.approveFlow);
     html += renderSection('rejectFlow', '工单审批-退回', prd.rejectFlow);
+    html += renderSection('transferFlow', '工单移交', prd.transferFlow);
+    html += renderSection('batchHandleFlow', '批量办理', prd.batchHandleFlow);
+    html += renderSection('batchMarkReadFlow', '批量标记已读', prd.batchMarkReadFlow);
+    html += renderSection('uploadFlow', '附件上传', prd.uploadFlow);
+    html += renderSection('forwardFlow', '转发', prd.forwardFlow);
 
     // 软件服务商相关
     html += renderSection('appAddFlow', '服务商应用关联-新增', prd.appAddFlow);
@@ -12530,6 +12694,19 @@ function renderPrdCard(pageKey, pageName, prd) {
     html += renderSection('customRecordEditFlow', '自定义抄送记录-修改', prd.customRecordEditFlow);
     html += renderSection('customRecordDeleteFlow', '自定义抄送记录-删除', prd.customRecordDeleteFlow);
     html += renderSection('customRecordQueryFlow', '自定义抄送记录-查询', prd.customRecordQueryFlow);
+
+    // 工单抄送-信息管理（v3走查新增）
+    html += renderSection('infoManageFlow', '信息管理', prd.infoManageFlow);
+    html += renderSection('recordInfoFlow', '记录信息管理', prd.recordInfoFlow);
+    html += renderSection('ticketInfoAddFlow', '工单信息新增', prd.ticketInfoAddFlow);
+    html += renderSection('ticketInfoEditFlow', '工单信息修改', prd.ticketInfoEditFlow);
+    html += renderSection('ticketInfoDeleteFlow', '工单信息删除', prd.ticketInfoDeleteFlow);
+    html += renderSection('ticketInfoQueryFlow', '工单信息查询', prd.ticketInfoQueryFlow);
+
+    // 待阅工单配置-信息管理（v3走查新增）
+    html += renderSection('statInfoManageFlow', '统计配置信息管理', prd.statInfoManageFlow);
+    html += renderSection('displayInfoManageFlow', '展示规则配置信息管理', prd.displayInfoManageFlow);
+    html += renderSection('timerInfoManageFlow', '定时器配置信息管理', prd.timerInfoManageFlow);
 
     // 用户拓展信息及关联（user）
     html += renderSection('extInfoDeleteFlow', '用户拓展信息-删除', prd.extInfoDeleteFlow);
