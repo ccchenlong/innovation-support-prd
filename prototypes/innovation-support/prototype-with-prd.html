@@ -943,95 +943,100 @@ var pageConfigs = {
 
     /* ---------- 工单抄送管理（3Tab结构） ---------- */
     'ticket-cc': {
-        type: 'tab-table',
+        type: 'ticket-cc',
         breadcrumb: ['工单中心', '工单抄送管理'],
         tabs: [
-            { key: 'default', label: '默认抄送记录' },
-            { key: 'custom', label: '自定义抄送设置' },
-            { key: 'customRecord', label: '自定义抄送记录' },
+            { key: 'config', label: '抄送配置' },
+            { key: 'record', label: '抄送记录' },
         ],
-        tabConfigs: {
-            'default': {
-                query: [
-                    { key: 'name', label: '规则名称', type: 'input', placeholder: '请输入规则名称' },
-                    { key: 'ticketType', label: '工单类型', type: 'select', placeholder: '请选择', options: [{ value: '', label: '全部' }, { value: 'general', label: '通用工单' }, { value: 'equipment', label: '设备申请' }, { value: 'auth', label: '权限申请' }] },
-                ],
-                toolbar: [{ type: 'add', text: '新增' }, { type: 'batchDelete' }],
-                columns: [
-                    { type: 'checkbox' },
-                    { type: 'index', title: '序号' },
-                    { key: 'name', title: '规则名称', sortable: true },
-                    { key: 'ticketType', title: '工单类型', type: 'tag', tagMap: { 'general': { text: '通用工单', color: 'blue' }, 'equipment': { text: '设备申请', color: 'green' }, 'auth': { text: '权限申请', color: 'orange' } } },
-                    { key: 'ccTarget', title: '抄送对象' },
-                    { key: 'ccMethod', title: '抄送方式', type: 'tag', tagMap: { '站内信': { text: '站内信', color: 'blue' }, '邮件': { text: '邮件', color: 'green' }, '短信': { text: '短信', color: 'orange' } } },
-                    { key: 'status', title: '状态', type: 'tag', tagMap: { true: { text: '启用', color: 'green' }, false: { text: '停用', color: 'red' } } },
-                    { key: 'createTime', title: '创建时间', sortable: true },
-                    { type: 'actions', title: '操作', actions: [{ key: 'edit', label: '编辑' }, { key: 'delete', label: '删除', danger: true }] },
-                ],
-                data: [
-                    { id: 1, name: '通用工单提交抄送', ticketType: 'general', ccTarget: '部门领导', ccMethod: '站内信', status: true, createTime: '2025-03-01 10:00:00' },
-                    { id: 2, name: '设备申请审批抄送', ticketType: 'equipment', ccTarget: '分管领导', ccMethod: '邮件', status: true, createTime: '2025-03-02 14:30:00' },
-                    { id: 3, name: '权限申请完成抄送', ticketType: 'auth', ccTarget: '系统管理员', ccMethod: '站内信', status: true, createTime: '2025-03-03 09:15:00' },
-                    { id: 4, name: '通用工单审批抄送', ticketType: 'general', ccTarget: '分级管理员', ccMethod: '短信', status: false, createTime: '2025-03-04 16:45:00' },
-                    { id: 5, name: '设备申请驳回抄送', ticketType: 'equipment', ccTarget: '申请人+部门领导', ccMethod: '站内信+邮件', status: true, createTime: '2025-03-05 11:20:00' },
-                    { id: 6, name: '权限申请审批抄送', ticketType: 'auth', ccTarget: '条线管理员', ccMethod: '邮件', status: true, createTime: '2025-03-06 08:30:00' },
-                ],
-            },
-            'custom': {
-                query: [
-                    { key: 'name', label: '设置名称', type: 'input', placeholder: '请输入设置名称' },
-                    { key: 'ticketType', label: '工单类型', type: 'select', placeholder: '请选择', options: [{ value: '', label: '全部' }, { value: 'general', label: '通用工单' }, { value: 'equipment', label: '设备申请' }, { value: 'auth', label: '权限申请' }] },
-                ],
-                toolbar: [{ type: 'add', text: '新增' }, { type: 'batchDelete' }],
-                columns: [
-                    { type: 'checkbox' },
-                    { type: 'index', title: '序号' },
-                    { key: 'name', title: '设置名称', sortable: true },
-                    { key: 'ticketType', title: '工单类型', type: 'tag', tagMap: { 'general': { text: '通用工单', color: 'blue' }, 'equipment': { text: '设备申请', color: 'green' }, 'auth': { text: '权限申请', color: 'orange' } } },
-                    { key: 'triggerNode', title: '触发节点', type: 'tag', tagMap: { 'submit': { text: '提交时', color: 'blue' }, 'approve': { text: '审批通过时', color: 'green' }, 'reject': { text: '驳回时', color: 'red' } } },
-                    { key: 'ccTargetType', title: '抄送对象类型', type: 'tag', tagMap: { 'user': { text: '指定人员', color: 'blue' }, 'role': { text: '角色', color: 'green' }, 'dept': { text: '部门', color: 'orange' } } },
-                    { key: 'status', title: '状态', type: 'tag', tagMap: { true: { text: '启用', color: 'green' }, false: { text: '停用', color: 'red' } } },
-                    { key: 'createTime', title: '创建时间', sortable: true },
-                    { type: 'actions', title: '操作', actions: [{ key: 'edit', label: '编辑' }, { key: 'delete', label: '删除', danger: true }] },
-                ],
-                data: [
-                    { id: 11, name: '紧急工单提交抄送', ticketType: 'general', triggerNode: 'submit', ccTargetType: 'role', status: true, createTime: '2025-03-01 10:00:00' },
-                    { id: 12, name: '设备申请通过抄送', ticketType: 'equipment', triggerNode: 'approve', ccTargetType: 'user', status: true, createTime: '2025-03-02 14:30:00' },
-                    { id: 13, name: '权限申请驳回通知', ticketType: 'auth', triggerNode: 'reject', ccTargetType: 'dept', status: true, createTime: '2025-03-03 09:15:00' },
-                    { id: 14, name: '通用工单办结抄送', ticketType: 'general', triggerNode: 'approve', ccTargetType: 'role', status: false, createTime: '2025-03-04 16:45:00' },
-                    { id: 15, name: '设备申请提交抄送', ticketType: 'equipment', triggerNode: 'submit', ccTargetType: 'dept', status: true, createTime: '2025-03-05 11:20:00' },
-                    { id: 16, name: '权限变更审批抄送', ticketType: 'auth', triggerNode: 'approve', ccTargetType: 'user', status: true, createTime: '2025-03-06 08:30:00' },
-                ],
-            },
-            'customRecord': {
-                query: [
-                    { key: 'name', label: '记录名称', type: 'input', placeholder: '请输入记录名称' },
-                    { key: 'ticketType', label: '工单类型', type: 'select', placeholder: '请选择', options: [{ value: '', label: '全部' }, { value: 'general', label: '通用工单' }, { value: 'equipment', label: '设备申请' }, { value: 'auth', label: '权限申请' }] },
-                    { key: 'ccStatus', label: '状态', type: 'select', placeholder: '请选择', options: [{ value: '', label: '全部' }, { value: 'success', label: '成功' }, { value: 'failed', label: '失败' }] },
-                ],
-                toolbar: [{ type: 'add', text: '新增' }, { type: 'batchDelete' }],
-                columns: [
-                    { type: 'checkbox' },
-                    { type: 'index', title: '序号' },
-                    { key: 'name', title: '记录名称', sortable: true },
-                    { key: 'relatedTicket', title: '关联工单' },
-                    { key: 'ticketType', title: '工单类型', type: 'tag', tagMap: { 'general': { text: '通用工单', color: 'blue' }, 'equipment': { text: '设备申请', color: 'green' }, 'auth': { text: '权限申请', color: 'orange' } } },
-                    { key: 'ccUser', title: '抄送人' },
-                    { key: 'ccTime', title: '抄送时间', sortable: true },
-                    { key: 'ccStatus', title: '抄送状态', type: 'tag', tagMap: { 'success': { text: '成功', color: 'green' }, 'failed': { text: '失败', color: 'red' } } },
-                    { type: 'actions', title: '操作', actions: [{ key: 'view', label: '查看' }, { key: 'delete', label: '删除', danger: true }] },
-                ],
-                data: [
-                    { id: 21, name: '紧急工单提交抄送记录', relatedTicket: 'GD202503150001', ticketType: 'general', ccUser: '张经理', ccTime: '2025-03-15 10:30:00', ccStatus: 'success' },
-                    { id: 22, name: '设备申请通过抄送记录', relatedTicket: 'GD202503160002', ticketType: 'equipment', ccUser: '李主任', ccTime: '2025-03-16 14:20:00', ccStatus: 'success' },
-                    { id: 23, name: '权限申请驳回通知记录', relatedTicket: 'GD202503170003', ticketType: 'auth', ccUser: '王科长', ccTime: '2025-03-17 09:15:00', ccStatus: 'success' },
-                    { id: 24, name: '通用工单办结抄送记录', relatedTicket: 'GD202503180004', ticketType: 'general', ccUser: '赵处长', ccTime: '2025-03-18 11:00:00', ccStatus: 'failed' },
-                    { id: 25, name: '设备申请提交抄送记录', relatedTicket: 'GD202503190005', ticketType: 'equipment', ccUser: '钱主任', ccTime: '2025-03-19 15:40:00', ccStatus: 'success' },
-                    { id: 26, name: '权限变更审批抄送记录', relatedTicket: 'GD202503200006', ticketType: 'auth', ccUser: '孙经理', ccTime: '2025-03-20 08:50:00', ccStatus: 'success' },
-                    { id: 27, name: '投诉工单转办抄送', relatedTicket: 'GD202503210007', ticketType: 'general', ccUser: '周主管', ccTime: '2025-03-21 13:25:00', ccStatus: 'success' },
-                    { id: 28, name: '系统升级通知抄送', relatedTicket: 'GD202503220008', ticketType: 'general', ccUser: '吴专员', ccTime: '2025-03-22 10:10:00', ccStatus: 'failed' },
-                ],
-            },
+        // 抄送配置 - 子模式
+        subModes: ['default', 'custom'],
+        subModeLabels: { default: '默认抄送', custom: '自定义抄送' },
+        // 默认抄送规则
+        defaultRules: {
+            query: [
+                { key: 'name', label: '规则名称', type: 'input', placeholder: '请输入规则名称' },
+                { key: 'ticketType', label: '工单类型', type: 'select', placeholder: '请选择', options: [{ value: '', label: '全部' }, { value: 'general', label: '通用工单' }, { value: 'equipment', label: '设备申请' }, { value: 'auth', label: '权限申请' }] },
+            ],
+            toolbar: [{ type: 'add', text: '新增' }, { type: 'batchDelete' }],
+            columns: [
+                { type: 'checkbox' },
+                { type: 'index', title: '序号' },
+                { key: 'name', title: '规则名称', sortable: true, redField: true },
+                { key: 'ticketType', title: '适用工单类型', type: 'tag', tagMap: { 'general': { text: '通用工单', color: 'blue' }, 'equipment': { text: '设备申请', color: 'green' }, 'auth': { text: '权限申请', color: 'orange' } } },
+                { key: 'ccTarget', title: '抄送对象', redField: true },
+                { key: 'status', title: '状态', type: 'tag', tagMap: { true: { text: '启用', color: 'green' }, false: { text: '停用', color: 'red' } } },
+                { key: 'createTime', title: '创建时间', sortable: true },
+                { type: 'actions', title: '操作', actions: [{ key: 'view', label: '查看' }, { key: 'edit', label: '编辑' }, { key: 'delete', label: '删除', danger: true }] },
+            ],
+            data: [
+                { id: 1, name: '通用工单提交抄送', ticketType: 'general', ccTarget: '部门领导', ccMethod: '站内信', status: true, createTime: '2025-03-01 10:00:00' },
+                { id: 2, name: '设备申请审批抄送', ticketType: 'equipment', ccTarget: '分管领导', ccMethod: '邮件', status: true, createTime: '2025-03-02 14:30:00' },
+                { id: 3, name: '权限申请完成抄送', ticketType: 'auth', ccTarget: '系统管理员', ccMethod: '站内信', status: true, createTime: '2025-03-03 09:15:00' },
+                { id: 4, name: '通用工单审批抄送', ticketType: 'general', ccTarget: '分级管理员', ccMethod: '短信', status: false, createTime: '2025-03-04 16:45:00' },
+                { id: 5, name: '设备申请驳回抄送', ticketType: 'equipment', ccTarget: '申请人+部门领导', ccMethod: '站内信+邮件', status: true, createTime: '2025-03-05 11:20:00' },
+                { id: 6, name: '权限申请审批抄送', ticketType: 'auth', ccTarget: '条线管理员', ccMethod: '邮件', status: true, createTime: '2025-03-06 08:30:00' },
+            ],
+        },
+        // 自定义抄送模板
+        customTemplates: {
+            query: [
+                { key: 'name', label: '模板名称', type: 'input', placeholder: '请输入模板名称' },
+                { key: 'ticketType', label: '工单类型', type: 'select', placeholder: '请选择', options: [{ value: '', label: '全部' }, { value: 'general', label: '通用工单' }, { value: 'equipment', label: '设备申请' }, { value: 'auth', label: '权限申请' }] },
+            ],
+            toolbar: [{ type: 'add', text: '新增' }, { type: 'batchDelete' }],
+            columns: [
+                { type: 'checkbox' },
+                { type: 'index', title: '序号' },
+                { key: 'name', title: '模板名称', sortable: true, redField: true },
+                { key: 'ticketType', title: '适用工单类型', type: 'tag', tagMap: { 'general': { text: '通用工单', color: 'blue' }, 'equipment': { text: '设备申请', color: 'green' }, 'auth': { text: '权限申请', color: 'orange' } } },
+                { key: 'status', title: '是否启用', type: 'tag', tagMap: { true: { text: '启用', color: 'green' }, false: { text: '停用', color: 'red' } } },
+                { key: 'createTime', title: '创建时间', sortable: true },
+                { type: 'actions', title: '操作', actions: [{ key: 'view', label: '查看' }, { key: 'edit', label: '编辑' }, { key: 'delete', label: '删除', danger: true }] },
+            ],
+            data: [
+                { id: 11, name: '紧急工单提交抄送模板', ticketType: 'general', triggerNode: 'submit', ccTargetType: 'role', status: true, createTime: '2025-03-01 10:00:00' },
+                { id: 12, name: '设备申请通过抄送模板', ticketType: 'equipment', triggerNode: 'approve', ccTargetType: 'user', status: true, createTime: '2025-03-02 14:30:00' },
+                { id: 13, name: '权限申请驳回通知模板', ticketType: 'auth', triggerNode: 'reject', ccTargetType: 'dept', status: true, createTime: '2025-03-03 09:15:00' },
+                { id: 14, name: '通用工单办结抄送模板', ticketType: 'general', triggerNode: 'approve', ccTargetType: 'role', status: false, createTime: '2025-03-04 16:45:00' },
+                { id: 15, name: '设备申请提交抄送模板', ticketType: 'equipment', triggerNode: 'submit', ccTargetType: 'dept', status: true, createTime: '2025-03-05 11:20:00' },
+                { id: 16, name: '权限变更审批抄送模板', ticketType: 'auth', triggerNode: 'approve', ccTargetType: 'user', status: true, createTime: '2025-03-06 08:30:00' },
+            ],
+        },
+        // 抄送记录（合并）
+        ccRecords: {
+            query: [
+                { key: 'keyword', label: '关键词', type: 'input', placeholder: '工单标题/编号' },
+                { key: 'ticketType', label: '工单类型', type: 'select', placeholder: '请选择', options: [{ value: '', label: '全部' }, { value: 'general', label: '通用工单' }, { value: 'equipment', label: '设备申请' }, { value: 'auth', label: '权限申请' }] },
+                { key: 'ccWay', label: '抄送方式', type: 'select', placeholder: '请选择', options: [{ value: '', label: '全部' }, { value: 'default', label: '默认抄送' }, { value: 'custom', label: '自定义抄送' }] },
+                { key: 'readStatus', label: '状态', type: 'select', placeholder: '请选择', options: [{ value: '', label: '全部' }, { value: 'read', label: '已读' }, { value: 'unread', label: '未读' }] },
+                { key: 'dateRange', label: '抄送时间', type: 'input', placeholder: '开始时间 - 结束时间' },
+            ],
+            toolbar: [{ type: 'add', text: '新增' }, { type: 'batchDelete' }, { type: 'export' }],
+            columns: [
+                { type: 'checkbox' },
+                { type: 'index', title: '序号' },
+                { key: 'ticketNo', title: '工单编号', sortable: true },
+                { key: 'title', title: '工单标题' },
+                { key: 'ticketType', title: '工单类型', type: 'tag', tagMap: { 'general': { text: '通用工单', color: 'blue' }, 'equipment': { text: '设备申请', color: 'green' }, 'auth': { text: '权限申请', color: 'orange' } } },
+                { key: 'ccWay', title: '抄送方式', type: 'tag', tagMap: { 'default': { text: '默认', color: 'blue' }, 'custom': { text: '自定义', color: 'green' } } },
+                { key: 'ccUser', title: '抄送人' },
+                { key: 'ccTime', title: '抄送时间', sortable: true },
+                { key: 'readStatus', title: '状态', type: 'tag', tagMap: { 'read': { text: '已读', color: 'green' }, 'unread': { text: '未读', color: 'orange' } } },
+                { type: 'actions', title: '操作', actions: [{ key: 'view', label: '查看' }, { key: 'edit', label: '编辑' }, { key: 'delete', label: '删除', danger: true }] },
+            ],
+            data: [
+                { id: 1, ticketNo: 'GD202503150001', title: '办公系统登录异常问题', ticketType: 'general', ccWay: 'default', ccUser: '张经理', ccTime: '2025-03-15 10:30:00', readStatus: 'read' },
+                { id: 2, ticketNo: 'GD202503160002', title: '民生服务平台功能建议', ticketType: 'general', ccWay: 'custom', ccUser: '李主任', ccTime: '2025-03-16 14:20:00', readStatus: 'read' },
+                { id: 3, ticketNo: 'GD202503170003', title: '市场监管数据更新申请', ticketType: 'equipment', ccWay: 'default', ccUser: '王科长', ccTime: '2025-03-17 09:15:00', readStatus: 'unread' },
+                { id: 4, ticketNo: 'GD202503180004', title: '应急系统模块故障', ticketType: 'general', ccWay: 'custom', ccUser: '赵处长', ccTime: '2025-03-18 11:00:00', readStatus: 'read' },
+                { id: 5, ticketNo: 'GD202503190005', title: '设备采购审批工单', ticketType: 'equipment', ccWay: 'default', ccUser: '钱主任', ccTime: '2025-03-19 15:40:00', readStatus: 'read' },
+                { id: 6, ticketNo: 'GD202503200006', title: '权限变更申请', ticketType: 'auth', ccWay: 'custom', ccUser: '孙经理', ccTime: '2025-03-20 08:50:00', readStatus: 'unread' },
+                { id: 7, ticketNo: 'GD202503210007', title: '投诉工单转办通知', ticketType: 'general', ccWay: 'default', ccUser: '周主管', ccTime: '2025-03-21 13:25:00', readStatus: 'read' },
+                { id: 8, ticketNo: 'GD202503220008', title: '系统升级通知', ticketType: 'general', ccWay: 'default', ccUser: '吴专员', ccTime: '2025-03-22 10:10:00', readStatus: 'unread' },
+                { id: 9, ticketNo: 'GD202503230009', title: '新增账号申请', ticketType: 'auth', ccWay: 'custom', ccUser: '郑主管', ccTime: '2025-03-23 09:30:00', readStatus: 'read' },
+                { id: 10, ticketNo: 'GD202503240010', title: '设备报修工单', ticketType: 'equipment', ccWay: 'default', ccUser: '冯经理', ccTime: '2025-03-24 16:00:00', readStatus: 'unread' },
+            ],
         },
     },
 
@@ -2039,7 +2044,6 @@ var pageConfigs = {
         breadcrumb: ['应用管理', '应用审核'],
         tabs: [
             { key: 'pending', label: '待审核' },
-            { key: 'auditing', label: '审核中' },
             { key: 'passed', label: '已通过' },
             { key: 'rejected', label: '已驳回' },
         ],
@@ -2053,7 +2057,7 @@ var pageConfigs = {
             { type: 'index', title: '序号' },
             { key: 'name', title: '应用名称', sortable: true },
             { key: 'bizType', title: '业务类型' },
-            { key: 'status', title: '状态', type: 'tag', tagMap: { 'pending': { text: '待审核', color: 'orange' }, 'auditing': { text: '审核中', color: 'blue' }, 'passed': { text: '已通过', color: 'green' }, 'rejected': { text: '已驳回', color: 'red' } } },
+            { key: 'status', title: '状态', type: 'tag', tagMap: { 'pending': { text: '待审核', color: 'orange' }, 'passed': { text: '已通过', color: 'green' }, 'rejected': { text: '已驳回', color: 'red' } } },
             { key: 'applicant', title: '申请人' },
             { key: 'applyTime', title: '申请时间', sortable: true },
             { type: 'actions', title: '操作', actions: [{ key: 'view', label: '查看' }, { key: 'audit', label: '审核' }] },
@@ -2063,10 +2067,6 @@ var pageConfigs = {
                 { id: 1, name: '智慧办公系统', bizType: '政务办公', status: 'pending', applicant: '张三', applyTime: '2025-03-15 10:30:00' },
                 { id: 2, name: '民生服务平台', bizType: '民生服务', status: 'pending', applicant: '李四', applyTime: '2025-03-16 14:20:00' },
                 { id: 3, name: '应急指挥系统', bizType: '政务办公', status: 'pending', applicant: '钱七', applyTime: '2025-03-17 09:15:00' },
-            ],
-            'auditing': [
-                { id: 4, name: '经济运行监测系统', bizType: '经济运行', status: 'auditing', applicant: '王五', applyTime: '2025-02-10 09:00:00' },
-                { id: 5, name: '交通运输管理系统', bizType: '经济运行', status: 'auditing', applicant: '孙八', applyTime: '2025-03-18 11:00:00' },
             ],
             'passed': [
                 { id: 6, name: '市场监管综合平台', bizType: '市场监管', status: 'passed', applicant: '赵六', applyTime: '2025-01-11 14:30:00' },
@@ -2504,16 +2504,16 @@ var pageConfigs = {
             { type: 'actions', title: '操作', actions: [{ key: 'view', label: '查看' }, { key: 'edit', label: '编辑' }, { key: 'delete', label: '删除', danger: true }] },
         ],
         data: [
-            { id: 1, ticketNo: '1787233932395', title: '办公系统登录异常问题', handleType: 'create', handler: '张子俊', handleTime: '2026-08-20 21:52:12', handleRemark: '用户提交工单', handleIp: '192.168.1.101' },
-            { id: 2, ticketNo: '1787233899541', title: '民生服务平台功能建议', handleType: 'approve', handler: '刘述涛', handleTime: '2026-08-20 22:10:00', handleRemark: '审批通过', handleIp: '192.168.1.102' },
-            { id: 3, ticketNo: '1787231656829', title: '市场监管数据更新申请', handleType: 'transfer', handler: '李凌云', handleTime: '2026-08-21 09:15:00', handleRemark: '转办至数据组', handleIp: '192.168.1.103' },
-            { id: 4, ticketNo: '1787213862744', title: '搜索功能优化需求', handleType: 'create', handler: '熊欣果', handleTime: '2026-08-21 10:30:00', handleRemark: '提交功能优化申请', handleIp: '192.168.1.104' },
-            { id: 5, ticketNo: '1787213839986', title: '系统操作权限变更', handleType: 'close', handler: '许明哲', handleTime: '2026-08-22 14:20:00', handleRemark: '工单办结', handleIp: '192.168.1.105' },
-            { id: 6, ticketNo: '1786071569844', title: '工单转发测试', handleType: 'transfer', handler: '钱健', handleTime: '2026-08-23 11:00:00', handleRemark: '转办至测试组', handleIp: '192.168.1.106' },
-            { id: 7, ticketNo: '1785809739240', title: '功能优化建议反馈', handleType: 'approve', handler: '陈运贞', handleTime: '2026-08-24 16:45:00', handleRemark: '审批通过，已转研发', handleIp: '192.168.1.107' },
-            { id: 8, ticketNo: '1783673158054', title: '纪检标签看不到单位内部其他部门', handleType: 'reject', handler: '黄牟成', handleTime: '2026-08-25 08:30:00', handleRemark: '信息不全，退回补充', handleIp: '192.168.1.108' },
-            { id: 9, ticketNo: '1782934567890', title: '应急系统模块故障报修', handleType: 'create', handler: '周宇恒', handleTime: '2026-08-26 09:45:00', handleRemark: '系统故障紧急报修', handleIp: '192.168.1.109' },
-            { id: 10, ticketNo: '1781876543210', title: '数据导出功能异常', handleType: 'close', handler: '吴思远', handleTime: '2026-08-27 15:30:00', handleRemark: '问题已修复，工单办结', handleIp: '192.168.1.110' },
+            { id: 1, ticketNo: '1787233932395', title: '办公系统登录异常问题', ticketType: 'consult', handleType: 'create', applicant: '张子俊', applyTime: '2026-08-20 21:50:00', handler: '张子俊', handleTime: '2026-08-20 21:52:12', handleStatus: 'processing', handleResult: '用户提交工单，正在处理中', handleDuration: '0小时2分', handleRemark: '用户提交工单', handleIp: '192.168.1.101', remark: '' },
+            { id: 2, ticketNo: '1787233899541', title: '民生服务平台功能建议', ticketType: 'suggest', handleType: 'approve', applicant: '刘述涛', applyTime: '2026-08-20 22:00:00', handler: '刘述涛', handleTime: '2026-08-20 22:10:00', handleStatus: 'completed', handleResult: '审批通过，已转研发处理', handleDuration: '0小时10分', handleRemark: '审批通过', handleIp: '192.168.1.102', remark: '建议合理，纳入下版本规划' },
+            { id: 3, ticketNo: '1787231656829', title: '市场监管数据更新申请', ticketType: 'business', handleType: 'transfer', applicant: '李凌云', applyTime: '2026-08-21 09:00:00', handler: '李凌云', handleTime: '2026-08-21 09:15:00', handleStatus: 'processing', handleResult: '转办至数据组处理', handleDuration: '0小时15分', handleRemark: '转办至数据组', handleIp: '192.168.1.103', remark: '需数据组配合处理' },
+            { id: 4, ticketNo: '1787213862744', title: '搜索功能优化需求', ticketType: 'suggest', handleType: 'create', applicant: '熊欣果', applyTime: '2026-08-21 10:25:00', handler: '熊欣果', handleTime: '2026-08-21 10:30:00', handleStatus: 'pending', handleResult: '提交功能优化申请，待处理', handleDuration: '0小时5分', handleRemark: '提交功能优化申请', handleIp: '192.168.1.104', remark: '' },
+            { id: 5, ticketNo: '1787213839986', title: '系统操作权限变更', ticketType: 'auth', handleType: 'close', applicant: '许明哲', applyTime: '2026-08-22 14:00:00', handler: '许明哲', handleTime: '2026-08-22 14:20:00', handleStatus: 'completed', handleResult: '权限变更已完成，工单办结', handleDuration: '0小时20分', handleRemark: '工单办结', handleIp: '192.168.1.105', remark: '用户已确认权限变更生效' },
+            { id: 6, ticketNo: '1786071569844', title: '工单转发测试', ticketType: 'general', handleType: 'transfer', applicant: '钱健', applyTime: '2026-08-23 10:45:00', handler: '钱健', handleTime: '2026-08-23 11:00:00', handleStatus: 'processing', handleResult: '转办至测试组', handleDuration: '0小时15分', handleRemark: '转办至测试组', handleIp: '192.168.1.106', remark: '' },
+            { id: 7, ticketNo: '1785809739240', title: '功能优化建议反馈', ticketType: 'suggest', handleType: 'approve', applicant: '陈运贞', applyTime: '2026-08-24 16:30:00', handler: '陈运贞', handleTime: '2026-08-24 16:45:00', handleStatus: 'completed', handleResult: '审批通过，已转研发', handleDuration: '0小时15分', handleRemark: '审批通过，已转研发', handleIp: '192.168.1.107', remark: '优先级：中' },
+            { id: 8, ticketNo: '1783673158054', title: '纪检标签看不到单位内部其他部门', ticketType: 'consult', handleType: 'reject', applicant: '黄牟成', applyTime: '2026-08-25 08:15:00', handler: '黄牟成', handleTime: '2026-08-25 08:30:00', handleStatus: 'rejected', handleResult: '信息不全，退回补充', handleDuration: '0小时15分', handleRemark: '信息不全，退回补充', handleIp: '192.168.1.108', remark: '需补充部门编码信息' },
+            { id: 9, ticketNo: '1782934567890', title: '应急系统模块故障报修', ticketType: 'fault', handleType: 'create', applicant: '周宇恒', applyTime: '2026-08-26 09:30:00', handler: '周宇恒', handleTime: '2026-08-26 09:45:00', handleStatus: 'pending', handleResult: '系统故障紧急报修，待处理', handleDuration: '0小时15分', handleRemark: '系统故障紧急报修', handleIp: '192.168.1.109', remark: '紧急程度：高' },
+            { id: 10, ticketNo: '1781876543210', title: '数据导出功能异常', ticketType: 'fault', handleType: 'close', applicant: '吴思远', applyTime: '2026-08-27 15:00:00', handler: '吴思远', handleTime: '2026-08-27 15:30:00', handleStatus: 'closed', handleResult: '问题已修复，工单办结', handleDuration: '0小时30分', handleRemark: '问题已修复，工单办结', handleIp: '192.168.1.110', remark: '已通知用户验证' },
         ],
     },
 
@@ -3831,6 +3831,49 @@ function getPageData(pageKey) {
 
 /** 解析页面key（支持 tab-table 格式）返回 { pageKey, tabKey, config, tabConfig, getData, setData, columns, query } */
 function resolvePageConfig(key) {
+    // ticket-cc 特殊处理
+    if (key === 'ticket-cc-record') {
+        var cfg = pageConfigs['ticket-cc'];
+        var recCfg = cfg.ccRecords;
+        return {
+            pageKey: 'ticket-cc',
+            tabKey: 'record',
+            config: cfg,
+            tabConfig: recCfg,
+            columns: recCfg.columns || [],
+            query: recCfg.query || null,
+            getData: function() { return recCfg.data || []; },
+            setData: function(data) { recCfg.data = data; }
+        };
+    }
+    if (key === 'ticket-cc-config-default') {
+        var cfg2 = pageConfigs['ticket-cc'];
+        var defCfg = cfg2.defaultRules;
+        return {
+            pageKey: 'ticket-cc',
+            tabKey: 'default',
+            config: cfg2,
+            tabConfig: defCfg,
+            columns: defCfg.columns || [],
+            query: defCfg.query || null,
+            getData: function() { return defCfg.data || []; },
+            setData: function(data) { defCfg.data = data; }
+        };
+    }
+    if (key === 'ticket-cc-config-custom') {
+        var cfg3 = pageConfigs['ticket-cc'];
+        var custCfg = cfg3.customTemplates;
+        return {
+            pageKey: 'ticket-cc',
+            tabKey: 'custom',
+            config: cfg3,
+            tabConfig: custCfg,
+            columns: custCfg.columns || [],
+            query: custCfg.query || null,
+            getData: function() { return custCfg.data || []; },
+            setData: function(data) { custCfg.data = data; }
+        };
+    }
     // 直接匹配 pageConfigs
     if (pageConfigs[key]) {
         var cfg = pageConfigs[key];
@@ -4058,6 +4101,21 @@ function renderPage(pageKey) {
         if (tabKey) {
             var tabColConfig = (config.tabConfigs && config.tabConfigs[tabKey]) ? config.tabConfigs[tabKey] : config;
             renderTable('tableContainer_' + pageKey + '_' + tabKey, tabColConfig.columns, getTabData(pageKey, tabKey), pageKey + '_' + tabKey);
+        }
+        return;
+    }
+    if (config.type === 'ticket-cc') {
+        main.innerHTML = renderTicketCcPage();
+        // 渲染当前表格
+        const tabKey = state.currentTab['ticket-cc'] || 'config';
+        if (tabKey === 'config') {
+            const subMode = state.ticketCcSubMode || 'default';
+            const subConfig = subMode === 'default' ? config.defaultRules : config.customTemplates;
+            const subId = 'ticket-cc-config-' + subMode;
+            renderTable('tableContainer_' + subId, subConfig.columns, subConfig.data, subId);
+        } else {
+            const recId = 'ticket-cc-record';
+            renderTable('tableContainer_' + recId, config.ccRecords.columns, config.ccRecords.data, recId);
         }
         return;
     }
@@ -5634,6 +5692,71 @@ function switchMonitorSubTab(tabKey, el) {
     el.style.color = 'var(--primary)';
     el.style.fontWeight = '500';
     renderPage('app-monitor');
+}
+
+/** 渲染工单抄送管理页 */
+function renderTicketCcPage() {
+    const config = pageConfigs['ticket-cc'];
+    const tabKey = state.currentTab['ticket-cc'] || 'config';
+    const subMode = state.ticketCcSubMode || 'default';
+
+    let html = '';
+    // 面包屑
+    html += renderBreadcrumb(config.breadcrumb);
+    // Tab栏
+    html += '<div class="tab-bar" style="border-bottom:1px solid var(--border-color);margin-bottom:16px;">';
+    config.tabs.forEach(function(tab) {
+        const active = tab.key === tabKey;
+        html += '<div class="tab-item' + (active ? ' active' : '') + '" onclick="switchTicketCcTab(\'' + tab.key + '\')">' + tab.label + '</div>';
+    });
+    html += '</div>';
+
+    if (tabKey === 'config') {
+        // 抄送配置 - 单选切换条
+        html += '<div style="margin-bottom:16px;">';
+        html += '<div style="display:inline-flex;background:#F5F7FA;border-radius:6px;padding:4px;">';
+        config.subModes.forEach(function(mode) {
+            const active = mode === subMode;
+            html += '<label style="display:inline-flex;align-items:center;cursor:pointer;padding:6px 16px;border-radius:4px;' + (active ? 'background:#fff;box-shadow:0 1px 3px rgba(0,0,0,0.1);' : '') + '">';
+            html += '<input type="radio" name="ticketCcSubMode" value="' + mode + '" ' + (active ? 'checked' : '') + ' onchange="switchTicketCcSubMode(\'' + mode + '\')" style="margin-right:6px;accent-color:var(--primary-color);">';
+            html += '<span style="font-size:14px;color:' + (active ? 'var(--primary-color)' : 'var(--text-secondary)') + ';">' + config.subModeLabels[mode] + '</span>';
+            html += '</label>';
+        });
+        html += '</div>';
+        html += '</div>';
+
+        const subConfig = subMode === 'default' ? config.defaultRules : config.customTemplates;
+        const subId = 'ticket-cc-config-' + subMode;
+        const subWrapper = { query: subConfig.query, toolbar: subConfig.toolbar };
+        // 查询区
+        html += renderQueryArea(subId, subWrapper);
+        // 工具栏
+        html += renderToolbar(subId, subWrapper);
+        // 表格
+        html += '<div id="tableContainer_' + subId + '" class="table-container"></div>';
+        // 分页
+        html += renderPagination(subId, (subConfig.data || []).length);
+    } else {
+        // 抄送记录
+        const recConfig = config.ccRecords;
+        const recId = 'ticket-cc-record';
+        const recWrapper = { query: recConfig.query, toolbar: recConfig.toolbar };
+        html += renderQueryArea(recId, recWrapper);
+        html += renderToolbar(recId, recWrapper);
+        html += '<div id="tableContainer_' + recId + '" class="table-container"></div>';
+        html += renderPagination(recId, (recConfig.data || []).length);
+    }
+    return html;
+}
+
+function switchTicketCcTab(tabKey) {
+    state.currentTab['ticket-cc'] = tabKey;
+    renderPage('ticket-cc');
+}
+
+function switchTicketCcSubMode(mode) {
+    state.ticketCcSubMode = mode;
+    renderPage('ticket-cc');
 }
 
 /** 渲染应用日志页 */
@@ -7583,19 +7706,17 @@ function handleQuery(pageKey) {
     let tabKey = null;
     let config = pageConfigs[pageKey];
     let queryFields = config ? config.query : null;
+    let tableColumns = config ? config.columns : null;
     
-    // 如果直接找不到，尝试解析 pageKey_tabKey 格式
+    // 如果直接找不到，尝试用 resolvePageConfig 解析
     if (!config) {
-        for (const pk of Object.keys(pageConfigs)) {
-            if (pageKey.startsWith(pk + '_')) {
-                realPageKey = pk;
-                tabKey = pageKey.substring(pk.length + 1);
-                config = pageConfigs[pk];
-                if (config.tabConfigs && config.tabConfigs[tabKey]) {
-                    queryFields = config.tabConfigs[tabKey].query;
-                }
-                break;
-            }
+        const resolved = resolvePageConfig(pageKey);
+        if (resolved) {
+            realPageKey = resolved.pageKey;
+            tabKey = resolved.tabKey;
+            config = resolved.config;
+            queryFields = resolved.query;
+            tableColumns = resolved.columns;
         }
     }
     
@@ -7612,13 +7733,11 @@ function handleQuery(pageKey) {
     // 重新渲染
     if (realPageKey === 'admin-auth') {
         renderAdminAuthTable();
-    } else if (tabKey && config && config.tabConfigs && config.tabConfigs[tabKey]) {
-        // tab-table 页面
-        const tabCfg = config.tabConfigs[tabKey];
-        const data = getTabData(realPageKey, tabKey);
-        // 对数据做过滤
+    } else if (tabKey && tableColumns) {
+        // tab-table 页面或 ticket-cc 等使用 resolvePageConfig 解析的页面
         const search = state.searchData[pageKey];
-        let filtered = data.slice();
+        const resolved = resolvePageConfig(pageKey);
+        let filtered = resolved ? resolved.getData().slice() : [];
         if (search) {
             for (const [key, val] of Object.entries(search)) {
                 if (val && val.trim()) {
@@ -7626,7 +7745,7 @@ function handleQuery(pageKey) {
                 }
             }
         }
-        renderTable('tableContainer_' + pageKey, tabCfg.columns, filtered, pageKey);
+        renderTable('tableContainer_' + pageKey, tableColumns, filtered, pageKey);
         // 更新分页
         const main = $('mainContent');
         const oldPagi = main.querySelector('.flex.flex-wrap.items-center.justify-between.gap-4');
@@ -7643,16 +7762,33 @@ function handleQuery(pageKey) {
 
 /** 重置 */
 function handleReset(pageKey) {
-    const config = pageConfigs[pageKey];
-    if (!config.query) return;
+    let config = pageConfigs[pageKey];
+    let queryFields = config ? config.query : null;
+    let tableColumns = config ? config.columns : null;
+    if (!config) {
+        const resolved = resolvePageConfig(pageKey);
+        if (resolved) {
+            config = resolved.config;
+            queryFields = resolved.query;
+            tableColumns = resolved.columns;
+        }
+    }
+    if (!queryFields) return;
     state.searchData[pageKey] = {};
-    for (const field of config.query) {
+    for (const field of queryFields) {
         const el = $('query_' + pageKey + '_' + field.key);
         if (el) el.value = '';
     }
     state.pagination[pageKey] = { page: 1, pageSize: 10 };
     if (pageKey === 'admin-auth') {
         renderAdminAuthTable();
+    } else if (tableColumns) {
+        const resolved = resolvePageConfig(pageKey);
+        const data = resolved ? resolved.getData() : [];
+        renderTable('tableContainer_' + pageKey, tableColumns, data, pageKey);
+        const main = $('mainContent');
+        const oldPagi = main.querySelector('.flex.flex-wrap.items-center.justify-between.gap-4');
+        if (oldPagi) oldPagi.outerHTML = renderPagination(pageKey, data.length);
     } else {
         renderTable('tableContainer_' + pageKey, config.columns, getPageData(pageKey), pageKey);
         const data = getPageData(pageKey);
@@ -7848,7 +7984,20 @@ function openAddModal(pageKey) {
     const resolved = resolvePageConfig(pageKey);
     const config = resolved ? resolved.config : pageConfigs[pageKey];
     if (!config) { showToast('页面配置不存在', 'error'); return; }
-    
+
+    // 应用日志 - 自定义新增弹窗
+    if (pageKey === 'app-log' && resolved && resolved.tabKey) {
+        const tabKey = resolved.tabKey;
+        if (tabKey === 'opConfig') {
+            openAppLogOpConfigModal('add', {});
+            return;
+        }
+        if (tabKey === 'subConfig') {
+            openAppLogSubConfigModal('add', {});
+            return;
+        }
+    }
+
     // tab-table 页面：根据 columns 动态生成表单
     if (resolved && resolved.tabKey) {
         const cols = resolved.columns || [];
@@ -7932,6 +8081,23 @@ function openAddModal(pageKey) {
         body += renderFormField('抄送层级', `<select class="form-input w-full" id="add_ccLevel"><option value="">请选择</option><option value="line">条线管理员</option><option value="graded">分级管理员</option><option value="system">系统管理员</option></select>`, true);
         body += renderFormField('抄送时机', `<select class="form-input w-full" id="add_ccTime"><option value="">请选择</option><option value="提交时">提交时</option><option value="审批通过时">审批通过时</option><option value="完成时">完成时</option></select>`, true);
         body += renderFormField('状态', `<span class="toggle-switch on" id="add_status" onclick="this.classList.toggle('on')"></span>`);
+    } else if (pageKey === 'ticket-record') {
+        body = '<div class="grid grid-cols-2 gap-4">';
+        body += renderFormField('工单编号', `<input type="text" class="form-input w-full" id="add_ticketNo" value="${esc(row.ticketNo)}" readonly style="background:#F5F5F5;" />`);
+        body += renderFormField('工单标题', `<input type="text" class="form-input w-full" id="add_title" value="${esc(row.title)}" />`, true);
+        body += renderFormField('工单类型', `<select class="form-input w-full" id="add_ticketType"><option value="general" ${row.ticketType === 'general' ? 'selected' : ''}>通用工单</option><option value="consult" ${row.ticketType === 'consult' ? 'selected' : ''}>咨询建议</option><option value="fault" ${row.ticketType === 'fault' ? 'selected' : ''}>故障报修</option><option value="business" ${row.ticketType === 'business' ? 'selected' : ''}>业务办理</option><option value="auth" ${row.ticketType === 'auth' ? 'selected' : ''}>权限申请</option><option value="suggest" ${row.ticketType === 'suggest' ? 'selected' : ''}>功能建议</option></select>`, true);
+        body += renderFormField('申请人', `<input type="text" class="form-input w-full" id="add_applicant" value="${esc(row.applicant || '')}" />`);
+        body += renderFormField('申请时间', `<input type="text" class="form-input w-full" id="add_applyTime" value="${esc(row.applyTime || '')}" />`);
+        body += renderFormField('办理人', `<input type="text" class="form-input w-full" id="add_handler" value="${esc(row.handler)}" />`);
+        body += renderFormField('办理时间', `<input type="text" class="form-input w-full" id="add_handleTime" value="${esc(row.handleTime)}" />`);
+        body += renderFormField('办理状态', `<select class="form-input w-full" id="add_handleStatus"><option value="pending" ${row.handleStatus === 'pending' ? 'selected' : ''}>待办理</option><option value="processing" ${row.handleStatus === 'processing' ? 'selected' : ''}>办理中</option><option value="completed" ${row.handleStatus === 'completed' ? 'selected' : ''}>已完成</option><option value="rejected" ${row.handleStatus === 'rejected' ? 'selected' : ''}>已退回</option><option value="closed" ${row.handleStatus === 'closed' ? 'selected' : ''}>已关闭</option></select>`, true);
+        body += '</div>';
+        body += renderFormField('办理结果', `<textarea class="form-input w-full" id="add_handleResult" rows="3">${esc(row.handleResult || '')}</textarea>`);
+        body += '<div class="grid grid-cols-2 gap-4">';
+        body += renderFormField('办理用时', `<input type="text" class="form-input w-full" id="add_handleDuration" value="${esc(row.handleDuration || '')}" />`);
+        body += renderFormField('操作IP', `<input type="text" class="form-input w-full" id="add_handleIp" value="${esc(row.handleIp || '')}" />`);
+        body += '</div>';
+        body += renderFormField('备注', `<textarea class="form-input w-full" id="add_remark" rows="3">${esc(row.remark || '')}</textarea>`);
     } else if (pageKey === 'notice') {
         body = renderFormField('公告标题', `<input type="text" class="form-input w-full" id="add_title" placeholder="请输入公告标题" />`, true);
         body += renderFormField('公告类型', `<select class="form-input w-full" id="add_type"><option value="">请选择</option><option value="notice">通知</option><option value="announcement">公告</option><option value="system">系统消息</option></select>`, true);
@@ -8110,13 +8276,23 @@ function openAddModal(pageKey) {
         body += renderFormField('工单内容', `<textarea class="form-input w-full" id="add_content" rows="4" placeholder="请详细描述工单内容"></textarea>`, true);
         body += renderFormField('附件', `<div class="border border-dashed rounded p-3 text-center" style="border-color:#D9D9D9;"><i class="fa fa-paperclip" style="color:#999;"></i><span class="text-sm ml-2" style="color:#666;">点击上传附件</span></div>`);
     } else if (pageKey === 'ticket-record') {
-        // 办件记录 — 新增（一般不新增，这里模拟）
-        body = renderFormField('工单标题', `<input type="text" class="form-input w-full" id="add_title" placeholder="请输入工单标题" />`, true);
-        body += renderFormField('工单类型', `<select class="form-input w-full" id="add_type"><option value="general">通用工单</option><option value="equipment">设备申请</option><option value="auth">权限申请</option></select>`);
+        // 办件记录 — 新增
+        body = '<div class="grid grid-cols-2 gap-4">';
+        body += renderFormField('工单编号', `<input type="text" class="form-input w-full" id="add_ticketNo" placeholder="自动生成" readonly style="background:#F5F5F5;" />`);
+        body += renderFormField('工单标题', `<input type="text" class="form-input w-full" id="add_title" placeholder="请输入工单标题" />`, true);
+        body += renderFormField('工单类型', `<select class="form-input w-full" id="add_ticketType"><option value="">请选择</option><option value="general">通用工单</option><option value="consult">咨询建议</option><option value="fault">故障报修</option><option value="business">业务办理</option><option value="auth">权限申请</option><option value="suggest">功能建议</option></select>`, true);
+        body += renderFormField('申请人', `<input type="text" class="form-input w-full" id="add_applicant" placeholder="请输入申请人" />`);
+        body += renderFormField('申请时间', `<input type="datetime-local" class="form-input w-full" id="add_applyTime" />`);
         body += renderFormField('办理人', `<input type="text" class="form-input w-full" id="add_handler" placeholder="请输入办理人" />`);
-        body += renderFormField('办理结果', `<select class="form-input w-full" id="add_result"><option value="approved">同意</option><option value="rejected">驳回</option><option value="transferred">转办</option></select>`);
-        body += renderFormField('办理意见', `<textarea class="form-input w-full" id="add_opinion" rows="3" placeholder="请输入办理意见"></textarea>`);
-        body += renderFormField('办理时长', `<input type="text" class="form-input" id="add_duration" style="width:150px;" placeholder="如：2小时30分" />`);
+        body += renderFormField('办理时间', `<input type="datetime-local" class="form-input w-full" id="add_handleTime" />`);
+        body += renderFormField('办理状态', `<select class="form-input w-full" id="add_handleStatus"><option value="pending">待办理</option><option value="processing">办理中</option><option value="completed">已完成</option><option value="rejected">已退回</option><option value="closed">已关闭</option></select>`, true);
+        body += '</div>';
+        body += renderFormField('办理结果', `<textarea class="form-input w-full" id="add_handleResult" rows="3" placeholder="请输入办理结果"></textarea>`);
+        body += '<div class="grid grid-cols-2 gap-4">';
+        body += renderFormField('办理用时', `<input type="text" class="form-input w-full" id="add_handleDuration" placeholder="如：2小时30分" />`);
+        body += renderFormField('操作IP', `<input type="text" class="form-input w-full" id="add_handleIp" placeholder="请输入操作IP" />`);
+        body += '</div>';
+        body += renderFormField('备注', `<textarea class="form-input w-full" id="add_remark" rows="3" placeholder="请输入备注"></textarea>`);
     } else if (pageKey === 'dict-manage') {
         // 字典管理 — 新增字典
         body = renderFormField('字典名称', `<input type="text" class="form-input w-full" id="add_name" placeholder="请输入字典名称" />`, true);
@@ -8233,7 +8409,19 @@ function openEditModal(pageKey, rowId) {
     const id = 'modal_edit_' + pageKey;
     const cols = resolved.columns || [];
     let body = '';
-    
+
+    // 应用日志 - 自定义编辑弹窗
+    if (pageKey === 'app-log' && resolved.tabKey) {
+        if (resolved.tabKey === 'opConfig') {
+            openAppLogOpConfigModal('edit', row);
+            return;
+        }
+        if (resolved.tabKey === 'subConfig') {
+            openAppLogSubConfigModal('edit', row);
+            return;
+        }
+    }
+
     // tab-table 页面：根据 columns 动态生成编辑表单
     if (resolved.tabKey) {
         for (const col of cols) {
@@ -8295,6 +8483,23 @@ function openEditModal(pageKey, rowId) {
         body += renderFormField('抄送层级', `<select class="form-input w-full" id="add_ccLevel"><option value="${row.ccLevel}">${row.ccLevel === 'line' ? '条线管理员' : row.ccLevel === 'graded' ? '分级管理员' : '系统管理员'}</option></select>`, true);
         body += renderFormField('抄送时机', `<select class="form-input w-full" id="add_ccTime"><option>${esc(row.ccTime)}</option></select>`, true);
         body += renderFormField('状态', `<span class="toggle-switch ${row.status ? 'on' : ''}" id="add_status" onclick="this.classList.toggle('on')"></span>`);
+    } else if (pageKey === 'ticket-record') {
+        body = '<div class="grid grid-cols-2 gap-4">';
+        body += renderFormField('工单编号', `<input type="text" class="form-input w-full" id="add_ticketNo" value="${esc(row.ticketNo)}" readonly style="background:#F5F5F5;" />`);
+        body += renderFormField('工单标题', `<input type="text" class="form-input w-full" id="add_title" value="${esc(row.title)}" />`, true);
+        body += renderFormField('工单类型', `<select class="form-input w-full" id="add_ticketType"><option value="general" ${row.ticketType === 'general' ? 'selected' : ''}>通用工单</option><option value="consult" ${row.ticketType === 'consult' ? 'selected' : ''}>咨询建议</option><option value="fault" ${row.ticketType === 'fault' ? 'selected' : ''}>故障报修</option><option value="business" ${row.ticketType === 'business' ? 'selected' : ''}>业务办理</option><option value="auth" ${row.ticketType === 'auth' ? 'selected' : ''}>权限申请</option><option value="suggest" ${row.ticketType === 'suggest' ? 'selected' : ''}>功能建议</option></select>`, true);
+        body += renderFormField('申请人', `<input type="text" class="form-input w-full" id="add_applicant" value="${esc(row.applicant || '')}" />`);
+        body += renderFormField('申请时间', `<input type="text" class="form-input w-full" id="add_applyTime" value="${esc(row.applyTime || '')}" />`);
+        body += renderFormField('办理人', `<input type="text" class="form-input w-full" id="add_handler" value="${esc(row.handler)}" />`);
+        body += renderFormField('办理时间', `<input type="text" class="form-input w-full" id="add_handleTime" value="${esc(row.handleTime)}" />`);
+        body += renderFormField('办理状态', `<select class="form-input w-full" id="add_handleStatus"><option value="pending" ${row.handleStatus === 'pending' ? 'selected' : ''}>待办理</option><option value="processing" ${row.handleStatus === 'processing' ? 'selected' : ''}>办理中</option><option value="completed" ${row.handleStatus === 'completed' ? 'selected' : ''}>已完成</option><option value="rejected" ${row.handleStatus === 'rejected' ? 'selected' : ''}>已退回</option><option value="closed" ${row.handleStatus === 'closed' ? 'selected' : ''}>已关闭</option></select>`, true);
+        body += '</div>';
+        body += renderFormField('办理结果', `<textarea class="form-input w-full" id="add_handleResult" rows="3">${esc(row.handleResult || '')}</textarea>`);
+        body += '<div class="grid grid-cols-2 gap-4">';
+        body += renderFormField('办理用时', `<input type="text" class="form-input w-full" id="add_handleDuration" value="${esc(row.handleDuration || '')}" />`);
+        body += renderFormField('操作IP', `<input type="text" class="form-input w-full" id="add_handleIp" value="${esc(row.handleIp || '')}" />`);
+        body += '</div>';
+        body += renderFormField('备注', `<textarea class="form-input w-full" id="add_remark" rows="3">${esc(row.remark || '')}</textarea>`);
     } else if (pageKey === 'notice') {
         body = renderFormField('公告标题', `<input type="text" class="form-input w-full" id="add_title" value="${esc(row.title)}" />`, true);
         body += renderFormField('公告类型', `<select class="form-input w-full" id="add_type"><option value="${row.type}">${row.type === 'notice' ? '通知' : row.type === 'announcement' ? '公告' : '系统消息'}</option></select>`, true);
@@ -8426,6 +8631,257 @@ function confirmEdit(pageKey, modalId, rowId) {
 }
 
 
+/** 应用日志 - 操作日志配置 - 新增/编辑弹窗 */
+function openAppLogOpConfigModal(mode, row) {
+    const id = 'modal_applog_opconfig_' + mode;
+    const isEdit = mode === 'edit';
+    const title = isEdit ? '编辑配置' : '新增配置';
+    const r = row || {};
+    const modules = ['用户管理','机构管理','角色管理','权限管理','应用管理','系统管理'];
+    const opTypes = ['新增','修改','删除','查询','导出','导入','登录','登出'];
+    const levels = ['低','中','高'];
+    let body = '<div style="line-height:2;">';
+    body += '<div class="grid grid-cols-2 gap-4">';
+    body += '<div><label class="form-label">配置名称 <span class="text-red-500">*</span></label><input type="text" class="form-input" value="' + esc(r.name || '') + '"></div>';
+    body += '<div><label class="form-label">日志类型</label><input type="text" class="form-input" value="操作日志" disabled style="background:#F5F7FA;color:var(--text-secondary);"></div>';
+    body += '<div><label class="form-label">操作模块 <span class="text-red-500">*</span></label><select class="form-input">';
+    modules.forEach(function(m){ body += '<option' + (r.module===m?' selected':'') + '>' + m + '</option>'; });
+    body += '</select></div>';
+    body += '<div><label class="form-label">操作类型 <span class="text-red-500">*</span></label>';
+    body += '<div style="border:1px solid #D9D9D9;border-radius:4px;padding:8px;max-height:80px;overflow-y:auto;">';
+    opTypes.forEach(function(t){
+        var checked = (r.opType && r.opType.indexOf(t) >= 0) ? 'checked' : '';
+        body += '<label style="display:inline-flex;align-items:center;margin-right:12px;margin-bottom:4px;"><input type="checkbox" ' + checked + ' style="margin-right:4px;">' + t + '</label>';
+    });
+    body += '</div></div>';
+    body += '<div><label class="form-label">记录级别</label><select class="form-input">';
+    levels.forEach(function(l){ body += '<option' + (r.level===l?' selected':'') + '>' + l + '</option>'; });
+    body += '</select></div>';
+    body += '<div><label class="form-label">保留天数</label><input type="number" class="form-input" value="' + (r.retentionDays || 90) + '"></div>';
+    body += '<div><label class="form-label">是否启用</label><div style="display:flex;align-items:center;height:32px;"><span class="switch switch-on" onclick="this.classList.toggle(\'switch-on\');this.classList.toggle(\'switch-off\');"><span class="switch-dot"></span></span></div></div>';
+    body += '</div>';
+    body += '<div><label class="form-label">备注</label><textarea class="form-input" rows="3" style="width:100%;resize:vertical;">' + esc(r.remark || '') + '</textarea></div>';
+    body += '</div>';
+    const footer = '<button class="px-4 py-1.5 text-sm rounded border" style="border-color:#D9D9D9;color:var(--text-secondary);background:#fff;" onclick="closeModal(\'' + id + '\')">取消</button>' +
+        '<button class="px-4 py-1.5 text-sm rounded text-white" style="background:var(--primary-color);" onclick="closeModal(\'' + id + '\')">确定</button>';
+    openModal(id, title, body, footer, '600px');
+}
+
+/** 应用日志 - 操作日志 - 查看弹窗 */
+function openAppLogOpViewModal(row) {
+    const id = 'modal_applog_op_view';
+    const r = row || {};
+    let body = '<div style="line-height:2.2;">';
+    body += '<div class="grid grid-cols-2 gap-4">';
+    body += '<div class="flex"><span class="form-label" style="width:100px;">日志ID</span><span style="color:var(--text-primary);">' + esc(r.id || '') + '</span></div>';
+    body += '<div class="flex"><span class="form-label" style="width:100px;">操作人</span><span style="color:var(--text-primary);">' + esc(r.operator || '') + '</span></div>';
+    body += '<div class="flex"><span class="form-label" style="width:100px;">操作时间</span><span style="color:var(--text-primary);">' + esc(r.time || '') + '</span></div>';
+    body += '<div class="flex"><span class="form-label" style="width:100px;">操作模块</span><span style="color:var(--text-primary);">' + esc(r.module || '') + '</span></div>';
+    body += '<div class="flex"><span class="form-label" style="width:100px;">操作类型</span><span style="color:var(--text-primary);">' + esc(r.type || '') + '</span></div>';
+    body += '<div class="flex"><span class="form-label" style="width:100px;">操作结果</span><span style="color:var(--text-primary);">' + (r.result === '成功' ? '<span class="tag tag-green">成功</span>' : '<span class="tag tag-red">失败</span>') + '</span></div>';
+    body += '<div class="flex"><span class="form-label" style="width:100px;">IP地址</span><span style="color:var(--text-primary);">192.168.1.' + (100 + (r.id % 50)) + '</span></div>';
+    body += '<div class="flex"><span class="form-label" style="width:100px;">耗时(ms)</span><span style="color:var(--text-primary);">' + (100 + (r.id * 37) % 500) + '</span></div>';
+    body += '</div>';
+    body += '<div class="flex mt-2"><span class="form-label" style="width:100px;">操作内容</span><span style="color:var(--text-primary);flex:1;">' + esc(r.content || '') + '</span></div>';
+    body += '<div class="mt-3"><label class="form-label">请求参数</label><div style="background:#F5F7FA;padding:10px;border-radius:4px;font-family:monospace;font-size:12px;max-height:100px;overflow-y:auto;">{"id":' + (r.id||1) + ',"name":"test","page":1,"size":10}</div></div>';
+    body += '<div class="mt-3"><label class="form-label">响应结果</label><div style="background:#F5F7FA;padding:10px;border-radius:4px;font-family:monospace;font-size:12px;max-height:100px;overflow-y:auto;">{"code":0,"message":"success","data":{"total":100,"list":[...]}}</div></div>';
+    body += '</div>';
+    const footer = '<button class="px-4 py-1.5 text-sm rounded border" style="border-color:#D9D9D9;color:var(--text-secondary);background:#fff;" onclick="closeModal(\'' + id + '\')">关闭</button>';
+    openModal(id, '查看日志', body, footer, 'large');
+}
+
+/** 应用日志 - 订阅日志配置 - 新增/编辑弹窗 */
+function openAppLogSubConfigModal(mode, row) {
+    const id = 'modal_applog_subconfig_' + mode;
+    const isEdit = mode === 'edit';
+    const title = isEdit ? '编辑配置' : '新增配置';
+    const r = row || {};
+    const subTypes = ['应用订阅','接口订阅','数据订阅'];
+    const subMethods = ['Webhook','邮件','短信'];
+    const events = ['新增','修改','删除','状态变更'];
+    let body = '<div style="line-height:2;">';
+    body += '<div class="grid grid-cols-2 gap-4">';
+    body += '<div><label class="form-label">配置名称 <span class="text-red-500">*</span></label><input type="text" class="form-input" value="' + esc(r.name || '') + '"></div>';
+    body += '<div><label class="form-label">订阅类型 <span class="text-red-500">*</span></label><select class="form-input">';
+    subTypes.forEach(function(t){ body += '<option' + (r.subType===t?' selected':'') + '>' + t + '</option>'; });
+    body += '</select></div>';
+    body += '<div><label class="form-label">订阅方式 <span class="text-red-500">*</span></label><select class="form-input">';
+    subMethods.forEach(function(m){ body += '<option' + (r.method===m?' selected':'') + '>' + m + '</option>'; });
+    body += '</select></div>';
+    body += '<div><label class="form-label">订阅地址</label><input type="text" class="form-input" value="' + esc(r.url || 'https://') + '"></div>';
+    body += '<div><label class="form-label">订阅事件 <span class="text-red-500">*</span></label>';
+    body += '<div style="border:1px solid #D9D9D9;border-radius:4px;padding:8px;">';
+    events.forEach(function(e){
+        var checked = (r.events && r.events.indexOf(e) >= 0) ? 'checked' : '';
+        body += '<label style="display:inline-flex;align-items:center;margin-right:12px;"><input type="checkbox" ' + checked + ' style="margin-right:4px;">' + e + '</label>';
+    });
+    body += '</div></div>';
+    body += '<div><label class="form-label">重试次数</label><input type="number" class="form-input" value="' + (r.retry || 3) + '"></div>';
+    body += '<div><label class="form-label">超时时间(秒)</label><input type="number" class="form-input" value="' + (r.timeout || 30) + '"></div>';
+    body += '<div><label class="form-label">是否启用</label><div style="display:flex;align-items:center;height:32px;"><span class="switch switch-on" onclick="this.classList.toggle(\'switch-on\');this.classList.toggle(\'switch-off\');"><span class="switch-dot"></span></span></div></div>';
+    body += '</div>';
+    body += '<div><label class="form-label">备注</label><textarea class="form-input" rows="3" style="width:100%;resize:vertical;">' + esc(r.remark || '') + '</textarea></div>';
+    body += '</div>';
+    const footer = '<button class="px-4 py-1.5 text-sm rounded border" style="border-color:#D9D9D9;color:var(--text-secondary);background:#fff;" onclick="closeModal(\'' + id + '\')">取消</button>' +
+        '<button class="px-4 py-1.5 text-sm rounded text-white" style="background:var(--primary-color);" onclick="closeModal(\'' + id + '\')">确定</button>';
+    openModal(id, title, body, footer, '600px');
+}
+
+/** 应用日志 - 订阅日志 - 查看弹窗 */
+function openAppLogSubViewModal(row) {
+    const id = 'modal_applog_sub_view';
+    const r = row || {};
+    let body = '<div style="line-height:2.2;">';
+    body += '<div class="grid grid-cols-2 gap-4">';
+    body += '<div class="flex"><span class="form-label" style="width:100px;">日志ID</span><span style="color:var(--text-primary);">' + esc(r.id || '') + '</span></div>';
+    body += '<div class="flex"><span class="form-label" style="width:100px;">订阅名称</span><span style="color:var(--text-primary);">' + esc(r.name || '') + '</span></div>';
+    body += '<div class="flex"><span class="form-label" style="width:100px;">订阅类型</span><span style="color:var(--text-primary);">' + esc(r.subType || '') + '</span></div>';
+    body += '<div class="flex"><span class="form-label" style="width:100px;">订阅方式</span><span style="color:var(--text-primary);">' + esc(r.method || '') + '</span></div>';
+    body += '<div class="flex"><span class="form-label" style="width:100px;">触发时间</span><span style="color:var(--text-primary);">' + esc(r.time || '') + '</span></div>';
+    body += '<div class="flex"><span class="form-label" style="width:100px;">触发事件</span><span style="color:var(--text-primary);">' + esc(r.event || '') + '</span></div>';
+    body += '<div class="flex"><span class="form-label" style="width:100px;">推送状态</span><span style="color:var(--text-primary);">' + (r.status === '成功' ? '<span class="tag tag-green">成功</span>' : '<span class="tag tag-red">失败</span>') + '</span></div>';
+    body += '<div class="flex"><span class="form-label" style="width:100px;">重试次数</span><span style="color:var(--text-primary);">' + (r.retryCount || 0) + '</span></div>';
+    body += '<div class="flex"><span class="form-label" style="width:100px;">耗时(ms)</span><span style="color:var(--text-primary);">' + (200 + (r.id * 23) % 800) + '</span></div>';
+    body += '</div>';
+    body += '<div class="flex mt-2"><span class="form-label" style="width:100px;">推送地址</span><span style="color:var(--text-primary);flex:1;font-family:monospace;font-size:12px;">' + esc(r.url || 'https://api.example.com/webhook') + '</span></div>';
+    if (r.status === '失败') {
+        body += '<div class="flex mt-2"><span class="form-label" style="width:100px;">失败原因</span><span style="color:var(--danger-color);flex:1;">连接超时：目标服务器无响应</span></div>';
+    }
+    body += '<div class="mt-3"><label class="form-label">请求内容</label><div style="background:#F5F7FA;padding:10px;border-radius:4px;font-family:monospace;font-size:12px;max-height:100px;overflow-y:auto;">{"event":"' + (r.event||'update') + '","data":{"id":' + (r.id||1) + ',"name":"test"},"timestamp":"' + (r.time||'') + '"}</div></div>';
+    body += '<div class="mt-3"><label class="form-label">响应内容</label><div style="background:#F5F7FA;padding:10px;border-radius:4px;font-family:monospace;font-size:12px;max-height:100px;overflow-y:auto;">{"code":' + (r.status==='成功'?'0':'500') + ',"message":"' + (r.status==='成功'?'success':'timeout') + '"}</div></div>';
+    body += '</div>';
+    const footer = '<button class="px-4 py-1.5 text-sm rounded border" style="border-color:#D9D9D9;color:var(--text-secondary);background:#fff;" onclick="closeModal(\'' + id + '\')">关闭</button>';
+    openModal(id, '查看日志', body, footer, 'large');
+}
+
+/** 应用接入流程审批 - 查看弹窗 */
+function openAppAccessFlowViewModal(tabKey, row) {
+    const id = 'modal_view_app-access-flow';
+    let body = '';
+    if (tabKey === 'config') {
+        // 流程配置查看
+        body = '<div style="line-height:2.2;">';
+        body += '<div class="grid grid-cols-2 gap-4">';
+        body += '<div class="flex"><span class="form-label" style="width:100px;">流程ID</span><span style="color:var(--text-primary);">' + esc(row.code || '') + '</span></div>';
+        body += '<div class="flex"><span class="form-label" style="width:100px;">流程名称</span><span style="color:var(--text-primary);">' + esc(row.name || '') + '</span></div>';
+        body += '<div class="flex"><span class="form-label" style="width:100px;">流程类型</span><span style="color:var(--text-primary);">接入审批</span></div>';
+        body += '<div class="flex"><span class="form-label" style="width:100px;">适用应用类型</span><span style="color:var(--text-primary);">' + (row.appType === 'business' ? '业务应用' : row.appType === 'office' ? '办公应用' : '服务应用') + '</span></div>';
+        body += '<div class="flex"><span class="form-label" style="width:100px;">当前版本</span><span style="color:var(--text-primary);">v1.0</span></div>';
+        body += '<div class="flex"><span class="form-label" style="width:100px;">创建时间</span><span style="color:var(--text-primary);">' + esc(row.createTime || '') + '</span></div>';
+        body += '<div class="flex"><span class="form-label" style="width:100px;">状态</span><span style="color:var(--text-primary);">' + (row.status ? '<span class="tag tag-green">启用</span>' : '<span class="tag tag-red">停用</span>') + '</span></div>';
+        body += '</div>';
+        body += '<div class="flex mt-2"><span class="form-label" style="width:100px;">流程描述</span><span style="color:var(--text-primary);flex:1;">用于' + esc(row.name || '') + '的标准审批流程</span></div>';
+        body += '<div class="mt-4 mb-2 font-medium" style="font-size:14px;">流程节点列表</div>';
+        var nodes = [
+            { name: '提交申请', type: '开始节点', handler: '申请人', countersign: '否', sort: 1 },
+            { name: '一级审批', type: '审批节点', handler: '部门负责人', countersign: '否', sort: 2 },
+            { name: '二级审批', type: '审批节点', handler: '分管领导', countersign: '是', sort: 3 },
+            { name: '办结', type: '结束节点', handler: '系统自动', countersign: '否', sort: 4 },
+        ];
+        body += '<table class="data-table" style="font-size:13px;"><thead><tr><th style="padding:8px;">节点名称</th><th style="padding:8px;">节点类型</th><th style="padding:8px;">处理人/角色</th><th style="padding:8px;">是否会签</th><th style="padding:8px;">排序号</th></tr></thead><tbody>';
+        for (var i = 0; i < nodes.length; i++) {
+            body += '<tr><td style="padding:8px;">' + nodes[i].name + '</td><td style="padding:8px;">' + nodes[i].type + '</td><td style="padding:8px;">' + nodes[i].handler + '</td><td style="padding:8px;">' + nodes[i].countersign + '</td><td style="padding:8px;">' + nodes[i].sort + '</td></tr>';
+        }
+        body += '</tbody></table>';
+        body += '</div>';
+    } else {
+        // 流程列表查看
+        body = '<div style="line-height:2.2;">';
+        body += '<div class="grid grid-cols-2 gap-4">';
+        body += '<div class="flex"><span class="form-label" style="width:100px;">申请单号</span><span style="color:var(--text-primary);">' + esc(row.instanceId || '') + '</span></div>';
+        body += '<div class="flex"><span class="form-label" style="width:100px;">应用名称</span><span style="color:var(--text-primary);">' + esc(row.appName || '') + '</span></div>';
+        body += '<div class="flex"><span class="form-label" style="width:100px;">申请类型</span><span style="color:var(--text-primary);">应用接入</span></div>';
+        body += '<div class="flex"><span class="form-label" style="width:100px;">申请人</span><span style="color:var(--text-primary);">' + esc(row.applicant || '') + '</span></div>';
+        body += '<div class="flex"><span class="form-label" style="width:100px;">申请时间</span><span style="color:var(--text-primary);">' + esc(row.applyTime || '') + '</span></div>';
+        body += '<div class="flex"><span class="form-label" style="width:100px;">当前节点</span><span style="color:var(--text-primary);">' + esc(row.currentNode || '') + '</span></div>';
+        var statusMap = { pending: { text: '待审批', color: 'orange' }, processing: { text: '审批中', color: 'blue' }, approved: { text: '已通过', color: 'green' }, rejected: { text: '已驳回', color: 'red' } };
+        var st = statusMap[row.status] || { text: row.status, color: 'gray' };
+        body += '<div class="flex"><span class="form-label" style="width:100px;">流程状态</span><span style="color:var(--text-primary);"><span class="tag tag-' + st.color + '">' + st.text + '</span></span></div>';
+        body += '</div>';
+        body += '<div class="mt-4 mb-2 font-medium" style="font-size:14px;">审批记录</div>';
+        var records = [
+            { node: '提交申请', handler: row.applicant || '张三', opinion: '提交接入申请', time: '2025-03-01 10:00:00', result: '提交' },
+            { node: '一级审批', handler: '李主任', opinion: '同意接入', time: '2025-03-02 09:30:00', result: '通过' },
+            { node: '二级审批', handler: '王处长', opinion: '材料齐全，同意', time: '2025-03-03 14:20:00', result: '通过' },
+        ];
+        body += '<table class="data-table" style="font-size:13px;"><thead><tr><th style="padding:8px;">节点名称</th><th style="padding:8px;">处理人</th><th style="padding:8px;">处理意见</th><th style="padding:8px;">处理时间</th><th style="padding:8px;">处理结果</th></tr></thead><tbody>';
+        for (var j = 0; j < records.length; j++) {
+            var resColor = records[j].result === '通过' ? 'green' : records[j].result === '驳回' ? 'red' : 'blue';
+            body += '<tr><td style="padding:8px;">' + records[j].node + '</td><td style="padding:8px;">' + records[j].handler + '</td><td style="padding:8px;">' + records[j].opinion + '</td><td style="padding:8px;">' + records[j].time + '</td><td style="padding:8px;"><span class="tag tag-' + resColor + '">' + records[j].result + '</span></td></tr>';
+        }
+        body += '</tbody></table>';
+        body += '</div>';
+    }
+    const footer = '<button class="px-4 py-1.5 text-sm rounded border" style="border-color:#D9D9D9;color:var(--text-secondary);background:#fff;" onclick="closeModal(\'' + id + '\')">关闭</button>';
+    openModal(id, '查看详情', body, footer, 'large');
+}
+
+/** 应用变更流程审批 - 查看弹窗 */
+function openAppChangeFlowViewModal(tabKey, row) {
+    const id = 'modal_view_app-change-flow';
+    let body = '';
+    if (tabKey === 'config') {
+        // 流程配置查看
+        body = '<div style="line-height:2.2;">';
+        body += '<div class="grid grid-cols-2 gap-4">';
+        body += '<div class="flex"><span class="form-label" style="width:100px;">流程ID</span><span style="color:var(--text-primary);">' + esc(row.code || '') + '</span></div>';
+        body += '<div class="flex"><span class="form-label" style="width:100px;">流程名称</span><span style="color:var(--text-primary);">' + esc(row.name || '') + '</span></div>';
+        body += '<div class="flex"><span class="form-label" style="width:100px;">流程类型</span><span style="color:var(--text-primary);">变更审批</span></div>';
+        var ctMap = { info: '信息变更', version: '版本升级', scope: '范围变更' };
+        body += '<div class="flex"><span class="form-label" style="width:100px;">变更类型</span><span style="color:var(--text-primary);">' + (ctMap[row.changeType] || row.changeType || '') + '</span></div>';
+        body += '<div class="flex"><span class="form-label" style="width:100px;">当前版本</span><span style="color:var(--text-primary);">v1.0</span></div>';
+        body += '<div class="flex"><span class="form-label" style="width:100px;">创建时间</span><span style="color:var(--text-primary);">' + esc(row.createTime || '') + '</span></div>';
+        body += '<div class="flex"><span class="form-label" style="width:100px;">状态</span><span style="color:var(--text-primary);">' + (row.status ? '<span class="tag tag-green">启用</span>' : '<span class="tag tag-red">停用</span>') + '</span></div>';
+        body += '</div>';
+        body += '<div class="flex mt-2"><span class="form-label" style="width:100px;">流程描述</span><span style="color:var(--text-primary);flex:1;">用于' + esc(row.name || '') + '的变更审批流程</span></div>';
+        body += '<div class="mt-4 mb-2 font-medium" style="font-size:14px;">流程节点列表</div>';
+        var nodes = [
+            { name: '提交变更', type: '开始节点', handler: '申请人', countersign: '否', sort: 1 },
+            { name: '变更审核', type: '审批节点', handler: '应用管理员', countersign: '否', sort: 2 },
+            { name: '技术评估', type: '审批节点', handler: '技术组', countersign: '是', sort: 3 },
+            { name: '领导审批', type: '审批节点', handler: '分管领导', countersign: '否', sort: 4 },
+            { name: '完成', type: '结束节点', handler: '系统自动', countersign: '否', sort: 5 },
+        ];
+        body += '<table class="data-table" style="font-size:13px;"><thead><tr><th style="padding:8px;">节点名称</th><th style="padding:8px;">节点类型</th><th style="padding:8px;">处理人/角色</th><th style="padding:8px;">是否会签</th><th style="padding:8px;">排序号</th></tr></thead><tbody>';
+        for (var i = 0; i < nodes.length; i++) {
+            body += '<tr><td style="padding:8px;">' + nodes[i].name + '</td><td style="padding:8px;">' + nodes[i].type + '</td><td style="padding:8px;">' + nodes[i].handler + '</td><td style="padding:8px;">' + nodes[i].countersign + '</td><td style="padding:8px;">' + nodes[i].sort + '</td></tr>';
+        }
+        body += '</tbody></table>';
+        body += '</div>';
+    } else {
+        // 流程列表查看
+        body = '<div style="line-height:2.2;">';
+        body += '<div class="grid grid-cols-2 gap-4">';
+        body += '<div class="flex"><span class="form-label" style="width:100px;">申请单号</span><span style="color:var(--text-primary);">' + esc(row.instanceId || '') + '</span></div>';
+        body += '<div class="flex"><span class="form-label" style="width:100px;">应用名称</span><span style="color:var(--text-primary);">' + esc(row.appName || '') + '</span></div>';
+        var ctMap2 = { info: '信息变更', version: '版本升级', scope: '范围变更' };
+        body += '<div class="flex"><span class="form-label" style="width:100px;">变更类型</span><span style="color:var(--text-primary);">' + (ctMap2[row.changeType] || ctMap2[row.status] ? '' : row.changeType || '信息变更') + '</span></div>';
+        body += '<div class="flex"><span class="form-label" style="width:100px;">申请人</span><span style="color:var(--text-primary);">' + esc(row.applicant || '') + '</span></div>';
+        body += '<div class="flex"><span class="form-label" style="width:100px;">申请时间</span><span style="color:var(--text-primary);">' + esc(row.applyTime || '') + '</span></div>';
+        body += '<div class="flex"><span class="form-label" style="width:100px;">当前节点</span><span style="color:var(--text-primary);">' + esc(row.currentNode || '') + '</span></div>';
+        var statusMap2 = { pending: { text: '待审批', color: 'orange' }, processing: { text: '审批中', color: 'blue' }, approved: { text: '已通过', color: 'green' }, rejected: { text: '已驳回', color: 'red' } };
+        var st2 = statusMap2[row.status] || { text: row.status, color: 'gray' };
+        body += '<div class="flex"><span class="form-label" style="width:100px;">流程状态</span><span style="color:var(--text-primary);"><span class="tag tag-' + st2.color + '">' + st2.text + '</span></span></div>';
+        body += '</div>';
+        body += '<div class="mt-4 mb-2 font-medium" style="font-size:14px;">审批记录</div>';
+        var records2 = [
+            { node: '提交变更', handler: row.applicant || '张三', opinion: '提交变更申请', time: '2025-03-02 10:00:00', result: '提交' },
+            { node: '变更审核', handler: '李管理员', opinion: '变更合理，同意', time: '2025-03-03 09:30:00', result: '通过' },
+            { node: '技术评估', handler: '技术组', opinion: '技术方案可行', time: '2025-03-04 14:20:00', result: '通过' },
+            { node: '领导审批', handler: '王处长', opinion: '同意变更', time: '2025-03-05 11:00:00', result: '通过' },
+        ];
+        body += '<table class="data-table" style="font-size:13px;"><thead><tr><th style="padding:8px;">节点名称</th><th style="padding:8px;">处理人</th><th style="padding:8px;">处理意见</th><th style="padding:8px;">处理时间</th><th style="padding:8px;">处理结果</th></tr></thead><tbody>';
+        for (var j = 0; j < records2.length; j++) {
+            var resColor2 = records2[j].result === '通过' ? 'green' : records2[j].result === '驳回' ? 'red' : 'blue';
+            body += '<tr><td style="padding:8px;">' + records2[j].node + '</td><td style="padding:8px;">' + records2[j].handler + '</td><td style="padding:8px;">' + records2[j].opinion + '</td><td style="padding:8px;">' + records2[j].time + '</td><td style="padding:8px;"><span class="tag tag-' + resColor2 + '">' + records2[j].result + '</span></td></tr>';
+        }
+        body += '</tbody></table>';
+        body += '</div>';
+    }
+    const footer = '<button class="px-4 py-1.5 text-sm rounded border" style="border-color:#D9D9D9;color:var(--text-secondary);background:#fff;" onclick="closeModal(\'' + id + '\')">关闭</button>';
+    openModal(id, '查看详情', body, footer, 'large');
+}
+
 /* 全局字段中文映射（详情弹窗使用） */
 var globalFieldLabels = {
     name: '名称', code: '编码', desc: '描述', description: '描述', status: '状态',
@@ -8469,29 +8925,70 @@ var globalFieldLabels = {
 
 /** 查看弹窗（只读详情） */
 function openViewModal(pageKey, rowId) {
-    const config = pageConfigs[pageKey];
+    let config = pageConfigs[pageKey];
     let row;
-    // 用户管理页面 - 从 userLayoutState 获取数据
-    if (pageKey === 'user' && config.type === 'user-layout') {
-        row = (userLayoutState.users || []).find(function(u) { return u.id === rowId; });
-    } else if (pageKey === 'admin-auth') {
-        const tab = state.currentTab['admin-auth'];
-        row = config.tabData[tab].find(r => r.id === rowId);
-    } else if (config.tabData) {
-        var tabKey = state.currentTab[pageKey] || (config.tabs && config.tabs[0] && config.tabs[0].key);
-        row = (config.tabData[tabKey] || []).find(r => r.id === rowId);
+    let currentTabKey = '';
+    let actualPageKey = pageKey;
+
+    // 如果直接查找不到，尝试通过 resolvePageConfig 解析（如 ticket-cc-config-default）
+    if (!config) {
+        const resolved = resolvePageConfig(pageKey);
+        if (resolved) {
+            config = resolved.config;
+            actualPageKey = resolved.pageKey;
+            currentTabKey = resolved.tabKey || '';
+            const data = resolved.getData();
+            row = data.find(r => r.id === rowId);
+        }
     } else {
-        row = (config.data || []).find(r => r.id === rowId);
+        // 用户管理页面 - 从 userLayoutState 获取数据
+        if (pageKey === 'user' && config.type === 'user-layout') {
+            row = (userLayoutState.users || []).find(function(u) { return u.id === rowId; });
+        } else if (pageKey === 'admin-auth') {
+            const tab = state.currentTab['admin-auth'];
+            row = config.tabData[tab].find(r => r.id === rowId);
+        } else if (config.tabData) {
+            var tabKey = state.currentTab[pageKey] || (config.tabs && config.tabs[0] && config.tabs[0].key);
+            currentTabKey = tabKey;
+            row = (config.tabData[tabKey] || []).find(r => r.id === rowId);
+        } else if (config.tabConfigs) {
+            var tabKey2 = state.currentTab[pageKey] || (config.tabs && config.tabs[0] && config.tabs[0].key);
+            currentTabKey = tabKey2;
+            row = (config.tabConfigs[tabKey2] && config.tabConfigs[tabKey2].data || []).find(r => r.id === rowId);
+        } else {
+            row = (config.data || []).find(r => r.id === rowId);
+        }
     }
     if (!row) return;
 
+    // 应用接入流程审批 - 自定义查看弹窗
+    if (actualPageKey === 'app-access-flow') {
+        openAppAccessFlowViewModal(currentTabKey, row);
+        return;
+    }
+    // 应用变更流程审批 - 自定义查看弹窗
+    if (actualPageKey === 'app-change-flow') {
+        openAppChangeFlowViewModal(currentTabKey, row);
+        return;
+    }
+    // 应用日志 - 自定义查看弹窗
+    if (actualPageKey === 'app-log') {
+        if (currentTabKey === 'opLog') {
+            openAppLogOpViewModal(row);
+            return;
+        }
+        if (currentTabKey === 'subLog') {
+            openAppLogSubViewModal(row);
+            return;
+        }
+    }
     // 用户详情 - Tab页签式
-    if (pageKey === 'user') {
+    if (actualPageKey === 'user') {
         openUserDetailModal(row);
         return;
     }
     // 机构详情 - 含拓展信息
-    if (pageKey === 'org') {
+    if (actualPageKey === 'org') {
         openOrgDetailModal(row);
         return;
     }
@@ -9697,34 +10194,26 @@ function confirmBatchDelete(pageKey, modalId) {
     const selected = state.selectedRows[pageKey];
     if (!selected) return;
     
-    // 检测是否为 tab-table 格式
-    let realPageKey = pageKey;
-    let tabKey = null;
-    let config = pageConfigs[pageKey];
+    const resolved = resolvePageConfig(pageKey);
+    if (!resolved) return;
     
-    if (!config) {
-        for (const pk of Object.keys(pageConfigs)) {
-            if (pageKey.startsWith(pk + '_')) {
-                realPageKey = pk;
-                tabKey = pageKey.substring(pk.length + 1);
-                config = pageConfigs[pk];
-                break;
-            }
-        }
-    }
+    const realPageKey = resolved.pageKey;
+    const tabKey = resolved.tabKey;
+    const config = resolved.config;
     
     if (realPageKey === 'admin-auth') {
         const tab = state.currentTab['admin-auth'];
         config.tabData[tab] = config.tabData[tab].filter(r => !selected.has(r.id));
         state.selectedRows[pageKey] = new Set();
         renderAdminAuthTable();
-    } else if (tabKey && config.tabConfigs && config.tabConfigs[tabKey] && config.tabConfigs[tabKey].data) {
-        // tab-table 页面（tabConfigs 格式）
-        config.tabConfigs[tabKey].data = config.tabConfigs[tabKey].data.filter(r => !selected.has(r.id));
+    } else if (resolved.setData) {
+        // 使用 resolvePageConfig 的 setData 方法（支持 tabConfigs、ticket-cc 等）
+        const currentData = resolved.getData();
+        const newData = currentData.filter(r => !selected.has(r.id));
+        resolved.setData(newData);
         state.selectedRows[pageKey] = new Set();
-        const tabCfg = config.tabConfigs[tabKey];
         // 获取过滤后的数据（考虑查询条件）
-        let data = config.tabConfigs[tabKey].data.slice();
+        let data = newData.slice();
         const search = state.searchData[pageKey];
         if (search) {
             for (const [key, val] of Object.entries(search)) {
@@ -9733,16 +10222,11 @@ function confirmBatchDelete(pageKey, modalId) {
                 }
             }
         }
-        renderTable('tableContainer_' + pageKey, tabCfg.columns, data, pageKey);
+        renderTable('tableContainer_' + pageKey, resolved.columns, data, pageKey);
         // 更新分页
         const main = $('mainContent');
         const oldPagi = main.querySelector('.flex.flex-wrap.items-center.justify-between.gap-4');
         if (oldPagi) oldPagi.outerHTML = renderPagination(pageKey, data.length);
-    } else if (config && config.tabData && tabKey) {
-        // tab-table 页面（tabData 格式）
-        config.tabData[tabKey] = config.tabData[tabKey].filter(r => !selected.has(r.id));
-        state.selectedRows[pageKey] = new Set();
-        renderTable('tableContainer_' + pageKey, config.columns, getTabData(realPageKey, tabKey), pageKey);
     } else if (config) {
         config.data = (config.data || []).filter(r => !selected.has(r.id));
         state.selectedRows[pageKey] = new Set();
@@ -11341,19 +11825,19 @@ var prdData = {
         redFields: ['addFlow', 'editFlow', 'deleteFlow', 'queryFlow', 'sortConfig', 'viewFlow', 'evaluateFlow', 'uploadFlow', 'batchMarkReadFlow', 'exportFlow', 'forwardFlow', 'batchDeleteFlow'],
     },
     'ticket-cc': {
-        background: '【工单抄送管理】工单抄送管理是工单中心的核心配置模块，负责管理工单流程中的抄送规则和抄送记录。包含默认抄送记录、自定义抄送设置、自定义抄送记录3个Tab页，分别管理系统预设的抄送规则、用户自定义的抄送配置以及实际的抄送执行记录，实现全方位的工单抄送管理能力。',
+        background: '【工单抄送管理】工单抄送管理是工单中心的核心配置模块，负责管理工单流程中的抄送规则和抄送记录。包含抄送配置、抄送记录2个Tab页，抄送配置页通过单选切换管理默认抄送规则和自定义抄送模板，抄送记录页合并展示全部抄送记录，实现全方位的工单抄送管理能力。',
         targetUsers: '工单管理员、系统管理员、分级管理员',
-        coreFeatures: '1.默认抄送记录CRUD+批量删除 2.自定义抄送设置CRUD+批量删除 3.自定义抄送记录查询+查看+删除 4.三个Tab独立的查询条件和列表 5.抄送方式支持站内信/邮件/短信 6.触发节点支持提交时/审批通过时/驳回时',
-        businessFlow: '进入工单抄送管理页 -> 默认抄送记录Tab -> 新增/编辑/删除默认抄送规则 -> 设置抄送对象和方式 -> 保存；自定义抄送设置Tab -> 新增自定义抄送配置 -> 设置触发节点和抄送对象类型 -> 保存；自定义抄送记录Tab -> 查询抄送执行记录 -> 查看详情 -> 删除记录',
-        pageInfo: '3个Tab页（默认抄送记录/自定义抄送设置/自定义抄送记录）；默认抄送记录：支持规则名称/工单类型查询、新增、编辑、删除、批量删除；自定义抄送设置：支持设置名称/工单类型查询、新增、编辑、删除、批量删除；自定义抄送记录：支持记录名称/工单类型/状态查询、查看、删除、批量删除',
-        dataModel: '核心实体：默认抄送记录（id/规则名称/工单类型/抄送对象/抄送方式/状态/创建时间）、自定义抄送设置（id/设置名称/工单类型/触发节点/抄送对象类型/状态/创建时间）、自定义抄送记录（id/记录名称/关联工单/工单类型/抄送人/抄送时间/抄送状态）。枚举值：工单类型（通用工单/设备申请/权限申请）、抄送方式（站内信/邮件/短信）、触发节点（提交时/审批通过时/驳回时）、抄送对象类型（指定人员/角色/部门）、抄送状态（成功/失败）。',
-        addFlow: '默认抄送记录：点击"新增" -> 打开新增弹窗 -> 填写规则名称（必填） -> 选择工单类型 -> 设置抄送对象 -> 选择抄送方式（可多选） -> 设置状态（启用/停用） -> 点击保存 -> 校验通过 -> 新增成功。自定义抄送设置：点击"新增" -> 打开新增弹窗 -> 填写设置名称（必填） -> 选择工单类型 -> 选择触发节点 -> 选择抄送对象类型 -> 设置抄送对象（根据类型选择人员/角色/部门） -> 设置状态 -> 点击保存 -> 校验通过 -> 新增成功。自定义抄送记录：不支持手动新增，由系统自动生成。',
-        queryFlow: '默认抄送记录：支持规则名称（模糊）、工单类型（下拉）多条件查询，AND关系。自定义抄送设置：支持设置名称（模糊）、工单类型（下拉）多条件查询，AND关系。自定义抄送记录：支持记录名称（模糊）、工单类型（下拉）、状态（下拉）多条件查询，AND关系。各Tab独立查询，互不影响。均支持分页查询。',
-        sortConfig: '默认抄送记录：支持规则名称、创建时间字段排序。自定义抄送设置：支持设置名称、创建时间字段排序。自定义抄送记录：支持记录名称、抄送时间字段排序。点击表头切换升序/降序，箭头图标标识。',
-        exceptionHandling: '1.规则名称重复：提示"规则名称已存在，请重新输入" 2.设置名称重复：提示"设置名称已存在，请重新输入" 3.抄送失败：记录失败状态，支持查看失败原因 4.删除被引用的抄送规则：拦截提示"该规则正在被使用，无法删除" 5.批量删除含被引用数据：自动跳过被引用数据，提示成功删除数量和跳过数量 6.空数据状态：列表显示空状态占位图+提示文字"暂无数据" 7.网络异常：Toast提示"网络连接失败，请稍后重试"',
-        permissionReq: '1.系统管理员：拥有全部权限（新增/编辑/删除/批量删除/查询/查看） 2.工单管理员：拥有全部权限 3.分级管理员：仅查询权限，不可新增、编辑、删除 4.普通用户：无访问权限，菜单不可见',
-        interaction: 'Tab切换（3个Tab）；多条件组合查询；表头点击排序；复选框多选+批量操作；新增/编辑弹窗；删除二次确认；查看详情抽屉',
-        acceptance: '1.3个Tab切换正常 2.默认抄送记录CRUD功能完整 3.自定义抄送设置CRUD功能完整 4.自定义抄送记录查询查看正常 5.批量删除有二次确认 6.查询条件可用 7.表头可排序 8.分页功能正常 9.Tag标签显示正确',
+        coreFeatures: '1.抄送配置：默认抄送规则CRUD+批量删除 2.抄送配置：自定义抄送模板CRUD+批量删除 3.抄送记录：增删改查+批量删除+多条件查询 4.抄送方式（默认/自定义）标签筛选 5.已读/未读状态筛选 6.抄送时间范围查询 7.导出功能',
+        businessFlow: '进入工单抄送管理页 -> 抄送配置Tab -> 单选切换默认抄送/自定义抄送 -> 新增/编辑/删除抄送规则 -> 保存；抄送记录Tab -> 多条件查询（关键词/工单类型/抄送方式/状态/时间范围）-> 查看详情 -> 新增/编辑/删除 -> 批量删除/导出',
+        pageInfo: '2个Tab页（抄送配置/抄送记录）；抄送配置：顶部单选切换（默认抄送/自定义抄送），切换后下方列表内容变化，支持查询、新增、编辑、删除、批量删除；抄送记录：合并两种抄送记录，支持关键词（工单标题/编号）、工单类型、抄送方式（默认/自定义）、状态（已读/未读）、抄送时间范围查询，支持新增、批量删除、导出，10条数据，分页完整',
+        dataModel: '核心实体：默认抄送规则（id/规则名称/适用工单类型/抄送对象/状态/创建时间）、自定义抄送模板（id/模板名称/适用工单类型/是否启用/创建时间）、抄送记录（id/工单编号/工单标题/工单类型/抄送方式/抄送人/抄送时间/状态）。枚举值：工单类型（通用工单/设备申请/权限申请）、抄送方式（默认/自定义）、状态（已读/未读）。',
+        addFlow: '默认抄送：点击"新增" -> 打开新增弹窗 -> 填写规则名称（必填） -> 选择适用工单类型 -> 设置抄送对象 -> 选择状态（启用/停用） -> 点击保存 -> 校验通过 -> 新增成功。自定义抄送：点击"新增" -> 打开新增弹窗 -> 填写模板名称（必填） -> 选择适用工单类型 -> 设置是否启用 -> 点击保存 -> 校验通过 -> 新增成功。抄送记录：点击"新增" -> 打开新增弹窗 -> 选择工单 -> 选择抄送方式 -> 填写抄送人 -> 点击保存 -> 新增成功。',
+        queryFlow: '抄送配置-默认抄送：支持规则名称（模糊）、工单类型（下拉）查询。抄送配置-自定义抄送：支持模板名称（模糊）、工单类型（下拉）查询。抄送记录：支持关键词（工单标题/编号模糊）、工单类型（下拉）、抄送方式（下拉：默认/自定义）、状态（下拉：已读/未读）、抄送时间范围多条件查询，AND关系。均支持分页查询。',
+        sortConfig: '默认抄送：支持规则名称、创建时间字段排序。自定义抄送：支持模板名称、创建时间字段排序。抄送记录：支持工单编号、抄送时间字段排序。点击表头切换升序/降序，箭头图标标识。',
+        exceptionHandling: '1.规则名称重复：提示"规则名称已存在，请重新输入" 2.模板名称重复：提示"模板名称已存在，请重新输入" 3.抄送失败：记录失败状态，支持查看失败原因 4.删除被引用的抄送规则：拦截提示"该规则正在被使用，无法删除" 5.批量删除含被引用数据：自动跳过被引用数据，提示成功删除数量和跳过数量 6.空数据状态：列表显示空状态占位图+提示文字"暂无数据" 7.网络异常：Toast提示"网络连接失败，请稍后重试"',
+        permissionReq: '1.系统管理员：拥有全部权限（新增/编辑/删除/批量删除/查询/查看/导出） 2.工单管理员：拥有全部权限 3.分级管理员：仅查询权限，不可新增、编辑、删除 4.普通用户：无访问权限，菜单不可见',
+        interaction: 'Tab切换（2个Tab）；抄送配置内单选切换（默认抄送/自定义抄送）；多条件组合查询；表头点击排序；复选框多选+批量操作；新增/编辑弹窗；删除二次确认；查看详情弹窗；导出功能',
+        acceptance: '1.2个Tab切换正常 2.抄送配置-单选切换正常 3.默认抄送CRUD功能完整 4.自定义抄送CRUD功能完整 5.抄送记录查询查看正常 6.多条件查询可用 7.批量删除有二次确认 8.表头可排序 9.分页功能正常 10.Tag标签显示正确 11.导出功能正常',
         defaultAddFlow: '【默认抄送记录】点击"新增" → 打开新增弹窗 → 填写规则名称（必填）→ 选择工单类型 → 设置抄送对象 → 选择抄送方式（可多选：站内信/邮件/短信）→ 设置触发节点 → 设置状态 → 点击保存 → 校验通过 → 新增成功。',
         defaultEditFlow: '【默认抄送记录】点击操作列"编辑" → 打开编辑弹窗 → 回显规则信息 → 修改可编辑字段 → 点击保存 → 校验通过 → 更新成功。',
         defaultDeleteFlow: '【默认抄送记录】点击操作列"删除" → 弹出二次确认弹窗 → 确认删除 → 逻辑删除 → Toast提示"删除成功" → 列表刷新。',
@@ -11742,7 +12226,7 @@ var prdData = {
         redFields: ['batchDeleteFlow'],
 },
     'app-audit': {
-        background: '【模式A+B+F】应用变更申请批量删除、查询字段排序、状态分类管理。走查覆盖3项功能点：①应用变更申请批量删除（符合，增加该功能）②应用变更申请查询字段排序（符合，增加该功能）③应用申请状态分类（符合，增加管理功能）。原型实现：标准表格列表，批量删除+排序+状态分类管理；申请状态分为：草稿、待审核、审核中、已通过、已驳回、已撤回，各有不同颜色标签；状态流转有规则约束（草稿→待审核→审核中→已通过/已驳回→已撤回）。',
+        background: '【模式A+B+F】应用变更申请批量删除、查询字段排序、状态分类管理。走查覆盖3项功能点：①应用变更申请批量删除（符合，增加该功能）②应用变更申请查询字段排序（符合，增加该功能）③应用申请状态分类（符合，增加管理功能）。原型实现：标准表格列表，批量删除+排序+状态分类管理；申请状态分为：待审核、已通过、已驳回，各有不同颜色标签；状态流转有规则约束（待审核→已通过/已驳回）。',
         targetUsers: '应用审核管理员、系统管理员',
         coreFeatures: '1.多条件组合查询 2.列表字段排序 3.批量删除',
         businessFlow: '进入应用审核页 → 设置查询条件 → 查看列表数据 → 勾选多条 → 批量删除 → 二次确认',
@@ -11755,7 +12239,7 @@ var prdData = {
         permissionReq: '1.系统管理员：拥有全部权限（批量删除/查询/排序） 2.平台管理员：拥有全部权限 3.分级管理员：仅查询权限，不可新增、编辑、删除 4.普通用户：无访问权限，菜单不可见',
         interaction: '多条件组合查询；表头点击排序；复选框多选+批量操作',
         acceptance: '1.批量删除有二次确认 2.查询条件完整可用 3.表头可排序 4.分页功能正常',
-        batchDeleteFlow: '勾选多条变更申请记录 → 点击"批量删除"按钮 → 弹出二次确认弹窗（显示选中数量）→ 确认删除 → 批量逻辑删除 → Toast提示成功删除数量。删除约束：已审批通过的申请不可删除；审批中的申请删除需确认。',
+        batchDeleteFlow: '勾选多条变更申请记录 → 点击"批量删除"按钮 → 弹出二次确认弹窗（显示选中数量）→ 确认删除 → 批量逻辑删除 → Toast提示成功删除数量。删除约束：已审批通过的申请不可删除。',
         redFields: ['batchDeleteFlow'],
 },
     'app-list': {
@@ -12173,7 +12657,7 @@ var prdData = {
 
     /* ---------- 手动通知管理 ---------- */
     'manual-notice': {
-        background: '【手动通知管理】手动通知管理是通知待办子系统的重要模块，用于管理人员手动发送各类通知消息。支持系统通知、业务通知、紧急通知三种类型，可通过穿梭框选择通知用户，实现精准的消息触达。',
+        background: '【手动通知管理】复制一份通知管理命名为手动通知管理，功能一致；用于手动发送各类通知消息，支持通知模板选择、接收人配置、发送方式设置等。手动通知管理是通知待办子系统的重要模块，用于管理人员手动发送各类通知消息。支持系统通知、业务通知、紧急通知三种类型，可通过穿梭框选择通知用户，实现精准的消息触达。',
         targetUsers: '系统管理员、通知管理员、部门管理员',
         coreFeatures: '1.多条件组合查询 2.新增通知 3.查看通知详情 4.通知用户（穿梭框选择） 5.列表字段排序 6.草稿/已发送状态管理',
         businessFlow: '进入手动通知管理页 -> 点击"新增通知" -> 填写通知标题 -> 选择通知类型 -> 编辑通知内容 -> 保存为草稿/直接发送 -> 点击"通知用户" -> 打开选择用户弹窗 -> 穿梭框选择目标用户 -> 确认发送 -> 发送成功 -> 状态变为已发送',
