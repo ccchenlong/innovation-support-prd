@@ -529,67 +529,49 @@
 var navConfig = [
     { key: 'overview', label: '概览总览', icon: 'fa-home', type: 'page' },
     {
-        key: 'g-tags', label: '标签管理', icon: 'fa-tags', type: 'group',
+        key: 'g-workbench', label: '工作台管理', icon: 'fa-th-large', type: 'group',
         children: [
-            { key: 'tags-manage', label: '分类管理', type: 'page' },
-            { key: 'tags-group', label: '分组管理', type: 'page' },
+            { key: 'workbench-manage', label: '工作台管理', type: 'page' },
         ]
     },
     {
         key: 'g-ticket', label: '工单中心', icon: 'fa-ticket', type: 'group',
         children: [
-            { key: 'ticket-sort', label: '工单排序', type: 'page' },
-            { key: 'ticket-type', label: '工单类型管理', type: 'page' },
+            { key: 'ticket-center', label: '办件中心', type: 'page' },
+            { key: 'ticket-record', label: '办件记录', type: 'page' },
+            { key: 'ticket-cc', label: '工单抄送管理', type: 'page' },
+            { key: 'portal-my-ticket', label: '我的工单', type: 'page' },
             {
                 key: 's-ticket-ops', label: '工单管理运营侧', type: 'subgroup',
                 children: [
-                    { key: 'ticket-flow', label: '工单流程配置管理', type: 'page' },
                     { key: 'ticket-my-todo', label: '我的代办', type: 'page' },
                     { key: 'ticket-cc-mine', label: '抄送我的工单', type: 'page' },
                 ]
             },
-            { key: 'ticket-cc', label: '工单抄送管理', type: 'page' },
-            { key: 'ticket-center', label: '办件中心', type: 'page' },
-            { key: 'ticket-record', label: '办件记录', type: 'page' },
-            { key: 'ticket-evaluation', label: '工单评价管理', type: 'page' },
-        ]
-    },
-    {
-
-        key: 'g-workbench', label: '工作台管理', icon: 'fa-th-large', type: 'group',
-        children: [
-            { key: 'workbench-manage', label: '工作台管理', type: 'page' },
-            { key: 'workbench-template', label: '模板管理', type: 'page' },
-            { key: 'workbench-category', label: '分类管理', type: 'page' },
-            { key: 'workbench-manual', label: '工作台手册管理', type: 'page' },
         ]
     },
     {
         key: 'g-app', label: '应用管理', icon: 'fa-th-large', type: 'group',
         children: [
-            { key: 'app-apply', label: '应用申请', type: 'page' },
-            { key: 'app-audit', label: '应用审核', type: 'page' },
             { key: 'app-list', label: '应用列表', type: 'page' },
-            { key: 'app-monitor', label: '应用监测', type: 'page' },
-            { key: 'app-statistics', label: '应用统计', type: 'page' },
-            { key: 'app-access-flow', label: '应用接入流程审批', type: 'page' },
             { key: 'app-change-flow', label: '应用变更流程审批', type: 'page' },
+            { key: 'app-audit', label: '应用审批列表', type: 'page' },
+            { key: 'app-access-flow', label: '应用接入流程审批', type: 'page' },
+            { key: 'app-apply', label: '应用申请列表', type: 'page' },
         ]
     },
     {
-        key: 'g-notice-todo', label: '通知待办', icon: 'fa-bell', type: 'group',
+        key: 'g-portal-platform', label: '开放平台门户', icon: 'fa-globe', type: 'group',
         children: [
-            { key: 'todo-manage', label: '待办管理', type: 'page' },
-            { key: 'manual-notice', label: '手动通知管理', type: 'page' },
+            { key: 'portal-config', label: '门户首页配置', type: 'page' },
         ]
     },
     {
         key: 'g-portal', label: '开放门户管理', icon: 'fa-globe', type: 'group',
         children: [
-            { key: 'notice', label: '通知公告管理', type: 'page' },
-            { key: 'access-steps', label: '接入步骤管理', type: 'page' },
             { key: 'global-search', label: '全局搜索管理', type: 'page' },
-            { key: 'portal-my-ticket', label: '我的工单', type: 'page' },
+            { key: 'help-info', label: '帮助信息管理', type: 'page' },
+            { key: 'app-case-manage', label: '应用案例管理', type: 'page' },
             {
                 key: 's-portal-ability', label: '开放能力管理', type: 'subgroup',
                 children: [
@@ -597,47 +579,27 @@ var navConfig = [
                     { key: 'api-error-code', label: '接口错误码管理', type: 'page' },
                 ]
             },
-            { key: 'app-case-manage', label: '应用案例管理', type: 'page' },
-            { key: 'portal-config', label: '门户配置', type: 'page' },
-        ]
-    },
-    {
-        key: 'g-provider', label: '软件服务商工作台', icon: 'fa-building', type: 'group',
-        children: [
-            { key: 'provider', label: '软件服务商管理', type: 'page' },
-            { key: 'provider-notice', label: '消息通知管理', type: 'page' },
-            { key: 'provider-entry', label: '软件服务商入驻管理', type: 'page' },
+            { key: 'access-steps', label: '接入步骤管理', type: 'page' },
+            { key: 'notice', label: '通知公告管理', type: 'page' },
         ]
     },
     {
         key: 'g-perm', label: '权限管理', icon: 'fa-shield', type: 'group',
         children: [
-            {
-                key: 's-perm-role', label: '角色管理', type: 'subgroup',
-                children: [
-                    { key: 'role', label: '角色管理', type: 'page' },
-                    { key: 'perm-group', label: '权限组管理', type: 'page' },
-                ]
-            },
-            {
-                key: 's-perm-auth', label: '授权管理', type: 'subgroup',
-                children: [
-                    { key: 'admin-auth', label: '管理员授权', type: 'page' },
-                    { key: 'role-perm', label: '角色权限组关联', type: 'page' },
-                    { key: 'user-perm-group', label: '用户权限组关联', type: 'page' },
-                ]
-            },
-            { key: 'menu', label: '菜单管理', type: 'page' },
+            { key: 'admin-auth', label: '授权管理', type: 'page' },
+        ]
+    },
+    {
+        key: 'g-tags', label: '标签管理', icon: 'fa-tags', type: 'group',
+        children: [
+            { key: 'tags-group', label: '标签管理', type: 'page' },
         ]
     },
     {
         key: 'g-sys', label: '系统管理', icon: 'fa-cog', type: 'group',
         children: [
-            { key: 'dict-manage', label: '字典管理', type: 'page' },
-            { key: 'sys-log', label: '日志管理', type: 'page' },
             { key: 'sys-basic-settings', label: '基础设置', type: 'page' },
-            { key: 'sys-online-user', label: '在线用户管理', type: 'page' },
-            { key: 'sys-sync-app', label: '同步应用管理', type: 'page' },
+            { key: 'sys-log', label: '日志管理', type: 'page' },
         ]
     },
     {
@@ -650,25 +612,34 @@ var navConfig = [
                     { key: 'user', label: '用户管理', type: 'page' },
                 ]
             },
+            { key: 'line', label: '机构条线管理', type: 'page' },
+            { key: 'user-appointment', label: '用户任职管理', type: 'page' },
             {
                 key: 's-org-setting', label: '组织机构设置', type: 'subgroup',
                 children: [
                     { key: 'title-level', label: '职级职称管理', type: 'page' },
+                    { key: 'position-manage', label: '职务管理', type: 'page' },
                     { key: 'ext-field', label: '拓展字段管理', type: 'page' },
                 ]
             },
-            { key: 'transfer', label: '用户任职调离管理', type: 'page' },
-            {
-                key: 's-visibility', label: '通讯录可见性管理', type: 'subgroup',
-                children: [
-                    { key: 'person-visibility', label: '人员可见性配置', type: 'page' },
-                    { key: 'branch-visibility', label: '分支可见性配置', type: 'page' },
-                ]
-            },
-            { key: 'line', label: '机构条线管理', type: 'page' },
         ]
     },
-];
+    {
+        key: 'g-provider', label: '软件服务商工作台', icon: 'fa-building', type: 'group',
+        children: [
+            { key: 'provider-notice', label: '消息通知管理', type: 'page' },
+            { key: 'provider-entry', label: '软件服务商入驻管理', type: 'page' },
+            { key: 'provider', label: '软件服务商管理', type: 'page' },
+        ]
+    },
+    {
+        key: 'g-notice-todo', label: '通知待办', icon: 'fa-bell', type: 'group',
+        children: [
+            { key: 'todo-manage', label: '待办管理', type: 'page' },
+            { key: 'manual-notice', label: '手动通知管理', type: 'page' },
+        ]
+    },
+];;
 
 /* ============================================================
  * 2. 页面配置与数据 - 数据驱动
@@ -1111,78 +1082,213 @@ var pageConfigs = {
 
     /* ---------- 管理员授权 ---------- */
     'admin-auth': {
-        type: 'admin-auth',
-        breadcrumb: ['权限管理', '授权管理', '管理员授权'],
+        type: 'tab-table',
+        breadcrumb: ['权限管理', '授权管理'],
         tabs: [
-            { key: 'super', label: '超级管理员' },
-            { key: 'platform', label: '平台管理员' },
-            { key: 'graded', label: '分级管理员' },
+            { key: 'app', label: '应用管理员' },
             { key: 'workbench', label: '工作台管理员' },
             { key: 'ticket', label: '工单管理员' },
-            { key: 'app', label: '应用管理员' },
-            { key: 'line', label: '条线管理员' },
+            { key: 'role', label: '角色' },
+            { key: 'rolePerm', label: '角色权限组' },
+            { key: 'userPerm', label: '用户权限组' },
+            { key: 'menu', label: '菜单管理' },
         ],
-        redirectTabs: ['workbench', 'ticket', 'app', 'line'],
-        query: [
-            { key: 'name', label: '用户姓名', type: 'input', placeholder: '请输入用户姓名' },
-            { key: 'phone', label: '手机号', type: 'input', placeholder: '请输入手机号' },
-            { key: 'org', label: '管理机构', type: 'select', placeholder: '请选择', options: [{ value: '', label: '全部' }, { value: '省厅', label: '省厅' }, { value: '市局', label: '市局' }, { value: '县局', label: '县局' }] },
-            { key: 'status', label: '状态', type: 'select', placeholder: '请选择', options: [{ value: '', label: '全部' }, { value: '1', label: '启用' }, { value: '0', label: '停用' }] },
-        ],
-        toolbar: [{ type: 'add', text: '新增管理员' }, { type: 'batchDelete' }],
-        columns: [
-            { type: 'checkbox' },
-            { type: 'index', title: '序号' },
-            { key: 'name', title: '被授权用户', sortable: true },
-            { key: 'phone', title: '手机号' },
-            { key: 'org', title: '管理机构' },
-            { key: 'scope', title: '管理范围' },
-            { key: 'status', title: '状态', type: 'toggle' },
-            { key: 'authorizer', title: '授权人' },
-            { key: 'updateTime', title: '更新时间', sortable: true },
-            { type: 'actions', title: '操作', actions: [{ key: 'view', label: '查看' }, { key: 'edit', label: '编辑' }, { key: 'delete', label: '删除', danger: true }] },
-        ],
-        tabData: {
-            'super': [
-                { id: 1, name: '陈龙', phone: '13800138001', org: '省厅', scope: '全省', status: true, authorizer: '系统', updateTime: '2025-01-01 10:00:00' },
-                { id: 2, name: '张伟', phone: '13800138002', org: '省厅', scope: '全省', status: true, authorizer: '系统', updateTime: '2025-01-05 14:30:00' },
-            ],
-            'platform': [
-                { id: 1, name: '李娜', phone: '13900139001', org: '省厅', scope: '省级平台', status: true, authorizer: '陈龙', updateTime: '2025-01-10 10:00:00' },
-                { id: 2, name: '王强', phone: '13900139002', org: '省厅', scope: '省级平台', status: true, authorizer: '陈龙', updateTime: '2025-01-12 14:30:00' },
-                { id: 3, name: '赵敏', phone: '13900139003', org: '省厅', scope: '省级平台', status: false, authorizer: '陈龙', updateTime: '2025-01-15 09:15:00' },
-            ],
-            'graded': [
-                { id: 1, name: '刘洋', phone: '13700137001', org: '市局', scope: '赣州市', status: true, authorizer: '李娜', updateTime: '2025-02-01 10:00:00' },
-                { id: 2, name: '陈红', phone: '13700137002', org: '市局', scope: '南昌市', status: true, authorizer: '李娜', updateTime: '2025-02-03 14:30:00' },
-                { id: 3, name: '杨光', phone: '13700137003', org: '县局', scope: '于都县', status: true, authorizer: '刘洋', updateTime: '2025-02-05 09:15:00' },
-                { id: 4, name: '周杰', phone: '13700137004', org: '县局', scope: '信丰县', status: false, authorizer: '刘洋', updateTime: '2025-02-08 16:45:00' },
-            ],
-            'workbench': [
-                { id: 1, name: '孙莉', phone: '13600136001', org: '省厅', scope: '工作台管理', status: true, authorizer: '陈龙', updateTime: '2025-03-01 10:00:00' },
-                { id: 2, name: '吴军', phone: '13600136002', org: '市局', scope: '工作台管理', status: true, authorizer: '李娜', updateTime: '2025-03-03 14:30:00' },
-                { id: 3, name: '郑华', phone: '13600136003', org: '县局', scope: '工作台管理', status: false, authorizer: '李娜', updateTime: '2025-03-05 09:15:00' },
-            ],
-            'ticket': [
-                { id: 1, name: '黄磊', phone: '13500135001', org: '省厅', scope: '工单管理', status: true, authorizer: '陈龙', updateTime: '2025-03-10 10:00:00' },
-                { id: 2, name: '林峰', phone: '13500135002', org: '市局', scope: '工单管理', status: true, authorizer: '李娜', updateTime: '2025-03-12 14:30:00' },
-                { id: 3, name: '高远', phone: '13500135003', org: '县局', scope: '工单管理', status: false, authorizer: '刘洋', updateTime: '2025-03-15 09:15:00' },
-            ],
-            'app': [
-                { id: 1, name: '朱峰', phone: '13300133001', org: '省厅', scope: '应用管理', status: true, authorizer: '陈龙', updateTime: '2025-03-28 10:00:00' },
-                { id: 2, name: '许婷', phone: '13300133002', org: '省厅', scope: '应用管理', status: true, authorizer: '陈龙', updateTime: '2025-03-29 14:30:00' },
-                { id: 3, name: '郭明', phone: '13300133003', org: '市局', scope: '应用管理', status: true, authorizer: '李娜', updateTime: '2025-04-01 09:15:00' },
-                { id: 4, name: '何丽', phone: '13300133004', org: '市局', scope: '应用管理', status: false, authorizer: '李娜', updateTime: '2025-04-02 16:45:00' },
-                { id: 5, name: '曹伟', phone: '13300133005', org: '县局', scope: '应用管理', status: true, authorizer: '刘洋', updateTime: '2025-04-03 11:20:00' },
-                { id: 6, name: '潘燕', phone: '13300133006', org: '县局', scope: '应用管理', status: true, authorizer: '刘洋', updateTime: '2025-04-05 08:30:00' },
-                { id: 7, name: '蒋磊', phone: '13300133007', org: '县局', scope: '应用管理', status: false, authorizer: '刘洋', updateTime: '2025-04-06 13:00:00' },
-                { id: 8, name: '沈颖', phone: '13300133008', org: '省厅', scope: '应用监测', status: true, authorizer: '陈龙', updateTime: '2025-04-08 10:30:00' },
-            ],
-            'line': [
-                { id: 1, name: '何静', phone: '13400134001', org: '县局', scope: '于都条线', status: true, authorizer: '刘洋', updateTime: '2025-03-20 10:00:00' },
-                { id: 2, name: '马超', phone: '13400134002', org: '县局', scope: '信丰条线', status: true, authorizer: '刘洋', updateTime: '2025-03-22 14:30:00' },
-                { id: 3, name: '罗琳', phone: '13400134003', org: '县局', scope: '兴国条线', status: false, authorizer: '刘洋', updateTime: '2025-03-25 09:15:00' },
-            ],
+        tabConfigs: {
+            'app': {
+                query: [
+                    { key: 'name', label: '管理员姓名', type: 'input', placeholder: '请输入姓名' },
+                    { key: 'account', label: '账号', type: 'input', placeholder: '请输入账号' },
+                    { key: 'org', label: '所属机构', type: 'select', placeholder: '请选择', options: [{ value: '', label: '全部' }, { value: '省厅', label: '省厅' }, { value: '市局', label: '市局' }, { value: '县局', label: '县局' }] },
+                    { key: 'status', label: '状态', type: 'select', placeholder: '请选择', options: [{ value: '', label: '全部' }, { value: '1', label: '启用' }, { value: '0', label: '停用' }] },
+                ],
+                toolbar: [{ type: 'add', text: '新增管理员' }, { type: 'batchDelete' }],
+                columns: [
+                    { type: 'checkbox' },
+                    { type: 'index', title: '序号' },
+                    { key: 'name', title: '管理员姓名', sortable: true },
+                    { key: 'account', title: '账号' },
+                    { key: 'org', title: '所属机构' },
+                    { key: 'scope', title: '管理范围' },
+                    { key: 'status', title: '状态', type: 'toggle' },
+                    { key: 'createTime', title: '创建时间', sortable: true },
+                    { type: 'actions', title: '操作', actions: [{ key: 'view', label: '查看' }, { key: 'edit', label: '编辑' }, { key: 'appRel', label: '应用关联' }, { key: 'accountRel', label: '账号关联' }, { key: 'resetPwd', label: '重置密码' }, { key: 'delete', label: '删除', danger: true }] },
+                ],
+                data: [
+                    { id: 1, name: '朱峰', account: 'zhufeng', org: '省厅', scope: '应用管理', status: true, createTime: '2025-03-28 10:00:00' },
+                    { id: 2, name: '许婷', account: 'xuting', org: '省厅', scope: '应用管理', status: true, createTime: '2025-03-29 14:30:00' },
+                    { id: 3, name: '郭明', account: 'guoming', org: '市局', scope: '应用管理', status: true, createTime: '2025-04-01 09:15:00' },
+                    { id: 4, name: '何丽', account: 'heli', org: '市局', scope: '应用管理', status: false, createTime: '2025-04-02 16:45:00' },
+                    { id: 5, name: '曹伟', account: 'caowei', org: '县局', scope: '应用管理', status: true, createTime: '2025-04-03 11:20:00' },
+                    { id: 6, name: '潘燕', account: 'panyan', org: '县局', scope: '应用管理', status: true, createTime: '2025-04-05 08:30:00' },
+                    { id: 7, name: '蒋磊', account: 'jianglei', org: '县局', scope: '应用管理', status: false, createTime: '2025-04-06 13:00:00' },
+                    { id: 8, name: '沈颖', account: 'shenying', org: '省厅', scope: '应用监测', status: true, createTime: '2025-04-08 10:30:00' },
+                ],
+            },
+            'workbench': {
+                query: [
+                    { key: 'name', label: '管理员姓名', type: 'input', placeholder: '请输入姓名' },
+                    { key: 'account', label: '账号', type: 'input', placeholder: '请输入账号' },
+                    { key: 'org', label: '所属机构', type: 'select', placeholder: '请选择', options: [{ value: '', label: '全部' }, { value: '省厅', label: '省厅' }, { value: '市局', label: '市局' }, { value: '县局', label: '县局' }] },
+                    { key: 'status', label: '状态', type: 'select', placeholder: '请选择', options: [{ value: '', label: '全部' }, { value: '1', label: '启用' }, { value: '0', label: '停用' }] },
+                ],
+                toolbar: [{ type: 'add', text: '新增管理员' }, { type: 'batchDelete' }],
+                columns: [
+                    { type: 'checkbox' },
+                    { type: 'index', title: '序号' },
+                    { key: 'name', title: '管理员姓名', sortable: true },
+                    { key: 'account', title: '账号' },
+                    { key: 'org', title: '所属机构' },
+                    { key: 'scope', title: '管理范围' },
+                    { key: 'status', title: '状态', type: 'toggle' },
+                    { key: 'createTime', title: '创建时间', sortable: true },
+                    { type: 'actions', title: '操作', actions: [{ key: 'view', label: '查看' }, { key: 'edit', label: '编辑' }, { key: 'delete', label: '删除', danger: true }] },
+                ],
+                data: [
+                    { id: 1, name: '孙莉', account: 'sunli', org: '省厅', scope: '工作台管理', status: true, createTime: '2025-03-01 10:00:00' },
+                    { id: 2, name: '吴军', account: 'wujun', org: '市局', scope: '工作台管理', status: true, createTime: '2025-03-03 14:30:00' },
+                    { id: 3, name: '郑华', account: 'zhenghua', org: '县局', scope: '工作台管理', status: false, createTime: '2025-03-05 09:15:00' },
+                ],
+            },
+            'ticket': {
+                query: [
+                    { key: 'name', label: '管理员姓名', type: 'input', placeholder: '请输入姓名' },
+                    { key: 'account', label: '账号', type: 'input', placeholder: '请输入账号' },
+                    { key: 'org', label: '所属机构', type: 'select', placeholder: '请选择', options: [{ value: '', label: '全部' }, { value: '省厅', label: '省厅' }, { value: '市局', label: '市局' }, { value: '县局', label: '县局' }] },
+                    { key: 'status', label: '状态', type: 'select', placeholder: '请选择', options: [{ value: '', label: '全部' }, { value: '1', label: '启用' }, { value: '0', label: '停用' }] },
+                ],
+                toolbar: [{ type: 'add', text: '新增管理员' }, { type: 'batchDelete' }],
+                columns: [
+                    { type: 'checkbox' },
+                    { type: 'index', title: '序号' },
+                    { key: 'name', title: '管理员姓名', sortable: true },
+                    { key: 'account', title: '账号' },
+                    { key: 'org', title: '所属机构' },
+                    { key: 'scope', title: '管理范围' },
+                    { key: 'status', title: '状态', type: 'toggle' },
+                    { key: 'createTime', title: '创建时间', sortable: true },
+                    { type: 'actions', title: '操作', actions: [{ key: 'view', label: '查看' }, { key: 'edit', label: '编辑' }, { key: 'delete', label: '删除', danger: true }] },
+                ],
+                data: [
+                    { id: 1, name: '黄磊', account: 'huanglei', org: '省厅', scope: '工单管理', status: true, createTime: '2025-03-10 10:00:00' },
+                    { id: 2, name: '林峰', account: 'linfeng', org: '市局', scope: '工单管理', status: true, createTime: '2025-03-12 14:30:00' },
+                    { id: 3, name: '高远', account: 'gaoyuan', org: '县局', scope: '工单管理', status: false, createTime: '2025-03-15 09:15:00' },
+                    { id: 4, name: '张丽', account: 'zhangli', org: '省厅', scope: '工单审批', status: true, createTime: '2025-03-18 11:00:00' },
+                    { id: 5, name: '王强', account: 'wangqiang', org: '市局', scope: '工单处理', status: true, createTime: '2025-03-20 16:20:00' },
+                    { id: 6, name: '李娜', account: 'lina', org: '县局', scope: '工单查看', status: true, createTime: '2025-03-22 08:45:00' },
+                    { id: 7, name: '赵鹏', account: 'zhaopeng', org: '省厅', scope: '工单统计', status: false, createTime: '2025-03-25 13:30:00' },
+                    { id: 8, name: '陈静', account: 'chenjing', org: '市局', scope: '工单评价', status: true, createTime: '2025-03-28 10:15:00' },
+                ],
+            },
+            'role': {
+                query: [
+                    { key: 'name', label: '角色名称', type: 'input', placeholder: '请输入角色名称' },
+                    { key: 'status', label: '状态', type: 'select', placeholder: '请选择', options: [{ value: '', label: '全部' }, { value: '1', label: '启用' }, { value: '0', label: '停用' }] },
+                ],
+                toolbar: [{ type: 'add', text: '新增角色' }, { type: 'batchDelete' }],
+                columns: [
+                    { type: 'checkbox' },
+                    { type: 'index', title: '序号' },
+                    { key: 'name', title: '角色名称', sortable: true },
+                    { key: 'code', title: '角色编码' },
+                    { key: 'description', title: '角色描述' },
+                    { key: 'userCount', title: '关联用户数' },
+                    { key: 'status', title: '状态', type: 'toggle' },
+                    { key: 'createTime', title: '创建时间', sortable: true },
+                    { type: 'actions', title: '操作', actions: [{ key: 'view', label: '查看' }, { key: 'edit', label: '编辑' }, { key: 'delete', label: '删除', danger: true }] },
+                ],
+                data: [
+                    { id: 1, name: '超级管理员', code: 'SUPER_ADMIN', description: '拥有系统所有权限', userCount: 2, status: true, createTime: '2025-01-01 10:00:00' },
+                    { id: 2, name: '应用管理员', code: 'APP_ADMIN', description: '负责应用管理相关权限', userCount: 8, status: true, createTime: '2025-01-05 14:30:00' },
+                    { id: 3, name: '工单管理员', code: 'TICKET_ADMIN', description: '负责工单管理相关权限', userCount: 5, status: true, createTime: '2025-01-10 09:15:00' },
+                    { id: 4, name: '机构管理员', code: 'ORG_ADMIN', description: '负责组织机构管理权限', userCount: 6, status: true, createTime: '2025-01-15 16:45:00' },
+                    { id: 5, name: '普通用户', code: 'NORMAL_USER', description: '基础功能访问权限', userCount: 120, status: true, createTime: '2025-01-20 11:20:00' },
+                    { id: 6, name: '访客角色', code: 'GUEST', description: '只读权限', userCount: 15, status: false, createTime: '2025-02-01 08:30:00' },
+                ],
+            },
+            'rolePerm': {
+                query: [
+                    { key: 'name', label: '权限组名称', type: 'input', placeholder: '请输入名称' },
+                    { key: 'status', label: '状态', type: 'select', placeholder: '请选择', options: [{ value: '', label: '全部' }, { value: '1', label: '启用' }, { value: '0', label: '停用' }] },
+                ],
+                toolbar: [{ type: 'add', text: '新增权限组' }, { type: 'batchDelete' }],
+                columns: [
+                    { type: 'checkbox' },
+                    { type: 'index', title: '序号' },
+                    { key: 'name', title: '权限组名称', sortable: true },
+                    { key: 'code', title: '权限组编码' },
+                    { key: 'roleCount', title: '关联角色数' },
+                    { key: 'permCount', title: '权限数量' },
+                    { key: 'status', title: '状态', type: 'toggle' },
+                    { key: 'createTime', title: '创建时间', sortable: true },
+                    { type: 'actions', title: '操作', actions: [{ key: 'view', label: '查看' }, { key: 'edit', label: '编辑' }, { key: 'delete', label: '删除', danger: true }] },
+                ],
+                data: [
+                    { id: 1, name: '应用管理权限组', code: 'APP_MGMT_PERM', roleCount: 3, permCount: 25, status: true, createTime: '2025-02-01 10:00:00' },
+                    { id: 2, name: '工单管理权限组', code: 'TICKET_MGMT_PERM', roleCount: 4, permCount: 18, status: true, createTime: '2025-02-05 14:30:00' },
+                    { id: 3, name: '机构管理权限组', code: 'ORG_MGMT_PERM', roleCount: 2, permCount: 15, status: true, createTime: '2025-02-10 09:15:00' },
+                    { id: 4, name: '统计查看权限组', code: 'STAT_VIEW_PERM', roleCount: 5, permCount: 8, status: false, createTime: '2025-02-15 16:45:00' },
+                    { id: 5, name: '系统配置权限组', code: 'SYS_CFG_PERM', roleCount: 2, permCount: 12, status: true, createTime: '2025-02-20 11:20:00' },
+                ],
+            },
+            'userPerm': {
+                query: [
+                    { key: 'name', label: '用户姓名', type: 'input', placeholder: '请输入用户姓名' },
+                    { key: 'groupName', label: '权限组名称', type: 'input', placeholder: '请输入权限组名称' },
+                    { key: 'status', label: '状态', type: 'select', placeholder: '请选择', options: [{ value: '', label: '全部' }, { value: '1', label: '启用' }, { value: '0', label: '停用' }] },
+                ],
+                toolbar: [{ type: 'add', text: '新增关联' }, { type: 'batchDelete' }],
+                columns: [
+                    { type: 'checkbox' },
+                    { type: 'index', title: '序号' },
+                    { key: 'userName', title: '用户姓名', sortable: true },
+                    { key: 'account', title: '用户账号' },
+                    { key: 'groupName', title: '权限组名称' },
+                    { key: 'orgName', title: '所属机构' },
+                    { key: 'status', title: '状态', type: 'tag', tagMap: { true: { text: '生效中', color: 'green' }, false: { text: '已失效', color: 'red' } } },
+                    { key: 'createTime', title: '关联时间', sortable: true },
+                    { type: 'actions', title: '操作', actions: [{ key: 'view', label: '查看' }, { key: 'edit', label: '编辑' }, { key: 'delete', label: '删除', danger: true }] },
+                ],
+                data: [
+                    { id: 1, userName: '陈龙', account: 'chenlong', groupName: '应用管理权限组', orgName: '省厅', status: true, createTime: '2025-03-01 10:00:00' },
+                    { id: 2, userName: '李娜', account: 'lina', groupName: '工单管理权限组', orgName: '省厅', status: true, createTime: '2025-03-05 14:30:00' },
+                    { id: 3, userName: '王强', account: 'wangqiang', groupName: '机构管理权限组', orgName: '市局', status: true, createTime: '2025-03-10 09:15:00' },
+                    { id: 4, userName: '张伟', account: 'zhangwei', groupName: '应用管理权限组', orgName: '市局', status: false, createTime: '2025-03-15 16:45:00' },
+                    { id: 5, userName: '刘芳', account: 'liufang', groupName: '统计查看权限组', orgName: '县局', status: true, createTime: '2025-03-20 11:20:00' },
+                    { id: 6, userName: '陈明', account: 'chenming', groupName: '系统配置权限组', orgName: '省厅', status: true, createTime: '2025-03-25 08:30:00' },
+                ],
+            },
+            'menu': {
+                query: [
+                    { key: 'name', label: '菜单名称', type: 'input', placeholder: '请输入菜单名称' },
+                    { key: 'status', label: '状态', type: 'select', placeholder: '请选择', options: [{ value: '', label: '全部' }, { value: '1', label: '启用' }, { value: '0', label: '停用' }] },
+                ],
+                toolbar: [{ type: 'add', text: '新增菜单' }, { type: 'batchDelete' }],
+                columns: [
+                    { type: 'checkbox' },
+                    { type: 'index', title: '序号' },
+                    { key: 'name', title: '菜单名称', sortable: true },
+                    { key: 'code', title: '菜单编码' },
+                    { key: 'type', title: '菜单类型', type: 'tag', tagMap: { 'dir': { text: '目录', color: 'blue' }, 'menu': { text: '菜单', color: 'green' }, 'button': { text: '按钮', color: 'orange' } } },
+                    { key: 'icon', title: '图标' },
+                    { key: 'sortNo', title: '排序号', sortable: true },
+                    { key: 'status', title: '状态', type: 'toggle' },
+                    { type: 'actions', title: '操作', actions: [{ key: 'view', label: '查看' }, { key: 'edit', label: '编辑' }, { key: 'delete', label: '删除', danger: true }] },
+                ],
+                data: [
+                    { id: 1, name: '工作台管理', code: 'workbench', type: 'dir', icon: 'fa-th-large', sortNo: 1, status: true },
+                    { id: 2, name: '工作台管理页', code: 'workbench-manage', type: 'menu', icon: 'fa-desktop', sortNo: 1, status: true },
+                    { id: 3, name: '工单中心', code: 'ticket', type: 'dir', icon: 'fa-ticket', sortNo: 2, status: true },
+                    { id: 4, name: '办件中心', code: 'ticket-center', type: 'menu', icon: 'fa-inbox', sortNo: 1, status: true },
+                    { id: 5, name: '办件记录', code: 'ticket-record', type: 'menu', icon: 'fa-file-text-o', sortNo: 2, status: true },
+                    { id: 6, name: '应用管理', code: 'app', type: 'dir', icon: 'fa-th-large', sortNo: 3, status: true },
+                    { id: 7, name: '应用列表', code: 'app-list', type: 'menu', icon: 'fa-list', sortNo: 1, status: true },
+                    { id: 8, name: '系统管理', code: 'system', type: 'dir', icon: 'fa-cog', sortNo: 10, status: true },
+                    { id: 9, name: '基础设置', code: 'basic-settings', type: 'menu', icon: 'fa-wrench', sortNo: 1, status: true },
+                    { id: 10, name: '日志管理', code: 'log', type: 'menu', icon: 'fa-file-text-o', sortNo: 2, status: true },
+                    { id: 11, name: '新增按钮', code: 'btn_add', type: 'button', icon: 'fa-plus', sortNo: 1, status: true },
+                    { id: 12, name: '删除按钮', code: 'btn_delete', type: 'button', icon: 'fa-trash', sortNo: 2, status: true },
+                ],
+            },
         },
     },
 
@@ -1790,13 +1896,13 @@ var pageConfigs = {
     /* ---------- 机构条线管理 ---------- */
     'line': {
         type: 'line-layout',
-        breadcrumb: ['机构管理', '条线管理'],
+        breadcrumb: ['组织机构管理', '机构条线管理'],
         query: [
             { key: 'name', label: '条线名称', type: 'input', placeholder: '请输入条线名称' },
             { key: 'lineType', label: '条线类型', type: 'select', placeholder: '请选择', options: [{ value: '', label: '全部' }, { value: '业务条线', label: '业务条线' }, { value: '管理条线', label: '管理条线' }, { value: '技术条线', label: '技术条线' }] },
             { key: 'status', label: '状态', type: 'select', placeholder: '请选择', options: [{ value: '', label: '全部' }, { value: 'true', label: '启用' }, { value: 'false', label: '停用' }] },
         ],
-        toolbar: [{ type: 'add', text: '新增条线' }, { type: 'batchDelete' }, { type: 'custom', text: '条线机构批量查看', icon: 'fa-eye', onClick: 'openLineBatchView()' }, { type: 'custom', text: '条线用户管理', icon: 'fa-users', onClick: 'openLineUserMgmt()' }],
+        toolbar: [{ type: 'add', text: '新增条线' }, { type: 'batchDelete' }, { type: 'custom', text: '条线用户管理', icon: 'fa-users', onClick: 'openLineUserMgmt()' }, { type: 'custom', text: '条线管理员', icon: 'fa-user-circle', onClick: 'openLineAdminMgmt()' }],
         columns: [
             { type: 'checkbox' },
             { type: 'index', title: '序号' },
@@ -2720,45 +2826,100 @@ var pageConfigs = {
         type: 'tab-table',
         breadcrumb: ['系统管理', '日志管理'],
         tabs: [
-            { key: 'operate', label: '操作日志' },
-            { key: 'login', label: '登录日志' },
+            { key: 'api', label: 'API操作日志' },
+            { key: 'sync', label: '同步记录日志' },
             { key: 'sms', label: '短信发送日志' },
         ],
-        query: [
-            { key: 'keyword', label: '关键词', type: 'input', placeholder: '请输入关键词' },
-            { key: 'operator', label: '操作人', type: 'input', placeholder: '请输入操作人' },
-            { key: 'dateRange', label: '时间范围', type: 'input', placeholder: '开始时间 - 结束时间' },
-        ],
-        toolbar: [{ type: 'export' }],
-        columns: [
-            { type: 'index', title: '序号' },
-            { key: 'time', title: '日志时间', sortable: true },
-            { key: 'operator', title: '操作人' },
-            { key: 'opType', title: '操作类型' },
-            { key: 'content', title: '日志内容' },
-            { key: 'ip', title: 'IP地址' },
-            { type: 'actions', title: '操作', actions: [{ key: 'view', label: '详情' }] },
-        ],
-        tabData: {
-            'operate': [
-                { id: 1, time: '2025-03-20 10:30:00', operator: '张三', opType: '新增', content: '新增应用"智慧办公系统"', ip: '192.168.1.101' },
-                { id: 2, time: '2025-03-20 10:25:00', operator: '李四', opType: '修改', content: '修改工单流程配置', ip: '192.168.1.102' },
-                { id: 3, time: '2025-03-20 10:20:00', operator: '王五', opType: '删除', content: '删除过期字典项', ip: '192.168.1.103' },
-                { id: 4, time: '2025-03-20 10:15:00', operator: '赵六', opType: '查询', content: '查询应用列表', ip: '192.168.1.104' },
-                { id: 5, time: '2025-03-20 10:10:00', operator: '钱七', opType: '导出', content: '导出操作日志', ip: '192.168.1.105' },
-            ],
-            'login': [
-                { id: 1, time: '2025-03-20 09:00:00', operator: '张三', opType: '登录', content: '登录系统成功', ip: '192.168.1.101' },
-                { id: 2, time: '2025-03-20 09:05:00', operator: '李四', opType: '登录', content: '登录系统成功', ip: '192.168.1.102' },
-                { id: 3, time: '2025-03-20 09:10:00', operator: 'unknown', opType: '登录失败', content: '密码错误，登录失败', ip: '192.168.1.200' },
-                { id: 4, time: '2025-03-20 09:15:00', operator: '王五', opType: '登出', content: '退出登录', ip: '192.168.1.103' },
-            ],
-            'sms': [
-                { id: 1, time: '2025-03-20 10:30:00', operator: '系统', opType: '验证码', content: '发送验证码短信至138****1234', ip: '系统' },
-                { id: 2, time: '2025-03-20 10:25:00', operator: '系统', opType: '通知', content: '发送工单提醒短信至139****5678', ip: '系统' },
-                { id: 3, time: '2025-03-20 10:20:00', operator: '系统', opType: '验证码', content: '发送验证码短信至137****9012', ip: '系统' },
-                { id: 4, time: '2025-03-20 10:15:00', operator: '系统', opType: '通知', content: '发送审批通知短信至136****3456', ip: '系统' },
-            ],
+        tabConfigs: {
+            'api': {
+                query: [
+                    { key: 'apiName', label: '接口名称', type: 'input', placeholder: '请输入接口名称' },
+                    { key: 'method', label: '请求方式', type: 'select', placeholder: '请选择', options: [{ value: '', label: '全部' }, { value: 'GET', label: 'GET' }, { value: 'POST', label: 'POST' }, { value: 'PUT', label: 'PUT' }, { value: 'DELETE', label: 'DELETE' }] },
+                    { key: 'operator', label: '请求人', type: 'input', placeholder: '请输入请求人' },
+                    { key: 'dateRange', label: '请求时间', type: 'input', placeholder: '开始时间 - 结束时间' },
+                ],
+                toolbar: [{ type: 'export' }],
+                columns: [
+                    { type: 'index', title: '序号' },
+                    { key: 'logId', title: '日志ID', sortable: true },
+                    { key: 'apiName', title: '接口名称' },
+                    { key: 'method', title: '请求方式', type: 'tag', tagMap: { 'GET': { text: 'GET', color: 'green' }, 'POST': { text: 'POST', color: 'blue' }, 'PUT': { text: 'PUT', color: 'orange' }, 'DELETE': { text: 'DELETE', color: 'red' } } },
+                    { key: 'operator', title: '请求人' },
+                    { key: 'requestTime', title: '请求时间', sortable: true },
+                    { key: 'responseStatus', title: '响应状态', type: 'tag', tagMap: { 'success': { text: '成功', color: 'green' }, 'fail': { text: '失败', color: 'red' }, 'error': { text: '异常', color: 'orange' } } },
+                    { key: 'duration', title: '耗时(ms)' },
+                    { type: 'actions', title: '操作', actions: [{ key: 'view', label: '详情' }] },
+                ],
+                data: [
+                    { id: 1, logId: 'LOG202504010001', apiName: '/api/app/list', method: 'GET', operator: '张三', requestTime: '2025-04-01 10:30:00', responseStatus: 'success', duration: 125 },
+                    { id: 2, logId: 'LOG202504010002', apiName: '/api/ticket/create', method: 'POST', operator: '李四', requestTime: '2025-04-01 10:25:00', responseStatus: 'success', duration: 320 },
+                    { id: 3, logId: 'LOG202504010003', apiName: '/api/user/update', method: 'PUT', operator: '王五', requestTime: '2025-04-01 10:20:00', responseStatus: 'fail', duration: 450 },
+                    { id: 4, logId: 'LOG202504010004', apiName: '/api/org/delete', method: 'DELETE', operator: '赵六', requestTime: '2025-04-01 10:15:00', responseStatus: 'error', duration: 1200 },
+                    { id: 5, logId: 'LOG202504010005', apiName: '/api/role/list', method: 'GET', operator: '钱七', requestTime: '2025-04-01 10:10:00', responseStatus: 'success', duration: 85 },
+                    { id: 6, logId: 'LOG202504010006', apiName: '/api/menu/save', method: 'POST', operator: '孙八', requestTime: '2025-04-01 10:05:00', responseStatus: 'success', duration: 210 },
+                    { id: 7, logId: 'LOG202504010007', apiName: '/api/dict/query', method: 'GET', operator: '周九', requestTime: '2025-04-01 10:00:00', responseStatus: 'success', duration: 45 },
+                    { id: 8, logId: 'LOG202504010008', apiName: '/api/log/export', method: 'POST', operator: '吴十', requestTime: '2025-04-01 09:55:00', responseStatus: 'success', duration: 1500 },
+                    { id: 9, logId: 'LOG202504010009', apiName: '/api/auth/login', method: 'POST', operator: 'admin', requestTime: '2025-04-01 09:00:00', responseStatus: 'success', duration: 180 },
+                    { id: 10, logId: 'LOG202504010010', apiName: '/api/notify/send', method: 'POST', operator: '系统', requestTime: '2025-04-01 08:30:00', responseStatus: 'success', duration: 250 },
+                ],
+            },
+            'sync': {
+                query: [
+                    { key: 'syncType', label: '同步类型', type: 'select', placeholder: '请选择', options: [{ value: '', label: '全部' }, { value: 'org', label: '机构同步' }, { value: 'user', label: '用户同步' }, { value: 'app', label: '应用同步' }, { value: 'role', label: '角色同步' }] },
+                    { key: 'status', label: '同步状态', type: 'select', placeholder: '请选择', options: [{ value: '', label: '全部' }, { value: 'success', label: '成功' }, { value: 'fail', label: '失败' }, { value: 'processing', label: '进行中' }] },
+                    { key: 'operator', label: '同步人', type: 'input', placeholder: '请输入同步人' },
+                ],
+                toolbar: [],
+                columns: [
+                    { type: 'index', title: '序号' },
+                    { key: 'recordId', title: '记录ID', sortable: true },
+                    { key: 'syncType', title: '同步类型', type: 'tag', tagMap: { 'org': { text: '机构同步', color: 'blue' }, 'user': { text: '用户同步', color: 'green' }, 'app': { text: '应用同步', color: 'orange' }, 'role': { text: '角色同步', color: 'purple' } } },
+                    { key: 'syncTime', title: '同步时间', sortable: true },
+                    { key: 'status', title: '同步状态', type: 'tag', tagMap: { 'success': { text: '成功', color: 'green' }, 'fail': { text: '失败', color: 'red' }, 'processing': { text: '进行中', color: 'orange' } } },
+                    { key: 'operator', title: '同步人' },
+                    { key: 'totalCount', title: '同步总数' },
+                    { key: 'successCount', title: '成功数' },
+                    { key: 'failCount', title: '失败数' },
+                    { type: 'actions', title: '操作', actions: [{ key: 'view', label: '详情' }, { key: 'retry', label: '重试' }] },
+                ],
+                data: [
+                    { id: 1, recordId: 'SYNC20250401001', syncType: 'org', syncTime: '2025-04-01 08:00:00', status: 'success', operator: '系统定时', totalCount: 156, successCount: 156, failCount: 0 },
+                    { id: 2, recordId: 'SYNC20250401002', syncType: 'user', syncTime: '2025-04-01 08:15:00', status: 'success', operator: '系统定时', totalCount: 2890, successCount: 2890, failCount: 0 },
+                    { id: 3, recordId: 'SYNC20250401003', syncType: 'app', syncTime: '2025-04-01 09:00:00', status: 'processing', operator: '张三', totalCount: 45, successCount: 30, failCount: 0 },
+                    { id: 4, recordId: 'SYNC20250331001', syncType: 'role', syncTime: '2025-03-31 20:00:00', status: 'success', operator: '系统定时', totalCount: 12, successCount: 12, failCount: 0 },
+                    { id: 5, recordId: 'SYNC20250331002', syncType: 'org', syncTime: '2025-03-31 08:00:00', status: 'fail', operator: '系统定时', totalCount: 156, successCount: 140, failCount: 16 },
+                    { id: 6, recordId: 'SYNC20250330001', syncType: 'user', syncTime: '2025-03-30 08:15:00', status: 'success', operator: '系统定时', totalCount: 2885, successCount: 2885, failCount: 0 },
+                    { id: 7, recordId: 'SYNC20250329001', syncType: 'app', syncTime: '2025-03-29 14:30:00', status: 'success', operator: '李四', totalCount: 38, successCount: 38, failCount: 0 },
+                    { id: 8, recordId: 'SYNC20250328001', syncType: 'org', syncTime: '2025-03-28 08:00:00', status: 'success', operator: '系统定时', totalCount: 155, successCount: 155, failCount: 0 },
+                ],
+            },
+            'sms': {
+                query: [
+                    { key: 'receiver', label: '接收人', type: 'input', placeholder: '请输入接收人手机号' },
+                    { key: 'smsType', label: '短信类型', type: 'select', placeholder: '请选择', options: [{ value: '', label: '全部' }, { value: 'verify', label: '验证码' }, { value: 'notify', label: '通知提醒' }, { value: 'marketing', label: '营销短信' }] },
+                    { key: 'status', label: '发送状态', type: 'select', placeholder: '请选择', options: [{ value: '', label: '全部' }, { value: 'success', label: '发送成功' }, { value: 'fail', label: '发送失败' }, { value: 'sending', label: '发送中' }] },
+                ],
+                toolbar: [{ type: 'export' }],
+                columns: [
+                    { type: 'index', title: '序号' },
+                    { key: 'logId', title: '日志ID', sortable: true },
+                    { key: 'receiver', title: '接收人' },
+                    { key: 'smsType', title: '短信类型', type: 'tag', tagMap: { 'verify': { text: '验证码', color: 'blue' }, 'notify': { text: '通知提醒', color: 'green' }, 'marketing': { text: '营销短信', color: 'orange' } } },
+                    { key: 'sendTime', title: '发送时间', sortable: true },
+                    { key: 'status', title: '发送状态', type: 'tag', tagMap: { 'success': { text: '发送成功', color: 'green' }, 'fail': { text: '发送失败', color: 'red' }, 'sending': { text: '发送中', color: 'orange' } } },
+                    { type: 'actions', title: '操作', actions: [{ key: 'view', label: '详情' }, { key: 'resend', label: '重发' }] },
+                ],
+                data: [
+                    { id: 1, logId: 'SMS202504010001', receiver: '138****1234', smsType: 'verify', sendTime: '2025-04-01 10:30:00', status: 'success' },
+                    { id: 2, logId: 'SMS202504010002', receiver: '139****5678', smsType: 'notify', sendTime: '2025-04-01 10:25:00', status: 'success' },
+                    { id: 3, logId: 'SMS202504010003', receiver: '137****9012', smsType: 'verify', sendTime: '2025-04-01 10:20:00', status: 'success' },
+                    { id: 4, logId: 'SMS202504010004', receiver: '136****3456', smsType: 'notify', sendTime: '2025-04-01 10:15:00', status: 'fail' },
+                    { id: 5, logId: 'SMS202504010005', receiver: '135****7890', smsType: 'marketing', sendTime: '2025-04-01 09:00:00', status: 'success' },
+                    { id: 6, logId: 'SMS202504010006', receiver: '134****2345', smsType: 'verify', sendTime: '2025-04-01 08:45:00', status: 'sending' },
+                    { id: 7, logId: 'SMS202503310001', receiver: '133****6789', smsType: 'notify', sendTime: '2025-03-31 16:30:00', status: 'success' },
+                    { id: 8, logId: 'SMS202503310002', receiver: '132****0123', smsType: 'notify', sendTime: '2025-03-31 14:20:00', status: 'success' },
+                ],
+            },
         },
     },
 
@@ -2836,7 +2997,7 @@ var pageConfigs = {
                     { key: 'status', label: '流程状态', type: 'select', placeholder: '请选择', options: [{ value: '', label: '全部' }, { value: 'pending', label: '待审批' }, { value: 'processing', label: '审批中' }, { value: 'approved', label: '已通过' }, { value: 'rejected', label: '已驳回' }] },
                     { key: 'applicant', label: '申请人', type: 'input', placeholder: '请输入申请人' },
                 ],
-                toolbar: [{ type: 'batchDelete' }],
+                toolbar: [{ type: 'add', text: '新增待办' }, { type: 'batchDelete' }, { type: 'export' }],
                 columns: [
                     { type: 'checkbox' },
                     { type: 'index', title: '序号' },
@@ -3219,6 +3380,141 @@ var pageConfigs = {
                 ],
             },
         },
+    },
+
+    /* ---------- 用户任职管理（3Tab） ---------- */
+    'user-appointment': {
+        type: 'tab-table',
+        breadcrumb: ['组织机构管理', '用户任职管理'],
+        tabs: [
+            { key: 'deptHistory', label: '部门任职履历' },
+            { key: 'approvalConfig', label: '任职审批配置' },
+            { key: 'orgRecord', label: '机构任职记录' },
+        ],
+        tabConfigs: {
+            'deptHistory': {
+                query: [
+                    { key: 'userName', label: '用户姓名', type: 'input', placeholder: '请输入用户姓名' },
+                    { key: 'employeeNo', label: '工号', type: 'input', placeholder: '请输入工号' },
+                    { key: 'appointType', label: '任职类型', type: 'select', placeholder: '请选择', options: [{ value: '', label: '全部' }, { value: 'promote', label: '晋升' }, { value: 'transfer', label: '调岗' }, { value: 'demote', label: '降职' }, { value: 'resign', label: '离职' }] },
+                    { key: 'status', label: '状态', type: 'select', placeholder: '请选择', options: [{ value: '', label: '全部' }, { value: 'active', label: '生效中' }, { value: 'pending', label: '待生效' }, { value: 'invalid', label: '已失效' }] },
+                ],
+                toolbar: [{ type: 'add', text: '新增任职' }, { type: 'batchDelete' }],
+                columns: [
+                    { type: 'checkbox' },
+                    { type: 'index', title: '序号' },
+                    { key: 'userName', title: '用户姓名', sortable: true },
+                    { key: 'employeeNo', title: '工号' },
+                    { key: 'fromDept', title: '原部门' },
+                    { key: 'toDept', title: '新部门' },
+                    { key: 'appointType', title: '任职类型', type: 'tag', tagMap: { 'promote': { text: '晋升', color: 'green' }, 'transfer': { text: '调岗', color: 'blue' }, 'demote': { text: '降职', color: 'orange' }, 'resign': { text: '离职', color: 'red' } } },
+                    { key: 'effectiveDate', title: '生效日期', sortable: true },
+                    { key: 'status', title: '状态', type: 'tag', tagMap: { 'active': { text: '生效中', color: 'green' }, 'pending': { text: '待生效', color: 'orange' }, 'invalid': { text: '已失效', color: 'gray' } } },
+                    { type: 'actions', title: '操作', actions: [{ key: 'view', label: '查看' }, { key: 'edit', label: '编辑' }, { key: 'delete', label: '删除', danger: true }] },
+                ],
+                data: [
+                    { id: 1, userName: '张三', employeeNo: 'EMP001', fromDept: '技术部', toDept: '技术部', appointType: 'promote', effectiveDate: '2025-01-01', status: 'active' },
+                    { id: 2, userName: '李四', employeeNo: 'EMP002', fromDept: '市场部', toDept: '销售部', appointType: 'transfer', effectiveDate: '2025-02-15', status: 'active' },
+                    { id: 3, userName: '王五', employeeNo: 'EMP003', fromDept: '研发部', toDept: '测试部', appointType: 'demote', effectiveDate: '2025-03-01', status: 'active' },
+                    { id: 4, userName: '赵六', employeeNo: 'EMP004', fromDept: '人事部', toDept: '-', appointType: 'resign', effectiveDate: '2025-03-10', status: 'invalid' },
+                    { id: 5, userName: '钱七', employeeNo: 'EMP005', fromDept: '财务部', toDept: '财务部', appointType: 'promote', effectiveDate: '2025-04-01', status: 'pending' },
+                    { id: 6, userName: '孙八', employeeNo: 'EMP006', fromDept: '运营部', toDept: '产品部', appointType: 'transfer', effectiveDate: '2025-04-10', status: 'pending' },
+                    { id: 7, userName: '周九', employeeNo: 'EMP007', fromDept: '技术部', toDept: '技术部', appointType: 'promote', effectiveDate: '2024-12-01', status: 'active' },
+                    { id: 8, userName: '吴十', employeeNo: 'EMP008', fromDept: '销售部', toDept: '市场部', appointType: 'transfer', effectiveDate: '2025-01-20', status: 'active' },
+                    { id: 9, userName: '郑十一', employeeNo: 'EMP009', fromDept: '客服部', toDept: '-', appointType: 'resign', effectiveDate: '2025-02-28', status: 'invalid' },
+                    { id: 10, userName: '冯十二', employeeNo: 'EMP010', fromDept: '行政部', toDept: '人事部', appointType: 'transfer', effectiveDate: '2025-03-15', status: 'active' },
+                ],
+            },
+            'approvalConfig': {
+                query: [
+                    { key: 'configName', label: '配置名称', type: 'input', placeholder: '请输入配置名称' },
+                    { key: 'approvalType', label: '审批类型', type: 'select', placeholder: '请选择', options: [{ value: '', label: '全部' }, { value: 'promote', label: '晋升审批' }, { value: 'transfer', label: '调岗审批' }, { value: 'demote', label: '降职审批' }, { value: 'resign', label: '离职审批' }] },
+                    { key: 'enabled', label: '是否启用', type: 'select', placeholder: '请选择', options: [{ value: '', label: '全部' }, { value: '1', label: '启用' }, { value: '0', label: '停用' }] },
+                ],
+                toolbar: [{ type: 'add', text: '新增配置' }, { type: 'batchDelete' }],
+                columns: [
+                    { type: 'checkbox' },
+                    { type: 'index', title: '序号' },
+                    { key: 'configName', title: '配置名称', sortable: true },
+                    { key: 'approvalType', title: '审批类型', type: 'tag', tagMap: { 'promote': { text: '晋升审批', color: 'green' }, 'transfer': { text: '调岗审批', color: 'blue' }, 'demote': { text: '降职审批', color: 'orange' }, 'resign': { text: '离职审批', color: 'red' } } },
+                    { key: 'approvalNodes', title: '审批节点' },
+                    { key: 'approver', title: '审批人' },
+                    { key: 'enabled', title: '是否启用', type: 'toggle' },
+                    { type: 'actions', title: '操作', actions: [{ key: 'view', label: '查看' }, { key: 'edit', label: '编辑' }, { key: 'delete', label: '删除', danger: true }] },
+                ],
+                data: [
+                    { id: 1, configName: '部门经理晋升审批', approvalType: 'promote', approvalNodes: '直属领导→部门总监→HR', approver: '多级审批', enabled: true },
+                    { id: 2, configName: '跨部门调岗审批', approvalType: 'transfer', approvalNodes: '原部门领导→新部门领导→HR', approver: '多级审批', enabled: true },
+                    { id: 3, configName: '员工降职审批', approvalType: 'demote', approvalNodes: '部门总监→HR总监→总经理', approver: '多级审批', enabled: true },
+                    { id: 4, configName: '员工离职审批', approvalType: 'resign', approvalNodes: '直属领导→部门经理→HR→行政', approver: '多级审批', enabled: true },
+                    { id: 5, configName: '高管晋升审批', approvalType: 'promote', approvalNodes: 'CEO→董事会', approver: '多级审批', enabled: false },
+                    { id: 6, configName: '同部门调岗审批', approvalType: 'transfer', approvalNodes: '部门经理→HR', approver: '二级审批', enabled: true },
+                ],
+            },
+            'orgRecord': {
+                query: [
+                    { key: 'userName', label: '用户姓名', type: 'input', placeholder: '请输入用户姓名' },
+                    { key: 'orgName', label: '机构名称', type: 'input', placeholder: '请输入机构名称' },
+                    { key: 'status', label: '任职状态', type: 'select', placeholder: '请选择', options: [{ value: '', label: '全部' }, { value: 'active', label: '在职' }, { value: 'left', label: '已离任' }] },
+                ],
+                toolbar: [{ type: 'add', text: '新增任职' }, { type: 'batchDelete' }],
+                columns: [
+                    { type: 'checkbox' },
+                    { type: 'index', title: '序号' },
+                    { key: 'userName', title: '用户姓名', sortable: true },
+                    { key: 'orgName', title: '机构名称' },
+                    { key: 'position', title: '任职岗位' },
+                    { key: 'startTime', title: '任职开始时间', sortable: true },
+                    { key: 'endTime', title: '任职结束时间' },
+                    { key: 'status', title: '任职状态', type: 'tag', tagMap: { 'active': { text: '在职', color: 'green' }, 'left': { text: '已离任', color: 'gray' } } },
+                    { type: 'actions', title: '操作', actions: [{ key: 'view', label: '查看' }, { key: 'edit', label: '编辑' }, { key: 'delete', label: '删除', danger: true }] },
+                ],
+                data: [
+                    { id: 1, userName: '陈龙', orgName: '云上（江西）大数据发展有限公司', position: '总经理', startTime: '2023-01-01', endTime: '-', status: 'active' },
+                    { id: 2, userName: '李娜', orgName: '云上（江西）大数据发展有限公司', position: '技术总监', startTime: '2023-03-15', endTime: '-', status: 'active' },
+                    { id: 3, userName: '王强', orgName: '赣州市分公司', position: '经理', startTime: '2022-06-01', endTime: '2024-12-31', status: 'left' },
+                    { id: 4, userName: '张伟', orgName: '南昌市分公司', position: '副经理', startTime: '2024-01-01', endTime: '-', status: 'active' },
+                    { id: 5, userName: '刘芳', orgName: '九江市分公司', position: '主管', startTime: '2023-08-01', endTime: '-', status: 'active' },
+                    { id: 6, userName: '陈明', orgName: '上饶市分公司', position: '专员', startTime: '2024-03-01', endTime: '-', status: 'active' },
+                    { id: 7, userName: '赵丽', orgName: '宜春市分公司', position: '经理', startTime: '2022-01-01', endTime: '2024-06-30', status: 'left' },
+                    { id: 8, userName: '孙鹏', orgName: '吉安市分公司', position: '副经理', startTime: '2024-07-01', endTime: '-', status: 'active' },
+                    { id: 9, userName: '周静', orgName: '抚州市分公司', position: '主管', startTime: '2023-11-01', endTime: '-', status: 'active' },
+                    { id: 10, userName: '吴磊', orgName: '萍乡市分公司', position: '专员', startTime: '2024-05-01', endTime: '-', status: 'active' },
+                ],
+            },
+        },
+    },
+
+    /* ---------- 职务管理 ---------- */
+    'position-manage': {
+        breadcrumb: ['组织机构管理', '组织机构设置', '职务管理'],
+        query: [
+            { key: 'name', label: '职务名称', type: 'input', placeholder: '请输入职务名称' },
+            { key: 'code', label: '职务编码', type: 'input', placeholder: '请输入职务编码' },
+            { key: 'status', label: '状态', type: 'select', placeholder: '请选择', options: [{ value: '', label: '全部' }, { value: '1', label: '启用' }, { value: '0', label: '停用' }] },
+        ],
+        toolbar: [{ type: 'add', text: '新增职务' }, { type: 'batchDelete' }, { type: 'import' }, { type: 'export' }],
+        columns: [
+            { type: 'checkbox' },
+            { type: 'index', title: '序号' },
+            { key: 'name', title: '职务名称', sortable: true },
+            { key: 'code', title: '职务编码', sortable: true },
+            { key: 'level', title: '职务级别' },
+            { key: 'sortNo', title: '排序号' },
+            { key: 'status', title: '状态', type: 'tag', tagMap: { true: { text: '启用', color: 'green' }, false: { text: '停用', color: 'red' } } },
+            { key: 'createTime', title: '创建时间', sortable: true },
+            { type: 'actions', title: '操作', actions: [{ key: 'edit', label: '编辑' }, { key: 'delete', label: '删除', danger: true }] },
+        ],
+        data: [
+            { id: 1, name: '总经理', code: 'POS_GM', level: '高管级', sortNo: 1, status: true, createTime: '2025-01-01 10:00:00' },
+            { id: 2, name: '副总经理', code: 'POS_DGM', level: '高管级', sortNo: 2, status: true, createTime: '2025-01-01 10:00:00' },
+            { id: 3, name: '总监', code: 'POS_DIR', level: '总监级', sortNo: 3, status: true, createTime: '2025-01-02 11:00:00' },
+            { id: 4, name: '经理', code: 'POS_MGR', level: '经理级', sortNo: 4, status: true, createTime: '2025-01-03 09:00:00' },
+            { id: 5, name: '副经理', code: 'POS_DMGR', level: '经理级', sortNo: 5, status: true, createTime: '2025-01-04 14:00:00' },
+            { id: 6, name: '主管', code: 'POS_SUP', level: '主管级', sortNo: 6, status: true, createTime: '2025-01-05 16:00:00' },
+            { id: 7, name: '专员', code: 'POS_SPEC', level: '专员级', sortNo: 7, status: true, createTime: '2025-01-06 08:30:00' },
+            { id: 8, name: '助理', code: 'POS_ASST', level: '助理级', sortNo: 8, status: false, createTime: '2025-01-07 10:15:00' },
+        ],
     },
 
     /* ---------- 开放门户管理 - 接入步骤管理 ---------- */
@@ -3831,7 +4127,7 @@ var state = {
     expandedGroups: new Set(),
     sortConfig: {},        // { pageKey: { column, order } }
     selectedRows: {},      // { pageKey: Set<rowId> }
-    currentTab: { 'admin-auth': 'super' },
+    currentTab: { 'admin-auth': 'app' },
     pagination: {},       // { pageKey: { page, pageSize } }
     searchData: {},       // { pageKey: { field: value } }
     treeExpanded: {},     // { pageKey: Set<rowId> }
@@ -4320,41 +4616,39 @@ function renderSidebar() {
 
 // 有走查新增需求的页面 - 侧边栏显示NEW角标
 var _newFeaturePages = [
-    'global-search',        // 全局搜索管理（v2新增页面）
-    'ticket-my-todo',       // 我的代办（v3新增）
-    'ticket-cc-mine',       // 抄送我的工单（v3新增）
-    'api-example',          // 接口示例管理（v2补充增删改查）
-    'api-error-code',       // 接口错误码管理（v2补充增删改查）
-    'portal-my-ticket',     // 我的工单（v3补充修改/删除/排序）
-    'app-case-manage',      // 应用案例管理（v2补充查看）
-    'access-steps',         // 接入步骤管理（有走查）
-    'portal-config',        // 门户配置（7Tab统一管理）
-    'ticket-type',          // 工单类型管理（v3补充查询）
-    'ticket-cc',            // 工单抄送管理（v3补充8项）
-    'ticket-center',        // 办件中心（v3补充3项）
-    'sys-online-user',      // 在线用户管理（有走查）
-    'sys-sync-app',         // 同步应用管理（有走查）
-    'sys-log',              // 日志管理（有走查）
-    'sys-basic-settings',   // 基础设置（有走查）
-    'manual-notice',        // 手动通知管理（有走查）
-    'todo-manage',          // 待办管理（有走查）
-    'ticket-evaluation',    // 工单评价管理（有走查）
-    'ticket-record',        // 办件记录（有走查）
-    'app-log',              // 应用日志（有走查）
-    'app-access-flow',      // 应用接入流程审批（有走查）
-    'app-change-flow',      // 应用变更流程审批（有走查）
-    'app-apply',            // 应用申请列表（有走查）
-    'app-audit',            // 应用审批列表（有走查）
-    'user-perm-group',      // 用户权限组关联（有走查）
-    'admin-auth',           // 管理员授权（有走查）
-    'user',                 // 用户管理（有走查）
-    'org',                  // 机构管理（有走查）
-    'title-level',          // 职称职级管理（有走查）
-    'provider-notice',      // 消息通知管理（有走查）
-    'provider-entry',       // 软件服务商入驻管理（有走查）
-    'provider',             // 软件服务商管理（有走查）
-    'notice',               // 通知公告管理（有走查）
-];
+    'global-search',        // 全局搜索管理
+    'ticket-my-todo',       // 我的代办
+    'ticket-cc-mine',       // 抄送我的工单
+    'api-example',          // 接口示例管理
+    'api-error-code',       // 接口错误码管理
+    'portal-my-ticket',     // 我的工单
+    'app-case-manage',      // 应用案例管理
+    'access-steps',         // 接入步骤管理
+    'portal-config',        // 门户首页配置
+    'ticket-cc',            // 工单抄送管理
+    'ticket-center',        // 办件中心
+    'ticket-record',        // 办件记录
+    'sys-log',              // 日志管理（3Tab）
+    'sys-basic-settings',   // 基础设置
+    'manual-notice',        // 手动通知管理
+    'todo-manage',          // 待办管理
+    'app-access-flow',      // 应用接入流程审批
+    'app-change-flow',      // 应用变更流程审批
+    'app-apply',            // 应用申请列表
+    'app-audit',            // 应用审批列表
+    'admin-auth',           // 授权管理（7Tab）
+    'user',                 // 用户管理
+    'org',                  // 机构管理
+    'title-level',          // 职级职称管理
+    'position-manage',      // 职务管理（新增）
+    'provider-notice',      // 消息通知管理
+    'provider-entry',       // 软件服务商入驻管理
+    'provider',             // 软件服务商管理
+    'notice',               // 通知公告管理
+    'help-info',            // 帮助信息管理（恢复）
+    'user-appointment',     // 用户任职管理（新增）
+    'line',                 // 机构条线管理
+];;
 
 /** 递归渲染导航项 */
 function renderNavItem(item, level) {
@@ -4828,80 +5122,63 @@ function renderBreadcrumb(crumbs) {
 var _overviewModules = [
     { name: '工作台管理', icon: 'fa-th-large', color: '#165DFF', pages: [
         { key: 'workbench-manage', label: '工作台管理' },
-        { key: 'workbench-template', label: '模板管理' },
-        { key: 'workbench-category', label: '分类管理' },
-        { key: 'workbench-manual', label: '工作台手册管理' },
-    ]},
-    { name: '应用管理', icon: 'fa-th-large', color: '#722ED1', pages: [
-        { key: 'app-apply', label: '应用申请' },
-        { key: 'app-audit', label: '应用审核' },
-        { key: 'app-list', label: '应用列表' },
-        { key: 'app-monitor', label: '应用监测' },
-        { key: 'app-statistics', label: '应用统计' },
-        { key: 'app-log', label: '应用日志' },
-        { key: 'app-access-flow', label: '接入流程审批' },
-        { key: 'app-change-flow', label: '变更流程审批' },
     ]},
     { name: '工单中心', icon: 'fa-ticket', color: '#13C2C2', pages: [
         { key: 'ticket-center', label: '办件中心' },
         { key: 'ticket-record', label: '办件记录' },
         { key: 'ticket-cc', label: '工单抄送管理' },
-        { key: 'ticket-type', label: '工单类型管理' },
+        { key: 'portal-my-ticket', label: '我的工单' },
         { key: 'ticket-my-todo', label: '我的代办' },
         { key: 'ticket-cc-mine', label: '抄送我的工单' },
-        { key: 'ticket-evaluation', label: '工单评价管理' },
-        { key: 'ticket-config-todo-stat', label: '待办统计配置' },
-        { key: 'ticket-config-todo-expire', label: '超期提醒配置' },
-        { key: 'ticket-config-todo-display', label: '展示规则配置' },
-        { key: 'ticket-config-todo-timer', label: '定时器配置' },
+    ]},
+    { name: '应用管理', icon: 'fa-th-large', color: '#722ED1', pages: [
+        { key: 'app-list', label: '应用列表' },
+        { key: 'app-change-flow', label: '应用变更流程审批' },
+        { key: 'app-audit', label: '应用审批列表' },
+        { key: 'app-access-flow', label: '应用接入流程审批' },
+        { key: 'app-apply', label: '应用申请列表' },
+    ]},
+    { name: '开放平台门户', icon: 'fa-globe', color: '#1890FF', pages: [
+        { key: 'portal-config', label: '门户首页配置' },
     ]},
     { name: '开放门户管理', icon: 'fa-globe', color: '#1890FF', pages: [
-        { key: 'portal-config', label: '门户配置' },
         { key: 'global-search', label: '全局搜索管理' },
-        { key: 'notice', label: '通知公告管理' },
+        { key: 'help-info', label: '帮助信息管理' },
+        { key: 'app-case-manage', label: '应用案例管理' },
         { key: 'api-example', label: '接口示例管理' },
         { key: 'api-error-code', label: '接口错误码管理' },
-        { key: 'app-case-manage', label: '应用案例管理' },
         { key: 'access-steps', label: '接入步骤管理' },
-        { key: 'portal-my-ticket', label: '我的工单' },
+        { key: 'notice', label: '通知公告管理' },
     ]},
-    { name: '软件服务商工作台', icon: 'fa-briefcase', color: '#FA8C16', pages: [
-        { key: 'provider', label: '软件服务商管理' },
+    { name: '权限管理', icon: 'fa-shield', color: '#52C41A', pages: [
+        { key: 'admin-auth', label: '授权管理（7Tab）' },
+    ]},
+    { name: '标签管理', icon: 'fa-tags', color: '#EB2F96', pages: [
+        { key: 'tags-group', label: '标签管理' },
+    ]},
+    { name: '系统管理', icon: 'fa-cog', color: '#8C8C8C', pages: [
+        { key: 'sys-basic-settings', label: '基础设置' },
+        { key: 'sys-log', label: '日志管理' },
+    ]},
+    { name: '组织机构管理', icon: 'fa-sitemap', color: '#2F54EB', pages: [
+        { key: 'org', label: '机构管理' },
+        { key: 'user', label: '用户管理' },
+        { key: 'line', label: '机构条线管理' },
+        { key: 'user-appointment', label: '用户任职管理' },
+        { key: 'title-level', label: '职级职称管理' },
+        { key: 'position-manage', label: '职务管理' },
+        { key: 'ext-field', label: '拓展字段管理' },
+    ]},
+    { name: '软件服务商工作台', icon: 'fa-building', color: '#FA8C16', pages: [
         { key: 'provider-notice', label: '消息通知管理' },
-        { key: 'provider-entry', label: '服务商入驻管理' },
+        { key: 'provider-entry', label: '软件服务商入驻管理' },
+        { key: 'provider', label: '软件服务商管理' },
     ]},
     { name: '通知待办', icon: 'fa-bell', color: '#FA8C16', pages: [
         { key: 'todo-manage', label: '待办管理' },
         { key: 'manual-notice', label: '手动通知管理' },
     ]},
-    { name: '权限管理', icon: 'fa-shield', color: '#52C41A', pages: [
-        { key: 'role', label: '角色管理' },
-        { key: 'perm-group', label: '权限组管理' },
-        { key: 'admin-auth', label: '管理员授权' },
-        { key: 'role-perm', label: '角色权限组关联' },
-        { key: 'user-perm-group', label: '用户权限组关联' },
-        { key: 'menu', label: '菜单管理' },
-    ]},
-    { name: '组织机构管理', icon: 'fa-sitemap', color: '#2F54EB', pages: [
-        { key: 'org', label: '机构管理' },
-        { key: 'user', label: '用户管理' },
-        { key: 'title-level', label: '职级职称管理' },
-        { key: 'ext-field', label: '拓展字段管理' },
-        { key: 'transfer', label: '任职调离管理' },
-        { key: 'contact-visibility', label: '通讯录可见性' },
-        { key: 'line', label: '机构条线管理' },
-    ]},
-    { name: '系统管理', icon: 'fa-cog', color: '#8C8C8C', pages: [
-        { key: 'dict-manage', label: '字典管理' },
-        { key: 'sys-log', label: '日志管理' },
-        { key: 'sys-online-user', label: '在线用户管理' },
-        { key: 'sys-sync-app', label: '同步应用管理' },
-        { key: 'sys-basic-settings', label: '基础设置' },
-    ]},
-    { name: '标签管理', icon: 'fa-tags', color: '#EB2F96', pages: [
-        { key: 'tags-manage', label: '分类标签管理' },
-    ]},
-];
+];;
 
 /** 概览模块-显示模块页面列表弹窗 */
 function showModulePages(modIdx) {
@@ -4928,10 +5205,10 @@ function showModulePages(modIdx) {
 /** 概览总览页面 */
 function renderOverviewPage() {
     const stats = [
-        { label: '总功能点', value: 269, color: 'var(--primary)', bg: '#E8F3FF' },
-        { label: '新增功能', value: 66, color: '#F53F3F', bg: '#FFF1F0' },
-        { label: '涉及模块', value: 43, color: 'var(--warning)', bg: '#FFF7E6' },
-        { label: '新增页面', value: 6, color: 'var(--success)', bg: '#F6FFED' },
+        { label: '总功能点', value: 328, color: 'var(--primary)', bg: '#E8F3FF' },
+        { label: '新增功能', value: 85, color: '#F53F3F', bg: '#FFF1F0' },
+        { label: '涉及模块', value: 52, color: 'var(--warning)', bg: '#FFF7E6' },
+        { label: '页面总数', value: 68, color: 'var(--success)', bg: '#F6FFED' },
     ];
 
     const newFeatures = [
@@ -4963,12 +5240,12 @@ function renderOverviewPage() {
     html += '</div>';
     html += '<div class="flex-1">';
     html += '<div class="flex items-center gap-2 mb-1">';
-    html += '<span class="text-base font-bold" style="color:#F53F3F;">v3 走查新增需求提示</span>';
+    html += '<span class="text-base font-bold" style="color:#F53F3F;">最终版走查重构提示</span>';
     html += '<span class="text-xs px-2 py-0.5 rounded-full" style="background:#F53F3F;color:#fff;">NEW</span>';
-    html += '<span class="text-xs ml-2" style="color:#8C8C8C;">共 66 个功能点 / 6 个新页面 / 43 个模块组</span>';
+    html += '<span class="text-xs ml-2" style="color:#8C8C8C;">共 85 个功能点 / 12 个新页面 / 52 个模块组</span>';
     html += '</div>';
     html += '<div class="text-sm" style="color:#CF1322;line-height:1.8;">';
-    html += '基于最新v3走查记录，新增 <b>我的代办</b>、<b>抄送我的工单</b> 2个工单运营侧页面，';
+    html += '基于最终版走查记录，全面重构侧边栏菜单结构，新增 <b>用户任职管理</b>、<b>职务管理</b>、<b>帮助信息管理</b> 等页面，';
     html += '开放门户新增 <b>全局搜索管理</b>、<b>门户配置7Tab统一管理</b>，';
     html += '接入步骤/应用案例/接口示例/错误码等模块全面完善。';
     html += '右侧PRD面板中 <span style="color:#F53F3F;font-weight:600;">红色字体</span> 标注的为走查记录中的需求项，';
@@ -11026,6 +11303,66 @@ function openLineUserMgmt() {
     openModal(id, '条线用户管理', body, footer, 'large');
 }
 
+/** 条线管理员管理弹窗 */
+function openLineAdminMgmt() {
+    var id = 'modal_line_admin';
+    
+    // 查询区
+    var queryHtml = '<div style="padding:12px 0;border-bottom:1px solid #F0F0F0;">';
+    queryHtml += '<div class="flex gap-3 items-center flex-wrap">';
+    queryHtml += '<select class="form-input" style="width:180px;"><option value="">请选择条线</option><option>于都条线</option><option>信丰条线</option><option>兴国条线</option></select>';
+    queryHtml += '<input type="text" class="form-input" style="width:180px;" placeholder="请输入管理员姓名" />';
+    queryHtml += '<button class="px-4 py-1.5 text-sm text-white rounded" style="background:var(--primary);"><i class="fa fa-search"></i> 查询</button>';
+    queryHtml += '<button class="px-4 py-1.5 text-sm rounded border" style="border-color:#D9D9D9;color:var(--text-secondary);background:#fff;">重置</button>';
+    queryHtml += '</div>';
+    queryHtml += '<div class="mt-3 flex gap-2 items-center">';
+    queryHtml += '<button class="px-3 py-1 text-xs rounded" style="background:var(--primary);color:#fff;" onclick="showToast(\'新增条线管理员\',\'success\')"><i class="fa fa-plus"></i> 新增管理员</button>';
+    queryHtml += '<button class="px-3 py-1 text-xs rounded border" style="border-color:var(--danger);color:var(--danger);background:#fff;" onclick="showToast(\'批量移除成功\',\'success\')"><i class="fa fa-user-times"></i> 批量移除</button>';
+    queryHtml += '<span class="ml-2 text-xs" style="color:var(--text-tertiary);">选择后可批量移除</span>';
+    queryHtml += '</div>';
+    queryHtml += '</div>';
+    
+    // 管理员列表
+    var admins = [
+        { id: 1, name: '何静', account: 'hejing', phone: '134****0001', orgName: '于都县人民政府', lineName: '于都条线', role: '条线管理员', status: 1, createTime: '2025-03-20 10:00:00' },
+        { id: 2, name: '马超', account: 'machao', phone: '134****0002', orgName: '信丰县人民政府', lineName: '信丰条线', role: '条线管理员', status: 1, createTime: '2025-03-22 14:30:00' },
+        { id: 3, name: '罗琳', account: 'luolin', phone: '134****0003', orgName: '兴国县人民政府', lineName: '兴国条线', role: '条线管理员', status: 0, createTime: '2025-03-25 09:15:00' },
+        { id: 4, name: '宋涛', account: 'songtao', phone: '134****0004', orgName: '宁都县人民政府', lineName: '宁都条线', role: '条线管理员', status: 1, createTime: '2025-03-28 11:20:00' },
+        { id: 5, name: '唐敏', account: 'tangmin', phone: '134****0005', orgName: '于都县人民政府', lineName: '于都条线', role: '条线副管理员', status: 1, createTime: '2025-04-01 08:30:00' },
+    ];
+    
+    var tableHtml = '<div style="padding:8px 0;">';
+    tableHtml += '<table class="w-full text-sm" style="border-collapse:collapse;"><thead><tr style="background:var(--table-header-bg);">';
+    tableHtml += '<th style="padding:8px 12px;border-bottom:1px solid var(--table-border);width:40px;text-align:center;"><input type="checkbox" /></th>';
+    tableHtml += '<th style="padding:8px 12px;border-bottom:1px solid var(--table-border);text-align:left;">管理员姓名</th>';
+    tableHtml += '<th style="padding:8px 12px;border-bottom:1px solid var(--table-border);text-align:left;">账号</th>';
+    tableHtml += '<th style="padding:8px 12px;border-bottom:1px solid var(--table-border);text-align:left;">手机号</th>';
+    tableHtml += '<th style="padding:8px 12px;border-bottom:1px solid var(--table-border);text-align:left;">所属机构</th>';
+    tableHtml += '<th style="padding:8px 12px;border-bottom:1px solid var(--table-border);text-align:left;">所属条线</th>';
+    tableHtml += '<th style="padding:8px 12px;border-bottom:1px solid var(--table-border);text-align:left;">角色</th>';
+    tableHtml += '<th style="padding:8px 12px;border-bottom:1px solid var(--table-border);text-align:left;">状态</th>';
+    tableHtml += '<th style="padding:8px 12px;border-bottom:1px solid var(--table-border);text-align:left;">操作</th>';
+    tableHtml += '</tr></thead><tbody>';
+    admins.forEach(function(a) {
+        tableHtml += '<tr style="border-bottom:1px solid var(--table-border);" onmouseover="this.style.background=\'var(--table-header-bg)\'" onmouseout="this.style.background=\'#fff\'">';
+        tableHtml += '<td style="padding:8px 12px;text-align:center;"><input type="checkbox" /></td>';
+        tableHtml += '<td style="padding:8px 12px;">' + esc(a.name) + '</td>';
+        tableHtml += '<td style="padding:8px 12px;">' + esc(a.account) + '</td>';
+        tableHtml += '<td style="padding:8px 12px;">' + esc(a.phone) + '</td>';
+        tableHtml += '<td style="padding:8px 12px;">' + esc(a.orgName) + '</td>';
+        tableHtml += '<td style="padding:8px 12px;"><span style="padding:2px 8px;border-radius:4px;font-size:12px;color:#722ED1;background:#F9F0FF;">' + esc(a.lineName) + '</span></td>';
+        tableHtml += '<td style="padding:8px 12px;">' + esc(a.role) + '</td>';
+        tableHtml += '<td style="padding:8px 12px;">' + (a.status === 1 ? '<span class="tag tag-green">启用</span>' : '<span class="tag tag-red">停用</span>') + '</td>';
+        tableHtml += '<td style="padding:8px 12px;"><a style="color:var(--primary);cursor:pointer;font-size:13px;margin-right:10px;" onclick="showToast(\'编辑管理员\',\'info\')">编辑</a><a style="color:var(--danger);cursor:pointer;font-size:13px;" onclick="showToast(\'移除成功\',\'success\')">移除</a></td>';
+        tableHtml += '</tr>';
+    });
+    tableHtml += '</tbody></table></div>';
+    
+    var body = queryHtml + tableHtml;
+    var footer = '<button class="px-4 py-1.5 text-sm rounded border" style="border-color:#D9D9D9;color:var(--text-secondary);background:#fff;" onclick="closeModal(\'' + id + '\')">关闭</button>';
+    openModal(id, '条线管理员管理', body, footer, 'large');
+}
+
 
 /** 工单配置管理弹窗 */
 function openTicketConfigModal(pageKey) {
@@ -11320,6 +11657,7 @@ var pageList = [
     { key: 'ticket-type', name: '工单类型管理', group: '工单中心' },
     { key: 'ticket-flow', name: '工单流程配置管理', group: '工单中心' },
     { key: 'ticket-my-todo', name: '我的代办', group: '工单中心/工单管理运营侧' },
+    { key: 'ticket-customer-mine', name: '工单管理(客户侧)', group: '工单中心/工单管理运营侧' },
     { key: 'ticket-cc-mine', name: '抄送我的工单', group: '工单中心/工单管理运营侧' },
     { key: 'ticket-cc', name: '工单抄送管理', group: '工单中心' },
     { key: 'notice', name: '通知公告管理', group: '开放门户管理' },
@@ -11332,6 +11670,7 @@ var pageList = [
     { key: 'org', name: '机构管理', group: '组织机构管理' },
     { key: 'user', name: '用户管理', group: '组织机构管理' },
     { key: 'title-level', name: '职级职称管理', group: '组织机构管理' },
+    { key: 'user-appointment', name: '用户任职管理', group: '组织机构管理' },
     { key: 'ext-field', name: '拓展字段管理', group: '组织机构管理' },
     { key: 'transfer', name: '用户任职调离管理', group: '组织机构管理' },
     { key: 'person-visibility', name: '人员可见性配置', group: '组织机构管理' },
@@ -11372,6 +11711,7 @@ var pageList = [
     { key: 'api-example', name: '接口示例管理', group: '开放门户管理/开放能力管理' },
     { key: 'api-error-code', name: '接口错误码管理', group: '开放门户管理/开放能力管理' },
     { key: 'app-case-manage', name: '应用案例管理', group: '开放门户管理' },
+    { key: 'help-info', name: '帮助信息管理', group: '开放门户管理' },
     { key: 'portal-config', name: '门户配置', group: '开放门户管理' },
     { key: 'global-search', name: '全局搜索管理', group: '开放门户管理' },
     { key: 'provider-notice', name: '消息通知管理', group: '软件服务商工作台' },
@@ -11634,16 +11974,16 @@ var descData = {
  * ============================================================ */
 var prdData = {
     'overview': {
-        background: '创新支撑系统是赣政通平台的核心管理子系统，负责标签管理、工单中心、开放门户、软件服务商工作台、权限管理、组织机构管理6大子系统的配置管理。本次优化基于验收走查结果，对92项功能点进行新增、优化升级和架构变更。',
-        targetUsers: '系统管理员（超级管理员、平台管理员）、分级管理员、工作台管理员、工单管理员、条线管理员',
-        coreFeatures: '1.数据概览 2.指标统计 3.快捷入口',
-        businessFlow: '进入首页 → 查看核心指标概览 → 查看统计图表 → 点击快捷入口跳转对应模块',
-        pageInfo: '数据列表展示',
-        dataModel: '核心数据：工作台概览指标、统计数据、快捷入口配置。数据来源：各业务模块汇总统计。',
-        exceptionHandling: '1.空数据状态：列表显示空状态占位图+提示文字"暂无数据" 2.网络异常：Toast提示"网络连接失败，请稍后重试" 3.数据加载失败：显示"加载失败，点击重试"按钮',
-        permissionReq: '1.系统管理员：拥有全部权限（查看） 2.平台管理员：拥有全部权限 3.分级管理员：仅查询权限，不可新增、编辑、删除 4.普通用户：无访问权限，菜单不可见',
-        interaction: '指标卡片展示；图表数据可视化；快捷入口跳转',
-        acceptance: '1.概览指标展示正常 2.图表数据展示正常 3.快捷入口跳转正常'
+        background: '创新支撑系统是赣政通平台的核心管理子系统，涵盖工作台管理、工单中心、应用管理、开放平台门户、开放门户管理、权限管理、标签管理、系统管理、组织机构管理、软件服务商工作台、通知待办共11大子系统。基于最终版走查记录，对32个功能分组、共370项走查功能点进行全面验收覆盖，包含新增功能、功能升级、架构变更等多种优化类型，确保系统功能完整可用、用户体验优良。',
+        targetUsers: '系统管理员（超级管理员、平台管理员）、分级管理员、工作台管理员、工单管理员、条线管理员、软件服务商、普通用户',
+        coreFeatures: '1.核心指标概览（370项走查功能点/32个功能分组/11大子系统） 2.模块功能统计 3.走查完成度统计 4.快捷入口导航',
+        businessFlow: '进入首页 → 查看核心指标概览（总功能点、新增功能、涉及模块、完成率）→ 查看各模块功能分布统计 → 查看走查完成进度 → 点击快捷入口跳转对应模块',
+        pageInfo: '概览仪表盘页面；顶部4个核心指标卡片（总功能点370/新增功能XX/涉及模块32/完成率100%）；中部功能分组分布图（饼图+柱图）；底部快捷入口（各子系统入口卡片）',
+        dataModel: '核心数据：走查功能点总数、功能分组数、子系统数、新增功能数、各模块功能点数、完成率统计。数据来源：各业务模块走查功能点汇总统计。',
+        exceptionHandling: '1.空数据状态：显示空状态占位图+提示文字"暂无统计数据" 2.网络异常：Toast提示"网络连接失败，请稍后重试" 3.数据加载失败：显示"加载失败，点击重试"按钮 4.指标数据异常：显示"--"占位符，不影响其他指标展示',
+        permissionReq: '1.系统管理员：拥有全部权限（查看所有统计数据） 2.平台管理员：拥有全部权限 3.分级管理员：仅可查看权限范围内的模块统计 4.普通用户：无访问权限，菜单不可见',
+        interaction: '核心指标卡片展示；功能分组饼图/柱图可视化；走查进度条；快捷入口卡片跳转；模块钻取查看详情',
+        acceptance: '1.概览核心指标（370功能点/32分组）展示正常 2.功能分组分布图展示正常 3.走查完成度统计正常 4.快捷入口跳转正常 5.数据刷新正常'
     },
     'tags-manage': {
         background: '【模式H】默认标签功能 + 标签类型合并筛选。标签管理子系统负责对软件服务商和工作台模板的标签信息进行分类配置管理。走查覆盖2项功能点：①软件服务商标签信息（符合，增加默认标签功能）②工作台模板标签信息（符合，增加默认标签功能）。原型实现：将两个标签页面合并为统一的"分类标签管理"页面，通过标签类型字段（软件服务商标签/工作台模板标签）区分；查询条件增加标签类型筛选；列表含是否默认Toggle开关，支持设置默认标签。',
@@ -11660,8 +12000,8 @@ var prdData = {
         exceptionHandling: '1.名称重复：保存时提示"名称已存在，请重新输入" 2.编码重复：保存时提示"编码已存在，请重新输入" 3.编码格式错误：提示"编码只能包含字母、数字和下划线" 4.删除被引用数据：拦截删除并提示"该数据已被引用，无法删除，请先解除引用" 5.批量删除含被引用数据：自动跳过被引用数据，提示"成功删除N条，M条因被引用已跳过" 6.空数据状态：列表显示空状态占位图+提示文字"暂无数据" 7.网络异常：Toast提示"网络连接失败，请稍后重试" 8.数据加载失败：显示"加载失败，点击重试"按钮',
         permissionReq: '1.系统管理员：拥有全部权限（新增/编辑/删除/批量删除/查询/排序） 2.平台管理员：拥有全部权限 3.分级管理员：仅查询权限，不可新增、编辑、删除 4.普通用户：无访问权限，菜单不可见',
         interaction: '多条件组合查询；表头点击排序；复选框多选+批量操作；新增弹窗表单；编辑弹窗表单；删除二次确认',
-        acceptance: '1.新增功能正常 2.编辑功能正常 3.单条删除有二次确认 4.批量删除有二次确认 5.查询条件完整可用 6.表头可排序 7.分页功能正常'
-    },
+        redFields: ['batchDeleteFlow', 'sortConfig'],
+},
     'tags-group': {
         background: '【标签分组管理】标签分组管理是标签管理子系统的核心模块，负责对各类标签进行分组管理。支持机构标签、用户标签、应用标签、机构条线标签、工作组标签、软件服务商标签、工作台模板标签共7种标签分组类型，每种分组独立维护标签列表和分组配置。原型实现：Tab主从结构，左侧7个分类Tab切换，右侧显示对应分类的标签分组列表，支持分组CRUD、分组下标签管理、排序配置等。',
         targetUsers: '系统管理员、平台管理员',
@@ -11691,8 +12031,8 @@ var prdData = {
         exceptionHandling: '1.名称重复：保存时提示"名称已存在，请重新输入" 2.编码重复：保存时提示"编码已存在，请重新输入" 3.编码格式错误：提示"编码只能包含字母、数字和下划线" 4.删除被引用数据：拦截删除并提示"该数据已被引用，无法删除，请先解除引用" 5.批量删除含被引用数据：自动跳过被引用数据，提示"成功删除N条，M条因被引用已跳过" 6.空数据状态：列表显示空状态占位图+提示文字"暂无数据" 7.网络异常：Toast提示"网络连接失败，请稍后重试" 8.数据加载失败：显示"加载失败，点击重试"按钮',
         permissionReq: '1.系统管理员：拥有全部权限（新增/编辑/删除/批量删除/查询/排序） 2.平台管理员：拥有全部权限 3.分级管理员：仅查询权限，不可新增、编辑、删除 4.普通用户：无访问权限，菜单不可见',
         interaction: '多条件组合查询；表头点击排序；复选框多选+批量操作；新增弹窗表单；编辑弹窗表单；删除二次确认',
-        acceptance: '1.新增功能正常 2.编辑功能正常 3.单条删除有二次确认 4.批量删除有二次确认 5.查询条件完整可用 6.表头可排序 7.分页功能正常'
-    },
+        redFields: ['addFlow', 'editFlow', 'deleteFlow'],
+},
     'ticket-type': {
         background: '【工单类型管理】工单类型管理是工单中心的基础配置模块，负责对工单类型进行分类管理。支持工单类型CRUD、批量删除、查询字段排序等功能。走查覆盖：工单类型新增、修改、删除、批量删除、查询字段排序、查看、查询共7项功能点。原型实现：标准表格列表页，包含查询条件（类型名称、类型编码、状态）、工具栏（新增、批量删除、字段排序）、数据表格（复选框、序号、类型名称、类型编码、工单分类、状态、创建时间、操作）。',
         targetUsers: '工单管理员、系统管理员',
@@ -11705,7 +12045,9 @@ var prdData = {
         permissionReq: '1.系统管理员：拥有全部权限（查询） 2.平台管理员：拥有全部权限 3.分级管理员：仅查询权限，不可新增、编辑、删除 4.普通用户：无访问权限，菜单不可见',
         interaction: '多条件组合查询',
         acceptance: '1.查询条件完整可用 2.分页功能正常',
-        redFields: ['queryFlow'],
+        addFlow: '【工单类型新增】点击"新增"按钮 → 打开新增弹窗 → 填写类型名称（必填，唯一校验）、类型编码（必填，唯一校验）→ 选择工单分类 → 选择状态（启用/停用，默认启用）→ 设置排序号 → 点击保存 → 校验通过 → 新增成功，Toast提示 → 列表刷新。',
+        editFlow: '【工单类型修改】点击操作列"编辑" → 打开编辑弹窗 → 回显类型信息 → 修改可编辑字段 → 点击保存 → 校验通过 → 更新成功，Toast提示 → 列表刷新。编码创建后不可修改。',
+        redFields: ['addFlow', 'editFlow', 'queryFlow'],
     },
     'ticket-flow': {
         background: '【模式D】工单流程节点自动匹配赣政通管理员层级。走查覆盖5项功能点：①工单流程新增（部分符合，工单流程节点自动匹配赣政通管理员层级体系）②工单流程删除（部分符合，工单流程节点自动匹配赣政通管理员层级体系）③工单流程修改（部分符合，工单流程节点自动匹配赣政通管理员层级体系）④工单流程查询（部分符合，工单流程节点自动匹配赣政通管理员层级体系）⑤工单流程审批环节添加（部分符合，工单流程节点自动匹配赣政通管理员层级体系）。原型实现：工单流程配置列表+审批环节弹窗，审批环节绑定管理员层级（条线/分级/系统）而非具体人员，三色Tag区分层级类型，系统根据工单发起人所属条线/机构自动解析对应审批人。',
@@ -11721,8 +12063,8 @@ var prdData = {
         exceptionHandling: '1.名称重复：保存时提示"名称已存在，请重新输入" 2.编码重复：保存时提示"编码已存在，请重新输入" 3.编码格式错误：提示"编码只能包含字母、数字和下划线" 4.删除被引用数据：拦截删除并提示"该数据已被引用，无法删除，请先解除引用" 5.空数据状态：列表显示空状态占位图+提示文字"暂无数据" 6.网络异常：Toast提示"网络连接失败，请稍后重试" 7.数据加载失败：显示"加载失败，点击重试"按钮',
         permissionReq: '1.系统管理员：拥有全部权限（新增/编辑/删除/查询） 2.平台管理员：拥有全部权限 3.分级管理员：仅查询权限，不可新增、编辑、删除 4.普通用户：无访问权限，菜单不可见',
         interaction: '多条件组合查询；新增弹窗表单；编辑弹窗表单；删除二次确认',
-        acceptance: '1.新增功能正常 2.编辑功能正常 3.单条删除有二次确认 4.查询条件完整可用 5.分页功能正常'
-    },
+        redFields: ['addFlow', 'editFlow', 'deleteFlow', 'queryFlow'],
+},
     'ticket-my-todo': {
         background: '【我的代办】我的代办是工单管理运营侧的核心工作入口页面，集中展示当前用户需要办理的所有工单事项。支持按工单类型、优先级、状态等多维度筛选，提供批量办理和导出功能，帮助用户高效处理待办事项。走查覆盖6项功能点：工单列表查询、批量办理、导出、工单办理、工单查看、工单移交。',
         targetUsers: '工单处理人员、工单管理员、各级审批人员',
@@ -11765,7 +12107,6 @@ var prdData = {
         permissionReq: '1.工单管理员：拥有抄送统计配置管理权限（增删改查）、抄送工单查看和操作权限 2.各级管理人员：可查看抄送自己的工单，可评分和上传附件 3.系统管理员：拥有全部权限 4.普通用户：仅可查看抄送自己的工单',
         interaction: 'Tab切换（2个Tab）；多条件组合查询；表头点击排序；复选框多选+批量操作；新增/编辑弹窗；删除二次确认；查看详情抽屉；评分弹窗；附件上传弹窗；批量标记已读；导出功能；转发功能',
         acceptance: '1.2个Tab切换正常 2.抄送工单统计CRUD功能完整 3.抄送我的工单查询正常 4.查看详情抽屉正常 5.5星评分功能正常 6.附件上传功能正常 7.批量标记已读正常 8.导出功能正常 9.Tag标签显示正确 10.分页功能正常',
-        redFields: ['addFlow', 'editFlow', 'deleteFlow', 'queryFlow', 'sortConfig', 'viewFlow', 'evaluateFlow', 'uploadFlow', 'batchMarkReadFlow', 'exportFlow', 'forwardFlow', 'batchDeleteFlow'],
     },
     'ticket-cc': {
         background: '【工单抄送管理】工单抄送管理是工单中心的核心配置模块，负责管理工单流程中的抄送规则和抄送记录。包含抄送配置、抄送记录2个Tab页，抄送配置页通过单选切换管理默认抄送规则和自定义抄送模板，抄送记录页合并展示全部抄送记录，实现全方位的工单抄送管理能力。',
@@ -11799,7 +12140,7 @@ var prdData = {
         ticketInfoEditFlow: '【工单信息修改】在工单抄送管理中 → 支持对已有的工单抄送配置信息进行修改 → 包括默认抄送规则编辑、自定义抄送设置编辑 → 点击操作列"编辑" → 打开编辑弹窗回显原有信息 → 修改可编辑字段后保存 → 校验通过后更新成功 → 部分关键字段（如编码）创建后不可修改 → 修改操作记录操作日志。',
         ticketInfoDeleteFlow: '【工单信息删除】在工单抄送管理中 → 支持对工单抄送配置信息进行删除操作 → 包括默认抄送规则删除、自定义抄送设置删除、自定义抄送记录删除 → 单条删除：点击操作列"删除" → 弹出二次确认弹窗 → 确认后逻辑删除 → Toast提示成功 → 批量删除：勾选多条 → 点击批量删除 → 二次确认 → 批量逻辑删除 → 已被引用的配置不可删除，需先解除引用关系 → 删除操作记录操作日志。',
         ticketInfoQueryFlow: '【工单信息查询】在工单抄送管理中 → 支持对工单抄送相关信息进行多条件组合查询 → 默认抄送记录：支持规则名称（模糊）、工单类型（下拉）查询 → 自定义抄送设置：支持设置名称（模糊）、工单类型（下拉）查询 → 自定义抄送记录：支持记录名称（模糊）、工单类型（下拉）、抄送状态（下拉）查询 → 各Tab独立查询，互不影响 → 多条件为AND关系 → 支持分页查询，默认10条/页 → 支持重置查询条件。',
-        redFields: ['addFlow', 'editFlow', 'deleteFlow', 'queryFlow', 'viewFlow', 'batchDeleteFlow'],
+        redFields: ['defaultAddFlow', 'defaultEditFlow', 'defaultDeleteFlow', 'defaultQueryFlow', 'customSetAddFlow', 'customSetEditFlow', 'customSetDeleteFlow', 'customSetQueryFlow', 'customRecordAddFlow', 'customRecordEditFlow', 'customRecordDeleteFlow', 'customRecordQueryFlow', 'infoManageFlow', 'recordInfoFlow', 'ticketInfoAddFlow', 'ticketInfoEditFlow', 'ticketInfoDeleteFlow', 'ticketInfoQueryFlow', 'batchDeleteFlow', 'viewFlow'],
 },
     'notice': {
         background: '【模式A】增加查询字段排序功能。通知公告管理是开放门户管理的子模块。走查覆盖1项功能点：①通知公告查询字段排序（符合，增加该功能）。原型实现：通知公告列表表头支持点击排序（公告标题、发布时间等字段），升降序可切换，排序状态有箭头图标标识。',
@@ -11837,7 +12178,7 @@ var prdData = {
         appBatchDeleteFlow: '在软件服务商详情-应用关联Tab中 → 勾选多条关联记录 → 点击"批量解除关联"按钮 → 弹出二次确认弹窗（显示选中数量）→ 确认解除 → 批量删除关联关系 → Toast提示成功解除数量。',
         accountSortConfig: '在软件服务商详情-账号关联Tab中 → 支持账号名称、创建时间、最后登录时间字段排序 → 点击表头切换升序/降序 → 箭头图标标识排序状态。',
         passwordResetFlow: '在软件服务商账号列表中 → 点击操作列"重置密码" → 弹出二次确认弹窗"确定重置该服务商账号的密码吗？" → 确认后系统生成随机密码 → 弹窗显示新密码并提示复制保存 → Toast提示"密码重置成功"。重置操作记录操作日志。',
-        redFields: ['appAddFlow', 'appEditFlow', 'appDeleteFlow', 'appBatchDeleteFlow', 'accountSortConfig', 'passwordResetFlow'],
+        redFields: ['appAddFlow', 'appEditFlow', 'appDeleteFlow', 'appBatchDeleteFlow', 'accountSortConfig', 'passwordResetFlow', 'queryFlow'],
 },
     'role': {
         background: '【模式A】增加角色查询字段排序功能。角色管理是权限管理的子模块。走查覆盖1项功能点：①角色查询字段排序（符合，增加该功能）。原型实现：角色列表表头支持点击排序（角色名称、创建时间等字段），升降序可切换。',
@@ -11884,7 +12225,26 @@ var prdData = {
         permissionReq: '1.系统管理员：拥有全部权限（新增/编辑/删除/批量删除/查询/排序） 2.平台管理员：拥有全部权限 3.分级管理员：仅查询权限，不可新增、编辑、删除 4.普通用户：无访问权限，菜单不可见',
         interaction: '多条件组合查询；表头点击排序；复选框多选+批量操作；新增弹窗表单；编辑弹窗表单；删除二次确认；详情查看',
         acceptance: '1.新增功能正常 2.编辑功能正常 3.单条删除有二次确认 4.批量删除有二次确认 5.查询条件完整可用 6.表头可排序 7.详情查看正常 8.分页功能正常',
-        redFields: ['addFlow', 'editFlow', 'deleteFlow', 'batchDeleteFlow', 'sortConfig', 'viewFlow', 'queryFlow'],
+        infoManageFlow: '【应用管理员信息管理】在应用管理员Tab页 → 支持对应用管理员配置信息的全生命周期管理 → 包括管理员的新增、编辑、删除、查询筛选 → 每条管理员记录包含管理员名称、关联应用、权限范围、状态等完整信息 → 支持按管理员名称模糊查询、按应用筛选查询 → 支持启用/停用状态切换 → 配置变更记录操作日志。',
+        workbenchAddFlow: '【工作台管理员-新增】在工作台管理员Tab → 点击"新增"按钮 → 打开新增弹窗 → 选择管理员用户（支持搜索）→ 选择管理的工作台范围（全部/指定工作台）→ 设置权限（查看/编辑/配置/删除）→ 设置状态（启用/停用）→ 点击保存 → 校验通过 → 新增成功 → 列表刷新。',
+        workbenchEditFlow: '【工作台管理员-修改】点击操作列"编辑" → 打开编辑弹窗 → 回显管理员信息 → 修改可编辑字段（权限范围、权限设置、状态等）→ 点击保存 → 更新成功 → 列表刷新。管理员用户不可修改。',
+        workbenchDeleteFlow: '【工作台管理员-删除】点击操作列"删除" → 弹出二次确认弹窗 → 确认删除 → 移除管理员权限 → Toast提示"删除成功" → 列表刷新。删除操作记录操作日志。',
+        workbenchBatchDeleteFlow: '【工作台管理员-批量删除】勾选多条管理员记录 → 点击"批量删除"按钮 → 弹出二次确认弹窗（显示选中数量）→ 确认删除 → 批量移除管理员权限 → Toast提示成功删除数量。',
+        workbenchSortConfig: '【工作台管理员-排序】支持管理员名称、创建时间字段排序。点击表头切换升序/降序，箭头图标标识。默认按创建时间降序排列。',
+        workbenchViewFlow: '【工作台管理员-查看】点击管理员名称或操作列"查看" → 打开详情抽屉 → 展示管理员完整信息（用户信息、管理的工作台列表、权限配置、创建时间等）→ 查看模式只读。',
+        workbenchQueryFlow: '【工作台管理员-查询】支持管理员姓名（模糊）、工作台范围（下拉）、状态（下拉）多条件组合查询，AND关系。支持分页查询。',
+        ticketAddFlow: '【工单管理员-新增】在工单管理员Tab → 点击"新增"按钮 → 打开新增弹窗 → 选择管理员用户（支持搜索）→ 选择管理的工单类型范围 → 设置权限（查看/处理/配置/删除）→ 设置状态 → 点击保存 → 校验通过 → 新增成功 → 列表刷新。',
+        ticketEditFlow: '【工单管理员-修改】点击操作列"编辑" → 打开编辑弹窗 → 回显管理员信息 → 修改可编辑字段 → 点击保存 → 更新成功 → 列表刷新。',
+        ticketDeleteFlow: '【工单管理员-删除】点击操作列"删除" → 弹出二次确认弹窗 → 确认删除 → 移除管理员权限 → Toast提示成功 → 列表刷新。',
+        ticketBatchDeleteFlow: '【工单管理员-批量删除】勾选多条 → 点击"批量删除" → 二次确认 → 批量移除权限 → Toast提示成功数量。',
+        ticketSortConfig: '【工单管理员-排序】支持管理员名称、创建时间字段排序。点击表头切换升序/降序。默认按创建时间降序。',
+        ticketViewFlow: '【工单管理员-查看】点击管理员名称或操作列"查看" → 打开详情抽屉 → 展示管理员完整信息 → 查看模式只读。',
+        ticketQueryFlow: '【工单管理员-查询】支持管理员姓名（模糊）、工单类型范围、状态多条件组合查询，AND关系。支持分页查询。',
+        roleAddFlow: '【角色管理-新增】在角色管理Tab → 点击"新增"按钮 → 打开新增弹窗 → 填写角色名称（必填，唯一）、角色编码（必填，唯一）→ 选择角色分类 → 填写角色描述 → 设置状态 → 点击保存 → 校验通过 → 新增成功 → 列表刷新。',
+        roleEditFlow: '【角色管理-修改】点击操作列"编辑" → 打开编辑弹窗 → 回显角色信息 → 修改可编辑字段 → 点击保存 → 更新成功 → 列表刷新。角色编码不可修改。',
+        roleDeleteFlow: '【角色管理-删除】点击操作列"删除" → 弹出二次确认弹窗 → 确认删除 → 逻辑删除 → Toast提示成功 → 列表刷新。已被用户使用的角色不可删除。',
+        roleBatchDeleteFlow: '【角色管理-批量删除】勾选多条角色 → 点击"批量删除" → 二次确认 → 批量逻辑删除 → Toast提示成功删除数量。含被引用角色自动跳过。',
+        redFields: ['infoManageFlow', 'addFlow', 'editFlow', 'deleteFlow', 'batchDeleteFlow', 'sortConfig', 'viewFlow', 'queryFlow', 'workbenchAddFlow', 'workbenchEditFlow', 'workbenchDeleteFlow', 'workbenchBatchDeleteFlow', 'workbenchSortConfig', 'workbenchViewFlow', 'workbenchQueryFlow', 'ticketAddFlow', 'ticketEditFlow', 'ticketDeleteFlow', 'ticketBatchDeleteFlow', 'ticketSortConfig', 'ticketViewFlow', 'ticketQueryFlow', 'roleAddFlow', 'roleEditFlow', 'roleDeleteFlow', 'roleBatchDeleteFlow'],
 },
     'role-perm': {
         background: '【模式A+B+授权配置】角色权限组关联支持授权类型动态切换及权限树可视化配置。角色权限组关联是权限管理的核心模块，负责角色与权限组、权限之间的关联配置。走查覆盖2项功能点：①角色权限组关联批量删除（符合，增加该功能）②角色权限组关联查询字段排序（符合，增加该功能）。原型实现：采用顶部授权类型切换（角色/角色权限组）+ 左侧列表 + 右侧权限树的主从布局；切换授权类型后左侧列表动态切换为角色列表或角色权限组列表；点击左侧列表项，右侧展示对应权限树，支持按菜单层级展开/折叠，菜单和按钮权限以不同标签区分；权限树支持勾选配置，父节点勾选联动子节点，支持保存配置和重置操作。',
@@ -11929,7 +12289,9 @@ var prdData = {
         interaction: '机构树展开折叠；多条件组合查询；表头点击排序；编辑弹窗表单；Excel文件导入；右侧抽屉详情（2Tab切换）',
         acceptance: '1.编辑功能正常 2.查询条件完整可用 3.表头可排序 4.导入功能正常 5.分页功能正常 6.机构树交互正常 7.右侧抽屉详情2Tab切换正常',
         importFlow: '点击"批量导入"按钮 → 打开导入弹窗 → 点击"选择文件" → 支持选择多个Excel文件（.xlsx/.xls格式）→ 显示已选文件列表，支持移除单个文件 → 点击"开始导入" → 系统逐文件校验数据格式 → 校验通过后执行批量导入 → 导入完成后显示导入结果（成功N条/失败M条）→ 支持下载错误报告 → 列表刷新显示新导入的数据。导入约束：单文件最大10MB；支持同时上传最多10个文件；文件中编码重复的数据自动跳过；机构编码必须唯一。',
-        redFields: ['importFlow'],
+        addFlow: '【机构新增】在机构树中 → 选择上级机构 → 点击"新增子机构" → 打开新增弹窗 → 填写机构名称（必填）、机构编码（必填，唯一）→ 选择机构类型 → 填写机构简称、联系人、联系电话 → 设置排序号 → 设置状态 → 点击保存 → 校验通过 → 新增成功 → 机构树刷新。',
+        deleteFlow: '【机构删除】鼠标悬停机构节点 → 点击"删除"图标 → 弹出二次确认弹窗 → 确认删除 → 逻辑删除 → Toast提示成功。机构下有子机构或用户时不可删除，需先处理子机构和用户。',
+        redFields: ['addFlow', 'editFlow', 'deleteFlow', 'importFlow', 'queryFlow'],
 },
     'user': {
         background: '【模式A+B+F+任职管理】用户查询字段排序、批量删除、多Excel文件导入 + 用户任职全生命周期管理。用户管理是组织机构管理中功能点最多的模块。走查覆盖23项功能点：①用户批量删除（符合，新增）②用户查询字段排序（符合，新增）③批量导入（符合，改成上传多个Excel文件）④用户机构关联批量删除（符合，新增）⑤用户机构关联查询字段排序（符合，新增）⑥用户拓展信息编辑（符合，新增）⑦用户拓展信息查询字段排序（符合，新增）⑧用户岗位关联查询字段排序（符合，新增）⑨用户职称关联批量删除（符合，新增）⑩用户职称关联查询字段排序（符合，新增）⑪用户职称关联查询（符合，新增）⑫用户职级关联批量删除（符合，新增）⑬用户职级关联查询字段排序（符合，新增）⑭用户职级关联查询（符合，新增）⑮用户职务关联查询字段排序（符合，新增）⑯用户职务关联查询（符合，新增）⑰用户任职审批信息查询（符合，新增）⑱调整任职（符合，新增）⑲添加任职（符合，新增）⑳编辑任职（符合，新增）㉑解职/批量解职（符合，新增）㉒主职/兼职管理（符合，新增）㉓兼职方式配置（内部/外部/临时兼职）（符合，新增）。原型实现：用户列表页支持批量删除+表头排序+多文件导入；点击操作列"查看"或行点击打开右侧抽屉详情，抽屉内含8个Tab页签（基本信息/拓展信息/机构关联/岗位关联/职称关联/职级关联/职务关联/任职审批），各Tab子表格展示对应关联数据；调整任职采用抽屉+Tab结构，支持任职列表管理（添加任职、批量解职、编辑、解职），支持主职/兼职两种任职类型，兼职支持内部兼职/外部兼职/临时兼职三种方式。',
@@ -11955,7 +12317,19 @@ var prdData = {
         titleSortConfig: '在用户详情-职称关联Tab中 → 支持职称名称、级别、获取时间字段排序 → 点击表头切换升序/降序 → 箭头图标标识排序状态。',
         rankBatchDeleteFlow: '在用户详情-职级关联Tab中 → 勾选多条职级关联记录 → 点击"批量解除关联"按钮 → 弹出二次确认弹窗 → 确认解除 → 批量删除关联关系 → Toast提示成功解除数量。',
         rankSortConfig: '在用户详情-职级关联Tab中 → 支持职级名称、级别、获取时间字段排序 → 点击表头切换升序/降序 → 箭头图标标识排序状态。',
-        redFields: ['batchDeleteFlow', 'extInfoDeleteFlow', 'extInfoBatchDeleteFlow', 'extInfoSortConfig', 'postBatchDeleteFlow', 'postSortConfig', 'titleBatchDeleteFlow', 'titleSortConfig', 'rankBatchDeleteFlow', 'rankSortConfig'],
+        enableFlow: '【启用用户】选择已禁用的用户 → 点击"启用"按钮 → 弹出确认弹窗 → 确认启用 → 用户状态更新为正常 → 用户可正常登录 → Toast提示"启用成功"。',
+        disableFlow: '【禁用用户】选择正常状态的用户 → 点击"禁用"按钮 → 弹出确认弹窗 → 确认禁用 → 用户状态更新为已禁用 → 用户无法登录 → Toast提示"禁用成功"。',
+        lockFlow: '【锁定用户】选择正常状态的用户 → 点击"锁定"按钮 → 弹出确认弹窗 → 确认锁定 → 用户账户被锁定 → 用户无法登录需管理员解锁 → Toast提示"锁定成功"。',
+        unlockFlow: '【解锁用户】选择已锁定的用户 → 点击"解锁"按钮 → 弹出确认弹窗 → 确认解锁 → 用户账户恢复正常 → Toast提示"解锁成功"。',
+        moveOrgFlow: '【调整机构】点击操作列"更多→调整机构" → 打开调整机构弹窗 → 选择目标机构（机构树选择）→ 确认调整 → 用户所属机构更新 → Toast提示"调整成功"。',
+        batchMoveFlow: '【批量调整机构】勾选多条用户 → 点击"批量调整机构"按钮 → 打开选择机构弹窗 → 选择目标机构 → 确认调整 → 批量更新用户所属机构 → Toast提示成功调整数量。',
+        roleAssignFlow: '【角色分配】点击操作列"角色分配" → 打开角色分配弹窗 → 左侧显示可选角色列表 → 右侧显示已分配角色 → 选择角色后添加/移除 → 支持批量操作 → 保存后角色权限更新 → Toast提示成功。',
+        permAssignFlow: '【权限分配】点击操作列"权限分配" → 打开权限分配弹窗 → 展示权限树（菜单权限+操作权限）→ 勾选/取消权限 → 支持按角色快速继承权限 → 保存后权限生效 → Toast提示成功。',
+        avatarUploadFlow: '【头像上传】在用户编辑页 → 点击头像区域 → 打开上传弹窗 → 选择图片文件（支持jpg/png，大小限制）→ 裁剪调整 → 确认上传 → 头像更新 → Toast提示"上传成功"。',
+        exportDetailFlow: '【导出详情】点击操作列"更多→导出详情" → 导出该用户的完整信息（基础信息+扩展信息+任职信息+权限信息）→ 导出格式为Excel → 自动下载文件。',
+        batchImportFlow: '【批量导入用户】点击"批量导入"按钮 → 打开导入弹窗 → 下载导入模板 → 填写用户数据 → 上传Excel文件 → 系统解析并预览数据（成功/失败标记）→ 确认导入 → 批量新增用户 → Toast提示成功导入数量，失败的支持下载错误报告。',
+        templateDownloadFlow: '【模板下载】在批量导入弹窗 → 点击"下载模板"按钮 → 下载用户导入模板（Excel格式）→ 模板包含必填字段说明和示例数据。',
+        redFields: ['addFlow', 'editFlow', 'deleteFlow', 'batchDeleteFlow', 'sortConfig', 'viewFlow', 'queryFlow', 'importFlow', 'exportFlow', 'passwordResetFlow', 'extInfoDeleteFlow', 'extInfoBatchDeleteFlow', 'extInfoSortConfig', 'postBatchDeleteFlow', 'postSortConfig', 'titleBatchDeleteFlow', 'titleSortConfig', 'rankBatchDeleteFlow', 'rankSortConfig', 'enableFlow', 'disableFlow', 'lockFlow', 'unlockFlow', 'moveOrgFlow', 'batchMoveFlow', 'roleAssignFlow', 'permAssignFlow', 'avatarUploadFlow', 'exportDetailFlow', 'batchImportFlow', 'templateDownloadFlow'],
 },
     'title-level': {
         background: '【模式A+B+F】岗位管理完整CRUD + 职称/职级查询排序 + 多文件导入。职级职称管理是组织机构设置的子模块，包含岗位管理、职称管理、职级管理三个Tab页。走查覆盖：岗位管理7项（①新增②编辑③删除④批量删除⑤查看⑥查询⑦查询字段排序）、职称管理3项（①查询字段排序②导入③批量删除）、职级管理3项（①查询字段排序②导入③批量删除）。原型实现：Tab布局，岗位管理Tab支持完整CRUD+批量删除+查询排序+查看；职称/职级Tab支持查询排序+多文件导入+批量删除。',
@@ -12004,7 +12378,8 @@ var prdData = {
         acceptance: '1.Tab切换正常 2.岗位新增/编辑/删除/批量删除/查看功能正常 3.查询条件完整可用 4.表头可排序 5.导入功能正常 6.批量删除有二次确认 7.分页功能正常',
         importFlow: '【职称/职级管理】点击"批量导入"按钮 → 打开导入弹窗 → 支持选择多个Excel文件 → 显示已选文件列表 → 点击"开始导入" → 逐文件校验 → 导入完成显示结果（成功/失败数量）→ 支持下载错误报告。',
         exportFlow: '点击"导出"按钮 → 按当前筛选条件导出数据 → 支持导出为Excel格式 → 导出完成后自动下载 → 导出大数量时提示等待。',
-        redFields: ['addFlow', 'editFlow', 'deleteFlow', 'batchDeleteFlow', 'sortConfig', 'viewFlow', 'queryFlow', 'importFlow', 'exportFlow'],
+        moveFlow: '【职务移动】选择职务记录 → 点击"移动"按钮 → 打开移动弹窗 → 选择目标分类（职务/职称/职级/岗级）→ 确认移动 → 职务分类更新 → Toast提示成功。支持批量移动。',
+        redFields: ['addFlow', 'editFlow', 'deleteFlow', 'batchDeleteFlow', 'sortConfig', 'viewFlow', 'queryFlow', 'importFlow', 'exportFlow', 'moveFlow'],
 },
     'ext-field': {
         background: '【模式G】拓展字段修改，支持编辑已有字段配置。拓展字段管理是组织机构设置的子模块，用于统一管理机构和用户的自定义拓展字段。走查覆盖1项功能点：①拓展字段修改（符合，新增）。原型实现：列表展示字段名称、编码、类型、适用实体（机构/用户Tag）、是否必填、状态；新增/编辑弹窗支持配置字段类型（文本/数字/日期/下拉/多行文本）、适用实体、必填、校验规则、默认值。',
@@ -12092,8 +12467,8 @@ var prdData = {
         exceptionHandling: '1.名称重复：保存时提示"名称已存在，请重新输入" 2.编码重复：保存时提示"编码已存在，请重新输入" 3.编码格式错误：提示"编码只能包含字母、数字和下划线" 4.删除被引用数据：拦截删除并提示"该数据已被引用，无法删除，请先解除引用" 5.批量删除含被引用数据：自动跳过被引用数据，提示"成功删除N条，M条因被引用已跳过" 6.空数据状态：列表显示空状态占位图+提示文字"暂无数据" 7.网络异常：Toast提示"网络连接失败，请稍后重试" 8.数据加载失败：显示"加载失败，点击重试"按钮',
         permissionReq: '1.系统管理员：拥有全部权限（新增/删除/批量删除/查询/排序） 2.平台管理员：拥有全部权限 3.分级管理员：仅查询权限，不可新增、编辑、删除 4.普通用户：无访问权限，菜单不可见',
         interaction: '多条件组合查询；表头点击排序；复选框多选+批量操作；新增弹窗表单；删除二次确认；详情查看',
-        acceptance: '1.新增功能正常 2.单条删除有二次确认 3.批量删除有二次确认 4.查询条件完整可用 5.表头可排序 6.详情查看正常 7.分页功能正常'
-    },
+        redFields: ['addFlow', 'editFlow', 'deleteFlow', 'sortConfig', 'queryFlow'],
+},
     'workbench-manage': {
         background: '【第二批走查】工作台管理是工作台管理子系统的核心模块，以卡片式列表展示所有工作台，支持新增、编辑、删除、启用停用、版本管理等操作。走查覆盖3项功能点：①工作台管理卡片式列表+新增+批量操作（符合，增加管理功能）②工作台版本信息新增（符合，增加管理功能）③工作台版本信息查询（符合，增加查询功能）。原型实现：卡片式栅格布局，每张卡片含预览图、名称、类型标签、版本号、状态标签、启用停用Toggle开关、更多操作菜单；顶部操作栏含新增工作台、批量更新模板、批量进度查询按钮；查询区支持工作台名称搜索、状态筛选、类型筛选；点击版本管理可查看版本列表并新增版本。',
         targetUsers: '系统管理员、工作台管理员、平台管理员',
@@ -12106,8 +12481,13 @@ var prdData = {
         exceptionHandling: '1.名称重复：保存时提示"名称已存在，请重新输入" 2.编码重复：保存时提示"编码已存在，请重新输入" 3.编码格式错误：提示"编码只能包含字母、数字和下划线" 4.空数据状态：列表显示空状态占位图+提示文字"暂无数据" 5.网络异常：Toast提示"网络连接失败，请稍后重试" 6.数据加载失败：显示"加载失败，点击重试"按钮',
         permissionReq: '1.系统管理员：拥有全部权限（新增/查询） 2.平台管理员：拥有全部权限 3.分级管理员：仅查询权限，不可新增、编辑、删除 4.普通用户：无访问权限，菜单不可见',
         interaction: '多条件组合查询；新增弹窗表单',
-        acceptance: '1.新增功能正常 2.查询条件完整可用 3.分页功能正常'
-    },
+        editFlow: '【工作台编辑】点击操作列"编辑" → 打开编辑弹窗 → 回显工作台信息（名称、编码、描述、图标、布局模板等）→ 修改可编辑字段 → 点击保存 → 校验通过 → 更新成功，Toast提示 → 列表刷新。编码创建后不可修改，支持上传自定义图标。',
+        deleteFlow: '【工作台删除】点击操作列"删除" → 弹出二次确认弹窗"确定删除该工作台吗？删除后已关联的用户将无法访问。" → 确认删除 → 逻辑删除 → Toast提示"删除成功" → 列表刷新。已被用户订阅的工作台不可删除，需先解除关联。',
+        batchDeleteFlow: '【批量删除】勾选多条工作台记录 → 点击"批量删除"按钮 → 弹出二次确认弹窗（显示选中数量）→ 确认删除 → 批量逻辑删除 → Toast提示成功删除数量。含被引用数据时自动跳过并提示跳过数量。',
+        sortConfig: '支持工作台名称、创建时间、排序号字段排序。点击表头切换升序/降序，箭头图标标识。默认按排序号升序排列。仅支持单列排序。',
+        viewFlow: '【工作台查看】点击工作台卡片或操作列"查看" → 打开展示抽屉/详情页 → 展示工作台完整信息（名称、编码、描述、图标、布局配置、组件列表、权限范围等）→ 支持预览工作台效果 → 查看模式只读，不可编辑。',
+        redFields: ['addFlow', 'editFlow', 'deleteFlow', 'batchDeleteFlow', 'sortConfig', 'viewFlow', 'queryFlow', 'configFlow'],
+},
     'workbench-template': {
         background: '【模式A+B】工作台模板管理分为基本信息管理和模板配置管理两部分，独立Tab页展示。走查覆盖4项功能点：①工作台模板基本信息批量删除（符合，新增）②工作台模板基本信息查询字段排序（符合，新增）③工作台模板配置批量删除（符合，新增）④工作台模板配置查询字段排序（符合，新增）。原型实现：双Tab结构（基本信息/模板配置）；基本信息Tab管理模板主数据，支持CRUD+批量删除+排序；模板配置Tab管理模板配置项（组件配置/布局配置/主题配置），支持CRUD+批量删除+排序。两部分功能独立，验收标准明确区分。',
         targetUsers: '系统管理员、工作台管理员',
@@ -12198,8 +12578,28 @@ var prdData = {
         exceptionHandling: '1.删除被引用数据：拦截删除并提示"该数据已被引用，无法删除，请先解除引用" 2.批量删除含被引用数据：自动跳过被引用数据，提示"成功删除N条，M条因被引用已跳过" 3.空数据状态：列表显示空状态占位图+提示文字"暂无数据" 4.网络异常：Toast提示"网络连接失败，请稍后重试" 5.数据加载失败：显示"加载失败，点击重试"按钮',
         permissionReq: '1.系统管理员：拥有全部权限（批量删除/查询/排序） 2.平台管理员：拥有全部权限 3.分级管理员：仅查询权限，不可新增、编辑、删除 4.普通用户：无访问权限，菜单不可见',
         interaction: '多条件组合查询；表头点击排序；复选框多选+批量操作；详情查看',
-        acceptance: '1.批量删除有二次确认 2.查询条件完整可用 3.表头可排序 4.详情查看正常 5.分页功能正常'
-    },
+        onlineOfflineFlow: '【上下架操作】在应用列表中 → 找到目标应用 → 点击操作列"上架"或"下架" → 弹出确认弹窗 → 确认操作 → 状态更新为已上架/已下架 → Toast提示成功 → 列表刷新。上架前校验应用信息完整性，下架后用户端不可见。',
+        versionRecordFlow: '【版本记录】点击操作列"版本记录" → 打开版本记录抽屉 → 展示应用所有版本信息（版本号、发布时间、发布说明、操作人）→ 支持版本对比 → 支持回滚到指定版本 → 版本记录按时间倒序排列。',
+        batchOnlineFlow: '【批量上架】勾选多条待上架应用 → 点击"批量上架"按钮 → 弹出确认弹窗（显示选中数量）→ 确认上架 → 批量更新状态为已上架 → Toast提示成功上架数量。不符合上架条件的应用自动跳过并提示。',
+        batchOfflineFlow: '【批量下架】勾选多条已上架应用 → 点击"批量下架"按钮 → 弹出确认弹窗（显示选中数量）→ 确认下架 → 批量更新状态为已下架 → Toast提示成功下架数量。',
+        moveFlow: '【移动分类】勾选应用 → 点击"移动分类"按钮 → 打开移动分类弹窗 → 选择目标分类 → 确认移动 → 应用分类更新 → Toast提示成功。支持批量移动。',
+        copyFlow: '【复制应用】点击操作列"复制" → 弹出复制确认弹窗 → 输入新应用名称 → 确认复制 → 生成新应用副本（基础信息复制，状态为草稿）→ Toast提示"复制成功" → 自动跳转到新应用编辑页。',
+        resetFlow: '【重置应用】点击操作列"更多→重置" → 弹出二次确认弹窗 → 确认重置 → 应用配置恢复到默认状态 → Toast提示"重置成功" → 列表刷新。重置操作不可撤销。',
+        syncFlow: '【同步应用】点击"同步"按钮 → 触发应用数据同步 → 同步中显示加载状态 → 同步完成后Toast提示同步结果（成功/失败数量）→ 同步失败的支持查看失败原因和重试。',
+        categoryQueryFlow: '【应用分类查询】左侧应用分类树 → 点击分类节点 → 右侧列表自动筛选显示该分类下的应用 → 支持搜索分类名称快速定位 → 支持分类展开/折叠。',
+        categoryAddFlow: '【应用分类新增】在分类树顶部点击"新增分类" → 打开新增弹窗 → 填写分类名称（必填）、分类编码（必填）、上级分类 → 设置排序号 → 点击保存 → 校验通过 → 新增成功 → 分类树刷新。',
+        categoryEditFlow: '【应用分类编辑】鼠标悬停分类节点 → 点击"编辑"图标 → 打开编辑弹窗 → 修改分类信息 → 点击保存 → 更新成功 → 分类树刷新。',
+        categoryDeleteFlow: '【应用分类删除】鼠标悬停分类节点 → 点击"删除"图标 → 弹出二次确认弹窗 → 确认删除 → 逻辑删除 → Toast提示成功。分类下有应用时不可删除，需先移动应用。',
+        tagQueryFlow: '【标签筛选查询】在标签筛选区 → 点击标签 → 列表按选中标签过滤（多标签为OR关系）→ 再次点击取消筛选 → 支持全部/已选标签切换 → 选中标签以Tag形式展示在筛选栏。',
+        tagAddFlow: '【应用标签新增】在标签管理弹窗 → 点击"新增标签" → 填写标签名称（必填）、选择标签颜色 → 点击保存 → 新增成功 → 标签列表刷新。',
+        tagEditFlow: '【应用标签编辑】在标签列表 → 点击操作列"编辑" → 打开编辑弹窗 → 修改标签信息 → 点击保存 → 更新成功 → 标签列表刷新。',
+        tagDeleteFlow: '【应用标签删除】在标签列表 → 点击操作列"删除" → 弹出二次确认弹窗 → 确认删除 → 逻辑删除 → Toast提示成功。已被应用使用的标签不可删除。',
+        tagBatchDeleteFlow: '【应用标签批量删除】勾选多条标签 → 点击"批量删除"按钮 → 弹出二次确认弹窗 → 确认删除 → 批量逻辑删除 → Toast提示成功删除数量。',
+        detailBaseFlow: '【应用详情-基础信息】点击应用名称进入详情页 → 基础信息Tab → 展示应用基本信息（名称、编码、图标、分类、标签、描述、版本、状态等）→ 支持编辑基础信息 → 信息变更记录操作日志。',
+        detailConfigFlow: '【应用详情-配置管理】详情页配置管理Tab → 展示应用配置项列表 → 支持新增/编辑/删除配置项 → 支持配置分组管理 → 配置变更实时生效 → 记录操作日志。',
+        detailMonitorFlow: '【应用详情-监控数据】详情页监控数据Tab → 展示应用运行监控数据（访问量、使用时长、错误率、在线用户数等）→ 支持时间范围筛选 → 数据可视化图表展示 → 支持导出监控数据。',
+        redFields: ['addFlow', 'editFlow', 'deleteFlow', 'batchDeleteFlow', 'queryFlow', 'sortConfig', 'viewFlow', 'onlineOfflineFlow', 'versionRecordFlow', 'importFlow', 'exportFlow', 'categoryQueryFlow', 'categoryAddFlow', 'categoryEditFlow', 'categoryDeleteFlow', 'tagQueryFlow', 'tagAddFlow', 'tagEditFlow', 'tagDeleteFlow', 'tagBatchDeleteFlow', 'detailBaseFlow', 'detailConfigFlow', 'detailMonitorFlow', 'detailLogFlow', 'batchOnlineFlow', 'batchOfflineFlow', 'moveFlow', 'copyFlow', 'resetFlow', 'syncFlow'],
+},
     'app-monitor': {
         background: '【全功能覆盖】应用监测是应用管理的核心模块，负责对应用的使用、运行、访问、活跃、行为、错误、性能、能力、通知、待办等11大类、14个细分子项进行监测配置管理和统计数据分析。走查覆盖100+功能点，包含每个子项的配置管理（新增/修改/删除/批量删除/查询字段排序/查看/查询7项）和统计数据（统计/导出2项），共9项功能/子项。原型实现：11个主分类Tab+细分子类型Tab+配置管理/统计数据双层Tab的三级结构；每个子类型独立维护配置项和统计数据；配置管理支持完整CRUD+批量删除+字段排序；统计数据支持动态列+日期范围查询+Excel导出。',
         targetUsers: '系统管理员、平台管理员、应用管理员、运维监控人员',
@@ -12215,8 +12615,17 @@ var prdData = {
         exceptionHandling: '1.名称重复：保存时提示"名称已存在，请重新输入" 2.编码重复：保存时提示"编码已存在，请重新输入" 3.编码格式错误：提示"编码只能包含字母、数字和下划线" 4.删除被引用数据：拦截删除并提示"该数据已被引用，无法删除，请先解除引用" 5.批量删除含被引用数据：自动跳过被引用数据，提示"成功删除N条，M条因被引用已跳过" 6.导出数据量过大：提示"数据量较大，导出可能需要较长时间，请耐心等待" 7.空数据状态：列表显示空状态占位图+提示文字"暂无数据" 8.网络异常：Toast提示"网络连接失败，请稍后重试" 9.数据加载失败：显示"加载失败，点击重试"按钮',
         permissionReq: '1.系统管理员：拥有全部权限（新增/编辑/删除/批量删除/查询/排序/导出） 2.平台管理员：拥有全部权限 3.分级管理员：仅查询权限，不可新增、编辑、删除 4.普通用户：无访问权限，菜单不可见',
         interaction: '多维度监测切换；图表数据可视化；子类型切换；时间范围筛选；配置化管理；数据导出',
-        acceptance: '1.各监测维度可正常切换 2.监测配置增删改查正常 3.图表数据展示正常 4.子类型可切换 5.数据统计准确 6.导出功能正常'
-    },
+        viewFlow: '【监控详情查看】点击应用名称或操作列"查看" → 打开监控详情抽屉 → 展示该应用的完整监控数据（实时指标、历史趋势、告警记录、性能分析等）→ 支持切换时间粒度（分钟/小时/天）→ 支持数据钻取。',
+        exportFlow: '【导出监控数据】设置查询条件筛选 → 点击"导出"按钮 → 按当前筛选条件导出应用监控数据 → 导出字段：应用名称、访问量、用户数、错误率、平均响应时间 → 导出格式为Excel → 大数据量时提示等待。',
+        realTimeMonitorFlow: '【实时监控】实时监控面板 → 展示当前在线用户数、实时访问量、系统负载等关键指标 → 数据自动刷新（可设置刷新间隔：5秒/10秒/30秒）→ 异常指标高亮显示 → 支持全屏查看模式。',
+        historyDataFlow: '【历史数据】历史数据Tab → 展示历史监控数据趋势 → 支持时间范围选择（今天/昨天/近7天/近30天/自定义）→ 支持数据粒度切换（小时/天/周/月）→ 支持数据对比（同比/环比）。',
+        alarmFlow: '【告警信息】告警信息Tab → 展示应用告警记录列表 → 支持按告警级别（紧急/重要/一般/提示）、告警类型、时间范围筛选 → 支持告警确认和处理 → 支持查看告警详情。',
+        alarmConfigFlow: '【告警配置】告警配置Tab → 支持配置告警规则（告警指标、阈值、触发条件、通知方式）→ 支持告警级别设置 → 支持告警通知对象配置 → 支持告警静默时间设置。',
+        performanceFlow: '【性能指标】性能指标面板 → 展示应用性能关键指标（平均响应时间、峰值响应时间、吞吐量、并发用户数等）→ 性能趋势图展示 → 性能评分及健康度评估 → 性能瓶颈分析。',
+        usageFlow: '【使用统计】使用统计面板 → 展示应用使用情况（访问次数、使用时长、功能使用率等）→ 支持按时间/用户/机构维度统计 → 使用趋势图展示 → 热门功能排行。',
+        userStatFlow: '【用户统计】用户统计面板 → 展示应用用户使用数据（活跃用户数、新增用户数、用户留存率等）→ 用户分布统计 → 用户活跃度排行 → 用户使用时长统计。',
+        redFields: ['queryFlow', 'viewFlow', 'sortConfig', 'exportFlow', 'realTimeMonitorFlow', 'historyDataFlow', 'alarmFlow', 'alarmConfigFlow', 'performanceFlow', 'usageFlow', 'userStatFlow', 'orgStatFlow'],
+},
 
     /* ---------- 待办管理 ---------- */
     'todo-manage': {
@@ -12420,7 +12829,12 @@ var prdData = {
         interaction: '按筛选条件导出',
         acceptance: '1.导出功能正常 2.分页功能正常',
         exportFlow: '切换至"短信发送日志"Tab → 设置查询条件筛选数据 → 点击"导出"按钮 → 按当前筛选条件导出短信发送日志 → 导出字段包含：日志ID、手机号、短信类型、发送状态、发送时间、失败原因等 → 导出格式为Excel → 大数据量导出时提示"数据量较大，请耐心等待" → 导出完成后自动下载文件。',
-        redFields: ['exportFlow'],
+        apiQueryFlow: '【API操作日志-查询】在API操作日志Tab → 支持操作人（模糊）、操作类型（下拉）、操作时间范围、模块名称多条件组合查询，AND关系。支持分页查询，默认20条/页。点击"重置"清空条件。',
+        apiViewFlow: '【API操作日志-查看】点击操作列"查看详情" → 打开日志详情弹窗 → 展示完整日志信息（操作人、操作时间、IP地址、请求参数、响应结果、耗时等）→ 支持格式化查看JSON数据 → 支持复制日志内容。',
+        apiExportFlow: '【API操作日志-导出】设置查询条件筛选 → 点击"导出"按钮 → 按当前筛选条件导出API操作日志 → 导出字段：操作时间、操作人、操作类型、模块、IP地址、操作结果 → 导出格式为Excel → 大数据量导出提示等待。',
+        syncQueryFlow: '【同步记录-查询】在同步记录Tab → 支持同步类型（下拉）、同步状态（下拉）、同步时间范围多条件组合查询，AND关系。支持分页查询。支持查看同步详情和失败原因。',
+        smsQueryFlow: '【短信日志-查询】在短信日志Tab → 支持手机号（模糊）、短信类型（下拉）、发送状态（下拉）、发送时间范围多条件组合查询，AND关系。支持分页查询。支持查看短信内容和发送详情。',
+        redFields: ['apiQueryFlow', 'apiViewFlow', 'apiExportFlow', 'syncQueryFlow', 'smsQueryFlow'],
 },
 
     /* ---------- 职务管理 ---------- */
@@ -12460,7 +12874,8 @@ var prdData = {
         permissionReq: '1.系统管理员：拥有全部权限 2.平台管理员：拥有全部权限 3.安全管理员：拥有查看和配置权限 4.普通用户：无访问权限',
         acceptance: '1.新增功能正常 2.编辑功能正常 3.删除有二次确认 4.批量删除有二次确认 5.查询条件可用 6.表头可排序 7.查看详情含用户列表和权限树 8.权限配置正常',
         viewFlow: '点击操作列"查看" → 打开右侧抽屉详情 → 展示基本信息、关联用户列表、权限树配置 → 可切换Tab查看不同维度信息 → 支持快捷编辑跳转 → 关闭抽屉返回列表',
-        redFields: ['addFlow', 'editFlow', 'deleteFlow', 'batchDeleteFlow', 'sortConfig', 'viewFlow', 'queryFlow'],
+        linkUserFlow: '【关联用户】点击操作列"关联用户" → 打开关联用户弹窗 → 左侧显示可选用户列表（支持搜索、机构筛选）→ 右侧显示已关联用户 → 选择用户后点击添加 → 或选择已关联用户点击移除 → 支持批量添加/移除 → 保存后关联关系更新 → Toast提示成功。',
+        redFields: ['addFlow', 'editFlow', 'deleteFlow', 'batchDeleteFlow', 'sortConfig', 'linkUserFlow'],
 },
 
     /* ---------- 应用日志 ---------- */
@@ -12504,7 +12919,14 @@ var prdData = {
         permissionReq: '1.系统管理员：拥有全部权限 2.应用管理员：拥有流程配置和查看权限 3.审批人员：拥有流程列表查看和审批权限 4.普通用户：可发起申请',
         acceptance: '1.流程配置CRUD完整 2.批量删除有二次确认 3.流程列表查询正常 4.Tab切换正常 5.表头可排序 6.分页功能正常 7.流程详情可查看',
         viewFlow: '点击操作列"查看" → 打开流程详情抽屉 → 展示流程基本信息、审批节点配置、适用范围等 → 支持流程图可视化展示 → 关闭返回列表。',
-        redFields: ['addFlow', 'editFlow', 'deleteFlow', 'batchDeleteFlow', 'sortConfig', 'viewFlow', 'queryFlow'],
+        approveFlow: '【审批通过】在接入审批列表 → 找到待审批的应用接入申请 → 点击"审批"按钮 → 打开审批弹窗 → 查看申请详情和接入信息 → 填写审批意见 → 点击"通过" → 申请状态更新为"已通过" → 自动分配接入凭证 → Toast提示"审批通过"。',
+        rejectFlow: '【审批退回】在审批弹窗 → 查看接入申请详情 → 填写退回原因（必填）→ 点击"退回" → 申请状态更新为"已退回" → 通知申请人 → Toast提示"已退回"。',
+        submitFlow: '【提交审批】在应用接入申请页 → 填写完接入信息后 → 点击"提交审批" → 确认提交 → 申请进入审批流程 → 状态更新为"审批中" → Toast提示"提交成功"。',
+        withdrawFlow: '【撤回申请】在我发起的接入审批列表 → 找到"审批中"的申请 → 点击"撤回" → 确认撤回 → 状态更新为"已撤回" → 审批终止 → Toast提示"撤回成功"。',
+        flowConfigFlow: '【流程配置管理】在接入流程配置页 → 展示接入审批流程图 → 支持拖拽调整节点 → 支持新增/删除节点 → 支持设置审批人/角色 → 支持条件分支 → 保存配置后生效。',
+        nodeConfigFlow: '【节点配置管理】点击流程节点 → 打开节点配置面板 → 配置节点名称、类型、审批人类型、审批方式 → 配置完成后保存。',
+        conditionConfigFlow: '【条件配置管理】在条件分支节点 → 配置分支条件 → 支持多条件组合 → 条件字段：应用类型、接入方式、申请部门等 → 支持条件优先级 → 条件不满足走默认分支。',
+        redFields: ['addFlow', 'editFlow', 'deleteFlow', 'batchDeleteFlow', 'sortConfig', 'viewFlow', 'queryFlow', 'approveFlow', 'rejectFlow', 'submitFlow', 'withdrawFlow', 'flowConfigFlow', 'nodeConfigFlow', 'conditionConfigFlow'],
 },
 
     /* ---------- 应用变更流程审批 ---------- */
@@ -12526,7 +12948,14 @@ var prdData = {
         acceptance: '1.流程配置CRUD完整 2.批量删除有二次确认 3.流程列表查询正常 4.Tab切换正常 5.表头可排序 6.分页功能正常',
         batchDeleteFlow: '勾选多条流程配置记录 → 点击"批量删除"按钮 → 弹出二次确认弹窗（显示选中数量）→ 确认删除 → 批量逻辑删除 → Toast提示成功删除数量。删除约束：正在使用中的流程不可删除。',
         viewFlow: '点击操作列"查看" → 打开流程详情抽屉 → 展示流程基本信息、审批节点配置、适用范围等 → 支持流程图可视化展示 → 关闭返回列表。',
-        redFields: ['addFlow', 'editFlow', 'deleteFlow', 'batchDeleteFlow', 'sortConfig', 'viewFlow', 'queryFlow'],
+        approveFlow: '【审批通过】在审批列表 → 找到待审批的应用变更申请 → 点击"审批"按钮 → 打开审批弹窗 → 查看申请详情和变更内容 → 填写审批意见（选填）→ 点击"通过" → 申请状态更新为"已通过" → 触发后续流程 → Toast提示"审批通过"。',
+        rejectFlow: '【审批退回】在审批弹窗 → 查看申请详情 → 填写退回原因（必填）→ 点击"退回" → 申请状态更新为"已退回" → 通知申请人 → Toast提示"已退回"。',
+        submitFlow: '【提交审批】在应用变更编辑页 → 填写完变更信息后 → 点击"提交审批"按钮 → 弹出确认弹窗 → 确认提交 → 申请提交到审批流程 → 状态更新为"审批中" → Toast提示"提交成功" → 自动跳转到审批列表。',
+        withdrawFlow: '【撤回申请】在我发起的审批列表 → 找到状态为"审批中"的申请 → 点击"撤回"按钮 → 弹出确认弹窗 → 确认撤回 → 申请状态更新为"已撤回" → 审批流程终止 → Toast提示"撤回成功"。已审批完成的不可撤回。',
+        flowConfigFlow: '【流程配置管理】在流程配置页 → 展示应用变更审批流程图 → 支持拖拽调整节点顺序 → 支持新增/删除审批节点 → 支持设置每个节点的审批人/角色/部门 → 支持设置流程条件分支 → 保存配置后生效。',
+        nodeConfigFlow: '【节点配置管理】点击流程节点 → 打开节点配置面板 → 配置节点名称、节点类型（审批/抄送/条件）、审批人类型（指定人员/角色/部门/发起人直属领导）、审批方式（会签/或签/依次审批）→ 配置完成后保存。',
+        conditionConfigFlow: '【条件配置管理】在条件分支节点 → 配置分支条件 → 支持多条件组合（AND/OR）→ 条件字段：应用分类、变更类型、申请人部门等 → 支持条件优先级排序 → 条件不满足时走默认分支。',
+        redFields: ['addFlow', 'editFlow', 'deleteFlow', 'batchDeleteFlow', 'sortConfig', 'viewFlow', 'queryFlow', 'approveFlow', 'rejectFlow', 'submitFlow', 'withdrawFlow', 'flowConfigFlow', 'nodeConfigFlow', 'conditionConfigFlow'],
 },
 
     /* ---------- 基础设置 ---------- */
@@ -12556,7 +12985,11 @@ var prdData = {
         sysInfoEditFlow: '【系统信息设置】在系统信息设置Tab → 点击"编辑"按钮 → 进入编辑状态 → 修改系统名称、版本、备案号、联系方式等信息 → 点击保存 → 校验通过 → 更新成功，Toast提示。',
         sysInfoResetFlow: '【系统信息设置】点击"恢复默认"按钮 → 弹出二次确认弹窗"恢复默认设置将覆盖当前所有系统信息配置，确定恢复吗？" → 确认后系统信息恢复为出厂默认值 → Toast提示"已恢复默认设置"。恢复操作不可撤销。',
         logoUploadFlow: '【系统信息设置】点击Logo上传区域 → 打开文件选择器 → 选择图片文件（支持PNG/JPG格式，建议尺寸200x60px，大小不超过200KB）→ 上传后显示预览图 → 支持重新上传和删除 → 点击保存后Logo生效。上传格式错误时提示"仅支持PNG/JPG格式的图片"。',
-        redFields: ['accountAddFlow', 'accountEditFlow', 'encryptQueryFlow', 'apiAddFlow', 'apiEditFlow', 'apiDeleteFlow', 'ipOnFlow', 'ipOffFlow', 'sysInfoAddFlow', 'sysInfoEditFlow', 'sysInfoResetFlow', 'logoUploadFlow'],
+        passwordConfigFlow: '【密码策略配置】在密码策略Tab → 配置密码最小长度、最大长度 → 配置复杂度要求（数字/字母/特殊字符）→ 配置密码有效期 → 配置密码历史重复限制 → 配置登录失败锁定策略 → 点击保存 → 配置生效 → Toast提示"保存成功"。',
+        sessionConfigFlow: '【会话配置】在会话配置Tab → 配置会话超时时间（分钟）→ 配置最大并发会话数 → 配置会话超时处理方式（强制下线/提示续期）→ 配置记住登录时长 → 点击保存 → 配置生效 → Toast提示"保存成功"。',
+        loginConfigFlow: '【登录配置】在登录配置Tab → 配置登录方式（账号密码/短信验证码/第三方登录）→ 配置验证码开关 → 配置登录失败提示策略 → 配置首页跳转地址 → 点击保存 → 配置生效 → Toast提示"保存成功"。',
+        securityConfigFlow: '【安全配置】在安全配置Tab → 配置操作日志保留天数 → 配置敏感操作二次验证 → 配置IP白名单/黑名单 → 配置数据加密策略 → 点击保存 → 配置生效 → Toast提示"保存成功"。',
+        redFields: ['accountAddFlow', 'accountEditFlow', 'encryptQueryFlow', 'apiAddFlow', 'apiEditFlow', 'apiDeleteFlow', 'ipOnFlow', 'ipOffFlow', 'sysInfoAddFlow', 'sysInfoEditFlow', 'sysInfoResetFlow', 'logoUploadFlow', 'passwordConfigFlow', 'sessionConfigFlow', 'loginConfigFlow', 'securityConfigFlow'],
 },
 
     /* ---------- 在线用户管理 ---------- */
@@ -12575,7 +13008,6 @@ var prdData = {
         permissionReq: '1.系统管理员：拥有全部权限（查询+强制下线） 2.安全管理员：拥有全部权限 3.运维人员：仅查询权限 4.普通用户：无访问权限',
         acceptance: '1.在线用户列表展示正常 2.多条件查询可用 3.表头可排序 4.强制下线有二次确认 5.下线后列表自动更新 6.Toast提示正常 7.分页功能正常',
         forceOfflineFlow: '在在线用户列表中 → 找到目标用户 → 点击操作列"强制下线"按钮 → 弹出二次确认弹窗"确定强制该用户下线吗？下线后该用户需要重新登录。" → 确认后系统向该用户发送下线通知 → 用户会话立即失效 → 该行从在线用户列表移除 → Toast提示"已强制下线"。支持批量强制下线。操作记录系统日志。',
-        redFields: ['forceOfflineFlow'],
 },
 
     /* ---------- 同步应用管理 ---------- */
@@ -12595,7 +13027,6 @@ var prdData = {
         exceptionHandling: '1.应用名称重复：提示"应用名称已存在" 2.应用编码重复：提示"应用编码已存在" 3.同步失败：显示失败状态，支持查看失败原因 4.立即同步过于频繁：提示"同步操作过于频繁，请稍后再试"',
         permissionReq: '1.系统管理员：拥有全部权限 2.数据管理员：拥有配置和同步权限 3.运维人员：拥有查询和立即同步权限 4.普通用户：无访问权限',
         acceptance: '1.同步配置CRUD完整 2.立即同步功能正常 3.同步状态实时更新 4.多条件查询可用 5.表头可排序 6.分页功能正常 7.删除有二次确认',
-        redFields: ['addFlow'],
 },
 
     /* ---------- 手动通知管理 ---------- */
@@ -12615,7 +13046,8 @@ var prdData = {
         acceptance: '1.新增通知功能正常 2.查询条件可用 3.表头可排序 4.查看详情正常 5.通知用户弹窗正常 6.穿梭框选择用户正常 7.发送后状态更新正确 8.分页功能正常',
         viewFlow: '点击操作列"查看" → 打开通知详情弹窗/抽屉 → 展示通知标题、类型、内容、发送人、发送时间、接收人数、状态等完整信息 → 支持查看接收用户列表 → 关闭返回列表。',
         notifyFlow: '点击"通知用户"按钮 → 打开选择用户弹窗 → 左侧为组织机构树+用户列表 → 右侧为已选用户列表 → 支持搜索用户、按部门筛选 → 通过穿梭框选择目标用户 → 点击"确认发送" → 发送成功，Toast提示 → 通知状态更新为"已发送"，接收人数更新。',
-        redFields: ['background', 'addFlow', 'queryFlow', 'viewFlow', 'sortConfig', 'notifyFlow'],
+        batchNotifyFlow: '【批量通知】勾选多条通知记录 → 点击"批量发送"按钮 → 弹出确认弹窗（显示选中数量和接收人数）→ 确认发送 → 批量发送通知 → Toast提示成功发送数量，失败的支持查看原因。',
+        redFields: ['addFlow', 'queryFlow', 'viewFlow', 'sortConfig', 'notifyFlow', 'batchNotifyFlow'],
 },
 
     /* ---------- 工单评价管理 ---------- */
@@ -12635,7 +13067,6 @@ var prdData = {
         exceptionHandling: '1.评价名称重复：提示"评价名称已存在" 2.删除已使用的评价：拦截提示"该评价模板已被使用，无法删除" 3.未选择评价维度：提示"请至少选择一个评价维度"',
         permissionReq: '1.系统管理员：拥有全部权限 2.工单管理员：拥有全部权限 3.质量管理人员：拥有查看和配置权限 4.普通用户：无访问权限',
         acceptance: '1.评价CRUD功能完整 2.删除有二次确认 3.查询条件可用 4.表头可排序 5.参数设置弹窗正常 6.评价等级可配置 7.是否必填可设置 8.是否允许追加评价可设置 9.分页功能正常',
-        redFields: ['addFlow'],
 },
 
 
@@ -12655,7 +13086,9 @@ var prdData = {
         permissionReq: '1.系统管理员：拥有全部权限 2.平台管理员：拥有全部权限 3.产品运营人员：拥有查看和查询权限 4.普通用户：无访问权限',
         interaction: '状态筛选查询；上移/下移按钮调整顺序；新增/编辑弹窗（含字符计数、拖拽上传）；状态开关切换',
         acceptance: '1.新增功能正常 2.编辑功能正常 3.状态筛选可用 4.上移下移功能正常 5.字符计数显示正确 6.拖拽上传区域正常 7.步骤图缩略图显示正确 8.状态开关可切换',
-        redFields: ['addFlow', 'editFlow', 'sortConfig'],
+        deleteFlow: '【接入步骤删除】点击操作列"删除" → 弹出二次确认弹窗 → 确认删除 → 逻辑删除 → Toast提示"删除成功" → 列表刷新。删除后步骤顺序自动调整。',
+        viewFlow: '【接入步骤查看】点击步骤标题或操作列"查看" → 打开步骤详情抽屉 → 展示步骤完整信息（步骤名称、步骤编号、步骤描述、操作指引、注意事项等）→ 支持预览步骤效果 → 查看模式只读。',
+        redFields: ['addFlow', 'editFlow', 'deleteFlow', 'sortConfig', 'viewFlow', 'queryFlow'],
 },
 
     /* ---------- 我的工单 ---------- */    /* ---------- 我的工单 ---------- */
@@ -12684,7 +13117,7 @@ var prdData = {
         scoreFlow: '评价采用星级评分制 → 拖动或点击星级选择评分（1-5星）→ 5星对应非常满意，1星对应非常不满意 → 评分后自动关联满意度等级 → 支持分项评分（服务态度、解决效率、专业水平）→ 总分为各分项平均分。',
         approveFlow: '【工单审批】管理员在工单审批详情中 → 查看工单完整信息和审批流程节点 → 点击"审批通过"按钮 → 填写审批意见（选填）→ 点击确认 → 工单状态更新为"已通过" → 推送通知给申请人 → Toast提示"审批通过" → 审批记录自动保存。审批流程支持多级审批，逐级流转，每级审批通过后自动进入下一级。',
         rejectFlow: '【工单审批】管理员在工单审批详情中 → 点击"审批退回"按钮 → 填写退回原因（必填）→ 点击确认 → 工单状态更新为"已驳回" → 推送通知给申请人 → Toast提示"已退回" → 申请人可修改后重新提交。',
-        redFields: ['addFlow', 'editFlow', 'deleteFlow', 'sortConfig', 'viewFlow', 'queryFlow', 'todoQueryFlow', 'confirmFlow', 'evaluateFlow', 'scoreFlow', 'fillFlow', 'handleFlow', 'approveFlow', 'rejectFlow'],
+        redFields: ['addFlow', 'editFlow', 'deleteFlow', 'sortConfig', 'viewFlow', 'queryFlow', 'todoQueryFlow', 'confirmFlow', 'evaluateFlow', 'scoreFlow', 'fillFlow', 'handleFlow', 'approveFlow', 'rejectFlow', 'batchDeleteFlow'],
 },
 
     /* ---------- 接口示例管理 ---------- */
@@ -12706,7 +13139,8 @@ var prdData = {
         permissionReq: '1.系统管理员：拥有全部权限 2.平台管理员：拥有全部权限 3.技术文档人员：拥有新增/编辑/查看/查询权限 4.普通用户：仅查看权限',
         interaction: '多条件组合查询；表头点击排序；复选框多选+批量操作；新增/编辑弹窗（含代码编辑器）；删除二次确认；查看详情弹窗（代码高亮）',
         acceptance: '1.新增功能完整 2.编辑功能完整 3.删除有二次确认 4.批量删除正常 5.查询条件可用 6.表头可排序 7.查看详情正常 8.Tag标签显示正确 9.分页功能正常',
-        redFields: ['addFlow', 'editFlow', 'deleteFlow', 'viewFlow', 'batchDeleteFlow', 'sortConfig', 'queryFlow'],
+        importFlow: '【接口示例导入】点击"导入"按钮 → 打开导入弹窗 → 选择导入文件（支持Excel/JSON格式）→ 上传文件 → 系统解析并预览数据 → 确认导入 → 批量新增接口示例 → Toast提示成功导入数量，失败的支持下载错误报告。提供模板下载。',
+        redFields: ['addFlow', 'editFlow', 'deleteFlow', 'viewFlow', 'batchDeleteFlow', 'sortConfig', 'queryFlow', 'importFlow'],
 },
 
     /* ---------- 接口错误码管理 ---------- */
@@ -12728,7 +13162,8 @@ var prdData = {
         permissionReq: '1.系统管理员：拥有全部权限 2.平台管理员：拥有全部权限 3.技术文档人员：拥有新增/编辑/查询权限 4.普通用户：仅查看权限',
         interaction: '多条件组合查询；表头点击排序；复选框多选+批量操作；新增/编辑弹窗；删除二次确认；查看详情弹窗；导入功能',
         acceptance: '1.新增功能完整 2.编辑功能完整 3.删除有二次确认 4.批量删除正常 5.查询条件可用 6.表头可排序 7.查看详情正常 8.Tag标签显示正确 9.导入功能正常 10.分页功能正常',
-        redFields: ['addFlow', 'editFlow', 'deleteFlow', 'viewFlow', 'batchDeleteFlow', 'sortConfig', 'queryFlow'],
+        importFlow: '【错误码导入】点击"导入"按钮 → 打开导入弹窗 → 选择导入文件（支持Excel/JSON格式）→ 上传文件 → 系统解析并预览数据 → 确认导入 → 批量新增错误码 → Toast提示成功导入数量，失败的支持下载错误报告。提供模板下载。',
+        redFields: ['addFlow', 'editFlow', 'deleteFlow', 'viewFlow', 'batchDeleteFlow', 'sortConfig', 'queryFlow', 'importFlow'],
 },
 
     /* ---------- 应用案例管理 ---------- */
@@ -12750,7 +13185,7 @@ var prdData = {
         permissionReq: '1.系统管理员：拥有全部权限 2.平台管理员：拥有全部权限 3.内容运营人员：拥有新增/编辑/上下架/查询权限 4.普通用户：仅查看权限',
         interaction: '卡片式布局展示；搜索框实时筛选；新增/编辑弹窗；删除二次确认；查看详情弹窗；版本记录弹窗；上下架状态切换；卡片hover阴影效果',
         acceptance: '1.卡片布局正常（3列） 2.新增功能正常 3.编辑功能正常 4.删除有二次确认 5.搜索功能可用 6.查看详情弹窗正常 7.版本记录弹窗正常 8.上下架切换正常 9.hover效果正常 10.封面图显示正常',
-        redFields: ['addFlow', 'editFlow', 'deleteFlow', 'viewFlow', 'versionRecordFlow', 'shelfFlow'],
+        redFields: ['viewFlow', 'versionRecordFlow'],
 },
 
     /* ---------- 门户配置 ---------- */
@@ -12771,7 +13206,23 @@ var prdData = {
         permissionReq: '1.系统管理员：拥有全部权限 2.平台管理员：拥有全部权限 3.内容运营人员：拥有新增/编辑/查询权限',
         interaction: '7Tab切换；各Tab独立的查询、列表、新增、编辑、删除操作；部分Tab支持排序调整',
         acceptance: '1.7个Tab切换正常 2.轮播图管理功能完整 3.接入步骤管理功能完整 4.应用案例管理功能完整 5.开放能力管理功能完整 6.资源中心管理功能完整 7.开发指南管理功能完整 8.帮助中心管理功能完整 9.各Tab数据独立 10.面包屑导航正确',
-        redFields: ['addFlow', 'editFlow', 'deleteFlow', 'sortConfig', 'viewFlow', 'queryFlow'],
+        bannerAddFlow: '【Banner管理-新增】在Banner管理Tab → 点击"新增"按钮 → 打开新增弹窗 → 上传Banner图片（必填，支持jpg/png，尺寸校验）→ 填写Banner标题（必填）、跳转链接（选填）→ 选择展示位置 → 设置排序号 → 设置状态（启用/停用）→ 点击保存 → 校验通过 → 新增成功 → 列表刷新。',
+        bannerEditFlow: '【Banner管理-修改】点击操作列"编辑" → 打开编辑弹窗 → 回显Banner信息 → 修改可编辑字段 → 可重新上传图片 → 点击保存 → 更新成功 → 列表刷新。',
+        bannerDeleteFlow: '【Banner管理-删除】点击操作列"删除" → 弹出二次确认弹窗 → 确认删除 → 逻辑删除 → Toast提示成功 → 列表刷新。',
+        bannerSortConfig: '【Banner管理-排序】支持Banner标题、创建时间、排序号字段排序。点击表头切换升序/降序，箭头图标标识。默认按排序号升序排列。',
+        bannerQueryFlow: '【Banner管理-查询】支持Banner标题（模糊）、状态（下拉）、位置（下拉）多条件组合查询，AND关系。支持分页查询。',
+        abilityAddFlow: '【开放能力-新增】在开放能力Tab → 点击"新增"按钮 → 打开新增弹窗 → 填写能力名称（必填）、能力编码（必填，唯一）→ 选择能力分类 → 上传能力图标 → 填写能力描述 → 设置排序号 → 设置状态 → 点击保存 → 校验通过 → 新增成功 → 列表刷新。',
+        abilityEditFlow: '【开放能力-修改】点击操作列"编辑" → 打开编辑弹窗 → 回显能力信息 → 修改可编辑字段 → 点击保存 → 更新成功 → 列表刷新。',
+        abilityDeleteFlow: '【开放能力-删除】点击操作列"删除" → 弹出二次确认弹窗 → 确认删除 → 逻辑删除 → Toast提示成功 → 列表刷新。已关联接口的能力不可删除。',
+        abilitySortConfig: '【开放能力-排序】支持能力名称、创建时间、排序号字段排序。点击表头切换升序/降序。默认按排序号升序排列。',
+        abilityQueryFlow: '【开放能力-查询】支持能力名称（模糊）、分类（下拉）、状态（下拉）多条件组合查询，AND关系。支持分页查询。',
+        resourceAddFlow: '【资源中心-新增】在资源中心Tab → 点击"新增"按钮 → 打开新增弹窗 → 填写资源标题（必填）→ 选择资源类型（文档/工具/SDK/示例代码）→ 上传资源文件 → 填写资源描述 → 设置排序号 → 设置状态 → 点击保存 → 校验通过 → 新增成功 → 列表刷新。',
+        resourceEditFlow: '【资源中心-修改】点击操作列"编辑" → 打开编辑弹窗 → 回显资源信息 → 修改可编辑字段 → 可重新上传文件 → 点击保存 → 更新成功 → 列表刷新。',
+        resourceDeleteFlow: '【资源中心-删除】点击操作列"删除" → 弹出二次确认弹窗 → 确认删除 → 逻辑删除 → Toast提示成功 → 列表刷新。',
+        resourceSortConfig: '【资源中心-排序】支持资源标题、下载量、创建时间、排序号字段排序。点击表头切换升序/降序。默认按排序号升序排列。',
+        resourceQueryFlow: '【资源中心-查询】支持资源标题（模糊）、类型（下拉）、状态（下拉）多条件组合查询，AND关系。支持分页查询。',
+        guideAddFlow: '【新手指南-新增】在新手指南Tab → 点击"新增"按钮 → 打开新增弹窗 → 填写指南标题（必填）→ 选择指南分类 → 填写指南内容（富文本）→ 上传封面图 → 设置排序号 → 设置状态 → 点击保存 → 校验通过 → 新增成功 → 列表刷新。',
+        redFields: ['addFlow', 'editFlow', 'deleteFlow', 'sortConfig', 'viewFlow', 'queryFlow', 'bannerAddFlow', 'bannerEditFlow', 'bannerDeleteFlow', 'bannerSortConfig', 'bannerQueryFlow', 'abilityAddFlow', 'abilityEditFlow', 'abilityDeleteFlow', 'abilitySortConfig', 'abilityQueryFlow', 'resourceAddFlow', 'resourceEditFlow', 'resourceDeleteFlow', 'resourceSortConfig', 'resourceQueryFlow', 'guideAddFlow'],
 },
 
 
@@ -12794,7 +13245,7 @@ var prdData = {
         permissionReq: '1.系统管理员：拥有全部权限（新增/编辑/删除/批量删除/查询） 2.平台管理员：拥有全部权限 3.运营人员：拥有新增/编辑/查询权限 4.普通用户：无访问权限',
         interaction: 'Tab切换（2个Tab）；多条件组合查询；表头点击排序；复选框多选+批量操作；新增/编辑弹窗；删除二次确认；排序调整（上移/下移）',
         acceptance: '1.2个Tab切换正常 2.搜索配置CRUD功能完整 3.热搜词管理CRUD功能完整 4.批量删除有二次确认 5.查询条件可用 6.表头可排序 7.热搜词上移下移正常 8.Tag标签显示正确 9.分页功能正常 10.热门标识正常显示',
-        redFields: ['addFlow', 'editFlow', 'deleteFlow', 'batchDeleteFlow', 'queryFlow', 'sortConfig', 'viewFlow', 'moveFlow'],
+        redFields: ['addFlow', 'editFlow'],
 },
 
 
@@ -12849,6 +13300,103 @@ var prdData = {
         queryFlow: '支持服务商名称（模糊）、申请状态（下拉）、申请时间范围多条件组合查询，AND关系。点击"重置"按钮可一键清空所有查询条件，恢复默认列表。支持分页查询，默认10条/页。',
         redFields: ['queryFlow'],
 },
+
+    'ticket-customer-mine': {
+        background: '【工单管理客户侧-PC端】工单管理客户侧是面向办事群众和企业用户的工单服务入口，用户可通过PC端提交工单、查询工单进度、评价工单服务等。走查覆盖3项功能点：工单查询、工单查看、工单提交。',
+        targetUsers: '办事群众、企业用户、个人用户',
+        coreFeatures: '1.工单提交 2.工单查询 3.工单查看 4.进度跟踪',
+        businessFlow: '进入客户侧工单页 → 点击"提交工单" → 选择工单类型 → 填写工单内容 → 上传附件 → 提交成功 → 返回工单列表 → 查看工单进度 → 工单办结后评价',
+        pageInfo: '工单列表页+提交工单页；查询条件：工单标题、工单类型、状态、提交时间范围；列表字段：工单编号、工单标题、工单类型、提交时间、当前状态、操作（查看/评价）；支持分页',
+        dataModel: '核心实体：客户工单（id/工单编号/工单标题/工单类型/提交人/提交时间/状态/处理进度）。枚举值：工单类型（咨询/建议/投诉/报修）、状态（待受理/处理中/已办结/已评价）。',
+        submitFlow: '【提交工单】点击"提交工单"按钮 → 选择工单类型 → 填写工单标题（必填）和问题描述（必填，富文本）→ 上传附件（可选，支持图片/文档）→ 填写联系方式 → 点击提交 → 校验通过 → 工单提交成功 → 自动生成工单编号 → Toast提示"提交成功" → 跳转到工单详情页。',
+        queryFlow: '【工单查询】支持工单标题（模糊）、工单类型（下拉）、状态（下拉）、提交时间范围多条件组合查询，AND关系。查询操作：输入/选择条件后点击"查询"按钮 → 列表按条件过滤 → 点击"重置"清空条件。支持分页查询，默认10条/页。',
+        viewFlow: '【工单查看】点击工单标题或操作列"查看" → 打开工单详情页 → 展示工单完整信息（编号、标题、类型、提交时间、问题描述、附件、处理记录、当前状态）→ 进度时间线展示各节点处理情况 → 支持查看处理人回复 → 支持补充留言 → 查看模式下可进行评价操作。',
+        exceptionHandling: '1.提交时必填项为空：提示"请填写必填项" 2.附件格式/大小不符合：提示具体错误 3.网络异常：Toast提示"网络连接失败，请稍后重试" 4.空数据状态：列表显示空状态占位图+提示文字"暂无工单"',
+        permissionReq: '1.注册用户：可提交工单、查看自己的工单、评价工单 2.游客：无访问权限，需先登录 3.管理员：可查看和处理所有工单',
+        interaction: '多条件组合查询；工单提交表单；工单详情页（进度时间线）；评价功能；附件上传',
+        acceptance: '1.工单提交功能正常 2.工单查询条件完整可用 3.工单详情查看正常 4.进度跟踪展示正常 5.分页功能正常',
+        redFields: ['queryFlow', 'viewFlow', 'submitFlow'],
+    },
+
+    'app-statistics': {
+        background: '【应用统计】应用统计是应用管理的数据分析模块，负责对应用的访问量、使用情况、用户活跃度等数据进行多维度统计分析和可视化展示。支持按时间范围、机构、应用类型等多维度筛选，提供趋势图、排行图、饼图等多种图表展示形式，为应用运营决策提供数据支撑。走查覆盖14项功能点。',
+        targetUsers: '系统管理员、平台管理员、应用运营人员、各级领导',
+        coreFeatures: '1.访问统计 2.使用统计 3.用户活跃度分析 4.机构排行 5.应用排行 6.趋势分析 7.饼图分析 8.柱图分析 9.时间范围筛选 10.数据导出',
+        businessFlow: '进入应用统计页 → 选择统计维度（访问/使用/用户/机构）→ 设置时间范围 → 查看统计图表 → 切换图表类型（趋势/饼图/柱图）→ 钻取查看详情 → 导出统计报表',
+        pageInfo: '多Tab统计页面（访问统计/使用统计/用户分析/机构分析）；顶部时间范围筛选器+应用筛选；中部图表展示区（支持趋势图/饼图/柱图切换）；底部数据明细表；支持导出',
+        dataModel: '核心实体：应用统计数据（应用ID/应用名称/访问量/使用时长/用户数/统计日期）。统计维度：按日/周/月/季度/年；按机构/用户/应用分类。',
+        queryFlow: '支持应用名称（模糊）、应用分类（下拉）、统计维度（下拉）、时间范围多条件组合查询，AND关系。支持时间快捷选择（今天/昨天/近7天/近30天/本月/上月/自定义）。查询结果自动刷新图表和明细表。',
+        viewFlow: '【统计详情查看】点击数据明细行或图表数据点 → 打开统计详情抽屉 → 展示该应用的详细统计数据 → 支持切换时间粒度 → 支持查看同环比数据 → 支持下钻到用户/机构维度。',
+        sortConfig: '数据明细表支持访问量、使用时长、用户数、增长率等字段排序。点击表头切换升序/降序，箭头图标标识。默认按访问量降序排列。',
+        exportFlow: '【导出统计数据】设置查询条件筛选 → 点击"导出"按钮 → 按当前筛选条件导出应用统计数据 → 导出格式为Excel → 包含统计汇总和明细数据 → 大数据量导出时提示等待。',
+        visitStatFlow: '【访问统计】访问统计Tab → 展示应用访问量数据 → 支持PV/UV指标切换 → 访问趋势图展示（折线图）→ 访问量排行表 → 热门应用TOP10 → 支持按时间范围筛选。',
+        useStatFlow: '【使用统计】使用统计Tab → 展示应用使用数据 → 使用时长趋势图 → 使用次数统计 → 人均使用时长 → 功能使用率排行 → 支持按应用分类筛选。',
+        userActiveFlow: '【用户活跃度】用户分析Tab → 展示用户活跃度数据 → 活跃用户数趋势 → 用户留存率分析（次日/7日/30日）→ 新增用户数 → 用户地域分布 → 支持按机构维度筛选。',
+        orgRankFlow: '【机构排行】机构分析Tab → 展示各机构应用使用排行 → 机构使用量排行榜（柱图+列表）→ 机构覆盖率统计 → 机构活跃度对比 → 支持按机构层级钻取（省→市→县）。',
+        appRankFlow: '【应用排行】应用排行Tab → 展示应用使用量排行榜 → TOP10应用列表 → 应用分类占比（饼图）→ 支持按访问量/使用时长/用户数多维度排行 → 支持排行榜导出。',
+        trendFlow: '【趋势分析】趋势图展示模式 → 支持折线图/面积图切换 → 支持多指标叠加展示 → 支持时间粒度切换（日/周/月）→ 支持同环比显示 → 鼠标悬停显示详细数据。',
+        pieChartFlow: '【饼图分析】饼图展示模式 → 支持应用分类占比饼图 → 支持机构分布饼图 → 支持环形图/饼图切换 → 鼠标悬停显示占比详情 → 点击饼图区块可钻取查看明细。',
+        barChartFlow: '【柱图分析】柱图展示模式 → 支持应用排行柱图 → 支持机构对比柱图 → 支持横向/纵向切换 → 支持堆叠柱图 → 鼠标悬停显示数值 → 点击柱图可钻取详情。',
+        dateRangeFlow: '【时间范围筛选】顶部时间筛选器 → 支持快捷选择（今天/昨天/近7天/近30天/本月/上月/本季度/本年度）→ 支持自定义日期范围 → 选择后自动刷新统计数据 → 可保存常用时间范围。',
+        compareFlow: '【同环比对比】在统计图表中 → 开启同环比对比开关 → 图表叠加显示当前周期与上一周期/去年同期数据 → 支持同比（与去年同期比）和环比（与上一周期比）两种模式切换 → 同环比数据以不同颜色折线展示 → 数据明细表中显示同环比增长率（红色上升/绿色下降箭头标识）→ 支持钻取同环比变化原因。',
+        exceptionHandling: '1.数据量过大：分页加载，提示"数据量较大，正在加载" 2.无数据状态：显示空状态占位图+提示文字"暂无统计数据" 3.网络异常：Toast提示"网络连接失败，请稍后重试" 4.导出失败：提示"导出失败，请重试"',
+        permissionReq: '1.系统管理员：拥有全部权限（查看/导出/配置） 2.平台管理员：拥有全部权限 3.分级管理员：仅可查看本机构及下属机构统计数据 4.普通用户：无访问权限',
+        interaction: '多Tab切换；时间范围筛选；图表类型切换；数据钻取；明细列表；导出功能',
+        acceptance: '1.各Tab切换正常 2.访问统计数据展示正常 3.使用统计数据展示正常 4.用户活跃度分析正常 5.机构排行正常 6.应用排行正常 7.趋势图展示正常 8.饼图展示正常 9.柱图展示正常 10.时间筛选功能正常 11.导出功能正常 12.数据钻取正常 13.分页功能正常 14.图表交互正常',
+        redFields: ['queryFlow', 'viewFlow', 'sortConfig', 'exportFlow', 'visitStatFlow', 'useStatFlow', 'userActiveFlow', 'orgRankFlow', 'appRankFlow', 'trendFlow', 'pieChartFlow', 'barChartFlow', 'dateRangeFlow', 'compareFlow'],
+    },
+
+    'help-info': {
+        background: '【帮助信息管理】帮助信息管理是开放门户管理的子模块，负责管理门户前端的帮助文档和版本记录。支持帮助内容的分类管理、版本记录追溯、内容编辑等功能。走查覆盖1项功能点：帮助版本记录查看。',
+        targetUsers: '系统管理员、平台管理员、内容运营人员',
+        coreFeatures: '1.帮助分类管理 2.帮助内容管理 3.版本记录查看 4.帮助搜索',
+        businessFlow: '进入帮助信息管理页 → 左侧分类树选择分类 → 右侧查看帮助内容列表 → 点击查看详情 → 切换版本记录Tab → 查看历史版本变更 → 支持版本对比',
+        pageInfo: '左右布局，左侧帮助分类树，右侧帮助内容列表+详情；详情页包含内容Tab和版本记录Tab；版本记录展示版本号、发布时间、更新内容、操作人',
+        dataModel: '核心实体：帮助分类（id/名称/编码/排序号）、帮助内容（id/标题/分类/内容/版本号/状态/发布时间）、版本记录（id/帮助ID/版本号/更新内容/发布时间/操作人）。',
+        versionRecordFlow: '【帮助版本记录】在帮助详情页 → 切换到"版本记录"Tab → 展示该帮助文档的所有历史版本 → 按版本号倒序排列 → 每条记录包含版本号、发布时间、更新说明、操作人 → 点击版本号可查看该版本的完整内容 → 支持相邻版本对比（差异高亮显示）→ 支持回滚到指定版本（需二次确认）。',
+        queryFlow: '支持帮助标题（模糊）、分类（下拉）、状态（下拉）多条件组合查询，AND关系。支持分页查询。',
+        exceptionHandling: '1.空数据状态：显示空状态占位图+提示文字"暂无帮助文档" 2.网络异常：Toast提示"网络连接失败，请稍后重试" 3.版本对比数据量大：分页或折叠展示',
+        permissionReq: '1.系统管理员：拥有全部权限（新增/编辑/删除/查看/版本管理） 2.平台管理员：拥有全部权限 3.分级管理员：仅查看权限 4.普通用户：无访问权限',
+        interaction: '分类树导航；帮助内容列表；富文本编辑器；版本记录列表；版本对比',
+        acceptance: '1.帮助分类管理正常 2.帮助内容CRUD正常 3.版本记录查看正常 4.版本对比功能正常 5.查询筛选正常 6.分页功能正常',
+        redFields: ['versionRecordFlow'],
+    },
+
+    'user-appointment': {
+        background: '【用户任职管理】用户任职管理是组织机构管理的核心模块，负责管理用户在各部门和机构的任职信息、任职审批流程及任职记录。包含部门任职履历、任职审批配置、机构任职记录3个Tab页，支持全生命周期的任职信息管理。走查覆盖21项功能点：部门任职履历7项+任职审批配置7项+机构任职记录7项。',
+        targetUsers: '系统管理员、HR管理员、各级组织人事管理人员',
+        coreFeatures: '1.部门任职履历管理（增删改查+批量删除+排序+查看） 2.任职审批配置管理（增删改查+批量删除+排序+查看） 3.机构任职记录管理（增删改查+批量删除+排序+查看） 4.多Tab切换',
+        businessFlow: '进入用户任职管理页 → 部门任职履历Tab → 查看用户部门任职信息 → 新增/编辑/删除任职记录 → 或切换到任职审批配置Tab → 配置任职审批流程 → 或切换到机构任职记录Tab → 查看机构任职历史记录 → 支持多条件查询筛选',
+        pageInfo: '3个Tab页（部门任职履历/任职审批配置/机构任职记录）；每个Tab独立查询，支持增删改查、批量删除、排序、查看；列表字段：复选框、序号、用户姓名、部门/机构、职务、任职时间、状态、操作；分页完整',
+        dataModel: '核心实体：部门任职（id/用户ID/部门ID/职务/任职开始时间/任职结束时间/状态）、任职审批配置（id/审批名称/审批节点/审批人/触发条件/状态）、机构任职记录（id/用户ID/机构ID/职务/任职时间/变动类型/操作人）。枚举值：任职状态（在职/已离任/待审批）、变动类型（任命/免职/调岗/晋升/降职）。',
+        deptAddFlow: '【部门任职-新增】在部门任职履历Tab → 点击"新增"按钮 → 打开新增弹窗 → 选择用户（支持搜索）→ 选择部门 → 选择职务 → 填写任职开始时间 → 设置任职状态 → 点击保存 → 校验通过 → 新增成功 → 列表刷新。需审批的任职提交审批流程。',
+        deptEditFlow: '【部门任职-修改】点击操作列"编辑" → 打开编辑弹窗 → 回显任职信息 → 修改可编辑字段（职务、结束时间、状态等）→ 点击保存 → 更新成功 → 列表刷新。用户和部门不可修改。',
+        deptDeleteFlow: '【部门任职-删除】点击操作列"删除" → 弹出二次确认弹窗 → 确认删除 → 逻辑删除 → Toast提示"删除成功" → 列表刷新。删除操作记录操作日志。',
+        deptBatchDeleteFlow: '【部门任职-批量删除】勾选多条任职记录 → 点击"批量删除"按钮 → 弹出二次确认弹窗（显示选中数量）→ 确认删除 → 批量逻辑删除 → Toast提示成功删除数量。',
+        deptSortConfig: '【部门任职-排序】支持用户姓名、部门名称、任职开始时间字段排序。点击表头切换升序/降序，箭头图标标识。默认按任职开始时间降序排列。',
+        deptViewFlow: '【部门任职-查看】点击用户姓名或操作列"查看" → 打开任职详情抽屉 → 展示任职完整信息（用户信息、部门、职务、任职时间、任职状态、变动历史等）→ 查看模式只读。',
+        deptQueryFlow: '【部门任职-查询】支持用户姓名（模糊）、部门（下拉/机构树选择）、职务（下拉）、任职状态（下拉）、时间范围多条件组合查询，AND关系。各Tab独立查询。支持分页查询。',
+        approvalAddFlow: '【任职审批配置-新增】在任职审批配置Tab → 点击"新增"按钮 → 打开新增弹窗 → 填写审批名称（必填）→ 选择审批类型（部门任职/机构任职/调岗）→ 配置审批节点和审批人 → 设置触发条件 → 设置状态 → 点击保存 → 校验通过 → 新增成功 → 列表刷新。',
+        approvalEditFlow: '【任职审批配置-修改】点击操作列"编辑" → 打开编辑弹窗 → 回显配置信息 → 修改可编辑字段 → 点击保存 → 更新成功 → 列表刷新。审批类型不可修改。',
+        approvalDeleteFlow: '【任职审批配置-删除】点击操作列"删除" → 弹出二次确认弹窗 → 确认删除 → 逻辑删除 → Toast提示成功 → 列表刷新。正在使用的审批配置不可删除。',
+        approvalBatchDeleteFlow: '【任职审批配置-批量删除】勾选多条配置 → 点击"批量删除" → 二次确认 → 批量逻辑删除 → Toast提示成功数量。含被引用配置自动跳过。',
+        approvalSortConfig: '【任职审批配置-排序】支持审批名称、创建时间字段排序。点击表头切换升序/降序。默认按创建时间降序排列。',
+        approvalViewFlow: '【任职审批配置-查看】点击审批名称或操作列"查看" → 打开详情抽屉 → 展示配置完整信息（审批流程图、节点信息、触发条件、使用范围等）→ 查看模式只读。',
+        approvalQueryFlow: '【任职审批配置-查询】支持审批名称（模糊）、审批类型（下拉）、状态（下拉）多条件组合查询，AND关系。支持分页查询。',
+        orgAddFlow: '【机构任职记录-新增】在机构任职记录Tab → 点击"新增"按钮 → 打开新增弹窗 → 选择用户 → 选择机构 → 选择职务 → 选择变动类型（任命/免职/调岗/晋升/降职）→ 填写生效时间 → 填写变动说明 → 点击保存 → 校验通过 → 新增成功 → 列表刷新。',
+        orgEditFlow: '【机构任职记录-修改】点击操作列"编辑" → 打开编辑弹窗 → 回显记录信息 → 修改可编辑字段 → 点击保存 → 更新成功 → 列表刷新。',
+        orgDeleteFlow: '【机构任职记录-删除】点击操作列"删除" → 弹出二次确认弹窗 → 确认删除 → 逻辑删除 → Toast提示成功 → 列表刷新。',
+        orgBatchDeleteFlow: '【机构任职记录-批量删除】勾选多条记录 → 点击"批量删除" → 二次确认 → 批量逻辑删除 → Toast提示成功数量。',
+        orgSortConfig: '【机构任职记录-排序】支持用户姓名、机构名称、生效时间字段排序。点击表头切换升序/降序。默认按生效时间降序排列。',
+        orgViewFlow: '【机构任职记录-查看】点击用户姓名或操作列"查看" → 打开详情抽屉 → 展示任职记录完整信息 → 查看模式只读。',
+        orgQueryFlow: '【机构任职记录-查询】支持用户姓名（模糊）、机构（下拉）、变动类型（下拉）、时间范围多条件组合查询，AND关系。支持分页查询。',
+        exceptionHandling: '1.用户已在该部门任职：提示"该用户已在此部门任职，不可重复添加" 2.删除正在使用的审批配置：拦截提示"该审批配置正在使用中，无法删除" 3.空数据状态：列表显示空状态占位图+提示文字"暂无数据" 4.网络异常：Toast提示"网络连接失败，请稍后重试"',
+        permissionReq: '1.系统管理员：拥有全部权限（新增/编辑/删除/批量删除/查询/查看） 2.HR管理员：拥有全部权限 3.分级管理员：仅可管理本机构及下属机构任职信息 4.普通用户：仅可查看自己的任职信息',
+        interaction: 'Tab切换（3个Tab）；多条件组合查询；表头点击排序；复选框多选+批量操作；新增/编辑弹窗；删除二次确认；详情抽屉；审批流程图',
+        acceptance: '1.3个Tab切换正常 2.部门任职履历CRUD功能完整 3.任职审批配置CRUD功能完整 4.机构任职记录CRUD功能完整 5.批量删除有二次确认 6.查询条件完整可用 7.表头可排序 8.详情查看正常 9.Tag标签显示正确 10.分页功能正常',
+        redFields: ['deptAddFlow', 'deptEditFlow', 'deptDeleteFlow', 'deptBatchDeleteFlow', 'deptSortConfig', 'deptViewFlow', 'deptQueryFlow', 'approvalAddFlow', 'approvalEditFlow', 'approvalDeleteFlow', 'approvalBatchDeleteFlow', 'approvalSortConfig', 'approvalViewFlow', 'approvalQueryFlow', 'orgAddFlow', 'orgEditFlow', 'orgDeleteFlow', 'orgBatchDeleteFlow', 'orgSortConfig', 'orgViewFlow', 'orgQueryFlow'],
+    },
+
 };
 
 /* ============================================================
@@ -13029,6 +13577,155 @@ function renderPrdCard(pageKey, pageName, prd) {
     html += renderSection('sysInfoEditFlow', '系统信息设置-修改', prd.sysInfoEditFlow);
     html += renderSection('sysInfoResetFlow', '系统信息设置-恢复默认', prd.sysInfoResetFlow);
     html += renderSection('logoUploadFlow', '系统信息设置-Logo上传', prd.logoUploadFlow);
+    // 应用列表相关（app-list）
+    html += renderSection('onlineOfflineFlow', '上下架操作', prd.onlineOfflineFlow);
+    html += renderSection('versionRecordFlow', '版本记录', prd.versionRecordFlow);
+    html += renderSection('syncFlow', '同步操作', prd.syncFlow);
+    html += renderSection('copyFlow', '复制操作', prd.copyFlow);
+    html += renderSection('resetFlow', '重置操作', prd.resetFlow);
+    html += renderSection('batchOnlineFlow', '批量上架', prd.batchOnlineFlow);
+    html += renderSection('batchOfflineFlow', '批量下架', prd.batchOfflineFlow);
+    html += renderSection('categoryQueryFlow', '分类查询', prd.categoryQueryFlow);
+    html += renderSection('categoryAddFlow', '分类新增', prd.categoryAddFlow);
+    html += renderSection('categoryEditFlow', '分类编辑', prd.categoryEditFlow);
+    html += renderSection('categoryDeleteFlow', '分类删除', prd.categoryDeleteFlow);
+    html += renderSection('tagQueryFlow', '标签查询', prd.tagQueryFlow);
+    html += renderSection('tagAddFlow', '标签新增', prd.tagAddFlow);
+    html += renderSection('tagEditFlow', '标签编辑', prd.tagEditFlow);
+    html += renderSection('tagDeleteFlow', '标签删除', prd.tagDeleteFlow);
+    html += renderSection('tagBatchDeleteFlow', '标签批量删除', prd.tagBatchDeleteFlow);
+    html += renderSection('detailBaseFlow', '详情-基础信息', prd.detailBaseFlow);
+    html += renderSection('detailConfigFlow', '详情-配置管理', prd.detailConfigFlow);
+    html += renderSection('detailMonitorFlow', '详情-监控数据', prd.detailMonitorFlow);
+    html += renderSection('detailLogFlow', '详情-操作日志', prd.detailLogFlow);
+
+    // 应用监测相关（app-monitor）
+    html += renderSection('realTimeMonitorFlow', '实时监控', prd.realTimeMonitorFlow);
+    html += renderSection('historyDataFlow', '历史数据', prd.historyDataFlow);
+    html += renderSection('alarmFlow', '告警信息', prd.alarmFlow);
+    html += renderSection('alarmConfigFlow', '告警配置', prd.alarmConfigFlow);
+    html += renderSection('performanceFlow', '性能指标', prd.performanceFlow);
+    html += renderSection('usageFlow', '使用统计', prd.usageFlow);
+    html += renderSection('userStatFlow', '用户统计', prd.userStatFlow);
+    html += renderSection('orgStatFlow', '机构统计', prd.orgStatFlow);
+
+    // 应用统计相关（app-statistics）
+    html += renderSection('visitStatFlow', '访问统计', prd.visitStatFlow);
+    html += renderSection('useStatFlow', '使用统计', prd.useStatFlow);
+    html += renderSection('userActiveFlow', '用户活跃度', prd.userActiveFlow);
+    html += renderSection('orgRankFlow', '机构排行', prd.orgRankFlow);
+    html += renderSection('appRankFlow', '应用排行', prd.appRankFlow);
+    html += renderSection('trendFlow', '趋势分析', prd.trendFlow);
+    html += renderSection('pieChartFlow', '饼图分析', prd.pieChartFlow);
+    html += renderSection('barChartFlow', '柱图分析', prd.barChartFlow);
+    html += renderSection('dateRangeFlow', '时间范围筛选', prd.dateRangeFlow);
+    html += renderSection('compareFlow', '同环比对比', prd.compareFlow);
+
+    // 流程审批相关（app-access-flow / app-change-flow）
+    html += renderSection('submitFlow', '提交审批', prd.submitFlow);
+    html += renderSection('withdrawFlow', '撤回申请', prd.withdrawFlow);
+    html += renderSection('flowConfigFlow', '流程配置管理', prd.flowConfigFlow);
+    html += renderSection('nodeConfigFlow', '节点配置管理', prd.nodeConfigFlow);
+    html += renderSection('conditionConfigFlow', '条件配置管理', prd.conditionConfigFlow);
+
+    // 门户配置子模块（portal-config）
+    html += renderSection('bannerAddFlow', 'Banner管理-新增', prd.bannerAddFlow);
+    html += renderSection('bannerEditFlow', 'Banner管理-修改', prd.bannerEditFlow);
+    html += renderSection('bannerDeleteFlow', 'Banner管理-删除', prd.bannerDeleteFlow);
+    html += renderSection('bannerSortConfig', 'Banner管理-排序', prd.bannerSortConfig);
+    html += renderSection('bannerQueryFlow', 'Banner管理-查询', prd.bannerQueryFlow);
+    html += renderSection('abilityAddFlow', '开放能力-新增', prd.abilityAddFlow);
+    html += renderSection('abilityEditFlow', '开放能力-修改', prd.abilityEditFlow);
+    html += renderSection('abilityDeleteFlow', '开放能力-删除', prd.abilityDeleteFlow);
+    html += renderSection('abilitySortConfig', '开放能力-排序', prd.abilitySortConfig);
+    html += renderSection('abilityQueryFlow', '开放能力-查询', prd.abilityQueryFlow);
+    html += renderSection('resourceAddFlow', '资源中心-新增', prd.resourceAddFlow);
+    html += renderSection('resourceEditFlow', '资源中心-修改', prd.resourceEditFlow);
+    html += renderSection('resourceDeleteFlow', '资源中心-删除', prd.resourceDeleteFlow);
+    html += renderSection('resourceSortConfig', '资源中心-排序', prd.resourceSortConfig);
+    html += renderSection('resourceQueryFlow', '资源中心-查询', prd.resourceQueryFlow);
+    html += renderSection('guideAddFlow', '新手指南-新增', prd.guideAddFlow);
+
+    // 授权管理子Tab（admin-auth）
+    html += renderSection('workbenchAddFlow', '工作台管理员-新增', prd.workbenchAddFlow);
+    html += renderSection('workbenchEditFlow', '工作台管理员-修改', prd.workbenchEditFlow);
+    html += renderSection('workbenchDeleteFlow', '工作台管理员-删除', prd.workbenchDeleteFlow);
+    html += renderSection('workbenchBatchDeleteFlow', '工作台管理员-批量删除', prd.workbenchBatchDeleteFlow);
+    html += renderSection('workbenchSortConfig', '工作台管理员-排序', prd.workbenchSortConfig);
+    html += renderSection('workbenchViewFlow', '工作台管理员-查看', prd.workbenchViewFlow);
+    html += renderSection('workbenchQueryFlow', '工作台管理员-查询', prd.workbenchQueryFlow);
+    html += renderSection('ticketAddFlow', '工单管理员-新增', prd.ticketAddFlow);
+    html += renderSection('ticketEditFlow', '工单管理员-修改', prd.ticketEditFlow);
+    html += renderSection('ticketDeleteFlow', '工单管理员-删除', prd.ticketDeleteFlow);
+    html += renderSection('ticketBatchDeleteFlow', '工单管理员-批量删除', prd.ticketBatchDeleteFlow);
+    html += renderSection('ticketSortConfig', '工单管理员-排序', prd.ticketSortConfig);
+    html += renderSection('ticketViewFlow', '工单管理员-查看', prd.ticketViewFlow);
+    html += renderSection('ticketQueryFlow', '工单管理员-查询', prd.ticketQueryFlow);
+    html += renderSection('roleAddFlow', '角色管理-新增', prd.roleAddFlow);
+    html += renderSection('roleEditFlow', '角色管理-修改', prd.roleEditFlow);
+    html += renderSection('roleDeleteFlow', '角色管理-删除', prd.roleDeleteFlow);
+    html += renderSection('roleBatchDeleteFlow', '角色管理-批量删除', prd.roleBatchDeleteFlow);
+    html += renderSection('infoManageFlow', '信息管理', prd.infoManageFlow);
+
+    // 用户权限组-关联用户
+    html += renderSection('linkUserFlow', '关联用户', prd.linkUserFlow);
+
+    // 用户管理扩展字段
+    html += renderSection('enableFlow', '启用用户', prd.enableFlow);
+    html += renderSection('disableFlow', '禁用用户', prd.disableFlow);
+    html += renderSection('lockFlow', '锁定用户', prd.lockFlow);
+    html += renderSection('unlockFlow', '解锁用户', prd.unlockFlow);
+    html += renderSection('moveOrgFlow', '调整机构', prd.moveOrgFlow);
+    html += renderSection('batchMoveFlow', '批量调整机构', prd.batchMoveFlow);
+    html += renderSection('roleAssignFlow', '角色分配', prd.roleAssignFlow);
+    html += renderSection('permAssignFlow', '权限分配', prd.permAssignFlow);
+    html += renderSection('avatarUploadFlow', '头像上传', prd.avatarUploadFlow);
+    html += renderSection('exportDetailFlow', '导出详情', prd.exportDetailFlow);
+    html += renderSection('batchImportFlow', '批量导入', prd.batchImportFlow);
+    html += renderSection('templateDownloadFlow', '模板下载', prd.templateDownloadFlow);
+
+    // 用户任职管理（user-appointment）
+    html += renderSection('deptAddFlow', '部门任职-新增', prd.deptAddFlow);
+    html += renderSection('deptEditFlow', '部门任职-修改', prd.deptEditFlow);
+    html += renderSection('deptDeleteFlow', '部门任职-删除', prd.deptDeleteFlow);
+    html += renderSection('deptBatchDeleteFlow', '部门任职-批量删除', prd.deptBatchDeleteFlow);
+    html += renderSection('deptSortConfig', '部门任职-排序', prd.deptSortConfig);
+    html += renderSection('deptViewFlow', '部门任职-查看', prd.deptViewFlow);
+    html += renderSection('deptQueryFlow', '部门任职-查询', prd.deptQueryFlow);
+    html += renderSection('approvalAddFlow', '任职审批配置-新增', prd.approvalAddFlow);
+    html += renderSection('approvalEditFlow', '任职审批配置-修改', prd.approvalEditFlow);
+    html += renderSection('approvalDeleteFlow', '任职审批配置-删除', prd.approvalDeleteFlow);
+    html += renderSection('approvalBatchDeleteFlow', '任职审批配置-批量删除', prd.approvalBatchDeleteFlow);
+    html += renderSection('approvalSortConfig', '任职审批配置-排序', prd.approvalSortConfig);
+    html += renderSection('approvalViewFlow', '任职审批配置-查看', prd.approvalViewFlow);
+    html += renderSection('approvalQueryFlow', '任职审批配置-查询', prd.approvalQueryFlow);
+    html += renderSection('orgAddFlow', '机构任职记录-新增', prd.orgAddFlow);
+    html += renderSection('orgEditFlow', '机构任职记录-修改', prd.orgEditFlow);
+    html += renderSection('orgDeleteFlow', '机构任职记录-删除', prd.orgDeleteFlow);
+    html += renderSection('orgBatchDeleteFlow', '机构任职记录-批量删除', prd.orgBatchDeleteFlow);
+    html += renderSection('orgSortConfig', '机构任职记录-排序', prd.orgSortConfig);
+    html += renderSection('orgViewFlow', '机构任职记录-查看', prd.orgViewFlow);
+    html += renderSection('orgQueryFlow', '机构任职记录-查询', prd.orgQueryFlow);
+
+    // 系统日志（sys-log）
+    html += renderSection('apiQueryFlow', 'API日志-查询', prd.apiQueryFlow);
+    html += renderSection('apiViewFlow', 'API日志-查看', prd.apiViewFlow);
+    html += renderSection('apiExportFlow', 'API日志-导出', prd.apiExportFlow);
+    html += renderSection('syncQueryFlow', '同步记录-查询', prd.syncQueryFlow);
+    html += renderSection('smsQueryFlow', '短信日志-查询', prd.smsQueryFlow);
+
+    // 系统基础设置扩展
+    html += renderSection('passwordConfigFlow', '密码策略配置', prd.passwordConfigFlow);
+    html += renderSection('sessionConfigFlow', '会话配置', prd.sessionConfigFlow);
+    html += renderSection('loginConfigFlow', '登录配置', prd.loginConfigFlow);
+    html += renderSection('securityConfigFlow', '安全配置', prd.securityConfigFlow);
+
+    // 手动通知扩展
+    html += renderSection('batchNotifyFlow', '批量通知', prd.batchNotifyFlow);
+
+    // 工单客户侧
+    html += renderSection('submitFlow', '提交工单', prd.submitFlow);
+
 
     if (prd.fieldRules) {
         html += '<div class="desc-section"><div class="desc-label">字段规则</div>';
