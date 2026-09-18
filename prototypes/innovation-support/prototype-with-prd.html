@@ -4081,6 +4081,255 @@ function renderNavItem(item, level) {
     return '';
 }
 
+/** 面包屑导航 */
+function renderBreadcrumb(crumbs) {
+    let html = '<div class="breadcrumb">';
+    crumbs.forEach((c, i) => {
+        if (i > 0) html += '<span class="crumb">/</span>';
+        if (i === crumbs.length - 1) {
+            html += '<span class="crumb-last">' + c + '</span>';
+        } else {
+            html += '<span class="crumb">' + c + '</span>';
+        }
+    });
+    html += '</div>';
+    return html;
+}
+
+/** 概览模块导航数据 */
+var _overviewModules = [
+    { name: '工作台管理', icon: 'fa-th-large', color: '#165DFF', pages: [
+        { key: 'workbench-manage', label: '工作台管理' },
+        { key: 'workbench-template', label: '模板管理' },
+        { key: 'workbench-category', label: '分类管理' },
+        { key: 'workbench-manual', label: '工作台手册管理' },
+    ]},
+    { name: '应用管理', icon: 'fa-th-large', color: '#722ED1', pages: [
+        { key: 'app-apply', label: '应用申请' },
+        { key: 'app-audit', label: '应用审核' },
+        { key: 'app-list', label: '应用列表' },
+        { key: 'app-monitor', label: '应用监测' },
+        { key: 'app-statistics', label: '应用统计' },
+        { key: 'app-log', label: '应用日志' },
+        { key: 'app-access-flow', label: '接入流程审批' },
+        { key: 'app-change-flow', label: '变更流程审批' },
+    ]},
+    { name: '工单中心', icon: 'fa-ticket', color: '#13C2C2', pages: [
+        { key: 'ticket-center', label: '办件中心' },
+        { key: 'ticket-record', label: '办件记录' },
+        { key: 'ticket-cc', label: '工单抄送管理' },
+        { key: 'ticket-type', label: '工单类型管理' },
+        { key: 'ticket-my-todo', label: '我的代办' },
+        { key: 'ticket-cc-mine', label: '抄送我的工单' },
+        { key: 'ticket-evaluation', label: '工单评价管理' },
+        { key: 'ticket-config-todo-stat', label: '待办统计配置' },
+        { key: 'ticket-config-todo-expire', label: '超期提醒配置' },
+        { key: 'ticket-config-todo-display', label: '展示规则配置' },
+        { key: 'ticket-config-todo-timer', label: '定时器配置' },
+    ]},
+    { name: '开放门户管理', icon: 'fa-globe', color: '#1890FF', pages: [
+        { key: 'portal-config', label: '门户配置' },
+        { key: 'global-search', label: '全局搜索管理' },
+        { key: 'notice', label: '通知公告管理' },
+        { key: 'api-example', label: '接口示例管理' },
+        { key: 'api-error-code', label: '接口错误码管理' },
+        { key: 'app-case-manage', label: '应用案例管理' },
+        { key: 'access-steps', label: '接入步骤管理' },
+        { key: 'portal-my-ticket', label: '我的工单' },
+    ]},
+    { name: '软件服务商工作台', icon: 'fa-briefcase', color: '#FA8C16', pages: [
+        { key: 'provider', label: '软件服务商管理' },
+        { key: 'provider-notice', label: '消息通知管理' },
+        { key: 'provider-entry', label: '服务商入驻管理' },
+    ]},
+    { name: '通知待办', icon: 'fa-bell', color: '#FA8C16', pages: [
+        { key: 'todo-manage', label: '待办管理' },
+        { key: 'manual-notice', label: '手动通知管理' },
+    ]},
+    { name: '权限管理', icon: 'fa-shield', color: '#52C41A', pages: [
+        { key: 'role', label: '角色管理' },
+        { key: 'perm-group', label: '权限组管理' },
+        { key: 'admin-auth', label: '管理员授权' },
+        { key: 'role-perm', label: '角色权限组关联' },
+        { key: 'user-perm-group', label: '用户权限组关联' },
+        { key: 'menu', label: '菜单管理' },
+    ]},
+    { name: '组织机构管理', icon: 'fa-sitemap', color: '#2F54EB', pages: [
+        { key: 'org', label: '机构管理' },
+        { key: 'user', label: '用户管理' },
+        { key: 'title-level', label: '职级职称管理' },
+        { key: 'ext-field', label: '拓展字段管理' },
+        { key: 'transfer', label: '任职调离管理' },
+        { key: 'contact-visibility', label: '通讯录可见性' },
+        { key: 'line', label: '机构条线管理' },
+    ]},
+    { name: '系统管理', icon: 'fa-cog', color: '#8C8C8C', pages: [
+        { key: 'dict-manage', label: '字典管理' },
+        { key: 'sys-log', label: '日志管理' },
+        { key: 'sys-online-user', label: '在线用户管理' },
+        { key: 'sys-sync-app', label: '同步应用管理' },
+        { key: 'sys-basic-settings', label: '基础设置' },
+    ]},
+    { name: '标签管理', icon: 'fa-tags', color: '#EB2F96', pages: [
+        { key: 'tags-manage', label: '分类标签管理' },
+    ]},
+];
+
+/** 概览模块-显示模块页面列表弹窗 */
+function showModulePages(modIdx) {
+    var mod = _overviewModules[modIdx];
+    if (!mod) return;
+    var html = '<div class="p-4">';
+    html += '<div class="text-base font-semibold mb-4" style="color:var(--text-primary);">' + mod.name + ' - 全部页面</div>';
+    html += '<div class="grid grid-cols-1 md:grid-cols-2 gap-3">';
+    for (var pi = 0; pi < mod.pages.length; pi++) {
+        var p = mod.pages[pi];
+        html += '<div class="p-3 rounded cursor-pointer hover:bg-blue-50 transition-colors" style="border:1px solid #E8E8E8;" onclick="closeModal();switchPage(\'' + p.key + '\')">';
+        html += '<div class="flex items-center gap-2">';
+        html += '<i class="fa ' + mod.icon + '" style="color:' + mod.color + ';"></i>';
+        html += '<span class="text-sm" style="color:var(--text-primary);">' + p.label + '</span>';
+        html += '<i class="fa fa-angle-right ml-auto text-xs" style="color:var(--text-tertiary);"></i>';
+        html += '</div>';
+        html += '</div>';
+    }
+    html += '</div>';
+    html += '</div>';
+    openModal('modPages_' + modIdx, mod.name + ' - 页面列表', html, '', 'large');
+}
+
+/** 概览总览页面 */
+function renderOverviewPage() {
+    const stats = [
+        { label: '总功能点', value: 269, color: 'var(--primary)', bg: '#E8F3FF' },
+        { label: '新增功能', value: 66, color: '#F53F3F', bg: '#FFF1F0' },
+        { label: '涉及模块', value: 43, color: 'var(--warning)', bg: '#FFF7E6' },
+        { label: '新增页面', value: 6, color: 'var(--success)', bg: '#F6FFED' },
+    ];
+
+    const newFeatures = [
+        { category: '工单中心', items: ['我的代办（查询/办理/查看/移交/批量办理/导出）', '抄送我的工单-抄送工单统计（增删改查/转发）', '抄送我的工单-抄送工单列表（查看/评分/附件/标记已读/导出）', '工单类型管理-查询', '我的工单-修改/删除/排序', '工单抄送管理-信息管理（8项）', '办件中心-配置信息管理（3项）'] },
+        { category: '开放门户管理', items: ['全局搜索管理（搜索配置+热搜词+排序号）', '通知公告管理-删除/查看', '接口示例管理-增删改查完善', '接口错误码管理-增删改查完善', '我的工单-填报/处理/审批', '应用案例管理-卡片式+查看+版本记录'] },
+        { category: '门户配置', items: ['统一门户配置7Tab（轮播图/接入步骤/应用案例/开放能力/资源中心/开发指南/帮助中心）', '接入步骤-拖拽上传+字符计数', '轮播图-间隔时间设置', '热搜词管理-排序号字段'] },
+    ];
+
+    const modes = [
+        { code: 'A', name: '查询字段排序', count: 38, desc: '列表表头支持点击排序，升序/降序切换，平台级通用能力', icon: 'fa-sort', color: '#165DFF' },
+        { code: 'B', name: '批量删除', count: 24, desc: '列表多选后一键删除，二次确认防误操作', icon: 'fa-trash-o', color: '#FF4D4F' },
+        { code: 'C', name: '配置管理CRUD', count: 76, desc: '各模块配置项完整增删改查，工单中心7类配置+应用日志配置', icon: 'fa-cogs', color: '#722ED1' },
+        { code: 'D', name: '管理员体系统一', count: 17, desc: '工作台/工单/条线管理员统一纳入赣政通管理员体系', icon: 'fa-users', color: '#13C2C2' },
+        { code: 'E', name: '日志导出', count: 3, desc: '操作日志/订阅日志/短信日志支持Excel导出', icon: 'fa-download', color: '#52C41A' },
+        { code: 'F', name: '状态分类管理', count: 1, desc: '应用申请状态分类字典化管理，支持颜色配置', icon: 'fa-tags', color: '#FA8C16' },
+        { code: 'G', name: '文件上传配置', count: 1, desc: '工作台轮播图上传+播放时长配置', icon: 'fa-upload', color: '#EB2F96' },
+        { code: 'H', name: '其他新增功能', count: 13, desc: '调离自动审核、多文件导入、拓展信息、默认标签等', icon: 'fa-plus-circle', color: '#2F54EB' },
+    ];
+
+    var modules = _overviewModules;
+
+    let html = '<div class="p-4">';
+    html += renderBreadcrumb(['概览总览']);
+
+    html += '<div class="new-feature-banner mb-6 p-4 rounded-lg" style="background:linear-gradient(135deg,#FFF1F0 0%,#FFEDED 100%);border:1px solid #FFCCC7;">';
+    html += '<div class="flex items-start gap-3">';
+    html += '<div class="w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0" style="background:#F53F3F;">';
+    html += '<i class="fa fa-bullhorn text-white text-lg"></i>';
+    html += '</div>';
+    html += '<div class="flex-1">';
+    html += '<div class="flex items-center gap-2 mb-1">';
+    html += '<span class="text-base font-bold" style="color:#F53F3F;">v3 走查新增需求提示</span>';
+    html += '<span class="text-xs px-2 py-0.5 rounded-full" style="background:#F53F3F;color:#fff;">NEW</span>';
+    html += '<span class="text-xs ml-2" style="color:#8C8C8C;">共 66 个功能点 / 6 个新页面 / 43 个模块组</span>';
+    html += '</div>';
+    html += '<div class="text-sm" style="color:#CF1322;line-height:1.8;">';
+    html += '基于最新v3走查记录，新增 <b>我的代办</b>、<b>抄送我的工单</b> 2个工单运营侧页面，';
+    html += '开放门户新增 <b>全局搜索管理</b>、<b>门户配置7Tab统一管理</b>，';
+    html += '接入步骤/应用案例/接口示例/错误码等模块全面完善。';
+    html += '右侧PRD面板中 <span style="color:#F53F3F;font-weight:600;">红色字体</span> 标注的为走查记录中的需求项，';
+    html += '侧边栏带 <span style="display:inline-block;font-size:10px;font-weight:600;color:#fff;background:linear-gradient(135deg,#F53F3F,#FF7D6B);padding:1px 6px;border-radius:10px;line-height:1.4;vertical-align:middle;">NEW</span> 标记的为有新增需求的页面。';
+    html += '</div>';
+    html += '</div>';
+    html += '</div>';
+    html += '</div>';
+
+    html += '<div class="grid grid-cols-2 md:grid-cols-4 gap-4 mt-3 mb-6">';
+    for (const s of stats) {
+        html += '<div class="stat-card bg-white rounded p-5" style="border:1px solid #F0F0F0;">';
+        html += '<div class="text-3xl font-bold" style="color:' + s.color + ';">' + s.value + '</div>';
+        html += '<div class="text-sm mt-2" style="color:var(--text-secondary);">' + s.label + '</div>';
+        html += '<div class="mt-2" style="height:3px;background:' + s.bg + ';border-radius:2px;"></div>';
+        html += '</div>';
+    }
+    html += '</div>';
+
+    html += '<div class="text-base font-semibold mb-4 flex items-center gap-2" style="color:var(--text-primary);">';
+    html += '<i class="fa fa-star" style="color:#F53F3F;"></i> 新增需求清单';
+    html += '<span class="text-xs font-normal ml-1" style="color:var(--text-tertiary);">v3走查记录 - 红色标注项</span>';
+    html += '</div>';
+    html += '<div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">';
+    for (var ni = 0; ni < newFeatures.length; ni++) {
+        var nf = newFeatures[ni];
+        html += '<div class="bg-white rounded p-5" style="border:1px solid #FFE0DD;">';
+        html += '<div class="font-semibold text-sm mb-3 flex items-center gap-2" style="color:#F53F3F;">';
+        html += '<i class="fa fa-folder-open-o"></i>' + nf.category;
+        html += '<span class="text-xs px-2 py-0.5 rounded-full ml-auto" style="background:#FFF1F0;color:#F53F3F;">' + nf.items.length + '项</span>';
+        html += '</div>';
+        html += '<div class="flex flex-wrap gap-2">';
+        for (var ii = 0; ii < nf.items.length; ii++) {
+            html += '<span class="text-xs px-2.5 py-1 rounded" style="background:#FFF7F6;color:#CF1322;border:1px solid #FFCCC7;">';
+            html += '<i class="fa fa-plus-circle mr-1" style="font-size:10px;"></i>' + nf.items[ii];
+            html += '</span>';
+        }
+        html += '</div>';
+        html += '</div>';
+    }
+    html += '</div>';
+
+    html += '<div class="text-base font-semibold mb-4" style="color:var(--text-primary);">8大变更模式</div>';
+    html += '<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">';
+    for (var mi = 0; mi < modes.length; mi++) {
+        var m = modes[mi];
+        html += '<div class="mode-card bg-white rounded p-5" style="border:1px solid #F0F0F0;">';
+        html += '<div class="flex items-center justify-between mb-3">';
+        html += '<div class="w-10 h-10 rounded-full flex items-center justify-center" style="background:' + m.color + '15;">';
+        html += '<i class="fa ' + m.icon + ' text-lg" style="color:' + m.color + ';"></i>';
+        html += '</div>';
+        html += '<span class="text-2xl font-bold" style="color:' + m.color + ';">' + m.count + '</span>';
+        html += '</div>';
+        html += '<div class="font-semibold text-sm" style="color:var(--text-primary);">模式' + m.code + ' - ' + m.name + '</div>';
+        html += '<div class="text-xs mt-2" style="color:var(--text-tertiary);line-height:1.6;">' + m.desc + '</div>';
+        html += '</div>';
+    }
+    html += '</div>';
+
+    html += '<div class="text-base font-semibold mt-8 mb-4" style="color:var(--text-primary);">功能模块导航 <span class="text-xs font-normal ml-2" style="color:var(--text-tertiary);">点击模块快速跳转</span></div>';
+    html += '<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">';
+    for (var mi2 = 0; mi2 < modules.length; mi2++) {
+        var mod2 = modules[mi2];
+        var tagsHtml2 = '';
+        for (var pi2 = 0; pi2 < Math.min(3, mod2.pages.length); pi2++) {
+            tagsHtml2 += '<span class="text-xs px-2 py-0.5 rounded" style="background:' + mod2.color + '10;color:' + mod2.color + ';">' + mod2.pages[pi2].label + '</span>';
+        }
+        if (mod2.pages.length > 3) {
+            tagsHtml2 += '<span class="text-xs px-2 py-0.5 rounded" style="background:#F5F5F5;color:#8C8C8C;">+' + (mod2.pages.length - 3) + '</span>';
+        }
+        html += '<div class="module-card bg-white rounded p-5 cursor-pointer hover:shadow-md transition-all" style="border:1px solid #F0F0F0;" onclick="showModulePages(' + mi2 + ')">';
+        html += '<div class="flex items-center gap-3 mb-3">';
+        html += '<div class="w-10 h-10 rounded flex items-center justify-center" style="background:' + mod2.color + '15;">';
+        html += '<i class="fa ' + mod2.icon + ' text-lg" style="color:' + mod2.color + ';"></i>';
+        html += '</div>';
+        html += '<div class="font-semibold text-base" style="color:var(--text-primary);">' + mod2.name + '</div>';
+        html += '</div>';
+        html += '<div class="flex flex-wrap gap-1">' + tagsHtml2 + '</div>';
+        html += '<div class="text-xs mt-3" style="color:var(--text-tertiary);">';
+        html += '<i class="fa fa-angle-right mr-1"></i> 点击查看全部 ' + mod2.pages.length + ' 个页面';
+        html += '</div>';
+        html += '</div>';
+    }
+    html += '</div>';
+
+    html += '</div>';
+    return html;
+}
+
 /** 渲染页面（主入口） */
 function renderPage(pageKey) {
     const config = pageConfigs[pageKey];
