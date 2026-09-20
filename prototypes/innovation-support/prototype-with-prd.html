@@ -5337,7 +5337,8 @@ var _newFeaturePages = [
     'help-info',            // 帮助信息管理（恢复）
     'user-appointment',     // 用户任职管理（新增）
     'line',                 // 机构条线管理
-];;
+    'workbench-manage',     // 工作台管理（双Tab+卡片+第三方工作台版本）
+];
 
 /** 递归渲染导航项 */
 function renderNavItem(item, level) {
@@ -5951,13 +5952,15 @@ function showModulePages(modIdx) {
 /** 概览总览页面 */
 function renderOverviewPage() {
     const stats = [
-        { label: '总功能点', value: 328, color: 'var(--primary)', bg: '#E8F3FF' },
-        { label: '新增功能', value: 85, color: '#F53F3F', bg: '#FFF1F0' },
-        { label: '涉及模块', value: 52, color: 'var(--warning)', bg: '#FFF7E6' },
+        { label: '总功能点', value: 370, color: 'var(--primary)', bg: '#E8F3FF' },
+        { label: '新增功能', value: 92, color: '#F53F3F', bg: '#FFF1F0' },
+        { label: '涉及模块', value: 58, color: 'var(--warning)', bg: '#FFF7E6' },
         { label: '页面总数', value: 68, color: 'var(--success)', bg: '#F6FFED' },
     ];
 
     const newFeatures = [
+        { category: '工作台管理', items: ['标准工作台卡片式布局（创建/编辑/删除/预览/状态切换）', '工作台创建弹窗（空白创建+工作台复刻）', '工作台历史版本记录（版本列表+版本详情+回滚）', '第三方工作台管理（增删改查+表格列表）', '第三方工作台版本管理（新增版本/版本详情/版本记录）'] },
+        { category: '软件服务商工作台', items: ['消息通知管理-站内消息单页（新增/编辑/查看/删除/标记已读）', '消息通知管理-手动通知管理说明', '软件服务商详情抽屉-应用关联Tab', '应用关联CRUD+批量解除+排序', '服务商入驻详情抽屉-应用关联CRUD'] },
         { category: '工单中心', items: ['我的代办（查询/办理/查看/移交/批量办理/导出）', '抄送我的工单-抄送工单统计（增删改查/转发）', '抄送我的工单-抄送工单列表（查看/评分/附件/标记已读/导出）', '工单类型管理-查询', '我的工单-修改/删除/排序', '工单抄送管理-信息管理（8项）', '办件中心-配置信息管理（3项）'] },
         { category: '开放门户管理', items: ['全局搜索管理（搜索配置+热搜词+排序号）', '通知公告管理-删除/查看', '接口示例管理-增删改查完善', '接口错误码管理-增删改查完善', '我的工单-填报/处理/审批', '应用案例管理-卡片式+查看+版本记录'] },
         { category: '门户配置', items: ['统一门户配置7Tab（轮播图/接入步骤/应用案例/开放能力/资源中心/开发指南/帮助中心）', '接入步骤-拖拽上传+字符计数', '轮播图-间隔时间设置', '热搜词管理-排序号字段'] },
@@ -5988,10 +5991,10 @@ function renderOverviewPage() {
     html += '<div class="flex items-center gap-2 mb-1">';
     html += '<span class="text-base font-bold" style="color:#F53F3F;">最终版走查重构提示</span>';
     html += '<span class="text-xs px-2 py-0.5 rounded-full" style="background:#F53F3F;color:#fff;">NEW</span>';
-    html += '<span class="text-xs ml-2" style="color:#8C8C8C;">共 85 个功能点 / 12 个新页面 / 52 个模块组</span>';
+    html += '<span class="text-xs ml-2" style="color:#8C8C8C;">共 92 个功能点 / 68 个页面 / 58 个模块组</span>';
     html += '</div>';
     html += '<div class="text-sm" style="color:#CF1322;line-height:1.8;">';
-    html += '基于最终版走查记录，全面重构侧边栏菜单结构，新增 <b>用户任职管理</b>、<b>职务管理</b>、<b>帮助信息管理</b> 等页面，';
+    html += '基于最终版走查记录，全面重构侧边栏菜单结构，新增 <b>工作台双Tab管理</b>（标准工作台卡片+第三方工作台）、<b>工作台版本管理</b>、<b>软件服务商应用关联</b>、<b>消息通知管理</b> 等功能，';
     html += '开放门户新增 <b>全局搜索管理</b>、<b>门户配置7Tab统一管理</b>，';
     html += '接入步骤/应用案例/接口示例/错误码等模块全面完善。';
     html += '右侧PRD面板中 <span style="color:#F53F3F;font-weight:600;">红色字体</span> 标注的为走查记录中的需求项，';
