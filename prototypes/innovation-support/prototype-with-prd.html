@@ -1929,26 +1929,73 @@ var pageConfigs = {
 
     /* ---------- 工作台管理 ---------- */
     'workbench-manage': {
-        type: 'card-list',
+        type: 'tab-table',
         breadcrumb: ['工作台管理', '工作台管理'],
-        query: [
-            { key: 'name', label: '工作台名称', type: 'input', placeholder: '请输入工作台名称' },
-            { key: 'status', label: '状态', type: 'select', placeholder: '请选择', options: [{ value: '', label: '全部' }, { value: '1', label: '启用' }, { value: '0', label: '停用' }] },
-            { key: 'type', label: '类型', type: 'select', placeholder: '请选择', options: [{ value: '', label: '全部' }, { value: 'standard', label: '标准工作台' }, { value: 'custom', label: '自定义工作台' }, { value: 'industry', label: '行业工作台' }] },
+        tabs: [
+            { key: 'standard', label: '标准工作台配置' },
+            { key: 'third-party', label: '第三方工作台配置' },
         ],
-        toolbar: [
-            { type: 'add', text: '新增工作台' },
-            { type: 'custom', text: '批量更新模板', icon: 'fa-refresh', onClick: "showToast('批量更新模板成功','success')" },
-            { type: 'custom', text: '批量进度查询', icon: 'fa-tasks', onClick: "showToast('批量进度查询成功','success')" },
-        ],
-        data: [
-            { id: 1, name: '政务办公工作台', type: 'standard', version: 'v2.1.0', status: true, preview: 'fa-desktop', createTime: '2025-03-15 10:30:00', creator: '张三' },
-            { id: 2, name: '民生服务工作台', type: 'industry', version: 'v1.5.2', status: true, preview: 'fa-users', createTime: '2025-03-16 14:20:00', creator: '李四' },
-            { id: 3, name: '经济运行工作台', type: 'custom', version: 'v3.0.0', status: false, preview: 'fa-line-chart', createTime: '2025-02-10 09:00:00', creator: '王五' },
-            { id: 4, name: '市场监管工作台', type: 'industry', version: 'v1.2.1', status: true, preview: 'fa-briefcase', createTime: '2025-02-11 14:30:00', creator: '赵六' },
-            { id: 5, name: '应急管理工作台', type: 'standard', version: 'v2.0.0', status: true, preview: 'fa-exclamation-triangle', createTime: '2025-03-17 09:15:00', creator: '钱七' },
-            { id: 6, name: '交通运输工作台', type: 'industry', version: 'v1.0.0', status: false, preview: 'fa-car', createTime: '2025-03-18 11:00:00', creator: '孙八' },
-        ],
+        tabConfigs: {
+            'standard': {
+                query: [
+                    { key: 'name', label: '工作台名称', type: 'input', placeholder: '请输入工作台名称' },
+                    { key: 'status', label: '状态', type: 'select', placeholder: '请选择', options: [{ value: '', label: '全部' }, { value: '1', label: '启用' }, { value: '0', label: '停用' }] },
+                ],
+                toolbar: [],
+                columns: [
+                    { type: 'index', title: '序号' },
+                    { key: 'name', title: '工作台名称', sortable: true },
+                    { key: 'code', title: '工作台编码', sortable: true },
+                    { key: 'version', title: '当前版本', sortable: true },
+                    { key: 'templateName', title: '关联模板' },
+                    { key: 'scope', title: '适用范围' },
+                    { key: 'status', title: '状态', type: 'tag', tagMap: { true: { text: '启用', color: 'green' }, false: { text: '停用', color: 'red' } } },
+                    { key: 'updateTime', title: '更新时间', sortable: true },
+                    { type: 'actions', title: '操作', actions: [
+                        { key: 'version', label: '版本记录', onClick: "showWorkbenchVersionRecord('standard', arguments[0])" },
+                    ]},
+                ],
+                data: [
+                    { id: 1, name: '政务办公工作台', code: 'STD-GZBG-001', version: 'v2.1.0', templateName: '政务办公标准模板', scope: '政务办公条线', status: true, updateTime: '2025-03-15 10:30:00' },
+                    { id: 2, name: '民生服务工作台', code: 'STD-MSFW-001', version: 'v1.5.2', templateName: '民生服务行业模板', scope: '民生服务条线', status: true, updateTime: '2025-03-16 14:20:00' },
+                    { id: 3, name: '应急管理工作台', code: 'STD-YJGL-001', version: 'v2.0.0', templateName: '应急管理标准模板', scope: '应急管理条线', status: true, updateTime: '2025-03-17 09:15:00' },
+                    { id: 4, name: '经济运行工作台', code: 'STD-JJYX-001', version: 'v3.0.0', templateName: '经济运行自定义模板', scope: '经济运行条线', status: false, updateTime: '2025-02-10 09:00:00' },
+                    { id: 5, name: '市场监管工作台', code: 'STD-SCJG-001', version: 'v1.2.1', templateName: '市场监管行业模板', scope: '市场监管条线', status: true, updateTime: '2025-02-11 14:30:00' },
+                    { id: 6, name: '医疗卫生工作台', code: 'STD-YYWS-001', version: 'v2.2.0', templateName: '医疗卫生标准模板', scope: '医疗卫生条线', status: true, updateTime: '2025-03-22 09:45:00' },
+                ],
+            },
+            'third-party': {
+                query: [
+                    { key: 'name', label: '工作台名称', type: 'input', placeholder: '请输入工作台名称' },
+                    { key: 'provider', label: '服务商名称', type: 'input', placeholder: '请输入服务商名称' },
+                    { key: 'status', label: '状态', type: 'select', placeholder: '请选择', options: [{ value: '', label: '全部' }, { value: '1', label: '启用' }, { value: '0', label: '停用' }] },
+                ],
+                toolbar: [{ type: 'add', text: '新增第三方工作台', onClick: "openThirdPartyWorkbenchAdd()" }, { type: 'batchDelete', onClick: "batchDeleteThirdPartyWorkbench()" }],
+                columns: [
+                    { type: 'checkbox' },
+                    { type: 'index', title: '序号' },
+                    { key: 'name', title: '工作台名称', sortable: true },
+                    { key: 'code', title: '工作台编码', sortable: true },
+                    { key: 'provider', title: '服务商名称' },
+                    { key: 'version', title: '当前版本', sortable: true },
+                    { key: 'accessType', title: '接入方式', type: 'tag', tagMap: { 'iframe': { text: 'iframe嵌入', color: 'blue' }, 'link': { text: '外链跳转', color: 'green' }, 'api': { text: 'API集成', color: 'purple' } } },
+                    { key: 'status', title: '状态', type: 'toggle' },
+                    { key: 'createTime', title: '创建时间', sortable: true },
+                    { type: 'actions', title: '操作', actions: [
+                        { key: 'version', label: '版本记录', onClick: "showWorkbenchVersionRecord('third-party', arguments[0])" },
+                        { key: 'edit', label: '编辑', onClick: "openThirdPartyWorkbenchEdit(arguments[0])" },
+                        { key: 'delete', label: '删除', danger: true },
+                    ]},
+                ],
+                data: [
+                    { id: 1, name: '智慧审批工作台', code: 'TP-ZHSP-001', provider: '某科技有限公司', version: 'v1.3.0', accessType: 'iframe', status: true, createTime: '2025-03-10 09:00:00' },
+                    { id: 2, name: '项目管理工作台', code: 'TP-XMGL-001', provider: '某软件公司', version: 'v2.0.1', accessType: 'api', status: true, createTime: '2025-03-12 10:30:00' },
+                    { id: 3, name: '财务共享工作台', code: 'TP-CWGX-001', provider: '某财务软件公司', version: 'v1.0.0', accessType: 'link', status: false, createTime: '2025-03-15 14:20:00' },
+                    { id: 4, name: '人力资源工作台', code: 'TP-RLZY-001', provider: '某HR科技公司', version: 'v1.5.2', accessType: 'iframe', status: true, createTime: '2025-03-18 11:00:00' },
+                    { id: 5, name: '客户关系工作台', code: 'TP-KHGX-001', provider: '某CRM厂商', version: 'v3.1.0', accessType: 'api', status: true, createTime: '2025-03-20 16:45:00' },
+                ],
+            },
+        },
     },
 
     /* ---------- 模板管理 ---------- */
@@ -11304,6 +11351,116 @@ function openLineUserMgmt() {
 }
 
 /** 条线管理员管理弹窗 */
+/** 工作台版本记录弹窗 */
+function showWorkbenchVersionRecord(type, row) {
+    var id = 'modal_wb_version_' + type + '_' + row.id;
+    var title = row.name + ' - 版本记录';
+
+    var versions = {
+        standard: [
+            { version: 'v2.1.0', date: '2025-03-15 10:30:00', desc: '新增政务服务模块；优化首页布局；修复已知问题', operator: '张三', status: '已发布' },
+            { version: 'v2.0.0', date: '2025-02-10 14:00:00', desc: '重大版本更新：重构组件库；新增数据大屏；性能优化', operator: '李四', status: '已发布' },
+            { version: 'v1.5.2', date: '2025-01-05 09:30:00', desc: '修复审批流程异常；优化消息通知', operator: '王五', status: '已发布' },
+            { version: 'v1.5.0', date: '2024-12-20 16:00:00', desc: '新增待办中心；优化用户体验', operator: '张三', status: '已发布' },
+            { version: 'v1.0.0', date: '2024-10-01 08:00:00', desc: '首版发布：政务办公工作台上线', operator: '系统', status: '已发布' },
+        ],
+        'third-party': [
+            { version: 'v1.3.0', date: '2025-03-20 11:00:00', desc: '新增数据统计模块；优化iframe加载性能', operator: '服务商A', status: '已发布' },
+            { version: 'v1.2.0', date: '2025-03-10 15:30:00', desc: '修复权限同步问题；新增主题切换', operator: '服务商A', status: '已发布' },
+            { version: 'v1.1.0', date: '2025-02-28 09:00:00', desc: '新增消息通知；优化首页布局', operator: '服务商A', status: '已发布' },
+            { version: 'v1.0.0', date: '2025-02-15 10:00:00', desc: '首版接入：第三方工作台上线', operator: '服务商A', status: '已发布' },
+        ],
+    };
+
+    var list = versions[type] || [];
+
+    var bodyHtml = '<div class="p-4">';
+    bodyHtml += '<div class="flex items-center justify-between mb-4">';
+    bodyHtml += '<div class="text-sm" style="color:var(--text-secondary);">当前版本：<span style="color:var(--primary);font-weight:600;">' + row.version + '</span></div>';
+    if (type === 'standard') {
+        bodyHtml += '<button class="px-3 py-1.5 text-sm text-white rounded" style="background:var(--primary);" onclick="showToast(\'新增版本成功\',\'success\')"><i class="fa fa-plus"></i> 新增版本</button>';
+    } else {
+        bodyHtml += '<button class="px-3 py-1.5 text-sm text-white rounded" style="background:var(--primary);" onclick="showToast(\'新增版本成功\',\'success\')"><i class="fa fa-plus"></i> 新增版本</button>';
+    }
+    bodyHtml += '</div>';
+
+    bodyHtml += '<div style="max-height:400px;overflow-y:auto;">';
+    bodyHtml += '<table class="data-table">';
+    bodyHtml += '<thead><tr>';
+    bodyHtml += '<th style="width:50px;">序号</th>';
+    bodyHtml += '<th>版本号</th>';
+    bodyHtml += '<th>发布时间</th>';
+    bodyHtml += '<th>更新内容</th>';
+    bodyHtml += '<th>操作人</th>';
+    bodyHtml += '<th style="width:80px;">状态</th>';
+    bodyHtml += '</tr></thead><tbody>';
+    for (var i = 0; i < list.length; i++) {
+        var v = list[i];
+        var isCurrent = v.version === row.version;
+        bodyHtml += '<tr>';
+        bodyHtml += '<td>' + (i + 1) + '</td>';
+        bodyHtml += '<td>';
+        bodyHtml += '<span style="font-weight:600;color:var(--primary);">' + v.version + '</span>';
+        if (isCurrent) bodyHtml += '<span class="ml-2 text-xs px-1.5 py-0.5 rounded" style="background:#E6F7FF;color:#1890FF;">当前</span>';
+        bodyHtml += '</td>';
+        bodyHtml += '<td class="text-xs" style="color:var(--text-tertiary);">' + v.date + '</td>';
+        bodyHtml += '<td class="text-xs" style="color:var(--text-secondary);">' + v.desc + '</td>';
+        bodyHtml += '<td>' + v.operator + '</td>';
+        bodyHtml += '<td><span class="text-xs px-2 py-0.5 rounded" style="background:#F6FFED;color:#52C41A;">' + v.status + '</span></td>';
+        bodyHtml += '</tr>';
+    }
+    bodyHtml += '</tbody></table>';
+    bodyHtml += '</div>';
+    bodyHtml += '</div>';
+
+    openModal(id, title, bodyHtml, '', 'large');
+}
+
+/** 新增第三方工作台弹窗 */
+function openThirdPartyWorkbenchAdd() {
+    var id = 'modal_tp_add';
+    var title = '新增第三方工作台';
+    var bodyHtml = renderThirdPartyWorkbenchForm(null);
+    var footerHtml = '<button class="px-4 py-1.5 text-sm rounded border" style="border-color:#D9D9D9;" onclick="closeModal(\'' + id + '\')">取消</button>';
+    footerHtml += '<button class="px-4 py-1.5 text-sm text-white rounded" style="background:var(--primary);" onclick="showToast(\'新增成功\',\'success\');closeModal(\'' + id + '\')">确定</button>';
+    openModal(id, title, bodyHtml, footerHtml, 'md');
+}
+
+/** 编辑第三方工作台弹窗 */
+function openThirdPartyWorkbenchEdit(row) {
+    var id = 'modal_tp_edit_' + row.id;
+    var title = '编辑第三方工作台';
+    var bodyHtml = renderThirdPartyWorkbenchForm(row);
+    var footerHtml = '<button class="px-4 py-1.5 text-sm rounded border" style="border-color:#D9D9D9;" onclick="closeModal(\'' + id + '\')">取消</button>';
+    footerHtml += '<button class="px-4 py-1.5 text-sm text-white rounded" style="background:var(--primary);" onclick="showToast(\'保存成功\',\'success\');closeModal(\'' + id + '\')">确定</button>';
+    openModal(id, title, bodyHtml, footerHtml, 'md');
+}
+
+/** 第三方工作台表单 */
+function renderThirdPartyWorkbenchForm(row) {
+    var d = row || { name: '', code: '', provider: '', accessType: 'iframe', status: true, url: '', appId: '', appSecret: '', remark: '' };
+    var html = '<div class="p-4">';
+    html += '<div class="grid grid-cols-2 gap-4">';
+    html += '<div class="form-item"><label class="form-label">工作台名称<span style="color:var(--danger);">*</span></label><input type="text" class="form-input" value="' + d.name + '" placeholder="请输入工作台名称" /></div>';
+    html += '<div class="form-item"><label class="form-label">工作台编码<span style="color:var(--danger);">*</span></label><input type="text" class="form-input" value="' + d.code + '" placeholder="请输入工作台编码" /></div>';
+    html += '<div class="form-item"><label class="form-label">服务商名称<span style="color:var(--danger);">*</span></label><input type="text" class="form-input" value="' + d.provider + '" placeholder="请输入服务商名称" /></div>';
+    html += '<div class="form-item"><label class="form-label">接入方式<span style="color:var(--danger);">*</span></label><select class="form-input"><option value="iframe">iframe嵌入</option><option value="link">外链跳转</option><option value="api">API集成</option></select></div>';
+    html += '<div class="form-item"><label class="form-label">访问地址<span style="color:var(--danger);">*</span></label><input type="text" class="form-input" value="' + d.url + '" placeholder="请输入访问地址URL" /></div>';
+    html += '<div class="form-item"><label class="form-label">应用ID</label><input type="text" class="form-input" value="' + d.appId + '" placeholder="请输入应用ID" /></div>';
+    html += '<div class="form-item col-span-2"><label class="form-label">应用密钥</label><input type="text" class="form-input" value="' + d.appSecret + '" placeholder="请输入应用密钥" /></div>';
+    html += '<div class="form-item"><label class="form-label">状态</label><select class="form-input"><option value="1" ' + (d.status ? 'selected' : '') + '>启用</option><option value="0" ' + (!d.status ? 'selected' : '') + '>停用</option></select></div>';
+    html += '<div class="form-item col-span-2"><label class="form-label">备注说明</label><textarea class="form-input" rows="3" placeholder="请输入备注说明">' + d.remark + '</textarea></div>';
+    html += '</div></div>';
+    return html;
+}
+
+/** 批量删除第三方工作台 */
+function batchDeleteThirdPartyWorkbench() {
+    showConfirmDialog('确认删除', '确定要批量删除选中的第三方工作台吗？删除后不可恢复。', function() {
+        showToast('批量删除成功', 'success');
+    });
+}
+
 function openLineAdminMgmt() {
     var id = 'modal_line_admin';
     
@@ -12470,24 +12627,27 @@ var prdData = {
         redFields: ['addFlow', 'editFlow', 'deleteFlow', 'sortConfig', 'queryFlow'],
 },
     'workbench-manage': {
-        background: '【第二批走查】工作台管理是工作台管理子系统的核心模块，以卡片式列表展示所有工作台，支持新增、编辑、删除、启用停用、版本管理等操作。走查覆盖3项功能点：①工作台管理卡片式列表+新增+批量操作（符合，增加管理功能）②工作台版本信息新增（符合，增加管理功能）③工作台版本信息查询（符合，增加查询功能）。原型实现：卡片式栅格布局，每张卡片含预览图、名称、类型标签、版本号、状态标签、启用停用Toggle开关、更多操作菜单；顶部操作栏含新增工作台、批量更新模板、批量进度查询按钮；查询区支持工作台名称搜索、状态筛选、类型筛选；点击版本管理可查看版本列表并新增版本。',
+        background: '【工作台管理】工作台管理是工作台管理子系统的核心模块，负责管理标准工作台配置和第三方工作台配置两大类。标准工作台为平台内置工作台，由系统管理员统一配置和维护版本；第三方工作台由外部服务商提供，支持完整的增删改查和版本管理。走查覆盖8个功能点：标准工作台配置（版本信息新增/查询）+ 第三方工作台配置（信息新增/修改/删除/查询/版本新增/版本查询）。',
         targetUsers: '系统管理员、工作台管理员、平台管理员',
-        coreFeatures: '1.多条件组合查询 2.新增工作台管理',
-        businessFlow: '进入工作台管理页 → 设置查询条件 → 查看列表数据 → 点击新增 → 填写表单 → 保存',
-        pageInfo: '支持多条件查询；支持新增',
-        dataModel: '核心实体：工作台管理（id/名称/编码/排序号/状态/创建时间/创建人）；支持新增操作。',
-        addFlow: '点击"新增"按钮 → 打开新增弹窗 → 填写名称（必填，唯一校验）、编码（必填，唯一校验，字母数字下划线） → 选择状态（启用/停用，默认启用） → 设置排序号（数字，默认0） → 点击保存 → 前端校验通过 → 后端唯一性校验 → 新增成功，Toast提示 → 列表刷新显示新记录',
-        queryFlow: '支持多条件组合查询，多条件为AND关系。查询操作：输入/选择条件后点击"查询"按钮 → 列表按条件过滤显示 → 点击"重置"按钮清空所有条件，恢复默认列表。支持分页查询，默认10条/页，可切换每页条数（10/20/50/100）。',
-        exceptionHandling: '1.名称重复：保存时提示"名称已存在，请重新输入" 2.编码重复：保存时提示"编码已存在，请重新输入" 3.编码格式错误：提示"编码只能包含字母、数字和下划线" 4.空数据状态：列表显示空状态占位图+提示文字"暂无数据" 5.网络异常：Toast提示"网络连接失败，请稍后重试" 6.数据加载失败：显示"加载失败，点击重试"按钮',
-        permissionReq: '1.系统管理员：拥有全部权限（新增/查询） 2.平台管理员：拥有全部权限 3.分级管理员：仅查询权限，不可新增、编辑、删除 4.普通用户：无访问权限，菜单不可见',
-        interaction: '多条件组合查询；新增弹窗表单',
-        editFlow: '【工作台编辑】点击操作列"编辑" → 打开编辑弹窗 → 回显工作台信息（名称、编码、描述、图标、布局模板等）→ 修改可编辑字段 → 点击保存 → 校验通过 → 更新成功，Toast提示 → 列表刷新。编码创建后不可修改，支持上传自定义图标。',
-        deleteFlow: '【工作台删除】点击操作列"删除" → 弹出二次确认弹窗"确定删除该工作台吗？删除后已关联的用户将无法访问。" → 确认删除 → 逻辑删除 → Toast提示"删除成功" → 列表刷新。已被用户订阅的工作台不可删除，需先解除关联。',
-        batchDeleteFlow: '【批量删除】勾选多条工作台记录 → 点击"批量删除"按钮 → 弹出二次确认弹窗（显示选中数量）→ 确认删除 → 批量逻辑删除 → Toast提示成功删除数量。含被引用数据时自动跳过并提示跳过数量。',
-        sortConfig: '支持工作台名称、创建时间、排序号字段排序。点击表头切换升序/降序，箭头图标标识。默认按排序号升序排列。仅支持单列排序。',
-        viewFlow: '【工作台查看】点击工作台卡片或操作列"查看" → 打开展示抽屉/详情页 → 展示工作台完整信息（名称、编码、描述、图标、布局配置、组件列表、权限范围等）→ 支持预览工作台效果 → 查看模式只读，不可编辑。',
-        redFields: ['addFlow', 'editFlow', 'deleteFlow', 'batchDeleteFlow', 'sortConfig', 'viewFlow', 'queryFlow', 'configFlow'],
-},
+        coreFeatures: '1.标准工作台配置（版本管理） 2.第三方工作台信息管理（增删改查） 3.第三方工作台版本管理 4.多条件组合查询',
+        businessFlow: '进入工作台管理页 → 选择"标准工作台配置"或"第三方工作台配置"Tab → 查看对应列表 → 标准工作台：点击版本记录查看/新增版本 → 第三方工作台：新增/编辑/删除/查看版本记录',
+        pageInfo: '双Tab结构：标准工作台配置 + 第三方工作台配置；标准工作台为只读列表，操作仅版本记录；第三方工作台支持完整CRUD+批量删除+版本管理',
+        dataModel: '核心实体：标准工作台（id/名称/编码/版本号/关联模板/适用范围/状态/更新时间）、第三方工作台（id/名称/编码/服务商名称/接入方式/访问地址/应用ID/应用密钥/版本号/状态/创建时间）、工作台版本（id/工作台ID/版本号/更新内容/发布时间/操作人/状态）。枚举值：接入方式（iframe嵌入/外链跳转/API集成）、状态（启用/停用）、版本状态（已发布/草稿/已回滚）。',
+        stdQueryFlow: '【标准工作台查询】支持工作台名称（模糊）、状态（下拉）多条件组合查询，AND关系。支持分页查询，默认10条/页。支持按工作台名称、编码、当前版本、更新时间排序。',
+        stdVersionAddFlow: '【标准工作台版本新增】在标准工作台列表 → 点击操作列"版本记录" → 打开版本记录弹窗 → 点击"新增版本"按钮 → 填写版本号、更新内容说明 → 选择发布状态 → 点击保存 → 版本新增成功 → 自动更新当前版本号 → Toast提示成功。版本号需遵循语义化版本规范（主版本.次版本.修订号）。',
+        tpAddFlow: '【第三方工作台新增】点击"新增第三方工作台"按钮 → 打开新增弹窗 → 填写工作台名称（必填，唯一校验）、工作台编码（必填，唯一校验，字母数字下划线开头） → 选择服务商名称（必填） → 选择接入方式（iframe嵌入/外链跳转/API集成，默认iframe） → 填写访问地址URL（必填） → 填写应用ID、应用密钥 → 选择状态（启用/停用，默认启用） → 填写备注说明 → 点击保存 → 前端校验通过 → 后端唯一性校验 → 新增成功，Toast提示 → 列表刷新。',
+        tpEditFlow: '【第三方工作台修改】点击操作列"编辑" → 打开编辑弹窗 → 回显所有字段信息 → 修改工作台名称/服务商/接入方式/访问地址/应用密钥/状态/备注等 → 点击保存 → 校验通过 → 更新成功，Toast提示 → 列表刷新。工作台编码创建后不可修改。',
+        tpDeleteFlow: '【第三方工作台删除】点击操作列"删除" → 弹出二次确认弹窗"确定删除该第三方工作台吗？删除后已关联的用户将无法访问。" → 确认删除 → 逻辑删除 → Toast提示"删除成功" → 列表刷新。已被用户订阅的工作台不可删除，需先解除关联。',
+        tpQueryFlow: '【第三方工作台查询】支持工作台名称（模糊）、服务商名称（模糊）、状态（下拉）多条件组合查询，AND关系。支持分页查询，默认10条/页。支持按工作台名称、编码、当前版本、创建时间排序。',
+        tpVersionAddFlow: '【第三方工作台版本新增】在第三方工作台列表 → 点击操作列"版本记录" → 打开版本记录弹窗 → 点击"新增版本"按钮 → 填写版本号、更新内容说明 → 选择发布状态 → 点击保存 → 版本新增成功 → 自动更新当前版本号 → Toast提示成功。版本号需遵循语义化版本规范。',
+        tpBatchDeleteFlow: '【第三方工作台批量删除】勾选多条第三方工作台记录 → 点击"批量删除"按钮 → 弹出二次确认弹窗（显示选中数量）→ 确认删除 → 批量逻辑删除 → Toast提示成功删除数量。含被引用数据时自动跳过并提示跳过数量。',
+        fieldRules: '1.工作台名称：必填，2-50字符，同一类型下唯一 2.工作台编码：必填，2-30字符，字母数字下划线，字母开头，全局唯一，创建后不可修改 3.服务商名称：必填（第三方），2-100字符 4.接入方式：必选（第三方），枚举iframe/link/api 5.访问地址：必填（第三方），合法URL格式 6.版本号：语义化版本（如v1.0.0），新增时自动递增 7.状态：枚举启用/停用，默认启用',
+        exceptionHandling: '1.名称重复：保存时提示"名称已存在" 2.编码重复/格式错误：提示对应错误信息 3.版本号不规范：提示"版本号格式不正确，请使用v主版本.次版本.修订号格式" 4.删除被引用数据：拦截删除并提示"该工作台已被用户订阅，无法删除" 5.空数据状态：显示空状态占位图 6.网络异常：Toast提示"网络连接失败"',
+        permissionReq: '1.系统管理员：拥有全部权限（标准工作台版本管理+第三方工作台完整CRUD+版本管理） 2.平台管理员：拥有全部权限 3.分级管理员：仅查询权限 4.普通用户：无访问权限',
+        interaction: '双Tab切换；标准工作台列表+版本记录弹窗；第三方工作台列表+增删改查弹窗+版本记录弹窗；批量删除二次确认；表头排序',
+        acceptance: '1.标准工作台Tab正常展示 2.标准工作台版本记录弹窗正常 3.标准工作台版本新增功能正常 4.第三方工作台Tab正常展示 5.新增第三方工作台弹窗字段完整 6.编辑功能正常 7.删除有二次确认 8.批量删除正常 9.查询筛选可用 10.版本记录弹窗正常 11.版本新增功能正常',
+        redFields: ['stdQueryFlow', 'stdVersionAddFlow', 'tpAddFlow', 'tpEditFlow', 'tpDeleteFlow', 'tpQueryFlow', 'tpVersionAddFlow', 'tpBatchDeleteFlow'],
+    },
     'workbench-template': {
         background: '【模式A+B】工作台模板管理分为基本信息管理和模板配置管理两部分，独立Tab页展示。走查覆盖4项功能点：①工作台模板基本信息批量删除（符合，新增）②工作台模板基本信息查询字段排序（符合，新增）③工作台模板配置批量删除（符合，新增）④工作台模板配置查询字段排序（符合，新增）。原型实现：双Tab结构（基本信息/模板配置）；基本信息Tab管理模板主数据，支持CRUD+批量删除+排序；模板配置Tab管理模板配置项（组件配置/布局配置/主题配置），支持CRUD+批量删除+排序。两部分功能独立，验收标准明确区分。',
         targetUsers: '系统管理员、工作台管理员',
@@ -13497,6 +13657,16 @@ function renderPrdCard(pageKey, pageName, prd) {
     html += renderSection('batchMarkReadFlow', '批量标记已读', prd.batchMarkReadFlow);
     html += renderSection('uploadFlow', '附件上传', prd.uploadFlow);
     html += renderSection('forwardFlow', '转发', prd.forwardFlow);
+
+    // 工作台管理相关
+    html += renderSection('stdQueryFlow', '标准工作台-查询', prd.stdQueryFlow);
+    html += renderSection('stdVersionAddFlow', '标准工作台-版本信息新增', prd.stdVersionAddFlow);
+    html += renderSection('tpAddFlow', '第三方工作台-信息新增', prd.tpAddFlow);
+    html += renderSection('tpEditFlow', '第三方工作台-信息修改', prd.tpEditFlow);
+    html += renderSection('tpDeleteFlow', '第三方工作台-信息删除', prd.tpDeleteFlow);
+    html += renderSection('tpQueryFlow', '第三方工作台-信息查询', prd.tpQueryFlow);
+    html += renderSection('tpVersionAddFlow', '第三方工作台-版本信息新增', prd.tpVersionAddFlow);
+    html += renderSection('tpBatchDeleteFlow', '第三方工作台-批量删除', prd.tpBatchDeleteFlow);
 
     // 软件服务商相关
     html += renderSection('appAddFlow', '服务商应用关联-新增', prd.appAddFlow);
