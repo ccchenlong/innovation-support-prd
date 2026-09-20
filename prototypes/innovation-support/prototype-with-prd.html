@@ -7967,6 +7967,7 @@ function renderCell(col, row, rowIndex, pageKey) {
                 html += '</div></div>';
             } else {
                 var colorStyle = act.danger ? 'color:var(--danger);' : 'color:var(--primary);';
+                // 所有 action 统一走 handleAction，避免引号冲突
                 html += '<a class="hover:underline cursor-pointer text-sm" style="' + colorStyle + 'margin-right:8px;" onclick="handleAction(\'' + act.key + '\',\'' + pageKey + '\',' + row.id + ')">' + act.label + '</a>';
             }
         }
@@ -9288,6 +9289,12 @@ function handleAction(actionKey, pageKey, rowId) {
             break;
         // 版本记录
         case 'version':
+            // 工作台管理特殊处理：区分标准/第三方工作台Tab
+            if (pageKey && pageKey.indexOf('workbench-manage_') === 0) {
+                var wbTab = pageKey.replace('workbench-manage_', '');
+                showWorkbenchVersionRecord(wbTab, 'workbench-manage', rowId);
+                break;
+            }
             showVersionRecordModal(pageKey, rowId);
             break;
         case 'moveUp':
@@ -13152,7 +13159,21 @@ function openLineUserMgmt() {
 
 /** 条线管理员管理弹窗 */
 /** 工作台版本记录弹窗 */
-function showWorkbenchVersionRecord(type, row) {
+function showWorkbenchVersionRecord(type, pageKey, rowId) {
+    // 兼容旧调用方式：如果第三个参数是对象（旧版），直接使用
+    var row;
+    if (typeof pageKey === 'object') {
+        row = pageKey;
+    } else {
+        // 新方式：从 pageConfigs 中查找数据
+        var config = pageConfigs['workbench-manage'];
+        if (!config) return;
+        var tabConfig = config.tabConfigs && config.tabConfigs[type];
+        if (!tabConfig) return;
+        var data = tabConfig.data || [];
+        row = data.find(function(r) { return r.id === rowId; });
+        if (!row) return;
+    }
     var id = 'modal_wb_version_' + type + '_' + row.id;
     var title = row.name + ' - 版本记录';
 
