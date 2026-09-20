@@ -7035,6 +7035,254 @@ function sortDrawerTable(tab, field) {
     showToast('按' + field + '排序', 'info');
 }
 
+/* ============================================================
+ * 软件服务商详情抽屉（应用关联管理）
+ * ============================================================ */
+var currentProviderDrawerTab = {};
+var currentDrawerProviderId = null;
+
+var providerDrawerTabs = [
+    { key: 'basic', label: '基本信息' },
+    { key: 'appLink', label: '应用关联' },
+];
+
+var providerDrawerData = {
+    1: {
+        appLink: [
+            { id: 101, appName: '政务办公应用', appCode: 'GOV_OFFICE', appType: '办公类', linkStatus: 'normal', linkTime: '2025-03-05 10:00:00', contact: '张经理', phone: '13800138001' },
+            { id: 102, appName: '民生服务应用', appCode: 'MS_SERVICE', appType: '服务类', linkStatus: 'normal', linkTime: '2025-03-10 14:30:00', contact: '张经理', phone: '13800138001' },
+            { id: 103, appName: '经济运行监测应用', appCode: 'ECON_MONITOR', appType: '监测类', linkStatus: 'pending', linkTime: '2025-04-02 09:00:00', contact: '张经理', phone: '13800138001' },
+        ]
+    },
+    2: {
+        appLink: [
+            { id: 201, appName: '智慧城管应用', appCode: 'SMART_CITY', appType: '管理类', linkStatus: 'normal', linkTime: '2025-03-08 11:00:00', contact: '李总', phone: '13900139001' },
+            { id: 202, appName: '交通出行应用', appCode: 'TRANSIT_APP', appType: '服务类', linkStatus: 'normal', linkTime: '2025-03-15 16:00:00', contact: '李总', phone: '13900139001' },
+        ]
+    },
+    3: {
+        appLink: [
+            { id: 301, appName: '企业信用查询应用', appCode: 'CREDIT_QUERY', appType: '查询类', linkStatus: 'pending', linkTime: '2025-04-01 10:00:00', contact: '王经理', phone: '13700137001' },
+        ]
+    }
+};
+
+function openProviderDrawer(providerId) {
+    var config = pageConfigs['provider-entry'];
+    var provider = null;
+    for (var i = 0; i < config.data.length; i++) {
+        if (config.data[i].id === providerId) { provider = config.data[i]; break; }
+    }
+    if (!provider) return;
+
+    var firstTab = providerDrawerTabs[0].key;
+    currentProviderDrawerTab['provider'] = firstTab;
+    currentDrawerProviderId = providerId;
+
+    var title = '<i class="fa fa-building-o" style="color:#165DFF;"></i> 服务商详情 - ' + provider.name;
+    var bodyHtml = renderProviderDrawerBody(provider, firstTab);
+    var footerHtml = '<button class="btn btn-default btn-sm" onclick="closeDrawer(\'providerDrawer\')">关闭</button>';
+
+    openDrawer('providerDrawer', title, bodyHtml, footerHtml, '780px');
+}
+
+function switchProviderDrawerTab(tabKey) {
+    var config = pageConfigs['provider-entry'];
+    var providerId = currentDrawerProviderId;
+    var provider = null;
+    for (var i = 0; i < config.data.length; i++) {
+        if (config.data[i].id === providerId) { provider = config.data[i]; break; }
+    }
+    if (!provider) return;
+    currentProviderDrawerTab['provider'] = tabKey;
+    var content = document.querySelector('#providerDrawer .drawer-tab-content');
+    if (content) {
+        content.innerHTML = renderProviderDrawerTabContent(provider, tabKey);
+    }
+    // 更新tab激活态
+    var tabs = document.querySelectorAll('#providerDrawer .drawer-tab-item');
+    for (var i = 0; i < tabs.length; i++) {
+        tabs[i].classList.remove('active');
+    }
+    var activeTab = document.querySelector('#providerDrawer .drawer-tab-item[data-tab="' + tabKey + '"]');
+    if (activeTab) activeTab.classList.add('active');
+}
+
+function renderProviderDrawerBody(provider, activeTab) {
+    var html = '<div class="drawer-tabs">';
+    for (var t = 0; t < providerDrawerTabs.length; t++) {
+        var tab = providerDrawerTabs[t];
+        var activeCls = tab.key === activeTab ? ' active' : '';
+        html += '<div class="drawer-tab-item' + activeCls + '" data-tab="' + tab.key + '" onclick="switchProviderDrawerTab(\'' + tab.key + '\')">' + tab.label + '</div>';
+    }
+    html += '</div>';
+    html += '<div class="drawer-tab-content">';
+    html += renderProviderDrawerTabContent(provider, activeTab);
+    html += '</div>';
+    return html;
+}
+
+function renderProviderDrawerTabContent(provider, tabKey) {
+    var html = '';
+    var sortIcon = ' <i class="fa fa-sort" style="color:#C9CDD4;font-size:12px;"></i>';
+    var pData = providerDrawerData[provider.id] || { appLink: [] };
+
+    if (tabKey === 'basic') {
+        html += '<div class="drawer-info-section">';
+        html += '<div class="drawer-section-title">基本信息</div>';
+        html += '<div class="drawer-info-grid">';
+        html += '<div class="drawer-info-item"><div class="drawer-info-label">服务商名称</div><div class="drawer-info-value">' + provider.name + '</div></div>';
+        html += '<div class="drawer-info-item"><div class="drawer-info-label">统一社会信用代码</div><div class="drawer-info-value">' + provider.creditCode + '</div></div>';
+        html += '<div class="drawer-info-item"><div class="drawer-info-label">联系人</div><div class="drawer-info-value">' + provider.contact + '</div></div>';
+        html += '<div class="drawer-info-item"><div class="drawer-info-label">联系电话</div><div class="drawer-info-value">' + provider.phone + '</div></div>';
+        var entryTag = '';
+        if (provider.entryStatus === 'entered') entryTag = '<span class="tag tag-green">已入驻</span>';
+        else if (provider.entryStatus === 'pending') entryTag = '<span class="tag tag-orange">待入驻</span>';
+        else entryTag = '<span class="tag tag-gray">已退出</span>';
+        var auditTag = '';
+        if (provider.auditStatus === 'approved') auditTag = '<span class="tag tag-green">已通过</span>';
+        else if (provider.auditStatus === 'pending') auditTag = '<span class="tag tag-orange">待审核</span>';
+        else auditTag = '<span class="tag tag-red">已驳回</span>';
+        html += '<div class="drawer-info-item"><div class="drawer-info-label">入驻状态</div><div class="drawer-info-value">' + entryTag + '</div></div>';
+        html += '<div class="drawer-info-item"><div class="drawer-info-label">审核状态</div><div class="drawer-info-value">' + auditTag + '</div></div>';
+        html += '<div class="drawer-info-item"><div class="drawer-info-label">申请时间</div><div class="drawer-info-value">' + provider.applyTime + '</div></div>';
+        html += '</div></div>';
+    } else if (tabKey === 'appLink') {
+        html += '<div class="drawer-info-section">';
+        html += '<div class="drawer-section-title">应用关联</div>';
+        // 查询区
+        html += '<div style="display:flex;align-items:center;gap:8px;margin-bottom:12px;">';
+        html += '<input type="text" class="form-input text-sm" placeholder="请输入应用名称" style="width:180px;padding:6px 10px;" />';
+        html += '<select class="form-input text-sm" style="width:120px;padding:6px 10px;"><option>全部类型</option><option>办公类</option><option>服务类</option><option>管理类</option><option>监测类</option><option>查询类</option></select>';
+        html += '<select class="form-input text-sm" style="width:110px;padding:6px 10px;"><option>全部状态</option><option>已关联</option><option>待审核</option><option>已解除</option></select>';
+        html += '<button class="btn btn-default btn-sm"><i class="fa fa-search"></i> 查询</button>';
+        html += '<button class="btn btn-default btn-sm">重置</button>';
+        html += '</div>';
+        // 工具栏
+        html += '<div style="display:flex;align-items:center;gap:8px;margin-bottom:12px;">';
+        html += '<button class="btn btn-primary btn-sm" onclick="addProviderAppLink()"><i class="fa fa-plus"></i> 新增关联</button>';
+        html += '<button class="btn btn-default btn-sm" onclick="batchDeleteProviderAppLink()"><i class="fa fa-trash-o"></i> 批量解除</button>';
+        html += '</div>';
+        // 表格
+        html += '<table class="drawer-sub-table"><thead><tr>';
+        html += '<th style="width:40px;"><input type="checkbox" class="drawer-checkbox-all" onclick="toggleDrawerAllCheck(\'appLink\', this)" /></th>';
+        html += '<th style="width:50px;">序号</th>';
+        html += '<th onclick="sortDrawerTable(\'appLink\',\'appName\')" style="cursor:pointer;">应用名称' + sortIcon + '</th>';
+        html += '<th>应用编码</th>';
+        html += '<th>应用类型</th>';
+        html += '<th onclick="sortDrawerTable(\'appLink\',\'linkStatus\')" style="cursor:pointer;">关联状态' + sortIcon + '</th>';
+        html += '<th onclick="sortDrawerTable(\'appLink\',\'linkTime\')" style="cursor:pointer;">关联时间' + sortIcon + '</th>';
+        html += '<th style="width:140px;">操作</th>';
+        html += '</tr></thead><tbody>';
+        var appData = pData.appLink || [];
+        for (var r = 0; r < appData.length; r++) {
+            var statusTag = '';
+            if (appData[r].linkStatus === 'normal') statusTag = '<span class="tag tag-green">已关联</span>';
+            else if (appData[r].linkStatus === 'pending') statusTag = '<span class="tag tag-orange">待审核</span>';
+            else statusTag = '<span class="tag tag-gray">已解除</span>';
+            html += '<tr><td><input type="checkbox" class="drawer-checkbox-appLink" value="' + appData[r].id + '" /></td>';
+            html += '<td>' + (r + 1) + '</td>';
+            html += '<td>' + appData[r].appName + '</td>';
+            html += '<td>' + appData[r].appCode + '</td>';
+            html += '<td>' + appData[r].appType + '</td>';
+            html += '<td>' + statusTag + '</td>';
+            html += '<td>' + appData[r].linkTime + '</td>';
+            html += '<td><a href="javascript:;" class="link-btn" onclick="viewProviderAppLink(' + appData[r].id + ')">查看</a>';
+            html += ' <a href="javascript:;" class="link-btn" onclick="editProviderAppLink(' + appData[r].id + ')">编辑</a>';
+            html += ' <a href="javascript:;" class="link-btn danger" onclick="deleteProviderAppLink(' + appData[r].id + ')">解除</a></td></tr>';
+        }
+        html += '</tbody></table></div>';
+    }
+    return html;
+}
+
+function addProviderAppLink() {
+    var bodyHtml = '<div style="width:560px;">' +
+        '<div style="margin-bottom:14px;"><label class="form-label">应用名称 <span style="color:#FF4D4F;">*</span></label>' +
+        '<div style="display:flex;gap:8px;"><input type="text" class="form-input" style="flex:1;" placeholder="请选择应用" readonly /><button class="btn btn-default btn-sm"><i class="fa fa-th-large"></i> 选择应用</button></div></div>' +
+        '<div style="margin-bottom:14px;display:flex;gap:12px;">' +
+        '<div style="flex:1;"><label class="form-label">应用编码</label>' +
+        '<input type="text" class="form-input w-full" placeholder="自动填充" style="background:#F7F8FA;" readonly /></div>' +
+        '<div style="flex:1;"><label class="form-label">应用类型</label>' +
+        '<input type="text" class="form-input w-full" placeholder="自动填充" style="background:#F7F8FA;" readonly /></div></div>' +
+        '<div style="margin-bottom:14px;display:flex;gap:12px;">' +
+        '<div style="flex:1;"><label class="form-label">关联时间 <span style="color:#FF4D4F;">*</span></label>' +
+        '<input type="date" class="form-input w-full" /></div>' +
+        '<div style="flex:1;"><label class="form-label">关联状态</label>' +
+        '<select class="form-input w-full"><option selected>待审核</option><option>已关联</option></select></div></div>' +
+        '<div style="margin-bottom:14px;display:flex;gap:12px;">' +
+        '<div style="flex:1;"><label class="form-label">对接联系人</label>' +
+        '<input type="text" class="form-input w-full" placeholder="请输入联系人" /></div>' +
+        '<div style="flex:1;"><label class="form-label">联系电话</label>' +
+        '<input type="text" class="form-input w-full" placeholder="请输入联系电话" /></div></div>' +
+        '<div style="margin-bottom:14px;"><label class="form-label">关联说明</label>' +
+        '<textarea class="form-input w-full" style="height:70px;" placeholder="请输入关联说明"></textarea></div>' +
+        '</div>';
+    openModal('新增应用关联', bodyHtml, function() {
+        showToast('新增关联成功，等待审核', 'success');
+        closeModal();
+    });
+}
+
+function editProviderAppLink(id) {
+    var bodyHtml = '<div style="width:560px;">' +
+        '<div style="margin-bottom:14px;"><label class="form-label">应用名称 <span style="color:#FF4D4F;">*</span></label>' +
+        '<div style="display:flex;gap:8px;"><input type="text" class="form-input" style="flex:1;" value="政务办公应用" readonly /><button class="btn btn-default btn-sm"><i class="fa fa-th-large"></i> 重新选择</button></div></div>' +
+        '<div style="margin-bottom:14px;display:flex;gap:12px;">' +
+        '<div style="flex:1;"><label class="form-label">应用编码</label>' +
+        '<input type="text" class="form-input w-full" value="GOV_OFFICE" style="background:#F7F8FA;" readonly /></div>' +
+        '<div style="flex:1;"><label class="form-label">应用类型</label>' +
+        '<input type="text" class="form-input w-full" value="办公类" style="background:#F7F8FA;" readonly /></div></div>' +
+        '<div style="margin-bottom:14px;display:flex;gap:12px;">' +
+        '<div style="flex:1;"><label class="form-label">关联时间 <span style="color:#FF4D4F;">*</span></label>' +
+        '<input type="date" class="form-input w-full" value="2025-03-05" /></div>' +
+        '<div style="flex:1;"><label class="form-label">关联状态</label>' +
+        '<select class="form-input w-full"><option>待审核</option><option selected>已关联</option><option>已解除</option></select></div></div>' +
+        '<div style="margin-bottom:14px;display:flex;gap:12px;">' +
+        '<div style="flex:1;"><label class="form-label">对接联系人</label>' +
+        '<input type="text" class="form-input w-full" value="张经理" /></div>' +
+        '<div style="flex:1;"><label class="form-label">联系电话</label>' +
+        '<input type="text" class="form-input w-full" value="13800138001" /></div></div>' +
+        '<div style="margin-bottom:14px;"><label class="form-label">关联说明</label>' +
+        '<textarea class="form-input w-full" style="height:70px;">政务办公应用服务对接，提供公文流转、会议管理等功能</textarea></div>' +
+        '</div>';
+    openModal('编辑应用关联', bodyHtml, function() {
+        showToast('修改成功', 'success');
+        closeModal();
+    });
+}
+
+function deleteProviderAppLink(id) {
+    openModal('确认解除', '<div style="width:400px;padding:10px 0;"><i class="fa fa-exclamation-circle" style="color:#FAAD14;font-size:20px;margin-right:8px;"></span>确定要解除该应用关联吗？解除后需重新申请。</div>', function() {
+        showToast('解除成功', 'success');
+        closeModal();
+    });
+}
+
+function batchDeleteProviderAppLink() {
+    openModal('批量解除', '<div style="width:400px;padding:10px 0;"><i class="fa fa-exclamation-circle" style="color:#FAAD14;font-size:20px;margin-right:8px;"></span>确定要批量解除选中的应用关联吗？解除后需重新申请。</div>', function() {
+        showToast('批量解除成功', 'success');
+        closeModal();
+    });
+}
+
+function viewProviderAppLink(id) {
+    var bodyHtml = '<div style="width:520px;"><div class="drawer-info-grid">' +
+        '<div class="drawer-info-item"><div class="drawer-info-label">应用名称</div><div class="drawer-info-value">政务办公应用</div></div>' +
+        '<div class="drawer-info-item"><div class="drawer-info-label">应用编码</div><div class="drawer-info-value">GOV_OFFICE</div></div>' +
+        '<div class="drawer-info-item"><div class="drawer-info-label">应用类型</div><div class="drawer-info-value">办公类</div></div>' +
+        '<div class="drawer-info-item"><div class="drawer-info-label">关联状态</div><div class="drawer-info-value"><span class="tag tag-green">已关联</span></div></div>' +
+        '<div class="drawer-info-item"><div class="drawer-info-label">关联时间</div><div class="drawer-info-value">2025-03-05 10:00:00</div></div>' +
+        '<div class="drawer-info-item"><div class="drawer-info-label">服务商名称</div><div class="drawer-info-value">江西科创软件有限公司</div></div>' +
+        '<div class="drawer-info-item"><div class="drawer-info-label">对接联系人</div><div class="drawer-info-value">张经理</div></div>' +
+        '<div class="drawer-info-item"><div class="drawer-info-label">联系电话</div><div class="drawer-info-value">13800138001</div></div>' +
+        '<div class="drawer-info-item full"><div class="drawer-info-label">关联说明</div><div class="drawer-info-value">政务办公应用服务对接，提供公文流转、会议管理、日程安排等核心功能，服务于全省政务办公人员。</div></div>' +
+        '</div></div>';
+    openModal('应用关联详情', bodyHtml, function() {
+        closeModal();
+    }, '关闭');
+}
+
 function renderOrgDrawerPage(pageKey) {
     var config = pageConfigs[pageKey];
     var html = '<div class="p-4">';
@@ -9625,6 +9873,7 @@ function handleAction(actionKey, pageKey, rowId) {
         case 'view':
             if (pageKey === 'user') { openUserDrawer(rowId); break; }
             if (pageKey === 'org') { openOrgDrawer(rowId); break; }
+            if (pageKey === 'provider-entry') { openProviderDrawer(rowId); break; }
             if (pageKey === 'ticket-cc-config') { openTicketCcConfigViewModal(rowId); break; }
             if (pageKey === 'ticket-cc-record') { openTicketCcRecordViewModal(rowId); break; }
             if (pageKey === 'ticket-cc-mine_ccMine') { openTicketCcDetailModal(rowId); break; }
@@ -15989,23 +16238,27 @@ var prdData = {
 
     /* ---------- 软件服务商入驻管理 ---------- */
     'provider-entry': {
-        background: '【软件服务商入驻管理】软件服务商入驻管理是软件服务商工作台的准入管理模块，负责管理软件服务商的入驻申请和审核流程。支持服务商入驻申请、审核、入驻、退出全生命周期管理，包含入驻状态和审核状态双重状态管理，确保服务商资质的严格审核和有效管理。',
+        background: '【软件服务商入驻管理】软件服务商入驻管理是软件服务商工作台的核心管理模块，负责管理软件服务商的入驻申请、审核流程以及服务商与应用的关联关系。支持服务商入驻全生命周期管理和应用关联管理，确保服务商资质的严格审核和应用关联关系的有效维护。',
         targetUsers: '系统管理员、平台管理员、运营审核人员、服务商申请人员',
-        coreFeatures: '1.多条件组合查询 2.查看服务商详情 3.服务商审核（通过/驳回） 4.批量删除 5.入驻状态管理 6.审核状态管理 7.列表字段排序',
-        businessFlow: '服务商提交入驻申请 → 进入软件服务商入驻管理页 → 查看待审核列表 → 点击"审核" → 查看服务商详细资料 → 审核通过/驳回 → 填写审核意见 → 提交审核结果 → 入驻状态更新 → 服务商获得相应权限',
-        pageInfo: '支持服务商名称/入驻状态/审核状态查询；支持查看、审核、批量删除；字段：复选框、序号、服务商名称、统一社会信用代码、联系人、联系电话、入驻状态（标签）、审核状态（标签）、申请时间、操作',
-        dataModel: '核心实体：软件服务商入驻（id/服务商名称/统一社会信用代码/联系人/联系电话/入驻状态/审核状态/申请时间/审核意见/审核时间）。枚举值：入驻状态（待入驻/已入驻/已退出）、审核状态（待审核/已通过/已驳回）。',
+        coreFeatures: '1.服务商入驻查询 2.服务商详情查看（基本信息+应用关联） 3.服务商审核（通过/驳回） 4.批量删除 5.入驻状态管理 6.审核状态管理 7.列表字段排序 8.软件服务商和应用关联新增 9.软件服务商和应用关联修改 10.软件服务商和应用关联删除 11.软件服务商和应用关联批量删除 12.软件服务商和应用关联查询字段排序',
+        businessFlow: '进入软件服务商入驻管理页 → 查询服务商列表 → 点击"查看" → 打开服务商详情抽屉 → 基本信息Tab查看服务商资质 → 应用关联Tab → 新增应用关联 → 选择应用 → 填写关联信息 → 提交 → 关联成功 → 编辑/删除/批量解除应用关联',
+        pageInfo: '列表页+详情抽屉（2个Tab）；列表支持服务商名称/入驻状态/审核状态查询，支持查看、审核、批量删除；详情抽屉含基本信息Tab和应用关联Tab；应用关联Tab支持新增、编辑、删除、批量删除、查询、字段排序。',
+        dataModel: '核心实体：软件服务商（id/服务商名称/统一社会信用代码/联系人/联系电话/入驻状态/审核状态/申请时间）、应用关联（id/应用名称/应用编码/应用类型/关联状态/关联时间/对接联系人/联系电话/关联说明）。枚举值：入驻状态（待入驻/已入驻/已退出）、审核状态（待审核/已通过/已驳回）、关联状态（已关联/待审核/已解除）。',
         deleteFlow: '单条删除：点击"删除" → 二次确认弹窗 → 确认删除 → 逻辑删除 → Toast提示。批量删除：勾选多条 → 点击批量删除 → 二次确认 → 批量逻辑删除。删除约束：已入驻的服务商不可直接删除，需先退出。',
         batchDeleteFlow: '勾选多条记录 → 点击"批量删除"按钮 → 弹出二次确认弹窗（显示选中数量）→ 确认删除 → 批量逻辑删除 → Toast提示成功删除数量。含已入驻服务商时自动跳过并提示跳过数量。',
         queryFlow: '支持服务商名称（模糊）、入驻状态（下拉）、审核状态（下拉）多条件组合查询，AND关系。支持分页查询，默认10条/页。',
         sortConfig: '支持服务商名称、申请时间字段排序。点击表头切换升序/降序，箭头图标标识。默认按申请时间降序排列。',
-        viewFlow: '点击"查看" → 打开发服务商详情抽屉 → 展示完整信息（基本信息、营业执照、法人信息、联系方式、资质证明、入驻状态、审核记录等）→ 可查看审核历史 → 关闭返回列表',
-        exceptionHandling: '1.删除已入驻服务商：拦截提示"已入驻服务商不可直接删除，请先办理退出" 2.审核重复提交：提示"该服务商已审核" 3.驳回未填写意见：提示"驳回时请填写审核意见" 4.空数据状态：列表显示空状态占位图+提示文字"暂无数据"',
-        permissionReq: '1.系统管理员：拥有全部权限（审核/删除/批量删除/查询/查看） 2.平台管理员：拥有审核和查看权限 3.运营审核人员：拥有审核和查看权限 4.普通用户：无访问权限 5.服务商：仅可提交入驻申请，查看自己的入驻状态',
-        interaction: '多条件组合查询；表头点击排序；复选框多选+批量操作；服务商详情抽屉；审核操作弹窗（通过/驳回+审核意见）；删除二次确认',
-        acceptance: '1.查询条件完整可用 2.表头可排序 3.查看详情正常 4.审核功能正常（通过/驳回） 5.审核意见必填校验 6.批量删除有二次确认 7.删除约束生效 8.Tag标签显示正确 9.分页功能正常 10.审核记录可追溯',
-        queryFlow: '支持服务商名称（模糊）、申请状态（下拉）、申请时间范围多条件组合查询，AND关系。点击"重置"按钮可一键清空所有查询条件，恢复默认列表。支持分页查询，默认10条/页。',
-        redFields: ['queryFlow'],
+        viewFlow: '点击"查看" → 打开服务商详情抽屉 → 基本信息Tab展示服务商完整信息 → 切换应用关联Tab查看该服务商关联的所有应用 → 关闭返回列表',
+        appLinkAddFlow: '【软件服务商和应用关联新增】在服务商详情抽屉 → 应用关联Tab → 点击"新增关联"按钮 → 打开新增弹窗 → 选择应用（必填，应用选择器）→ 自动填充应用编码和应用类型 → 选择关联时间（必填）→ 设置关联状态 → 填写对接联系人、联系电话 → 填写关联说明 → 点击确定 → 校验通过 → 新增关联成功，Toast提示"新增关联成功，等待审核"。',
+        appLinkEditFlow: '【软件服务商和应用关联修改】在应用关联Tab → 点击操作列"编辑" → 打开编辑弹窗 → 回显关联信息 → 修改关联时间、关联状态、对接联系人、联系电话、关联说明 → 点击确定 → 校验通过 → 修改成功，Toast提示。应用名称创建后不可修改。',
+        appLinkDeleteFlow: '【软件服务商和应用关联删除】在应用关联Tab → 点击操作列"解除" → 弹出二次确认弹窗（提示解除后需重新申请）→ 确认解除 → 关联状态变更为已解除 → Toast提示"解除成功"。',
+        appLinkBatchDeleteFlow: '【软件服务商和应用关联批量删除】在应用关联Tab → 勾选多条应用关联记录 → 点击"批量解除"按钮 → 弹出二次确认弹窗（显示选中数量，提示解除后需重新申请）→ 确认批量解除 → 批量变更为已解除状态 → Toast提示成功解除数量。',
+        appLinkSortFlow: '【软件服务商和应用关联查询字段排序】应用关联子表格支持应用名称、关联状态、关联时间字段排序。点击表头切换升序/降序，箭头图标标识。默认按关联时间降序排列。',
+        exceptionHandling: '1.删除已入驻服务商：拦截提示"已入驻服务商不可直接删除，请先办理退出" 2.审核重复提交：提示"该服务商已审核" 3.驳回未填写意见：提示"驳回时请填写审核意见" 4.空数据状态：列表显示空状态占位图+提示文字"暂无数据" 5.重复关联同一应用：提示"该应用已关联，请勿重复添加"',
+        permissionReq: '1.系统管理员：拥有全部权限（审核/删除/批量删除/查询/查看/应用关联管理） 2.平台管理员：拥有审核和查看权限、应用关联管理权限 3.运营审核人员：拥有审核和查看权限 4.普通用户：无访问权限 5.服务商：仅可提交入驻申请，查看自己的入驻状态和应用关联',
+        interaction: '多条件组合查询；表头点击排序；复选框多选+批量操作；服务商详情抽屉（2个Tab）；审核操作弹窗；删除二次确认；应用关联CRUD弹窗',
+        acceptance: '1.查询条件完整可用 2.表头可排序 3.查看详情正常（抽屉+Tab） 4.审核功能正常 5.批量删除有二次确认 6.应用关联新增正常 7.应用关联编辑正常 8.应用关联删除有二次确认 9.应用关联批量删除有二次确认 10.应用关联字段可排序',
+        redFields: ['appLinkAddFlow', 'appLinkEditFlow', 'appLinkDeleteFlow', 'appLinkBatchDeleteFlow', 'appLinkSortFlow'],
 },
 
     'ticket-customer-mine': {
