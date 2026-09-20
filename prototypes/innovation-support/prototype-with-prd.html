@@ -695,22 +695,48 @@ var pageConfigs = {
         ],
         masterTitle: '标签分组',
         masterSearch: { placeholder: '请输入标签分组名称' },
-        masterToolbar: [{ type: 'custom', text: '全量同步', icon: 'fa-sync' }],
-        masterData: [
-            { id: 1, name: '所属区域' },
-            { id: 2, name: '机构类型' },
+        masterToolbar: [
+            { type: 'add', text: '新增分组', onClick: "openTagGroupAddModal()" },
+            { type: 'batchDelete', text: '批量删除', onClick: "batchDeleteTagGroups()" },
+            { type: 'custom', text: '全量同步', icon: 'fa-sync', onClick: "showToast('同步成功','success')" },
         ],
-        detailToolbar: [{ type: 'add', text: '新增' }, { type: 'batchDelete' }],
+        masterColumns: [
+            { type: 'checkbox' },
+            { type: 'index', title: '序号' },
+            { key: 'name', title: '分组名称', sortable: true },
+            { key: 'groupCode', title: '分组编码', sortable: true },
+            { key: 'sortNo', title: '排序号', sortable: true },
+            { key: 'tagCount', title: '标签数量', sortable: true },
+            { key: 'status', title: '状态', type: 'tag', tagMap: { true: { text: '启用', color: 'green' }, false: { text: '停用', color: 'red' } } },
+            { type: 'actions', title: '操作', actions: [
+                { key: 'edit', label: '编辑', onClick: "openTagGroupEditModal(arguments[0])" },
+                { key: 'delete', label: '删除', danger: true, onClick: "deleteTagGroup(arguments[0])" },
+            ]},
+        ],
+        masterData: [
+            { id: 1, name: '所属区域', groupCode: 'REGION', sortNo: 1, tagCount: 12, status: true },
+            { id: 2, name: '机构类型', groupCode: 'ORG_TYPE', sortNo: 2, tagCount: 5, status: true },
+            { id: 3, name: '行业分类', groupCode: 'INDUSTRY', sortNo: 3, tagCount: 8, status: true },
+            { id: 4, name: '等级分类', groupCode: 'LEVEL', sortNo: 4, tagCount: 6, status: true },
+            { id: 5, name: '业务条线', groupCode: 'BIZ_LINE', sortNo: 5, tagCount: 10, status: true },
+            { id: 6, name: '用户类型', groupCode: 'USER_TYPE', sortNo: 6, tagCount: 4, status: false },
+            { id: 7, name: '服务等级', groupCode: 'SVC_LEVEL', sortNo: 7, tagCount: 3, status: true },
+        ],
+        detailToolbar: [{ type: 'add', text: '新增标签' }, { type: 'batchDelete', text: '批量删除' }],
         detailQuery: [{ key: 'name', label: '标签名称', type: 'input', placeholder: '请输入标签名称' }],
         detailColumns: [
             { type: 'checkbox' },
+            { type: 'index', title: '序号' },
             { key: 'name', title: '标签名称', sortable: true },
             { key: 'sortNo', title: '排序号', sortable: true },
+            { key: 'status', title: '状态', type: 'tag', tagMap: { true: { text: '启用', color: 'green' }, false: { text: '停用', color: 'red' } } },
             { type: 'actions', title: '操作', actions: [{ key: 'edit', label: '编辑' }, { key: 'delete', label: '删除', danger: true }] },
         ],
         detailData: [
-            { id: 101, name: '地市', sortNo: 0 },
-            { id: 102, name: '省直', sortNo: 1 },
+            { id: 101, name: '地市', sortNo: 1, status: true },
+            { id: 102, name: '省直', sortNo: 2, status: true },
+            { id: 103, name: '区县', sortNo: 3, status: true },
+            { id: 104, name: '乡镇', sortNo: 4, status: true },
         ],
     },
 
@@ -5822,8 +5848,10 @@ function renderTabMasterDetailPage(pageKey) {
     var masterData = config.masterData || [];
     var firstMasterId = masterData[0] ? masterData[0].id : null;
     html += '<div class="flex mt-4" style="gap:16px;">';
-    // 左侧：分组树
-    html += '<div style="width:240px;flex-shrink:0;border:1px solid #E8E8E8;border-radius:4px;overflow:hidden;">';
+    // 左侧：分组表格
+    var hasMasterTable = config.masterColumns && config.masterColumns.length;
+    var masterWidth = hasMasterTable ? '380px' : '240px';
+    html += '<div style="width:' + masterWidth + ';flex-shrink:0;border:1px solid #E8E8E8;border-radius:4px;overflow:hidden;display:flex;flex-direction:column;">';
     html += '<div style="padding:10px 12px;background:#FAFAFA;border-bottom:1px solid #E8E8E8;font-weight:500;font-size:13px;">' + (config.masterTitle || '分组') + '</div>';
     // 搜索框
     if (config.masterSearch) {
@@ -5833,26 +5861,87 @@ function renderTabMasterDetailPage(pageKey) {
     }
     // 工具栏
     if (config.masterToolbar && config.masterToolbar.length) {
-        html += '<div style="padding:6px 10px;border-bottom:1px solid #F0F0F0;font-size:12px;">';
+        html += '<div style="padding:6px 10px;border-bottom:1px solid #F0F0F0;font-size:12px;display:flex;gap:4px;flex-wrap:wrap;">';
         for (var t = 0; t < config.masterToolbar.length; t++) {
             var tb = config.masterToolbar[t];
-            if (tb.type === 'custom') {
-                html += '<button class="btn btn-default btn-sm" onclick="showToast(\'' + (tb.text || '') + '\',\'info\')">' + (tb.icon ? '<i class="fa ' + tb.icon + '"></i> ' : '') + tb.text + '</button>';
+            var onClick = tb.onClick || (tb.type === 'custom' ? "showToast('" + (tb.text || '') + "','info')" : "showToast('" + (tb.text || '操作') + "','info')");
+            if (tb.type === 'add' || tb.type === 'custom') {
+                var btnClass = tb.type === 'add' ? 'btn btn-primary btn-sm' : 'btn btn-default btn-sm';
+                html += '<button class="' + btnClass + '" onclick="' + onClick + '">' + (tb.icon ? '<i class="fa ' + tb.icon + '"></i> ' : '') + (tb.text || '新增') + '</button>';
+            } else if (tb.type === 'batchDelete') {
+                html += '<button class="btn btn-danger btn-sm" onclick="' + onClick + '"><i class="fa fa-trash-o"></i> ' + (tb.text || '批量删除') + '</button>';
             }
         }
         html += '</div>';
     }
-    // 树列表
-    html += '<div style="max-height:400px;overflow-y:auto;">';
-    for (var j = 0; j < masterData.length; j++) {
-        var item = masterData[j];
-        var isActive = item.id === firstMasterId ? 'background:var(--primary-light);color:var(--primary-dark);' : '';
-        html += '<div class="tree-node" style="padding:6px 12px;cursor:pointer;font-size:13px;' + isActive + '" onclick="switchMasterDetailMaster(\'' + pageKey + '\', ' + item.id + ', this)">';
-        html += '<i class="fa fa-folder-o" style="color:#FAAD14;margin-right:6px;font-size:12px;"></i>';
-        html += esc(item.name);
+    // 分组表格或树列表
+    if (hasMasterTable) {
+        // 表格形式：支持复选框、排序、操作
+        html += '<div style="flex:1;overflow-y:auto;">';
+        html += '<table class="data-table" style="margin:0;font-size:12px;"><thead style="position:sticky;top:0;z-index:1;"><tr>';
+        var mCols = config.masterColumns;
+        for (var mc = 0; mc < mCols.length; mc++) {
+            var mCol = mCols[mc];
+            if (mCol.type === 'checkbox') {
+                html += '<th style="width:32px;padding:6px 4px;"><input type="checkbox" onclick="toggleMasterAllCheckboxes(this, \'' + pageKey + '\')" /></th>';
+            } else if (mCol.type === 'index') {
+                html += '<th style="width:40px;padding:6px 4px;">' + (mCol.title || '序号') + '</th>';
+            } else if (mCol.type === 'actions') {
+                html += '<th style="width:80px;padding:6px 4px;">' + (mCol.title || '操作') + '</th>';
+            } else {
+                var sortIcon = mCol.sortable ? '<i class="fa fa-sort" style="margin-left:4px;color:#BFBFBF;font-size:10px;"></i>' : '';
+                html += '<th style="padding:6px 4px;cursor:' + (mCol.sortable ? 'pointer' : 'default') + ';">' + (mCol.title || mCol.key) + sortIcon + '</th>';
+            }
+        }
+        html += '</tr></thead><tbody>';
+        for (var j = 0; j < masterData.length; j++) {
+            var item = masterData[j];
+            var isActive = item.id === firstMasterId ? 'background:var(--primary-light);' : '';
+            html += '<tr style="' + isActive + '" onclick="event.stopPropagation();switchMasterDetailMaster(\'' + pageKey + '\', ' + item.id + ', this)">';
+            for (var mc2 = 0; mc2 < mCols.length; mc2++) {
+                var col2 = mCols[mc2];
+                if (col2.type === 'checkbox') {
+                    html += '<td style="padding:4px;"><input type="checkbox" class="master-checkbox" data-id="' + item.id + '" onclick="event.stopPropagation();" /></td>';
+                } else if (col2.type === 'index') {
+                    html += '<td style="padding:4px;text-align:center;">' + (j + 1) + '</td>';
+                } else if (col2.type === 'actions') {
+                    html += '<td style="padding:4px;">';
+                    var actions = col2.actions || [];
+                    for (var a = 0; a < actions.length; a++) {
+                        var act = actions[a];
+                        var dangerCls = act.danger ? 'color:var(--danger);' : 'color:var(--primary);';
+                        var onClick = act.onClick ? act.onClick.replace('arguments[0]', JSON.stringify(item)) : 'void(0)';
+                        html += '<a href="javascript:void(0)" style="' + dangerCls + 'font-size:12px;margin-right:6px;" onclick="event.stopPropagation();' + onClick + '">' + act.label + '</a>';
+                    }
+                    html += '</td>';
+                } else if (col2.type === 'tag') {
+                    var val = item[col2.key];
+                    var tagInfo = col2.tagMap ? (col2.tagMap[val] || { text: val, color: 'default' }) : { text: val, color: 'default' };
+                    html += '<td style="padding:4px;"><span class="tag tag-' + tagInfo.color + '" style="font-size:11px;padding:1px 6px;">' + tagInfo.text + '</span></td>';
+                } else {
+                    html += '<td style="padding:4px;">' + (item[col2.key] !== undefined ? item[col2.key] : '') + '</td>';
+                }
+            }
+            html += '</tr>';
+        }
+        if (masterData.length === 0) {
+            html += '<tr><td colspan="' + mCols.length + '" style="text-align:center;color:var(--text-tertiary);padding:20px;font-size:12px;">暂无数据</td></tr>';
+        }
+        html += '</tbody></table></div>';
+    } else {
+        // 原树形列表
+        html += '<div style="max-height:400px;overflow-y:auto;">';
+        for (var j = 0; j < masterData.length; j++) {
+            var item = masterData[j];
+            var isActive = item.id === firstMasterId ? 'background:var(--primary-light);color:var(--primary-dark);' : '';
+            html += '<div class="tree-node" style="padding:6px 12px;cursor:pointer;font-size:13px;' + isActive + '" onclick="switchMasterDetailMaster(\'' + pageKey + '\', ' + item.id + ', this)">';
+            html += '<i class="fa fa-folder-o" style="color:#FAAD14;margin-right:6px;font-size:12px;"></i>';
+            html += esc(item.name);
+            html += '</div>';
+        }
         html += '</div>';
     }
-    html += '</div></div>';
+    html += '</div>';
     // 右侧：标签列表表格区（先放查询和工具栏，表格用JS渲染）
     html += '<div style="flex:1;min-width:0;">';
     // 查询区
@@ -12393,6 +12482,61 @@ function batchDeleteThirdPartyWorkbench() {
     });
 }
 
+/** 新增标签分组弹窗 */
+function openTagGroupAddModal() {
+    var id = 'modal_tag_group_add';
+    var title = '新增标签分组';
+    var bodyHtml = '<div class="p-4"><div class="grid grid-cols-2 gap-4">';
+    bodyHtml += '<div class="form-item"><label class="form-label">分组名称<span style="color:var(--danger);">*</span></label><input type="text" class="form-input" placeholder="请输入分组名称" /></div>';
+    bodyHtml += '<div class="form-item"><label class="form-label">分组编码<span style="color:var(--danger);">*</span></label><input type="text" class="form-input" placeholder="请输入分组编码，字母大写" /></div>';
+    bodyHtml += '<div class="form-item"><label class="form-label">排序号</label><input type="number" class="form-input" value="0" /></div>';
+    bodyHtml += '<div class="form-item"><label class="form-label">状态</label><select class="form-input"><option value="1">启用</option><option value="0">停用</option></select></div>';
+    bodyHtml += '<div class="form-item col-span-2"><label class="form-label">分组描述</label><textarea class="form-input" rows="3" placeholder="请输入分组描述"></textarea></div>';
+    bodyHtml += '</div></div>';
+    var footerHtml = '<button class="px-4 py-1.5 text-sm rounded border" style="border-color:#D9D9D9;" onclick="closeModal(\'' + id + '\')">取消</button>';
+    footerHtml += '<button class="px-4 py-1.5 text-sm text-white rounded" style="background:var(--primary);" onclick="showToast(\'新增成功\',\'success\');closeModal(\'' + id + '\')">确定</button>';
+    openModal(id, title, bodyHtml, footerHtml, 'md');
+}
+
+/** 编辑标签分组弹窗 */
+function openTagGroupEditModal(row) {
+    var id = 'modal_tag_group_edit_' + row.id;
+    var title = '编辑标签分组';
+    var bodyHtml = '<div class="p-4"><div class="grid grid-cols-2 gap-4">';
+    bodyHtml += '<div class="form-item"><label class="form-label">分组名称<span style="color:var(--danger);">*</span></label><input type="text" class="form-input" value="' + row.name + '" /></div>';
+    bodyHtml += '<div class="form-item"><label class="form-label">分组编码<span style="color:var(--text-tertiary);">（不可修改）</span></label><input type="text" class="form-input" value="' + row.groupCode + '" disabled style="background:#F5F5F5;" /></div>';
+    bodyHtml += '<div class="form-item"><label class="form-label">排序号</label><input type="number" class="form-input" value="' + row.sortNo + '" /></div>';
+    bodyHtml += '<div class="form-item"><label class="form-label">状态</label><select class="form-input"><option value="1" ' + (row.status ? 'selected' : '') + '>启用</option><option value="0" ' + (!row.status ? 'selected' : '') + '>停用</option></select></div>';
+    bodyHtml += '<div class="form-item col-span-2"><label class="form-label">分组描述</label><textarea class="form-input" rows="3" placeholder="请输入分组描述"></textarea></div>';
+    bodyHtml += '</div></div>';
+    var footerHtml = '<button class="px-4 py-1.5 text-sm rounded border" style="border-color:#D9D9D9;" onclick="closeModal(\'' + id + '\')">取消</button>';
+    footerHtml += '<button class="px-4 py-1.5 text-sm text-white rounded" style="background:var(--primary);" onclick="showToast(\'保存成功\',\'success\');closeModal(\'' + id + '\')">确定</button>';
+    openModal(id, title, bodyHtml, footerHtml, 'md');
+}
+
+/** 删除标签分组 */
+function deleteTagGroup(row) {
+    showConfirmDialog('确认删除', '确定要删除标签分组"' + row.name + '"吗？删除后分组下的标签将一并移除。', function() {
+        showToast('删除成功', 'success');
+    });
+}
+
+/** 批量删除标签分组 */
+function batchDeleteTagGroups() {
+    showConfirmDialog('确认批量删除', '确定要批量删除选中的标签分组吗？删除后分组下的标签将一并移除，不可恢复。', function() {
+        showToast('批量删除成功', 'success');
+    });
+}
+
+/** 左侧分组表格全选 */
+function toggleMasterAllCheckboxes(el, pageKey) {
+    var container = el.closest('table') || el.parentElement.parentElement.parentElement;
+    var boxes = container.querySelectorAll('.master-checkbox');
+    for (var i = 0; i < boxes.length; i++) {
+        boxes[i].checked = el.checked;
+    }
+}
+
 function openLineAdminMgmt() {
     var id = 'modal_line_admin';
     
@@ -13237,18 +13381,25 @@ var prdData = {
         redFields: ['batchDeleteFlow', 'sortConfig'],
 },
     'tags-group': {
-        background: '【标签分组管理】标签分组管理是标签管理子系统的核心模块，负责对各类标签进行分组管理。支持机构标签、用户标签、应用标签、机构条线标签、工作组标签、软件服务商标签、工作台模板标签共7种标签分组类型，每种分组独立维护标签列表和分组配置。原型实现：Tab主从结构，左侧7个分类Tab切换，右侧显示对应分类的标签分组列表，支持分组CRUD、分组下标签管理、排序配置等。',
+        background: '【标签分组管理】标签分组管理是标签管理子系统的核心模块，负责对各类标签进行分组管理。支持机构标签、用户标签、应用标签、机构条线标签、工作组标签、软件服务商标签、工作台模板标签共8种标签分组类型，每种分组独立维护标签列表和分组配置。走查覆盖2项功能点：①标签分组批量删除 ②标签分组查询字段排序。原型实现：Tab主从结构，左侧标签分组表格（支持复选框批量操作、字段排序、CRUD），右侧标签明细列表。',
         targetUsers: '系统管理员、平台管理员',
-        coreFeatures: '1.多条件组合查询 2.列表字段排序',
-        businessFlow: '进入分组管理页 → 设置查询条件 → 查看列表数据',
-        pageInfo: '支持多条件查询；支持字段排序',
-        dataModel: '核心实体：分组管理（id/名称/编码/排序号/状态/创建时间/创建人）。',
-        queryFlow: '支持多条件组合查询，多条件为AND关系。查询操作：输入/选择条件后点击"查询"按钮 → 列表按条件过滤显示 → 点击"重置"按钮清空所有条件，恢复默认列表。支持分页查询，默认10条/页，可切换每页条数（10/20/50/100）。',
-        sortConfig: '支持列表字段排序。排序方式：点击表头切换排序状态，顺序为 无排序→升序→降序→无排序 循环切换；排序状态用箭头图标标识（↑升序，↓降序）；默认按排序号升序排列，无排序号字段则按创建时间降序。仅支持单列排序。',
-        exceptionHandling: '1.空数据状态：列表显示空状态占位图+提示文字"暂无数据" 2.网络异常：Toast提示"网络连接失败，请稍后重试" 3.数据加载失败：显示"加载失败，点击重试"按钮',
-        permissionReq: '1.系统管理员：拥有全部权限（查询/排序） 2.平台管理员：拥有全部权限 3.分级管理员：仅查询权限，不可新增、编辑、删除 4.普通用户：无访问权限，菜单不可见',
-        interaction: '多条件组合查询；表头点击排序',
-        acceptance: '1.查询条件完整可用 2.表头可排序 3.分页功能正常'
+        coreFeatures: '1.标签分组信息管理（增删改查） 2.标签分组批量删除 3.标签分组查询字段排序 4.分组下标签明细管理',
+        businessFlow: '进入分组管理页 → 选择标签类型Tab → 左侧查看/操作标签分组列表 → 新增/编辑标签分组 → 保存 → 点击分组查看右侧标签明细 → 管理标签明细',
+        pageInfo: 'Tab主从布局：左侧标签分组表格（支持批量删除/排序/CRUD），右侧标签明细表格；8个标签类型Tab切换',
+        dataModel: '核心实体：标签分组（id/分组名称/分组编码/排序号/标签数量/状态/创建时间/创建人/描述）、标签明细（id/标签名称/排序号/状态/创建时间）。枚举值：状态（启用/停用）。',
+        groupAddFlow: '【标签分组新增】点击"新增分组"按钮 → 打开新增弹窗 → 填写分组名称（必填，唯一校验，2-50字符）、分组编码（必填，唯一校验，大写字母+下划线） → 设置排序号（数字，默认0） → 选择状态（启用/停用，默认启用） → 填写分组描述 → 点击保存 → 前端校验通过 → 后端唯一性校验 → 新增成功，Toast提示 → 分组列表刷新。',
+        groupEditFlow: '【标签分组修改】点击操作列"编辑" → 打开编辑弹窗 → 回显分组信息 → 修改分组名称/排序号/状态/分组描述 → 点击保存 → 校验通过 → 更新成功，Toast提示 → 列表刷新。分组编码创建后不可修改。',
+        groupDeleteFlow: '【标签分组删除】点击操作列"删除" → 弹出二次确认弹窗"确定要删除该标签分组吗？删除后分组下的标签将一并移除。" → 确认删除 → 逻辑删除分组及关联标签 → Toast提示"删除成功" → 列表刷新。已被引用的分组不可删除。',
+        groupBatchDeleteFlow: '【标签分组批量删除】勾选多条标签分组记录 → 点击"批量删除"按钮 → 弹出二次确认弹窗（显示选中数量）→ 确认删除 → 批量逻辑删除 → Toast提示成功删除数量。含被引用数据时自动跳过并提示跳过数量。',
+        groupSortConfig: '【标签分组查询字段排序】标签分组列表支持按分组名称、分组编码、排序号、标签数量排序。排序方式：点击表头切换排序状态（无排序→升序→降序→无排序循环切换）；排序状态用箭头图标标识（↑升序，↓降序）；默认按排序号升序排列。仅支持单列排序。排序与查询条件组合生效。',
+        groupQueryFlow: '【标签分组查询】支持分组名称（模糊搜索）查询。查询操作：输入关键词后按回车或点击搜索 → 列表按条件过滤显示。支持分页查询，默认10条/页。',
+        queryFlow: '【标签明细查询】支持标签名称模糊查询，AND关系组合。点击查询按钮过滤列表，点击重置恢复默认。支持分页查询。',
+        sortConfig: '【标签明细排序】标签明细列表支持按标签名称、排序号排序。点击表头切换升降序，默认按排序号升序。仅支持单列排序。',
+        exceptionHandling: '1.名称重复：保存时提示"分组名称已存在" 2.编码重复/格式错误：提示对应错误信息 3.删除被引用分组：拦截删除并提示"该分组已被引用，无法删除" 4.空数据状态：显示空状态占位图 5.网络异常：Toast提示"网络连接失败"',
+        permissionReq: '1.系统管理员：拥有全部权限（分组CRUD+批量删除+排序+标签管理） 2.平台管理员：拥有全部权限 3.分级管理员：仅查询权限 4.普通用户：无访问权限',
+        interaction: 'Tab主从布局；左侧分组表格（复选框+批量删除+排序+CRUD操作）；右侧标签明细表格（查询+CRUD+批量删除+排序）',
+        acceptance: '1.标签分组列表表格正常展示 2.新增分组弹窗字段完整 3.编辑功能正常 4.删除有二次确认 5.批量删除正常 6.分组表头可排序 7.标签明细功能正常 8.Tab切换正常',
+        redFields: ['groupBatchDeleteFlow', 'groupSortConfig'],
     },
     'ticket-sort': {
         background: '【新增功能】工单排序信息管理。工单排序管理是工单中心的新增功能，用于配置工单列表的排序规则。走查覆盖1项功能点：①工单排序信息管理（符合，增加该功能）。原型实现：独立工单排序页面，支持排序规则CRUD，可配置排序类型、排序字段、排序方向、优先级等。',
@@ -14713,6 +14864,13 @@ function renderPrdCard(pageKey, pageName, prd) {
     html += renderSection('batchDeleteFlow', '批量删除流程', prd.batchDeleteFlow);
     html += renderSection('queryFlow', '查询流程', prd.queryFlow);
     html += renderSection('sortConfig', '排序功能', prd.sortConfig);
+    // 标签分组相关
+    html += renderSection('groupAddFlow', '标签分组-新增', prd.groupAddFlow);
+    html += renderSection('groupEditFlow', '标签分组-修改', prd.groupEditFlow);
+    html += renderSection('groupDeleteFlow', '标签分组-删除', prd.groupDeleteFlow);
+    html += renderSection('groupBatchDeleteFlow', '标签分组-批量删除', prd.groupBatchDeleteFlow);
+    html += renderSection('groupSortConfig', '标签分组-查询字段排序', prd.groupSortConfig);
+    html += renderSection('groupQueryFlow', '标签分组-查询', prd.groupQueryFlow);
     html += renderSection('viewFlow', '查看流程', prd.viewFlow);
     html += renderSection('importFlow', '导入流程', prd.importFlow);
     html += renderSection('exportFlow', '导出流程', prd.exportFlow);
