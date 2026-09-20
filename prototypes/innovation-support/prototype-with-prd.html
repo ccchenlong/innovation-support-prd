@@ -9561,11 +9561,11 @@ function renderWorkbenchTabCardPage(pageKey) {
     html += '<div class="page-card">';
 
     // Tab切换
-    html += '<div class="tab-bar">';
+    html += '<div class="tab-bar" id="workbenchTabBar">';
     for (var t = 0; t < config.tabs.length; t++) {
         var tab = config.tabs[t];
         var active = tab.key === currentWorkbenchTab ? 'active' : '';
-        html += '<div class="tab-item ' + active + '" onclick="switchWorkbenchTab(\'' + tab.key + '\', \'' + pageKey + '\')">' + tab.label + '</div>';
+        html += '<div class="tab-item ' + active + '" data-tab-key="' + tab.key + '" onclick="switchWorkbenchTab(\'' + tab.key + '\', \'' + pageKey + '\')">' + tab.label + '</div>';
     }
     html += '</div>';
 
@@ -9584,17 +9584,16 @@ function switchWorkbenchTab(tabKey, pageKey) {
     if (content) {
         content.innerHTML = renderWorkbenchTabContent(pageKey, tabKey);
     }
-    // 更新Tab激活状态
-    var tabItems = document.querySelectorAll('#workbenchTabContent').length > 0
-        ? document.querySelectorAll('.tab-bar .tab-item')
-        : [];
-    var config = pageConfigs[pageKey];
-    var barItems = document.querySelectorAll('.tab-bar .tab-item');
-    for (var i = 0; i < barItems.length; i++) {
-        if (config.tabs[i] && config.tabs[i].key === tabKey) {
-            barItems[i].classList.add('active');
-        } else {
-            barItems[i].classList.remove('active');
+    // 更新Tab激活状态 - 按data-tab-key匹配
+    var tabBar = document.getElementById('workbenchTabBar');
+    if (tabBar) {
+        var items = tabBar.querySelectorAll('.tab-item');
+        for (var i = 0; i < items.length; i++) {
+            if (items[i].getAttribute('data-tab-key') === tabKey) {
+                items[i].classList.add('active');
+            } else {
+                items[i].classList.remove('active');
+            }
         }
     }
 }
@@ -9808,7 +9807,7 @@ function openThirdPartyVersionManage(workbenchId) {
     bodyHtml += '</tbody></table>';
     bodyHtml += '</div>';
 
-    openModal(wb.name + ' - 版本管理', bodyHtml, null, false, '关闭');
+    openModal('tp_version_' + workbenchId, wb.name + ' - 版本管理', bodyHtml, '<button class="btn btn-default btn-sm" onclick="closeModal(\'tp_version_' + workbenchId + '\')">关闭</button>', 'large');
 }
 
 /** 新增第三方工作台版本 */
@@ -11411,6 +11410,14 @@ function openModal(id, title, bodyHtml, footerHtml, size) {
 
 /** 6. 通用弹窗关闭 */
 function closeModal(id) {
+    if (!id) {
+        // 不传id时关闭最上层弹窗
+        var masks = document.querySelectorAll('#modalLayer > .modal-mask');
+        if (masks.length > 0) {
+            masks[masks.length - 1].remove();
+            return;
+        }
+    }
     const modal = $(id);
     if (modal) modal.remove();
 }
