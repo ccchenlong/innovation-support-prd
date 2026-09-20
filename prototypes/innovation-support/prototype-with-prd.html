@@ -409,6 +409,16 @@
         .tag-light-blue { background: #E8F3FF; color: #165DFF; border: none; }
 
         /* 工作台卡片网格 */
+        .page-container {
+            padding: 16px;
+        }
+        .page-card {
+            background: #fff;
+            border-radius: 8px;
+            padding: 20px;
+            margin-top: 12px;
+            border: 1px solid #F0F0F0;
+        }
         .workbench-card-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
@@ -1204,9 +1214,10 @@ var pageConfigs = {
             { key: 'status', title: '状态', type: 'tag', tagMap: { 1: { text: '正常', color: 'green' }, 0: { text: '停用', color: 'red' } } },
             { key: 'createTime', title: '创建时间', sortable: true },
             { type: 'actions', title: '操作', actions: [
-                { key: 'view', label: '查看', onClick: 'openProviderManageDrawer(arguments[0])' },
+                { key: 'view', label: '查看' },
                 { key: 'edit', label: '编辑' },
                 { key: 'delete', label: '删除', danger: true },
+                { key: 'appLink', label: '应用关联' },
                 { key: 'accountLink', label: '帐号关联' },
             ]},
         ],
@@ -2190,42 +2201,34 @@ var pageConfigs = {
             },
             'thirdparty': {
                 query: [
-                    { key: 'name', label: '工作台名', type: 'input', placeholder: '请输入工作台名' },
+                    { key: 'name', label: '工作台名称', type: 'input', placeholder: '请输入工作台名称' },
                     { key: 'provider', label: '软件服务商', type: 'input', placeholder: '请输入服务商名称' },
-                    { key: 'auditStatus', label: '审核状态', type: 'select', placeholder: '请选择', options: [{ value: '', label: '全部' }, { value: 'pending', label: '待审核' }, { value: 'approved', label: '审核通过' }, { value: 'rejected', label: '审核不通过' }, { value: 'offline', label: '已下架' }] },
+                    { key: 'status', label: '状态', type: 'select', placeholder: '请选择', options: [{ value: '', label: '全部' }, { value: '1', label: '启用' }, { value: '0', label: '停用' }] },
                 ],
                 toolbar: [
-                    { text: '批量审核', icon: 'fa-check-square-o', onClick: 'batchAuditThirdParty()' },
-                    { text: '批量上架', icon: 'fa-arrow-up', onClick: 'batchOnlineThirdParty()' },
-                    { text: '批量下架', icon: 'fa-arrow-down', onClick: 'batchOfflineThirdParty()' },
+                    { type: 'add', text: '新增', onClick: 'openThirdPartyAddModal()' },
                 ],
-                sortOptions: [
-                    { key: 'createTime', label: '提交时间' },
-                    { key: 'auditTime', label: '审核时间' },
-                    { key: 'name', label: '名称' },
-                    { key: 'provider', label: '服务商' },
+                columns: [
+                    { type: 'index', title: '序号' },
+                    { key: 'name', title: '工作台名称', sortable: true },
+                    { key: 'provider', title: '软件服务商' },
+                    { key: 'category', title: '工作台分类' },
+                    { key: 'currentVersion', title: '当前版本' },
+                    { key: 'status', title: '状态', type: 'tag', tagMap: { 1: { text: '启用', color: 'green' }, 0: { text: '停用', color: 'red' } } },
+                    { key: 'createTime', title: '创建时间', sortable: true },
+                    { type: 'actions', title: '操作', actions: [
+                        { key: 'view', label: '查看' },
+                        { key: 'edit', label: '编辑' },
+                        { key: 'version', label: '版本管理' },
+                        { key: 'delete', label: '删除', danger: true },
+                    ]},
                 ],
-                cardData: [
-                    { id: 101, name: '智慧政务协同工作台', provider: '江西智慧政务科技有限公司', providerType: '软件服务商', category: '政务办公类', auditStatus: 'approved', onlineStatus: true, currentVersion: 'V20260910.001', submitTime: '2026-09-10 09:30:00', auditTime: '2026-09-12 14:20:00', previews: [
-                        { type: 'desktop', status: '已发布' },
-                        { type: 'mobile', status: '已发布' },
-                    ]},
-                    { id: 102, name: '民生服务一站式工作台', provider: '江西民生科技有限公司', providerType: '软件服务商', category: '民生服务类', auditStatus: 'pending', onlineStatus: false, currentVersion: 'V1.0.0', submitTime: '2026-09-18 11:00:00', auditTime: '', previews: [
-                        { type: 'desktop', status: '待审核' },
-                        { type: 'mobile', status: '待审核' },
-                    ]},
-                    { id: 103, name: '经济运行监测工作台', provider: '江西数字经济研究院', providerType: '软件服务商', category: '经济运行类', auditStatus: 'rejected', onlineStatus: false, currentVersion: 'V0.9.0', submitTime: '2026-09-15 16:45:00', auditTime: '2026-09-17 10:30:00', rejectReason: '功能不完整，缺少数据导出模块', previews: [
-                        { type: 'desktop', status: '审核不通过' },
-                        { type: 'mobile', status: '审核不通过' },
-                    ]},
-                    { id: 104, name: '市场监管执法工作台', provider: '江西智联科技有限公司', providerType: '软件服务商', category: '市场监管类', auditStatus: 'approved', onlineStatus: false, currentVersion: 'V20260820.003', submitTime: '2026-08-15 10:00:00', auditTime: '2026-08-20 15:00:00', previews: [
-                        { type: 'desktop', status: '已下架' },
-                        { type: 'mobile', status: '已下架' },
-                    ]},
-                    { id: 105, name: '应急指挥调度工作台', provider: '江西应急科技有限公司', providerType: '软件服务商', category: '应急管理类', auditStatus: 'pending', onlineStatus: false, currentVersion: 'V1.2.0', submitTime: '2026-09-19 08:30:00', auditTime: '', previews: [
-                        { type: 'desktop', status: '待审核' },
-                        { type: 'mobile', status: '待审核' },
-                    ]},
+                data: [
+                    { id: 101, name: '智慧政务协同工作台', provider: '江西智慧政务科技有限公司', category: '政务办公类', currentVersion: 'V20260910.001', status: 1, createTime: '2026-09-10 09:30:00' },
+                    { id: 102, name: '民生服务一站式工作台', provider: '江西民生科技有限公司', category: '民生服务类', currentVersion: 'V1.0.0', status: 0, createTime: '2026-09-18 11:00:00' },
+                    { id: 103, name: '经济运行监测工作台', provider: '江西数字经济研究院', category: '经济运行类', currentVersion: 'V0.9.0', status: 0, createTime: '2026-09-15 16:45:00' },
+                    { id: 104, name: '市场监管执法工作台', provider: '江西智联科技有限公司', category: '市场监管类', currentVersion: 'V20260820.003', status: 1, createTime: '2026-08-15 10:00:00' },
+                    { id: 105, name: '应急指挥调度工作台', provider: '江西应急科技有限公司', category: '应急管理类', currentVersion: 'V1.2.0', status: 0, createTime: '2026-09-19 08:30:00' },
                 ],
             },
         },
@@ -4743,7 +4746,7 @@ var pageConfigs = {
             { key: 'title', label: '消息标题', type: 'input', placeholder: '请输入消息标题' },
             { key: 'readStatus', label: '已读状态', type: 'select', placeholder: '请选择', options: [{ value: '', label: '全部' }, { value: 'read', label: '已读' }, { value: 'unread', label: '未读' }] },
         ],
-        toolbar: [{ type: 'add', text: '新增消息', onClick: 'openNoticeAddModal()' }, { type: 'batchDelete', onClick: 'batchDeleteNotice()' }],
+        toolbar: [{ type: 'custom', text: '新增消息', icon: 'fa-plus', onClick: 'openNoticeAddModal()' }, { type: 'batchDelete' }],
         columns: [
             { type: 'checkbox' },
             { type: 'index', title: '序号' },
@@ -4753,9 +4756,9 @@ var pageConfigs = {
             { key: 'readStatus', title: '已读状态', type: 'tag', tagMap: { 'read': { text: '已读', color: 'gray' }, 'unread': { text: '未读', color: 'red' } } },
             { key: 'sendTime', title: '发送时间', sortable: true },
             { type: 'actions', title: '操作', actions: [
-                { key: 'view', label: '查看', onClick: 'openNoticeViewModal(arguments[0])' },
-                { key: 'edit', label: '编辑', onClick: 'openNoticeEditModal(arguments[0])' },
-                { key: 'delete', label: '删除', danger: true, onClick: 'deleteNotice(arguments[0])' },
+                { key: 'view', label: '查看' },
+                { key: 'edit', label: '编辑' },
+                { key: 'delete', label: '删除', danger: true },
             ]},
         ],
         data: [
@@ -4767,6 +4770,8 @@ var pageConfigs = {
             { id: 6, title: '月度接口账单通知', msgType: 'business', receiver: '九江数据服务有限公司', readStatus: 'unread', sendTime: '2025-04-06 11:00:00' },
             { id: 7, title: '平台安全加固通知', msgType: 'system', receiver: '全部服务商', readStatus: 'read', sendTime: '2025-04-07 15:00:00' },
             { id: 8, title: '新功能上线公告', msgType: 'system', receiver: '全部服务商', readStatus: 'read', sendTime: '2025-04-08 10:00:00' },
+            { id: 9, title: '开发者实名认证提醒', msgType: 'audit', receiver: '上饶安全科技有限公司', readStatus: 'unread', sendTime: '2025-04-09 09:30:00' },
+            { id: 10, title: '应用性能优化通知', msgType: 'business', receiver: '吉安云计算科技公司', readStatus: 'read', sendTime: '2025-04-10 14:00:00' },
         ],
     },
 
@@ -7512,6 +7517,25 @@ function openProviderManageDrawer(providerId) {
     openDrawer('providerManageDrawer', title, bodyHtml, footerHtml, '780px');
 }
 
+/** 直接打开应用关联抽屉 */
+function openProviderAppLinkDrawer(providerId) {
+    var config = pageConfigs['provider'];
+    var provider = null;
+    for (var i = 0; i < config.data.length; i++) {
+        if (config.data[i].id === providerId) { provider = config.data[i]; break; }
+    }
+    if (!provider) return;
+
+    currentProviderManageDrawerTab['provider-manage'] = 'appLink';
+    currentDrawerManageProviderId = providerId;
+
+    var title = '<i class="fa fa-th-large" style="color:#165DFF;"></i> 应用关联 - ' + provider.name;
+    var bodyHtml = renderProviderManageDrawerBody(provider, 'appLink');
+    var footerHtml = '<button class="btn btn-default btn-sm" onclick="closeDrawer(\'providerManageDrawer\')">关闭</button>';
+
+    openDrawer('providerManageDrawer', title, bodyHtml, footerHtml, '780px');
+}
+
 function switchProviderManageDrawerTab(tabKey) {
     var config = pageConfigs['provider'];
     var providerId = currentDrawerManageProviderId;
@@ -9537,11 +9561,11 @@ function renderWorkbenchTabCardPage(pageKey) {
     html += '<div class="page-card">';
 
     // Tab切换
-    html += '<div class="tab-nav" style="margin-bottom:20px;border-bottom:1px solid var(--border-color);">';
+    html += '<div class="tab-bar">';
     for (var t = 0; t < config.tabs.length; t++) {
         var tab = config.tabs[t];
         var active = tab.key === currentWorkbenchTab ? 'active' : '';
-        html += '<span class="tab-nav-item ' + active + '" onclick="switchWorkbenchTab(\'' + tab.key + '\', \'' + pageKey + '\')">' + tab.label + '</span>';
+        html += '<div class="tab-item ' + active + '" onclick="switchWorkbenchTab(\'' + tab.key + '\', \'' + pageKey + '\')">' + tab.label + '</div>';
     }
     html += '</div>';
 
@@ -9561,13 +9585,16 @@ function switchWorkbenchTab(tabKey, pageKey) {
         content.innerHTML = renderWorkbenchTabContent(pageKey, tabKey);
     }
     // 更新Tab激活状态
-    var tabItems = document.querySelectorAll('.tab-nav-item');
+    var tabItems = document.querySelectorAll('#workbenchTabContent').length > 0
+        ? document.querySelectorAll('.tab-bar .tab-item')
+        : [];
     var config = pageConfigs[pageKey];
-    for (var i = 0; i < tabItems.length; i++) {
+    var barItems = document.querySelectorAll('.tab-bar .tab-item');
+    for (var i = 0; i < barItems.length; i++) {
         if (config.tabs[i] && config.tabs[i].key === tabKey) {
-            tabItems[i].classList.add('active');
+            barItems[i].classList.add('active');
         } else {
-            tabItems[i].classList.remove('active');
+            barItems[i].classList.remove('active');
         }
     }
 }
@@ -9577,161 +9604,251 @@ function renderWorkbenchTabContent(pageKey, tabKey) {
     var tabConfig = config.tabConfigs[tabKey];
     var html = '';
 
-    // 查询区
-    html += '<div class="query-area">';
-    html += '<div class="query-row">';
-    for (var q = 0; q < tabConfig.query.length; q++) {
-        var item = tabConfig.query[q];
-        html += '<div class="query-item">';
-        html += '<label class="query-label">' + item.label + '</label>';
-        if (item.type === 'input') {
-            html += '<input type="text" class="form-input" placeholder="' + (item.placeholder || '') + '" />';
-        } else if (item.type === 'select') {
-            html += '<select class="form-input"><option value="">' + (item.placeholder || '请选择') + '</option>';
-            if (item.options) {
-                for (var o = 0; o < item.options.length; o++) {
-                    html += '<option value="' + item.options[o].value + '">' + item.options[o].label + '</option>';
+    // 查询区 - 使用Tailwind风格，与renderQueryArea一致
+    if (tabConfig.query && tabConfig.query.length > 0) {
+        html += '<div class="flex flex-wrap items-center gap-4 mb-4 p-4 bg-white rounded border" style="border-color:var(--border-color-light);">';
+        for (var q = 0; q < tabConfig.query.length; q++) {
+            var item = tabConfig.query[q];
+            html += '<div class="flex items-center gap-2">';
+            html += '<label class="text-sm whitespace-nowrap" style="color:var(--text-secondary);">' + item.label + '</label>';
+            if (item.type === 'input') {
+                html += '<input type="text" class="form-input" style="width:180px;" placeholder="' + (item.placeholder || '') + '" />';
+            } else if (item.type === 'select') {
+                html += '<select class="form-input" style="width:160px;"><option value="">' + (item.placeholder || '请选择') + '</option>';
+                if (item.options) {
+                    for (var o = 0; o < item.options.length; o++) {
+                        html += '<option value="' + item.options[o].value + '">' + item.options[o].label + '</option>';
+                    }
                 }
+                html += '</select>';
             }
-            html += '</select>';
+            html += '</div>';
+        }
+        html += '<div class="flex gap-2 ml-auto">';
+        html += '<button class="px-4 py-1.5 text-sm text-white rounded" style="background:var(--primary);"><i class="fa fa-search" style="margin-right:4px;"></i>查询</button>';
+        html += '<button class="px-4 py-1.5 text-sm rounded border" style="border-color:var(--primary);color:var(--primary);background:#fff;"><i class="fa fa-refresh" style="margin-right:4px;"></i>重置</button>';
+        html += '</div>';
+        html += '</div>';
+    }
+
+    // 工具栏
+    if (tabConfig.toolbar && tabConfig.toolbar.length > 0) {
+        html += '<div class="flex items-center gap-2 mb-4">';
+        for (var t = 0; t < tabConfig.toolbar.length; t++) {
+            var btn = tabConfig.toolbar[t];
+            var isPrimary = btn.type === 'add';
+            var bgStyle = isPrimary
+                ? 'background:var(--primary);color:#fff;border-color:var(--primary);'
+                : 'background:#fff;color:var(--primary);border-color:var(--primary);';
+            var icon = btn.icon ? '<i class="fa ' + btn.icon + '" style="margin-right:4px;"></i>' : '';
+            var click = btn.onClick ? ' onclick="' + btn.onClick + '"' : '';
+            html += '<button class="px-4 py-1.5 text-sm rounded border flex items-center gap-1"' +
+                ' style="' + bgStyle + '"' + click + '>' +
+                (isPrimary ? '<i class="fa fa-plus" style="margin-right:4px;"></i>' : icon) +
+                btn.text + '</button>';
+        }
+        // 排序方式
+        if (tabConfig.sortOptions && tabConfig.sortOptions.length > 0) {
+            html += '<div class="ml-auto flex items-center gap-3">';
+            html += '<span class="text-sm" style="color:var(--text-secondary);">排序方式</span>';
+            for (var s = 0; s < tabConfig.sortOptions.length; s++) {
+                var sort = tabConfig.sortOptions[s];
+                html += '<span class="text-sm cursor-pointer" style="color:var(--text-secondary);" onclick="sortWorkbench(\'' + sort.key + '\')">' + sort.label + ' <i class="fa fa-sort" style="font-size:12px;"></i></span>';
+            }
+            html += '<span class="text-sm cursor-pointer" style="color:var(--text-tertiary);"><i class="fa fa-question-circle"></i></span>';
+            html += '</div>';
         }
         html += '</div>';
     }
-    html += '<div class="query-item query-actions">';
-    html += '<button class="btn btn-primary"><i class="fa fa-search"></i> 查询</button>';
-    html += '<button class="btn btn-default"><i class="fa fa-refresh"></i> 重置</button>';
-    html += '</div>';
-    html += '</div></div>';
 
-    // 工具栏
-    html += '<div class="toolbar">';
-    html += '<div class="toolbar-left">';
-    for (var t = 0; t < tabConfig.toolbar.length; t++) {
-        var btn = tabConfig.toolbar[t];
-        var btnClass = btn.type === 'add' ? 'btn btn-primary' : 'btn btn-default';
-        var icon = btn.icon ? '<i class="fa ' + btn.icon + '"></i> ' : '';
-        var click = btn.onClick ? ' onclick="' + btn.onClick + '"' : '';
-        html += '<button class="' + btnClass + '"' + click + '>' + icon + btn.text + '</button>';
-    }
-    html += '</div>';
-    html += '<div class="toolbar-right">';
-    html += '<span class="text-sm" style="color:var(--text-secondary);margin-right:8px;">排序方式</span>';
-    if (tabConfig.sortOptions) {
-        for (var s = 0; s < tabConfig.sortOptions.length; s++) {
-            var sort = tabConfig.sortOptions[s];
-            html += '<span class="text-sm sort-link" style="margin-right:12px;cursor:pointer;color:var(--text-secondary);" onclick="sortWorkbench(\'' + sort.key + '\')">' + sort.label + ' <i class="fa fa-sort" style="font-size:12px;"></i></span>';
+    // 内容区：标准工作台用卡片，第三方工作台用表格
+    if (tabKey === 'thirdparty') {
+        // 第三方工作台：直接渲染表格HTML
+        var tpConfig = tabConfig;
+        var tpData = tpConfig.data || [];
+        html += '<table class="data-table" style="width:100%;">';
+        html += '<thead><tr>';
+        for (var tc = 0; tc < tpConfig.columns.length; tc++) {
+            var col = tpConfig.columns[tc];
+            if (col.type === 'index') {
+                html += '<th style="width:60px;">' + col.title + '</th>';
+            } else if (col.type === 'actions') {
+                html += '<th style="width:240px;">' + col.title + '</th>';
+            } else if (col.sortable) {
+                html += '<th class="cursor-pointer select-none" onclick="sortThirdPartyTable(\'' + col.key + '\')">' + col.title + '<i class="fa fa-sort sort-icon"></i></th>';
+            } else {
+                html += '<th>' + col.title + '</th>';
+            }
         }
-    }
-    html += '<span class="text-sm" style="color:var(--text-tertiary);cursor:pointer;"><i class="fa fa-question-circle"></i></span>';
-    html += '</div>';
-    html += '</div>';
-
-    // 卡片网格
-    var data = tabConfig.cardData || [];
-    html += '<div class="workbench-card-grid">';
-    for (var i = 0; i < data.length; i++) {
-        var item = data[i];
-        if (tabKey === 'thirdparty') {
-            html += renderThirdPartyWorkbenchCard(item);
-        } else {
-            html += renderWorkbenchCard(item);
+        html += '</tr></thead><tbody>';
+        if (tpData.length === 0) {
+            html += '<tr><td colspan="' + tpConfig.columns.length + '" style="text-align:center;padding:40px;color:var(--text-tertiary);"><i class="fa fa-inbox" style="font-size:32px;display:block;margin-bottom:8px;"></i>暂无数据</td></tr>';
         }
+        for (var ti = 0; ti < tpData.length; ti++) {
+            var row = tpData[ti];
+            html += '<tr>';
+            for (var tc2 = 0; tc2 < tpConfig.columns.length; tc2++) {
+                var col2 = tpConfig.columns[tc2];
+                if (col2.type === 'index') {
+                    html += '<td>' + (ti + 1) + '</td>';
+                } else if (col2.type === 'tag') {
+                    var val = row[col2.key];
+                    var tagInfo = col2.tagMap ? (col2.tagMap[val] || { text: val, color: 'gray' }) : { text: val, color: 'gray' };
+                    html += '<td><span class="tag tag-' + tagInfo.color + '">' + tagInfo.text + '</span></td>';
+                } else if (col2.type === 'actions') {
+                    html += '<td>';
+                    var actions = col2.actions || [];
+                    for (var ai = 0; ai < actions.length; ai++) {
+                        var act = actions[ai];
+                        var color = act.danger ? 'color:var(--danger);' : 'color:var(--primary);';
+                        var clickHandler = 'handleThirdPartyAction(\'' + act.key + '\',' + row.id + ')';
+                        html += '<a class="hover:underline cursor-pointer text-sm" style="' + color + 'margin-right:8px;" onclick="' + clickHandler + '">' + act.label + '</a>';
+                    }
+                    html += '</td>';
+                } else {
+                    html += '<td>' + (row[col2.key] !== undefined ? row[col2.key] : '') + '</td>';
+                }
+            }
+            html += '</tr>';
+        }
+        html += '</tbody></table>';
+    } else {
+        // 标准工作台：卡片网格
+        var data = tabConfig.cardData || [];
+        html += '<div class="workbench-card-grid">';
+        for (var i = 0; i < data.length; i++) {
+            html += renderWorkbenchCard(data[i]);
+        }
+        html += '</div>';
     }
-    html += '</div>';
 
     return html;
 }
 
-/** 渲染第三方工作台卡片 */
-function renderThirdPartyWorkbenchCard(item) {
-    var html = '<div class="workbench-card">';
-    // 卡片头部
-    html += '<div class="wb-card-header">';
-    html += '<div class="wb-card-title" style="font-size:14px;">' + item.name + '</div>';
-    // 审核状态标签
-    var statusTag = '';
-    if (item.auditStatus === 'approved') {
-        statusTag = '<span class="tag tag-green">审核通过</span>';
-    } else if (item.auditStatus === 'pending') {
-        statusTag = '<span class="tag tag-orange">待审核</span>';
-    } else if (item.auditStatus === 'rejected') {
-        statusTag = '<span class="tag tag-red">审核不通过</span>';
-    } else if (item.auditStatus === 'offline') {
-        statusTag = '<span class="tag tag-gray">已下架</span>';
+/** 渲染第三方工作台表格 */
+function renderThirdPartyTable() {
+    var config = pageConfigs['workbench-manage'];
+    var tabConfig = config.tabConfigs['thirdparty'];
+    var container = document.getElementById('thirdPartyTableContainer');
+    if (!container) return;
+    renderTable('thirdPartyTableContainer', tabConfig.columns, tabConfig.data, 'workbench-thirdparty');
+}
+
+/** 第三方工作台版本管理数据 */
+var thirdPartyVersionData = {
+    101: [
+        { id: 1001, version: 'V20260910.001', type: '桌面端', publisher: '张三', publishTime: '2026-09-10 10:00:00', status: '已发布' },
+        { id: 1002, version: 'V20260825.002', type: '桌面端', publisher: '张三', publishTime: '2026-08-25 15:30:00', status: '已发布' },
+        { id: 1003, version: 'V20260825.001', type: '移动端', publisher: '李四', publishTime: '2026-08-25 09:00:00', status: '已发布' },
+    ],
+    102: [
+        { id: 2001, version: 'V1.0.0', type: '桌面端', publisher: '王五', publishTime: '2026-09-18 11:30:00', status: '待发布' },
+    ],
+    103: [
+        { id: 3001, version: 'V0.9.0', type: '桌面端', publisher: '赵六', publishTime: '2026-09-15 17:00:00', status: '已发布' },
+    ],
+    104: [
+        { id: 4001, version: 'V20260820.003', type: '桌面端', publisher: '孙七', publishTime: '2026-08-20 16:00:00', status: '已发布' },
+        { id: 4002, version: 'V20260815.002', type: '移动端', publisher: '孙七', publishTime: '2026-08-15 14:00:00', status: '已发布' },
+        { id: 4003, version: 'V20260810.001', type: '桌面端', publisher: '周八', publishTime: '2026-08-10 10:00:00', status: '已发布' },
+    ],
+    105: [
+        { id: 5001, version: 'V1.2.0', type: '桌面端', publisher: '吴九', publishTime: '2026-09-19 09:00:00', status: '待发布' },
+        { id: 5002, version: 'V1.1.0', type: '桌面端', publisher: '吴九', publishTime: '2026-09-10 14:00:00', status: '已发布' },
+    ],
+};
+
+/** 打开第三方工作台版本管理弹窗 */
+function openThirdPartyVersionManage(workbenchId) {
+    var config = pageConfigs['workbench-manage'];
+    var tabConfig = config.tabConfigs['thirdparty'];
+    var wb = null;
+    for (var i = 0; i < tabConfig.data.length; i++) {
+        if (tabConfig.data[i].id === workbenchId) { wb = tabConfig.data[i]; break; }
     }
-    html += statusTag;
-    html += '</div>';
+    if (!wb) return;
 
-    // 服务商信息
-    html += '<div class="wb-card-info" style="margin-top:8px;">';
-    html += '<span class="wb-info-label">服务商：</span>';
-    html += '<span class="wb-info-value" style="color:var(--text-secondary);">' + item.provider + '</span>';
-    html += '</div>';
-
-    // 分类
-    if (item.category) {
-        html += '<div class="wb-card-category"><span class="tag tag-light-blue">' + item.category + '</span></div>';
+    var versions = thirdPartyVersionData[workbenchId] || [];
+    var bodyHtml = '<div style="width:720px;">';
+    // 查询区
+    bodyHtml += '<div style="display:flex;align-items:center;gap:8px;margin-bottom:12px;">';
+    bodyHtml += '<input type="text" class="form-input text-sm" placeholder="请输入版本号" style="width:180px;padding:6px 10px;" />';
+    bodyHtml += '<select class="form-input text-sm" style="width:120px;padding:6px 10px;"><option>全部类型</option><option>桌面端</option><option>移动端</option></select>';
+    bodyHtml += '<button class="btn btn-default btn-sm"><i class="fa fa-search"></i> 查询</button>';
+    bodyHtml += '<button class="btn btn-default btn-sm">重置</button>';
+    bodyHtml += '<button class="btn btn-primary btn-sm" style="margin-left:auto;" onclick="addThirdPartyVersion(' + workbenchId + ')"><i class="fa fa-plus"></i> 新增版本</button>';
+    bodyHtml += '</div>';
+    // 表格
+    bodyHtml += '<table class="page-table">';
+    bodyHtml += '<thead><tr>';
+    bodyHtml += '<th style="width:50px;">序号</th>';
+    bodyHtml += '<th>版本号</th>';
+    bodyHtml += '<th>类型</th>';
+    bodyHtml += '<th>发布人</th>';
+    bodyHtml += '<th>发布时间</th>';
+    bodyHtml += '<th>状态</th>';
+    bodyHtml += '<th style="width:100px;">操作</th>';
+    bodyHtml += '</tr></thead><tbody>';
+    if (versions.length === 0) {
+        bodyHtml += '<tr><td colspan="7" style="text-align:center;padding:30px;color:#C9CDD4;">暂无版本记录</td></tr>';
     }
-
-    // 上架状态
-    html += '<div class="wb-card-info">';
-    html += '<span class="wb-info-label">上架状态：</span>';
-    html += '<span class="wb-info-value">' + (item.onlineStatus ? '已上架' : '未上架') + '</span>';
-    html += '</div>';
-
-    // 版本
-    html += '<div class="wb-card-info">';
-    html += '<span class="wb-info-label">当前版本：</span>';
-    html += '<span class="wb-info-value">' + item.currentVersion + '</span>';
-    html += '</div>';
-
-    // 提交/审核时间
-    html += '<div class="wb-card-info" style="color:var(--text-tertiary);">';
-    html += '提交时间：' + item.submitTime;
-    html += '</div>';
-    if (item.auditTime) {
-        html += '<div class="wb-card-info" style="color:var(--text-tertiary);">';
-        html += '审核时间：' + item.auditTime;
-        html += '</div>';
+    for (var v = 0; v < versions.length; v++) {
+        var ver = versions[v];
+        var statusTag = ver.status === '已发布' ? '<span class="tag tag-green">已发布</span>' : '<span class="tag tag-orange">待发布</span>';
+        bodyHtml += '<tr>';
+        bodyHtml += '<td>' + (v + 1) + '</td>';
+        bodyHtml += '<td>' + ver.version + '</td>';
+        bodyHtml += '<td>' + ver.type + '</td>';
+        bodyHtml += '<td>' + ver.publisher + '</td>';
+        bodyHtml += '<td>' + ver.publishTime + '</td>';
+        bodyHtml += '<td>' + statusTag + '</td>';
+        bodyHtml += '<td><span class="link-btn text-sm" onclick="viewThirdPartyVersion(' + ver.id + ')">查看</span></td>';
+        bodyHtml += '</tr>';
     }
+    bodyHtml += '</tbody></table>';
+    bodyHtml += '</div>';
 
-    // 预览图区域
-    html += '<div class="wb-preview-area">';
-    for (var p = 0; p < item.previews.length; p++) {
-        var pv = item.previews[p];
-        var statusColor = pv.status === '已发布' ? 'tag-green' : (pv.status === '待审核' ? 'tag-orange' : (pv.status === '审核不通过' ? 'tag-red' : 'tag-gray'));
-        var previewIcon = pv.type === 'desktop' ? 'fa-desktop' : 'fa-mobile';
-        var previewBg = pv.type === 'desktop'
-            ? 'linear-gradient(180deg,#E8F3FF 0%,#F0F5FF 100%)'
-            : 'linear-gradient(180deg,#E8F3FF 0%,#F0F5FF 100%)';
-        html += '<div class="wb-preview-item">';
-        html += '<div class="wb-preview-tag tag ' + statusColor + '">' + pv.status + '</div>';
-        html += '<div class="wb-preview-img" style="background:' + previewBg + ';">';
-        html += '<i class="fa ' + previewIcon + '" style="font-size:28px;color:#165DFF;opacity:0.5;"></i>';
-        html += '</div>';
-        html += '</div>';
-    }
-    html += '</div>';
+    openModal(wb.name + ' - 版本管理', bodyHtml, null, false, '关闭');
+}
 
-    // 底部操作区
-    html += '<div class="wb-card-footer">';
-    html += '<div style="display:flex;gap:12px;">';
-    html += '<button class="btn btn-text btn-sm" onclick="viewThirdPartyWorkbench(' + item.id + ')">查看</button>';
-    if (item.auditStatus === 'pending') {
-        html += '<button class="btn btn-text btn-sm" style="color:#00B42A;" onclick="auditThirdPartyWorkbench(' + item.id + ', \'pass\')">审核通过</button>';
-        html += '<button class="btn btn-text btn-sm" style="color:#F53F3F;" onclick="auditThirdPartyWorkbench(' + item.id + ', \'reject\')">审核不通过</button>';
-    } else if (item.auditStatus === 'approved' && item.onlineStatus) {
-        html += '<button class="btn btn-text btn-sm" style="color:#FF7D00;" onclick="offlineThirdPartyWorkbench(' + item.id + ')">下架</button>';
-    } else if (item.auditStatus === 'approved' && !item.onlineStatus) {
-        html += '<button class="btn btn-text btn-sm" style="color:#00B42A;" onclick="onlineThirdPartyWorkbench(' + item.id + ')">上架</button>';
-    } else if (item.auditStatus === 'rejected') {
-        html += '<button class="btn btn-text btn-sm" onclick="viewRejectReason(' + item.id + ')">查看原因</button>';
-    }
-    html += '</div>';
-    html += '</div>';
+/** 新增第三方工作台版本 */
+function addThirdPartyVersion(workbenchId) {
+    closeModal();
+    var bodyHtml = '<div style="width:480px;">' +
+        '<div style="margin-bottom:14px;"><label class="form-label">版本号 <span style="color:#FF4D4F;">*</span></label>' +
+        '<input type="text" class="form-input w-full" placeholder="如：V20260920.001" /></div>' +
+        '<div style="margin-bottom:14px;"><label class="form-label">类型 <span style="color:#FF4D4F;">*</span></label>' +
+        '<select class="form-input w-full"><option>桌面端</option><option>移动端</option></select></div>' +
+        '<div style="margin-bottom:14px;"><label class="form-label">版本说明</label>' +
+        '<textarea class="form-input w-full" style="height:80px;" placeholder="请输入版本说明"></textarea></div>' +
+        '<div style="margin-bottom:14px;"><label class="form-label">版本文件 <span style="color:#FF4D4F;">*</span></label>' +
+        '<div style="border:1px dashed #D9D9D9;border-radius:6px;padding:20px;text-align:center;color:#8C8C8C;">' +
+        '<i class="fa fa-cloud-upload" style="font-size:24px;margin-bottom:8px;display:block;"></i>' +
+        '点击或拖拽文件到此处上传</div></div>' +
+        '</div>';
+    openModal('新增版本', bodyHtml, function() {
+        showToast('新增版本成功', 'success');
+        closeModal();
+    });
+}
 
-    html += '</div>';
-    return html;
+/** 查看第三方工作台版本详情 */
+function viewThirdPartyVersion(versionId) {
+    var bodyHtml = '<div style="width:480px;">' +
+        '<div style="margin-bottom:12px;"><label class="form-label">版本号</label>' +
+        '<div style="padding:8px 12px;background:#F7F8FA;border-radius:4px;">V20260910.001</div></div>' +
+        '<div style="margin-bottom:12px;"><label class="form-label">类型</label>' +
+        '<div style="padding:8px 12px;background:#F7F8FA;border-radius:4px;">桌面端</div></div>' +
+        '<div style="margin-bottom:12px;"><label class="form-label">发布人</label>' +
+        '<div style="padding:8px 12px;background:#F7F8FA;border-radius:4px;">张三</div></div>' +
+        '<div style="margin-bottom:12px;"><label class="form-label">发布时间</label>' +
+        '<div style="padding:8px 12px;background:#F7F8FA;border-radius:4px;">2026-09-10 10:00:00</div></div>' +
+        '<div style="margin-bottom:12px;"><label class="form-label">状态</label>' +
+        '<div style="padding:8px 12px;background:#F7F8FA;border-radius:4px;"><span class="tag tag-green">已发布</span></div></div>' +
+        '<div style="margin-bottom:12px;"><label class="form-label">版本说明</label>' +
+        '<div style="padding:8px 12px;background:#F7F8FA;border-radius:4px;min-height:60px;">优化页面加载性能，修复已知问题，新增数据导出功能。</div></div>' +
+        '</div>';
+    openModal('版本详情', bodyHtml, null, false, '关闭');
 }
 
 /** 渲染工作台管理卡片列表页 */
@@ -9879,48 +9996,107 @@ function showWorkbenchMoreMenu(id, el) {
 }
 
 /* ---------- 第三方工作台操作 ---------- */
-function viewThirdPartyWorkbench(id) {
-    showToast('查看第三方工作台详情', 'info');
-}
+// 版本管理函数在上方定义
 
-function auditThirdPartyWorkbench(id, action) {
-    if (action === 'reject') {
-        showModal('审核不通过', function() {
-            showToast('已审核不通过', 'warning');
-        }, '请填写不通过原因', true, '确认不通过');
-    } else {
-        showConfirm('确认审核通过该第三方工作台吗？', function() {
-            showToast('审核通过成功', 'success');
-        });
+/** 第三方工作台操作处理 */
+function handleThirdPartyAction(action, rowId) {
+    switch (action) {
+        case 'view': openThirdPartyViewModal(rowId); break;
+        case 'edit': openThirdPartyEditModal(rowId); break;
+        case 'delete':
+            showConfirm('确认删除该第三方工作台吗？删除后版本数据一并清除。', function() {
+                showToast('删除成功', 'success');
+            });
+            break;
+        case 'version': openThirdPartyVersionManage(rowId); break;
     }
 }
 
-function onlineThirdPartyWorkbench(id) {
-    showConfirm('确认上架该第三方工作台吗？上架后用户可使用。', function() {
-        showToast('上架成功', 'success');
+/** 第三方工作台新增/编辑弹窗字段 */
+var thirdPartyFormFields = [
+    { key: 'name', label: '工作台名称', type: 'input', required: true, placeholder: '请输入工作台名称' },
+    { key: 'provider', label: '软件服务商', type: 'select', required: true, options: [
+        { value: '1', label: '江西智慧政务科技有限公司' },
+        { value: '2', label: '江西民生科技有限公司' },
+        { value: '3', label: '江西数字经济研究院' },
+        { value: '4', label: '江西智联科技有限公司' },
+        { value: '5', label: '江西应急科技有限公司' },
+    ]},
+    { key: 'category', label: '工作台分类', type: 'select', required: true, options: [
+        { value: 'gov', label: '政务办公类' },
+        { value: 'service', label: '民生服务类' },
+        { value: 'economy', label: '经济运行类' },
+        { value: 'market', label: '市场监管类' },
+        { value: 'emergency', label: '应急管理类' },
+    ]},
+    { key: 'currentVersion', label: '当前版本', type: 'input', required: true, placeholder: '如：V1.0.0' },
+    { key: 'status', label: '状态', type: 'select', options: [
+        { value: '1', label: '启用' },
+        { value: '0', label: '停用' },
+    ]},
+];
+
+/** 新增第三方工作台 */
+function openThirdPartyAddModal() {
+    var bodyHtml = buildFormHtml(thirdPartyFormFields, null);
+    openModal('新增第三方工作台', bodyHtml, function() {
+        showToast('新增成功', 'success');
+        closeModal();
+        refreshThirdPartyTab();
     });
 }
 
-function offlineThirdPartyWorkbench(id) {
-    showConfirm('确认下架该第三方工作台吗？下架后用户将无法使用。', function() {
-        showToast('下架成功', 'warning');
+/** 查看第三方工作台 */
+function openThirdPartyViewModal(rowId) {
+    var config = pageConfigs['workbench-manage'].tabConfigs['thirdparty'];
+    var row = null;
+    for (var i = 0; i < config.data.length; i++) {
+        if (config.data[i].id === rowId) { row = config.data[i]; break; }
+    }
+    if (!row) return;
+    var bodyHtml = '<div style="width:480px;">';
+    bodyHtml += '<div style="margin-bottom:12px;"><label class="form-label">工作台名称</label>';
+    bodyHtml += '<div style="padding:8px 12px;background:#F7F8FA;border-radius:4px;">' + row.name + '</div></div>';
+    bodyHtml += '<div style="margin-bottom:12px;"><label class="form-label">软件服务商</label>';
+    bodyHtml += '<div style="padding:8px 12px;background:#F7F8FA;border-radius:4px;">' + row.provider + '</div></div>';
+    bodyHtml += '<div style="margin-bottom:12px;"><label class="form-label">工作台分类</label>';
+    bodyHtml += '<div style="padding:8px 12px;background:#F7F8FA;border-radius:4px;">' + row.category + '</div></div>';
+    bodyHtml += '<div style="margin-bottom:12px;"><label class="form-label">当前版本</label>';
+    bodyHtml += '<div style="padding:8px 12px;background:#F7F8FA;border-radius:4px;">' + row.currentVersion + '</div></div>';
+    bodyHtml += '<div style="margin-bottom:12px;"><label class="form-label">状态</label>';
+    bodyHtml += '<div style="padding:8px 12px;background:#F7F8FA;border-radius:4px;">';
+    bodyHtml += row.status == 1 ? '<span class="tag tag-green">启用</span>' : '<span class="tag tag-red">停用</span>';
+    bodyHtml += '</div></div>';
+    bodyHtml += '<div style="margin-bottom:12px;"><label class="form-label">创建时间</label>';
+    bodyHtml += '<div style="padding:8px 12px;background:#F7F8FA;border-radius:4px;">' + row.createTime + '</div></div>';
+    bodyHtml += '</div>';
+    openModal('第三方工作台详情', bodyHtml, null, false, '关闭');
+}
+
+/** 编辑第三方工作台 */
+function openThirdPartyEditModal(rowId) {
+    var config = pageConfigs['workbench-manage'].tabConfigs['thirdparty'];
+    var row = null;
+    for (var i = 0; i < config.data.length; i++) {
+        if (config.data[i].id === rowId) { row = config.data[i]; break; }
+    }
+    if (!row) return;
+    var bodyHtml = buildFormHtml(thirdPartyFormFields, row);
+    openModal('编辑第三方工作台', bodyHtml, function() {
+        showToast('修改成功', 'success');
+        closeModal();
+        refreshThirdPartyTab();
     });
 }
 
-function viewRejectReason(id) {
-    showModal('审核不通过原因', null, '功能不完整，缺少数据导出模块。请补充相关功能后重新提交审核。', false, '知道了');
+/** 刷新第三方工作台Tab */
+function refreshThirdPartyTab() {
+    switchWorkbenchTab('thirdparty', 'workbench-manage');
 }
 
-function batchAuditThirdParty() {
-    showToast('批量审核功能', 'info');
-}
-
-function batchOnlineThirdParty() {
-    showToast('批量上架功能', 'info');
-}
-
-function batchOfflineThirdParty() {
-    showToast('批量下架功能', 'info');
+/** 第三方工作台排序 */
+function sortThirdPartyTable(key) {
+    showToast('按' + key + '排序', 'info');
 }
 
 function openCreateWorkbenchModal() {
@@ -10883,17 +11059,26 @@ function handleAction(actionKey, pageKey, rowId) {
         case 'edit':
             if (pageKey === 'ticket-cc-config') { openTicketCcConfigEditModal(rowId); break; }
             if (pageKey === 'ticket-cc-record') { openTicketCcRecordEditModal(rowId); break; }
+            if (pageKey === 'provider-notice') { openNoticeEditModal(rowId); break; }
             openEditModal(pageKey, rowId); break;
         case 'delete': openDeleteConfirm(pageKey, rowId); break;
         case 'addChild': showToast('新增子机构', 'info'); break;
         case 'view':
             if (pageKey === 'user') { openUserDrawer(rowId); break; }
             if (pageKey === 'org') { openOrgDrawer(rowId); break; }
+            if (pageKey === 'provider') { openProviderManageDrawer(rowId); break; }
             if (pageKey === 'provider-entry') { openProviderDrawer(rowId); break; }
             if (pageKey === 'ticket-cc-config') { openTicketCcConfigViewModal(rowId); break; }
             if (pageKey === 'ticket-cc-record') { openTicketCcRecordViewModal(rowId); break; }
             if (pageKey === 'ticket-cc-mine_ccMine') { openTicketCcDetailModal(rowId); break; }
+            if (pageKey === 'provider-notice') { openNoticeViewModal(rowId); break; }
             openViewModal(pageKey, rowId); break;
+        case 'appLink':
+            if (pageKey === 'provider') { openProviderAppLinkDrawer(rowId); break; }
+            break;
+        case 'version':
+            if (pageKey === 'workbench-thirdparty') { openThirdPartyVersionManage(rowId); break; }
+            break;
         case 'approval': openApprovalModal(pageKey, rowId); break;
         case 'permAssign': openPermAssignModal(pageKey, rowId); break;
         case 'accountLink': openTransferModal(pageKey, rowId); break;
@@ -11358,6 +11543,12 @@ function openAddModal(pageKey) {
     const resolved = resolvePageConfig(pageKey);
     const config = resolved ? resolved.config : pageConfigs[pageKey];
     if (!config) { showToast('页面配置不存在', 'error'); return; }
+
+    // 消息通知管理 - 自定义新增弹窗
+    if (pageKey === 'provider-notice') {
+        openNoticeAddModal();
+        return;
+    }
 
     // 应用变更流程 - 自定义新增弹窗
     if (pageKey === 'app-change-flow' && resolved && resolved.tabKey === 'config') {
@@ -16424,32 +16615,32 @@ var prdData = {
         redFields: ['lineUserDeleteFlow', 'lineUserBatchDeleteFlow', 'lineAdminAddFlow', 'lineAdminBatchRemoveFlow', 'lineAdminQueryFlow'],
 },
     'workbench-manage': {
-        background: '【工作台管理】工作台管理是工作台管理子系统的核心模块，分为标准工作台和第三方工作台两大类别，采用双Tab卡片式布局。标准工作台由平台内部创建和管理，支持基于空白创建和工作台复刻两种创建方式；第三方工作台由软件服务商提交，经平台审核通过后上架供用户使用。支持模板引用、多端预览、版本管理、审核管理、上架下架等完整生命周期管理。',
-        targetUsers: '系统管理员、工作台管理员、平台管理员、运营人员',
-        coreFeatures: '1.双Tab结构（标准工作台/第三方工作台） 2.标准工作台卡片式列表 3.基于空白创建工作台 4.基于工作台复刻创建 5.批量更新模板 6.批量进度查询 7.第三方工作台审核管理 8.第三方工作台上架/下架 9.第三方工作台批量审核/批量上架/批量下架 10.工作台多条件查询 11.字段排序 12.工作台启用/停用切换 13.历史版本查看 14.桌面端/移动端预览',
-        businessFlow: '进入工作台管理页 → 选择Tab（标准工作台/第三方工作台）→ 标准工作台：查看卡片列表 → 新增/编辑/版本管理/启停；第三方工作台：查看服务商提交的工作台 → 审核通过/不通过 → 上架/下架 → 查看审核原因',
-        pageInfo: '双Tab卡片式布局（标准工作台Tab + 第三方工作台Tab）；标准工作台Tab：查询（名称/工作台/业务类型）+ 工具栏（新增/批量更新模板/批量进度查询）+ 排序 + 卡片网格；第三方工作台Tab：查询（名称/软件服务商/审核状态）+ 工具栏（批量审核/批量上架/批量下架）+ 排序 + 卡片网格；每张卡片含名称、状态标签、服务商/分类、版本、预览图、操作按钮。',
-        dataModel: '核心实体：工作台（id/名称/创建类型/分类/工作台类型/模板引用状态/当前版本/创建时间/状态/预览配置）、第三方工作台（id/名称/服务商ID/服务商名称/分类/审核状态/上架状态/当前版本/提交时间/审核时间/驳回原因/预览配置）、工作台版本（id/工作台ID/版本号/首页类型/发布人/操作时间）。枚举值：创建类型（模板创建/空白创建/复刻创建）、审核状态（待审核/审核通过/审核不通过/已下架）、上架状态（已上架/未上架）、状态（启用/停用）、发布状态（已发布/待发布/待更新/待审核/审核不通过/已下架）。',
+        background: '【工作台管理】工作台管理是工作台管理子系统的核心模块，分为标准工作台和第三方工作台两大类别，采用双Tab布局。标准工作台由平台内部创建和管理，卡片式布局，支持基于空白创建和工作台复刻两种创建方式；第三方工作台采用表格列表布局，支持工作台信息的增删改查及版本管理（版本新增、版本查询）。',
+        targetUsers: '系统管理员、工作台管理员、平台管理员',
+        coreFeatures: '1.双Tab结构（标准工作台/第三方工作台） 2.标准工作台卡片式列表 3.基于空白创建工作台 4.基于工作台复刻创建 5.批量更新模板 6.批量进度查询 7.第三方工作台信息新增 8.第三方工作台信息修改 9.第三方工作台信息删除 10.第三方工作台信息查询 11.第三方工作台版本信息新增 12.第三方工作台版本信息查询 13.工作台字段排序',
+        businessFlow: '进入工作台管理页 → 选择Tab（标准工作台/第三方工作台）→ 标准工作台：查看卡片列表 → 新增/编辑/版本管理/启停；第三方工作台：查看表格列表 → 新增/编辑/删除 → 版本管理 → 新增版本/查看版本',
+        pageInfo: '双Tab布局（标准工作台Tab + 第三方工作台Tab）；标准工作台Tab：卡片式布局，查询（名称/工作台/业务类型）+ 工具栏（新增/批量更新模板/批量进度查询）+ 排序 + 卡片网格；第三方工作台Tab：表格列表布局，查询（工作台名称/软件服务商/状态）+ 工具栏（新增）+ 表格列（序号/名称/服务商/分类/当前版本/状态/创建时间/操作）+ 操作（查看/编辑/版本管理/删除）。',
+        dataModel: '核心实体：工作台（id/名称/创建类型/分类/工作台类型/模板引用状态/当前版本/创建时间/状态/预览配置）、第三方工作台（id/名称/服务商名称/分类/当前版本/状态/创建时间）、第三方工作台版本（id/工作台ID/版本号/类型/发布人/发布时间/状态/版本说明/版本文件）。枚举值：状态（启用/停用）、版本类型（桌面端/移动端）、版本状态（已发布/待发布）。',
         createFlow: '【工作台新增-标准工作台】点击"新增"按钮 → 弹出创建工作台选择弹窗 → 选择创建方式：①基于空白创建：跳转到空白工作台编辑页，从零开始配置；②基于工作台复刻：选择已有工作台 → 自动复制全部配置 → 进入编辑页修改 → 保存创建新工作台。',
-        thirdPartyAuditFlow: '【第三方工作台审核】在第三方工作台Tab → 待审核状态的工作台 → 点击"审核通过" → 二次确认 → 审核通过，状态变更为审核通过；或点击"审核不通过" → 弹出不通过原因弹窗 → 填写原因 → 确认提交 → 状态变更为审核不通过，服务商可查看原因并修改后重新提交。',
-        thirdPartyOnlineFlow: '【第三方工作台上架】审核通过且未上架的工作台 → 点击"上架" → 二次确认（提示上架后用户可使用）→ 上架成功，状态变更为已上架。',
-        thirdPartyOfflineFlow: '【第三方工作台下架】已上架的工作台 → 点击"下架" → 二次确认（提示下架后用户无法使用）→ 下架成功，状态变更为已下架。',
-        thirdPartyBatchFlow: '【第三方工作台批量操作】批量审核：勾选多条待审核记录 → 点击"批量审核" → 选择审核结果（通过/不通过）→ 填写不通过原因（不通过时）→ 确认批量处理；批量上架：勾选多条审核通过且未上架记录 → 点击"批量上架" → 二次确认 → 批量上架；批量下架：勾选多条已上架记录 → 点击"批量下架" → 二次确认 → 批量下架。',
+        thirdPartyAddFlow: '【第三方工作台信息新增】在第三方工作台Tab → 点击"新增"按钮 → 打开新增弹窗 → 填写工作台名称、选择软件服务商、选择工作台分类、填写当前版本、选择状态 → 点击确定 → 校验通过 → 新增成功。',
+        thirdPartyEditFlow: '【第三方工作台信息修改】点击操作列"编辑" → 打开编辑弹窗 → 修改工作台名称、分类、状态等信息 → 点击确定 → 修改成功。',
+        thirdPartyDeleteFlow: '【第三方工作台信息删除】点击操作列"删除" → 弹出二次确认弹窗 → 确认删除 → 删除成功。',
+        thirdPartyQueryFlow: '【第三方工作台信息查询】支持工作台名称（模糊）、软件服务商（模糊）、状态（下拉：启用/停用）多条件组合查询，AND关系。支持表格列排序（工作台名称、创建时间）。',
+        thirdPartyVersionAddFlow: '【第三方工作台版本信息新增】点击操作列"版本管理" → 打开版本管理弹窗 → 点击"新增版本"按钮 → 打开新增版本弹窗 → 填写版本号、选择类型（桌面端/移动端）、填写版本说明、上传版本文件 → 点击确定 → 新增版本成功。',
+        thirdPartyVersionQueryFlow: '【第三方工作台版本信息查询】在版本管理弹窗中 → 支持版本号（模糊）、类型（下拉）查询 → 展示版本列表（序号/版本号/类型/发布人/发布时间/状态）→ 点击"查看"查看版本详情。',
         batchUpdateTemplateFlow: '【批量更新模板-标准工作台】选择需要更新模板的工作台 → 点击"批量更新模板"按钮 → 选择目标模板版本 → 确认更新 → 系统后台批量处理 → 完成后Toast提示成功数量/失败数量。',
         batchProgressFlow: '【批量进度查询】点击"批量进度查询"按钮 → 打开进度查询弹窗 → 展示最近批量操作记录 → 可查看失败详情。',
         standardQueryFlow: '【标准工作台查询】支持工作台名（模糊）、工作台分类（下拉）、业务类型（下拉）多条件组合查询，AND关系。支持分页，默认3列网格展示。',
-        thirdPartyQueryFlow: '【第三方工作台查询】支持工作台名（模糊）、软件服务商（模糊）、审核状态（下拉：待审核/审核通过/审核不通过/已下架）多条件组合查询，AND关系。支持分页，3列网格展示。',
         standardSortFlow: '【标准工作台排序】支持创建时间、更新时间、名称、业务类型排序。点击排序文字切换升序/降序，默认按创建时间降序。',
-        thirdPartySortFlow: '【第三方工作台排序】支持提交时间、审核时间、名称、服务商排序。点击排序文字切换升序/降序，默认按提交时间降序。',
         versionRecordFlow: '【历史版本-标准工作台】点击卡片更多操作 → 选择"版本记录" → 打开历史版本弹窗 → 展示版本列表 → 可查看详情或回滚。',
         statusToggleFlow: '【启用/停用-标准工作台】点击卡片底部开关 → 切换工作台启用/停用状态 → 停用后用户无法访问。',
-        previewFlow: '【多端预览】每张卡片展示桌面端和移动端两个预览缩略图，右上角标注发布状态/审核状态。',
-        fieldRules: '1.工作台名称：必填，2-50字符，同一分类下唯一 2.服务商名称：第三方工作台必填 3.审核状态：枚举待审核/审核通过/审核不通过/已下架 4.版本号：自动生成，格式V+日期+序号 5.驳回原因：审核不通过时必填',
-        exceptionHandling: '1.名称重复：提示"工作台名称已存在" 2.模板更新失败：记录失败原因并汇总展示 3.停用已分配工作台：提示已分配用户数量 4.审核不通过必填原因：未填写时拦截提示 5.上架已上架工作台：拦截提示 6.空数据状态：显示空状态占位图+提示',
-        permissionReq: '1.系统管理员：全部权限（标准工作台CRUD/版本管理/批量操作 + 第三方工作台审核/上架/下架/批量操作） 2.工作台管理员：标准工作台创建/编辑/版本管理/启停 3.平台管理员：查询查看 + 第三方工作台审核/上架/下架 4.运营人员：查询查看权限 5.普通用户：无访问权限',
-        interaction: '双Tab切换；卡片式网格布局；创建方式选择弹窗；审核弹窗（含不通过原因）；上架/下架二次确认；批量操作；多条件查询+排序；启停开关；历史版本弹窗；多端预览缩略图；更多操作下拉菜单',
-        acceptance: '1.双Tab切换正常（标准工作台/第三方工作台） 2.标准工作台卡片信息完整 3.第三方工作台卡片含服务商和审核状态 4.新增按钮打开创建方式选择弹窗 5.批量更新模板/进度查询可用 6.第三方工作台审核通过/不通过功能正常 7.第三方工作台上架/下架功能正常 8.批量审核/批量上架/批量下架按钮可用 9.两个Tab查询条件各自独立 10.两个Tab排序方式各自可用 11.标准工作台启用/停用开关可切换 12.桌面端+移动端预览图正确显示状态标签',
-        redFields: ['createFlow', 'thirdPartyAuditFlow', 'thirdPartyOnlineFlow', 'thirdPartyOfflineFlow', 'thirdPartyBatchFlow', 'thirdPartyQueryFlow', 'thirdPartySortFlow', 'standardQueryFlow', 'standardSortFlow', 'versionRecordFlow', 'statusToggleFlow', 'previewFlow'],
+        previewFlow: '【多端预览-标准工作台】每张卡片展示桌面端和移动端两个预览缩略图，右上角标注发布状态。',
+        fieldRules: '1.工作台名称：必填，2-50字符，同一分类下唯一 2.软件服务商：第三方工作台必填 3.版本号：必填，格式如V20260920.001 4.版本类型：必填，桌面端/移动端 5.版本文件：新增版本时必填 6.状态：枚举启用/停用，默认停用',
+        exceptionHandling: '1.名称重复：提示"工作台名称已存在" 2.模板更新失败：记录失败原因并汇总展示 3.停用已分配工作台：提示已分配用户数量 4.删除有版本的工作台：提示"该工作台有N个版本，删除后版本数据一并清除，确认删除？" 5.空数据状态：显示空状态占位图+提示',
+        permissionReq: '1.系统管理员：全部权限（标准工作台CRUD/版本管理/批量操作 + 第三方工作台CRUD/版本管理） 2.工作台管理员：标准工作台创建/编辑/版本管理/启停 + 第三方工作台CRUD/版本管理 3.平台管理员：查询查看权限 4.普通用户：无访问权限',
+        interaction: '双Tab切换；标准工作台卡片式网格布局；第三方工作台表格列表；创建方式选择弹窗；版本管理弹窗（含查询+新增版本+版本列表）；新增版本弹窗；版本详情弹窗；多条件查询+排序；启停开关；删除二次确认',
+        acceptance: '1.双Tab切换正常（标准工作台/第三方工作台） 2.标准工作台卡片信息完整 3.第三方工作台表格列表正常 4.第三方工作台新增弹窗正常 5.第三方工作台编辑弹窗正常 6.第三方工作台删除有二次确认 7.第三方工作台版本管理弹窗正常 8.新增版本弹窗正常（版本号/类型/说明/文件上传） 9.版本详情弹窗正常 10.两个Tab查询条件各自独立 11.表格列可排序 12.标准工作台启用/停用开关可切换',
+        redFields: ['createFlow', 'thirdPartyAddFlow', 'thirdPartyEditFlow', 'thirdPartyDeleteFlow', 'thirdPartyQueryFlow', 'thirdPartyVersionAddFlow', 'thirdPartyVersionQueryFlow', 'standardQueryFlow', 'standardSortFlow', 'versionRecordFlow', 'statusToggleFlow', 'previewFlow'],
     },
     'workbench-template': {
         background: '【模式A+B】工作台模板管理分为基本信息管理和模板配置管理两部分，独立Tab页展示。走查覆盖4项功能点：①工作台模板基本信息批量删除（符合，新增）②工作台模板基本信息查询字段排序（符合，新增）③工作台模板配置批量删除（符合，新增）④工作台模板配置查询字段排序（符合，新增）。原型实现：双Tab结构（基本信息/模板配置）；基本信息Tab管理模板主数据，支持CRUD+批量删除+排序；模板配置Tab管理模板配置项（组件配置/布局配置/主题配置），支持CRUD+批量删除+排序。两部分功能独立，验收标准明确区分。',
