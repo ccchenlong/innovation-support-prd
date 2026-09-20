@@ -9972,17 +9972,90 @@ function renderWorkbenchCard(item) {
     html += '<span class="text-sm" style="color:var(--text-secondary);">' + (item.status ? '启用' : '停用') + '</span>';
     html += '<div class="wb-toggle ' + (item.status ? 'active' : '') + '" onclick="toggleWorkbenchStatus(' + item.id + ', this)"><div class="wb-toggle-dot"></div></div>';
     html += '</div>';
-    html += '<div class="wb-more-actions" onclick="showWorkbenchMoreMenu(' + item.id + ', this)">';
-    html += '<i class="fa fa-ellipsis-h"></i>';
+    html += '<div class="wb-more-actions action-dropdown" style="position:relative;">';
+    html += '<i class="fa fa-ellipsis-h" onclick="toggleWorkbenchMoreMenu(event, ' + item.id + ')"></i>';
+    html += '<div class="action-dropdown-menu wb-more-menu" style="display:none;position:absolute;right:0;bottom:100%;margin-bottom:8px;background:#fff;border:1px solid #E5E6EB;border-radius:6px;box-shadow:0 4px 12px rgba(0,0,0,0.1);min-width:140px;z-index:200;padding:4px 0;">';
+    html += '<div class="action-dropdown-item" style="padding:8px 12px;cursor:pointer;font-size:13px;" onclick="editWorkbench(' + item.id + ')">编辑工作台</div>';
+    html += '<div class="action-dropdown-item" style="padding:8px 12px;cursor:pointer;font-size:13px;" onclick="openWorkbenchVersionModal(' + item.id + ')">版本记录</div>';
+    html += '<div class="action-dropdown-item" style="padding:8px 12px;cursor:pointer;font-size:13px;" onclick="copyWorkbench(' + item.id + ')">复制工作台</div>';
+    html += '<div class="action-dropdown-item" style="padding:8px 12px;cursor:pointer;font-size:13px;color:var(--danger);" onclick="deleteWorkbench(' + item.id + ')">删除工作台</div>';
+    html += '</div>';
     html += '</div>';
     html += '</div>';
     html += '</div>';
     return html;
 }
 
+/** 工作台更多操作菜单 */
+function toggleWorkbenchMoreMenu(event, id) {
+    event.stopPropagation();
+    var menu = event.currentTarget.parentElement.querySelector('.wb-more-menu');
+    var allMenus = document.querySelectorAll('.wb-more-menu');
+    for (var i = 0; i < allMenus.length; i++) {
+        if (allMenus[i] !== menu) allMenus[i].style.display = 'none';
+    }
+    menu.style.display = menu.style.display === 'none' ? 'block' : 'none';
+}
+
+/** 编辑工作台 */
+function editWorkbench(id) {
+    closeWorkbenchMenus();
+    showToast('编辑工作台', 'info');
+}
+
+/** 工作台版本记录弹窗 */
+function openWorkbenchVersionModal(id) {
+    closeWorkbenchMenus();
+    var versions = [
+        { version: 'V20260910.001', type: '桌面端', publisher: '张三', time: '2026-09-10 10:00:00', status: '已发布' },
+        { version: 'V20260825.002', type: '桌面端', publisher: '李四', time: '2026-08-25 15:30:00', status: '已发布' },
+        { version: 'V20260815.001', type: '移动端', publisher: '王五', time: '2026-08-15 09:00:00', status: '已发布' },
+    ];
+    var bodyHtml = '<div style="width:600px;">';
+    bodyHtml += '<table class="data-table" style="width:100%;">';
+    bodyHtml += '<thead><tr><th style="width:50px;">序号</th><th>版本号</th><th>类型</th><th>发布人</th><th>发布时间</th><th>状态</th><th style="width:100px;">操作</th></tr></thead><tbody>';
+    for (var i = 0; i < versions.length; i++) {
+        var v = versions[i];
+        var statusTag = v.status === '已发布' ? '<span class="tag tag-green">已发布</span>' : '<span class="tag tag-orange">待发布</span>';
+        bodyHtml += '<tr><td>' + (i+1) + '</td><td>' + v.version + '</td><td>' + v.type + '</td><td>' + v.publisher + '</td><td>' + v.time + '</td><td>' + statusTag + '</td>';
+        bodyHtml += '<td><span class="link-btn text-sm">查看</span> <span class="link-btn text-sm" style="color:var(--danger);">回滚</span></td></tr>';
+    }
+    bodyHtml += '</tbody></table></div>';
+    openModal('历史版本', bodyHtml, null, false, '关闭');
+}
+
+/** 复制工作台 */
+function copyWorkbench(id) {
+    closeWorkbenchMenus();
+    showConfirm('确认复制该工作台吗？将复制全部配置生成新的工作台。', function() {
+        showToast('复制成功', 'success');
+    });
+}
+
+/** 删除工作台 */
+function deleteWorkbench(id) {
+    closeWorkbenchMenus();
+    showConfirm('确认删除该工作台吗？删除后无法恢复。', function() {
+        showToast('删除成功', 'success');
+    });
+}
+
+/** 关闭所有工作台更多菜单 */
+function closeWorkbenchMenus() {
+    var menus = document.querySelectorAll('.wb-more-menu');
+    for (var i = 0; i < menus.length; i++) {
+        menus[i].style.display = 'none';
+    }
+}
+
 function sortWorkbench(key) {
     showToast('按' + key + '排序', 'info');
 }
+
+// 点击空白处关闭工作台更多菜单
+document.addEventListener('click', function() {
+    closeWorkbenchMenus();
+});
 
 function toggleWorkbenchStatus(id, el) {
     el.classList.toggle('active');
