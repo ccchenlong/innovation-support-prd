@@ -5278,6 +5278,8 @@ function switchMasterDetailMaster(pageKey, masterId, el) {
     renderMasterDetailDetailTable(pageKey, tabKey, masterId);
 }
 
+var currentDrawerTab = {};
+var currentDrawerUserId = null;
 function openUserDrawer(userId) {
     var config = pageConfigs['user'];
     var user = null;
@@ -6580,7 +6582,166 @@ function addUserDrawerItem(tab) {
         duty: '新增职务关联',
         approval: '新增任职审批'
     };
-    openModal(titles[tab] || '新增', '<div style="width:480px;"><div style="margin-bottom:12px;"><label class="form-label">名称</label><input type="text" class="form-input" style="width:320px;" placeholder="请输入" /></div><div style="margin-bottom:12px;"><label class="form-label">备注</label><textarea class="form-input" style="width:320px;height:80px;" placeholder="请输入备注"></textarea></div></div>', function() {
+    var bodyHtml = '';
+    switch(tab) {
+        case 'extend':
+            bodyHtml = '<div style="width:560px;">' +
+                '<div style="margin-bottom:14px;"><label class="form-label">字段名称 <span style="color:#FF4D4F;">*</span></label>' +
+                '<input type="text" class="form-input w-full" placeholder="请输入字段名称" /></div>' +
+                '<div style="margin-bottom:14px;"><label class="form-label">字段编码 <span style="color:#FF4D4F;">*</span></label>' +
+                '<input type="text" class="form-input w-full" placeholder="如：EMP_NO，英文唯一标识" /></div>' +
+                '<div style="margin-bottom:14px;"><label class="form-label">字段类型 <span style="color:#FF4D4F;">*</span></label>' +
+                '<select class="form-input w-full"><option>请选择</option><option>文本</option><option>数字</option><option>日期</option><option>下拉选择</option><option>多行文本</option></select></div>' +
+                '<div style="margin-bottom:14px;"><label class="form-label">字段值</label>' +
+                '<input type="text" class="form-input w-full" placeholder="请输入字段值" /></div>' +
+                '<div style="margin-bottom:14px;display:flex;gap:12px;">' +
+                '<div style="flex:1;"><label class="form-label">是否必填</label>' +
+                '<select class="form-input w-full"><option>否</option><option>是</option></select></div>' +
+                '<div style="flex:1;"><label class="form-label">排序号</label>' +
+                '<input type="number" class="form-input w-full" value="1" /></div></div>' +
+                '<div style="margin-bottom:14px;"><label class="form-label">备注说明</label>' +
+                '<textarea class="form-input w-full" style="height:70px;" placeholder="请输入备注说明（可选）"></textarea></div>' +
+                '</div>';
+            break;
+        case 'orgLink':
+            bodyHtml = '<div style="width:560px;">' +
+                '<div style="margin-bottom:14px;"><label class="form-label">机构名称 <span style="color:#FF4D4F;">*</span></label>' +
+                '<div style="display:flex;gap:8px;"><input type="text" class="form-input" style="flex:1;" placeholder="请选择机构" readonly /><button class="btn btn-default btn-sm"><i class="fa fa-sitemap"></i> 选择</button></div></div>' +
+                '<div style="margin-bottom:14px;"><label class="form-label">机构路径</label>' +
+                '<input type="text" class="form-input w-full" placeholder="自动回显" readonly style="background:#F7F8FA;" /></div>' +
+                '<div style="margin-bottom:14px;display:flex;gap:12px;">' +
+                '<div style="flex:1;"><label class="form-label">是否主机构 <span style="color:#FF4D4F;">*</span></label>' +
+                '<select class="form-input w-full"><option>否</option><option>是</option></select></div>' +
+                '<div style="flex:1;"><label class="form-label">关联时间 <span style="color:#FF4D4F;">*</span></label>' +
+                '<input type="date" class="form-input w-full" /></div></div>' +
+                '<div style="margin-bottom:14px;"><label class="form-label">关联原因</label>' +
+                '<textarea class="form-input w-full" style="height:70px;" placeholder="请输入关联原因说明"></textarea></div>' +
+                '</div>';
+            break;
+        case 'position':
+            bodyHtml = '<div style="width:560px;">' +
+                '<div style="margin-bottom:14px;"><label class="form-label">岗位名称 <span style="color:#FF4D4F;">*</span></label>' +
+                '<select class="form-input w-full"><option>请选择岗位</option><option>高级工程师</option><option>产品经理</option><option>前端开发工程师</option><option>UI设计师</option><option>运维工程师</option></select></div>' +
+                '<div style="margin-bottom:14px;display:flex;gap:12px;">' +
+                '<div style="flex:1;"><label class="form-label">岗位类型</label>' +
+                '<select class="form-input w-full"><option>技术岗</option><option>管理岗</option><option>行政岗</option><option>工勤岗</option></select></div>' +
+                '<div style="flex:1;"><label class="form-label">任职状态</label>' +
+                '<select class="form-input w-full"><option>在职</option><option>挂职</option><option>借调</option><option>离任</option></select></div></div>' +
+                '<div style="margin-bottom:14px;display:flex;gap:12px;">' +
+                '<div style="flex:1;"><label class="form-label">任职开始时间 <span style="color:#FF4D4F;">*</span></label>' +
+                '<input type="date" class="form-input w-full" /></div>' +
+                '<div style="flex:1;"><label class="form-label">任职结束时间</label>' +
+                '<input type="date" class="form-input w-full" /></div></div>' +
+                '<div style="margin-bottom:14px;display:flex;gap:12px;">' +
+                '<div style="flex:1;"><label class="form-label">任职机构 <span style="color:#FF4D4F;">*</span></label>' +
+                '<input type="text" class="form-input w-full" placeholder="请选择任职机构" /></div>' +
+                '<div style="flex:1;"><label class="form-label">是否主岗</label>' +
+                '<select class="form-input w-full"><option>是</option><option>否</option></select></div></div>' +
+                '<div style="margin-bottom:14px;"><label class="form-label">任职文号</label>' +
+                '<input type="text" class="form-input w-full" placeholder="请输入任职文号" /></div>' +
+                '<div style="margin-bottom:14px;"><label class="form-label">备注</label>' +
+                '<textarea class="form-input w-full" style="height:60px;" placeholder="请输入备注"></textarea></div>' +
+                '</div>';
+            break;
+        case 'title':
+            bodyHtml = '<div style="width:560px;">' +
+                '<div style="margin-bottom:14px;"><label class="form-label">职称名称 <span style="color:#FF4D4F;">*</span></label>' +
+                '<select class="form-input w-full"><option>请选择职称</option><option>高级工程师</option><option>工程师</option><option>助理工程师</option><option>高级经济师</option><option>经济师</option></select></div>' +
+                '<div style="margin-bottom:14px;display:flex;gap:12px;">' +
+                '<div style="flex:1;"><label class="form-label">职称级别 <span style="color:#FF4D4F;">*</span></label>' +
+                '<select class="form-input w-full"><option>正高级</option><option>副高级</option><option>中级</option><option>助理级</option><option>员级</option></select></div>' +
+                '<div style="flex:1;"><label class="form-label">职称系列</label>' +
+                '<select class="form-input w-full"><option>工程系列</option><option>经济系列</option><option>会计系列</option><option>卫生系列</option></select></div></div>' +
+                '<div style="margin-bottom:14px;display:flex;gap:12px;">' +
+                '<div style="flex:1;"><label class="form-label">证书编号 <span style="color:#FF4D4F;">*</span></label>' +
+                '<input type="text" class="form-input w-full" placeholder="请输入证书编号" /></div>' +
+                '<div style="flex:1;"><label class="form-label">授予时间 <span style="color:#FF4D4F;">*</span></label>' +
+                '<input type="date" class="form-input w-full" /></div></div>' +
+                '<div style="margin-bottom:14px;display:flex;gap:12px;">' +
+                '<div style="flex:1;"><label class="form-label">授予单位</label>' +
+                '<input type="text" class="form-input w-full" placeholder="请输入授予单位" /></div>' +
+                '<div style="flex:1;"><label class="form-label">状态</label>' +
+                '<select class="form-input w-full"><option>有效</option><option>已失效</option></select></div></div>' +
+                '<div style="margin-bottom:14px;"><label class="form-label">证书附件</label>' +
+                '<div style="border:1px dashed #D9D9D9;border-radius:4px;padding:16px;text-align:center;color:#86909C;font-size:12px;cursor:pointer;">' +
+                '<i class="fa fa-cloud-upload" style="font-size:20px;margin-bottom:4px;display:block;"></i>点击上传证书扫描件</div></div>' +
+                '</div>';
+            break;
+        case 'level':
+            bodyHtml = '<div style="width:560px;">' +
+                '<div style="margin-bottom:14px;"><label class="form-label">职级名称 <span style="color:#FF4D4F;">*</span></label>' +
+                '<select class="form-input w-full"><option>请选择职级</option><option>正厅级</option><option>副厅级</option><option>正处级</option><option>副处级</option><option>正科级</option><option>副科级</option><option>一级科员</option></select></div>' +
+                '<div style="margin-bottom:14px;display:flex;gap:12px;">' +
+                '<div style="flex:1;"><label class="form-label">职级层次 <span style="color:#FF4D4F;">*</span></label>' +
+                '<select class="form-input w-full"><option>厅局级</option><option>县处级</option><option>乡科级</option><option>科员级</option></select></div>' +
+                '<div style="flex:1;"><label class="form-label">任职状态</label>' +
+                '<select class="form-input w-full"><option>现任</option><option>曾任</option></select></div></div>' +
+                '<div style="margin-bottom:14px;display:flex;gap:12px;">' +
+                '<div style="flex:1;"><label class="form-label">任职时间 <span style="color:#FF4D4F;">*</span></label>' +
+                '<input type="date" class="form-input w-full" /></div>' +
+                '<div style="flex:1;"><label class="form-label">免去时间</label>' +
+                '<input type="date" class="form-input w-full" /></div></div>' +
+                '<div style="margin-bottom:14px;display:flex;gap:12px;">' +
+                '<div style="flex:1;"><label class="form-label">任职机构 <span style="color:#FF4D4F;">*</span></label>' +
+                '<input type="text" class="form-input w-full" placeholder="请选择任职机构" /></div>' +
+                '<div style="flex:1;"><label class="form-label">是否主任职</label>' +
+                '<select class="form-input w-full"><option>是</option><option>否</option></select></div></div>' +
+                '<div style="margin-bottom:14px;"><label class="form-label">任免文号</label>' +
+                '<input type="text" class="form-input w-full" placeholder="请输入任免文号" /></div>' +
+                '<div style="margin-bottom:14px;"><label class="form-label">备注</label>' +
+                '<textarea class="form-input w-full" style="height:60px;" placeholder="请输入备注"></textarea></div>' +
+                '</div>';
+            break;
+        case 'duty':
+            bodyHtml = '<div style="width:560px;">' +
+                '<div style="margin-bottom:14px;"><label class="form-label">职务名称 <span style="color:#FF4D4F;">*</span></label>' +
+                '<select class="form-input w-full"><option>请选择职务</option><option>总经理</option><option>副总经理</option><option>部门经理</option><option>部门副经理</option><option>主管</option><option>组长</option></select></div>' +
+                '<div style="margin-bottom:14px;display:flex;gap:12px;">' +
+                '<div style="flex:1;"><label class="form-label">职务层级 <span style="color:#FF4D4F;">*</span></label>' +
+                '<select class="form-input w-full"><option>高层</option><option>中层</option><option>基层</option></select></div>' +
+                '<div style="flex:1;"><label class="form-label">任职状态</label>' +
+                '<select class="form-input w-full"><option>现任</option><option>曾任</option></select></div></div>' +
+                '<div style="margin-bottom:14px;display:flex;gap:12px;">' +
+                '<div style="flex:1;"><label class="form-label">任职机构 <span style="color:#FF4D4F;">*</span></label>' +
+                '<input type="text" class="form-input w-full" placeholder="请选择任职机构" /></div>' +
+                '<div style="flex:1;"><label class="form-label">所属部门</label>' +
+                '<input type="text" class="form-input w-full" placeholder="请选择所属部门" /></div></div>' +
+                '<div style="margin-bottom:14px;display:flex;gap:12px;">' +
+                '<div style="flex:1;"><label class="form-label">任职开始时间 <span style="color:#FF4D4F;">*</span></label>' +
+                '<input type="date" class="form-input w-full" /></div>' +
+                '<div style="flex:1;"><label class="form-label">任职结束时间</label>' +
+                '<input type="date" class="form-input w-full" /></div></div>' +
+                '<div style="margin-bottom:14px;"><label class="form-label">任免文号</label>' +
+                '<input type="text" class="form-input w-full" placeholder="请输入任免文号" /></div>' +
+                '<div style="margin-bottom:14px;"><label class="form-label">职责描述</label>' +
+                '<textarea class="form-input w-full" style="height:60px;" placeholder="请输入主要职责描述"></textarea></div>' +
+                '</div>';
+            break;
+        case 'approval':
+            bodyHtml = '<div style="width:560px;">' +
+                '<div style="margin-bottom:14px;"><label class="form-label">审批类型 <span style="color:#FF4D4F;">*</span></label>' +
+                '<select class="form-input w-full"><option>请选择</option><option>机构任职审批</option><option>岗位调整审批</option><option>职务晋升审批</option><option>职级晋升审批</option><option>调离审批</option></select></div>' +
+                '<div style="margin-bottom:14px;display:flex;gap:12px;">' +
+                '<div style="flex:1;"><label class="form-label">目标机构 <span style="color:#FF4D4F;">*</span></label>' +
+                '<input type="text" class="form-input w-full" placeholder="请选择目标机构" /></div>' +
+                '<div style="flex:1;"><label class="form-label">目标岗位</label>' +
+                '<input type="text" class="form-input w-full" placeholder="请选择目标岗位" /></div></div>' +
+                '<div style="margin-bottom:14px;display:flex;gap:12px;">' +
+                '<div style="flex:1;"><label class="form-label">申请时间 <span style="color:#FF4D4F;">*</span></label>' +
+                '<input type="date" class="form-input w-full" /></div>' +
+                '<div style="flex:1;"><label class="form-label">期望生效时间</label>' +
+                '<input type="date" class="form-input w-full" /></div></div>' +
+                '<div style="margin-bottom:14px;"><label class="form-label">审批原因 <span style="color:#FF4D4F;">*</span></label>' +
+                '<textarea class="form-input w-full" style="height:70px;" placeholder="请详细说明任职审批原因"></textarea></div>' +
+                '<div style="margin-bottom:14px;"><label class="form-label">附件材料</label>' +
+                '<div style="border:1px dashed #D9D9D9;border-radius:4px;padding:16px;text-align:center;color:#86909C;font-size:12px;cursor:pointer;">' +
+                '<i class="fa fa-cloud-upload" style="font-size:20px;margin-bottom:4px;display:block;"></i>点击上传任免文件等材料（支持PDF/Word）</div></div>' +
+                '</div>';
+            break;
+        default:
+            bodyHtml = '<div style="width:480px;"><div style="margin-bottom:12px;"><label class="form-label">名称</label><input type="text" class="form-input" style="width:320px;" placeholder="请输入" /></div><div style="margin-bottom:12px;"><label class="form-label">备注</label><textarea class="form-input" style="width:320px;height:80px;" placeholder="请输入备注"></textarea></div></div>';
+    }
+    openModal(titles[tab] || '新增', bodyHtml, function() {
         showToast('新增成功', 'success');
         closeModal();
     });
@@ -6589,12 +6750,173 @@ function addUserDrawerItem(tab) {
 function editUserDrawerItem(tab, id) {
     var titles = {
         extend: '编辑拓展信息',
+        orgLink: '编辑机构关联',
         position: '编辑岗位关联',
         title: '编辑职称关联',
         level: '编辑职级关联',
-        duty: '编辑职务关联'
+        duty: '编辑职务关联',
+        approval: '编辑任职审批'
     };
-    openModal(titles[tab] || '编辑', '<div style="width:480px;"><div style="margin-bottom:12px;"><label class="form-label">名称</label><input type="text" class="form-input" style="width:320px;" value="示例数据" /></div><div style="margin-bottom:12px;"><label class="form-label">备注</label><textarea class="form-input" style="width:320px;height:80px;">示例备注</textarea></div></div>', function() {
+    var bodyHtml = '';
+    switch(tab) {
+        case 'extend':
+            bodyHtml = '<div style="width:560px;">' +
+                '<div style="margin-bottom:14px;"><label class="form-label">字段名称 <span style="color:#FF4D4F;">*</span></label>' +
+                '<input type="text" class="form-input w-full" value="入职日期" /></div>' +
+                '<div style="margin-bottom:14px;"><label class="form-label">字段编码 <span style="color:#FF4D4F;">*</span></label>' +
+                '<input type="text" class="form-input w-full" value="EXT_JOIN_DATE" style="background:#F7F8FA;" readonly /></div>' +
+                '<div style="margin-bottom:14px;"><label class="form-label">字段类型 <span style="color:#FF4D4F;">*</span></label>' +
+                '<select class="form-input w-full"><option>日期</option><option>文本</option><option>数字</option><option>下拉选择</option><option>多行文本</option></select></div>' +
+                '<div style="margin-bottom:14px;"><label class="form-label">字段值</label>' +
+                '<input type="text" class="form-input w-full" value="2023-06-15" /></div>' +
+                '<div style="margin-bottom:14px;display:flex;gap:12px;">' +
+                '<div style="flex:1;"><label class="form-label">是否必填</label>' +
+                '<select class="form-input w-full"><option>否</option><option selected>是</option></select></div>' +
+                '<div style="flex:1;"><label class="form-label">排序号</label>' +
+                '<input type="number" class="form-input w-full" value="3" /></div></div>' +
+                '<div style="margin-bottom:14px;"><label class="form-label">备注说明</label>' +
+                '<textarea class="form-input w-full" style="height:70px;">员工入职日期记录</textarea></div>' +
+                '</div>';
+            break;
+        case 'position':
+            bodyHtml = '<div style="width:560px;">' +
+                '<div style="margin-bottom:14px;"><label class="form-label">岗位名称 <span style="color:#FF4D4F;">*</span></label>' +
+                '<select class="form-input w-full"><option selected>高级工程师</option><option>产品经理</option><option>前端开发工程师</option></select></div>' +
+                '<div style="margin-bottom:14px;display:flex;gap:12px;">' +
+                '<div style="flex:1;"><label class="form-label">岗位类型</label>' +
+                '<select class="form-input w-full"><option selected>技术岗</option><option>管理岗</option></select></div>' +
+                '<div style="flex:1;"><label class="form-label">任职状态</label>' +
+                '<select class="form-input w-full"><option selected>在职</option><option>挂职</option><option>借调</option><option>离任</option></select></div></div>' +
+                '<div style="margin-bottom:14px;display:flex;gap:12px;">' +
+                '<div style="flex:1;"><label class="form-label">任职开始时间 <span style="color:#FF4D4F;">*</span></label>' +
+                '<input type="date" class="form-input w-full" value="2023-06-15" /></div>' +
+                '<div style="flex:1;"><label class="form-label">任职结束时间</label>' +
+                '<input type="date" class="form-input w-full" /></div></div>' +
+                '<div style="margin-bottom:14px;display:flex;gap:12px;">' +
+                '<div style="flex:1;"><label class="form-label">任职机构 <span style="color:#FF4D4F;">*</span></label>' +
+                '<input type="text" class="form-input w-full" value="省政务信息中心" /></div>' +
+                '<div style="flex:1;"><label class="form-label">是否主岗</label>' +
+                '<select class="form-input w-full"><option selected>是</option><option>否</option></select></div></div>' +
+                '<div style="margin-bottom:14px;"><label class="form-label">任职文号</label>' +
+                '<input type="text" class="form-input w-full" value="赣政通人〔2023〕15号" /></div>' +
+                '<div style="margin-bottom:14px;"><label class="form-label">备注</label>' +
+                '<textarea class="form-input w-full" style="height:60px;">主岗任职，技术序列</textarea></div>' +
+                '</div>';
+            break;
+        case 'title':
+            bodyHtml = '<div style="width:560px;">' +
+                '<div style="margin-bottom:14px;"><label class="form-label">职称名称 <span style="color:#FF4D4F;">*</span></label>' +
+                '<select class="form-input w-full"><option selected>高级工程师</option><option>工程师</option></select></div>' +
+                '<div style="margin-bottom:14px;display:flex;gap:12px;">' +
+                '<div style="flex:1;"><label class="form-label">职称级别 <span style="color:#FF4D4F;">*</span></label>' +
+                '<select class="form-input w-full"><option>正高级</option><option selected>副高级</option><option>中级</option></select></div>' +
+                '<div style="flex:1;"><label class="form-label">职称系列</label>' +
+                '<select class="form-input w-full"><option selected>工程系列</option><option>经济系列</option></select></div></div>' +
+                '<div style="margin-bottom:14px;display:flex;gap:12px;">' +
+                '<div style="flex:1;"><label class="form-label">证书编号 <span style="color:#FF4D4F;">*</span></label>' +
+                '<input type="text" class="form-input w-full" value="ZC2023001" /></div>' +
+                '<div style="flex:1;"><label class="form-label">授予时间 <span style="color:#FF4D4F;">*</span></label>' +
+                '<input type="date" class="form-input w-full" value="2023-10-15" /></div></div>' +
+                '<div style="margin-bottom:14px;display:flex;gap:12px;">' +
+                '<div style="flex:1;"><label class="form-label">授予单位</label>' +
+                '<input type="text" class="form-input w-full" value="江西省人力资源和社会保障厅" /></div>' +
+                '<div style="flex:1;"><label class="form-label">状态</label>' +
+                '<select class="form-input w-full"><option selected>有效</option><option>已失效</option></select></div></div>' +
+                '<div style="margin-bottom:14px;"><label class="form-label">证书附件</label>' +
+                '<div style="border:1px solid #D9D9D9;border-radius:4px;padding:10px;font-size:12px;color:#4E5969;">' +
+                '<i class="fa fa-file-pdf-o" style="color:#FF4D4F;margin-right:6px;"></i>高级工程师证书.pdf <span style="float:right;color:#165DFF;cursor:pointer;">重新上传</span></div></div>' +
+                '</div>';
+            break;
+        case 'level':
+            bodyHtml = '<div style="width:560px;">' +
+                '<div style="margin-bottom:14px;"><label class="form-label">职级名称 <span style="color:#FF4D4F;">*</span></label>' +
+                '<select class="form-input w-full"><option selected>正科级</option><option>副科级</option></select></div>' +
+                '<div style="margin-bottom:14px;display:flex;gap:12px;">' +
+                '<div style="flex:1;"><label class="form-label">职级层次 <span style="color:#FF4D4F;">*</span></label>' +
+                '<select class="form-input w-full"><option>厅局级</option><option>县处级</option><option selected>乡科级</option></select></div>' +
+                '<div style="flex:1;"><label class="form-label">任职状态</label>' +
+                '<select class="form-input w-full"><option selected>现任</option><option>曾任</option></select></div></div>' +
+                '<div style="margin-bottom:14px;display:flex;gap:12px;">' +
+                '<div style="flex:1;"><label class="form-label">任职时间 <span style="color:#FF4D4F;">*</span></label>' +
+                '<input type="date" class="form-input w-full" value="2023-10-15" /></div>' +
+                '<div style="flex:1;"><label class="form-label">免去时间</label>' +
+                '<input type="date" class="form-input w-full" /></div></div>' +
+                '<div style="margin-bottom:14px;display:flex;gap:12px;">' +
+                '<div style="flex:1;"><label class="form-label">任职机构 <span style="color:#FF4D4F;">*</span></label>' +
+                '<input type="text" class="form-input w-full" value="省政务信息中心" /></div>' +
+                '<div style="flex:1;"><label class="form-label">是否主任职</label>' +
+                '<select class="form-input w-full"><option selected>是</option><option>否</option></select></div></div>' +
+                '<div style="margin-bottom:14px;"><label class="form-label">任免文号</label>' +
+                '<input type="text" class="form-input w-full" value="赣政通人〔2023〕20号" /></div>' +
+                '<div style="margin-bottom:14px;"><label class="form-label">备注</label>' +
+                '<textarea class="form-input w-full" style="height:60px;">乡科级正职</textarea></div>' +
+                '</div>';
+            break;
+        case 'duty':
+            bodyHtml = '<div style="width:560px;">' +
+                '<div style="margin-bottom:14px;"><label class="form-label">职务名称 <span style="color:#FF4D4F;">*</span></label>' +
+                '<select class="form-input w-full"><option selected>技术部经理</option><option>部门副经理</option></select></div>' +
+                '<div style="margin-bottom:14px;display:flex;gap:12px;">' +
+                '<div style="flex:1;"><label class="form-label">职务层级 <span style="color:#FF4D4F;">*</span></label>' +
+                '<select class="form-input w-full"><option>高层</option><option selected>中层</option><option>基层</option></select></div>' +
+                '<div style="flex:1;"><label class="form-label">任职状态</label>' +
+                '<select class="form-input w-full"><option selected>现任</option><option>曾任</option></select></div></div>' +
+                '<div style="margin-bottom:14px;display:flex;gap:12px;">' +
+                '<div style="flex:1;"><label class="form-label">任职机构 <span style="color:#FF4D4F;">*</span></label>' +
+                '<input type="text" class="form-input w-full" value="省政务信息中心" /></div>' +
+                '<div style="flex:1;"><label class="form-label">所属部门</label>' +
+                '<input type="text" class="form-input w-full" value="技术研发部" /></div></div>' +
+                '<div style="margin-bottom:14px;display:flex;gap:12px;">' +
+                '<div style="flex:1;"><label class="form-label">任职开始时间 <span style="color:#FF4D4F;">*</span></label>' +
+                '<input type="date" class="form-input w-full" value="2023-10-15" /></div>' +
+                '<div style="flex:1;"><label class="form-label">任职结束时间</label>' +
+                '<input type="date" class="form-input w-full" /></div></div>' +
+                '<div style="margin-bottom:14px;"><label class="form-label">任免文号</label>' +
+                '<input type="text" class="form-input w-full" value="赣政通人〔2023〕25号" /></div>' +
+                '<div style="margin-bottom:14px;"><label class="form-label">职责描述</label>' +
+                '<textarea class="form-input w-full" style="height:60px;">负责技术部整体管理工作，包括技术规划、团队建设、项目管理等</textarea></div>' +
+                '</div>';
+            break;
+        case 'orgLink':
+            bodyHtml = '<div style="width:560px;">' +
+                '<div style="margin-bottom:14px;"><label class="form-label">机构名称 <span style="color:#FF4D4F;">*</span></label>' +
+                '<div style="display:flex;gap:8px;"><input type="text" class="form-input" style="flex:1;" value="云上（江西）大数据发展有限公司" readonly /><button class="btn btn-default btn-sm"><i class="fa fa-sitemap"></i> 重新选择</button></div></div>' +
+                '<div style="margin-bottom:14px;"><label class="form-label">机构路径</label>' +
+                '<input type="text" class="form-input w-full" value="江西省/赣政通/省政务信息中心/云上（江西）大数据发展有限公司" readonly style="background:#F7F8FA;" /></div>' +
+                '<div style="margin-bottom:14px;display:flex;gap:12px;">' +
+                '<div style="flex:1;"><label class="form-label">是否主机构 <span style="color:#FF4D4F;">*</span></label>' +
+                '<select class="form-input w-full"><option selected>否</option><option>是</option></select></div>' +
+                '<div style="flex:1;"><label class="form-label">关联时间 <span style="color:#FF4D4F;">*</span></label>' +
+                '<input type="date" class="form-input w-full" value="2025-02-01" /></div></div>' +
+                '<div style="margin-bottom:14px;"><label class="form-label">关联原因</label>' +
+                '<textarea class="form-input w-full" style="height:70px;">借调至云上公司参与项目建设</textarea></div>' +
+                '</div>';
+            break;
+        case 'approval':
+            bodyHtml = '<div style="width:560px;">' +
+                '<div style="margin-bottom:14px;"><label class="form-label">审批类型 <span style="color:#FF4D4F;">*</span></label>' +
+                '<select class="form-input w-full"><option selected>职务晋升审批</option><option>机构任职审批</option><option>岗位调整审批</option></select></div>' +
+                '<div style="margin-bottom:14px;display:flex;gap:12px;">' +
+                '<div style="flex:1;"><label class="form-label">目标机构 <span style="color:#FF4D4F;">*</span></label>' +
+                '<input type="text" class="form-input w-full" value="省政务信息中心" /></div>' +
+                '<div style="flex:1;"><label class="form-label">目标岗位</label>' +
+                '<input type="text" class="form-input w-full" value="技术部经理" /></div></div>' +
+                '<div style="margin-bottom:14px;display:flex;gap:12px;">' +
+                '<div style="flex:1;"><label class="form-label">申请时间 <span style="color:#FF4D4F;">*</span></label>' +
+                '<input type="date" class="form-input w-full" value="2024-03-01" /></div>' +
+                '<div style="flex:1;"><label class="form-label">期望生效时间</label>' +
+                '<input type="date" class="form-input w-full" value="2024-04-01" /></div></div>' +
+                '<div style="margin-bottom:14px;"><label class="form-label">审批原因 <span style="color:#FF4D4F;">*</span></label>' +
+                '<textarea class="form-input w-full" style="height:70px;">工作表现突出，拟晋升技术部经理职务</textarea></div>' +
+                '<div style="margin-bottom:14px;"><label class="form-label">附件材料</label>' +
+                '<div style="border:1px solid #D9D9D9;border-radius:4px;padding:10px;font-size:12px;color:#4E5969;">' +
+                '<i class="fa fa-file-pdf-o" style="color:#FF4D4F;margin-right:6px;"></i>职务晋升申请.pdf <span style="float:right;color:#165DFF;cursor:pointer;">重新上传</span></div></div>' +
+                '</div>';
+            break;
+        default:
+            bodyHtml = '<div style="width:480px;"><div style="margin-bottom:12px;"><label class="form-label">名称</label><input type="text" class="form-input" style="width:320px;" value="示例数据" /></div><div style="margin-bottom:12px;"><label class="form-label">备注</label><textarea class="form-input" style="width:320px;height:80px;">示例备注</textarea></div></div>';
+    }
+    openModal(titles[tab] || '编辑', bodyHtml, function() {
         showToast('修改成功', 'success');
         closeModal();
     });
@@ -6632,7 +6954,103 @@ function viewUserDrawerItem(tab, id) {
         duty: '职务关联详情',
         approval: '任职审批详情'
     };
-    openModal(titles[tab] || '详情', '<div style="width:480px;"><div class="drawer-info-grid"><div class="drawer-info-item"><div class="drawer-info-label">名称</div><div class="drawer-info-value">示例数据</div></div><div class="drawer-info-item"><div class="drawer-info-label">状态</div><div class="drawer-info-value"><span class="tag tag-green">正常</span></div></div><div class="drawer-info-item"><div class="drawer-info-label">创建时间</div><div class="drawer-info-value">2025-01-10 10:00:00</div></div><div class="drawer-info-item"><div class="drawer-info-label">创建人</div><div class="drawer-info-value">管理员</div></div><div class="drawer-info-item full"><div class="drawer-info-label">备注</div><div class="drawer-info-value">这是一条示例详情数据，用于展示查看功能。</div></div></div></div>', function() {
+    var bodyHtml = '';
+    function field(label, value) {
+        return '<div class="drawer-info-item"><div class="drawer-info-label">' + label + '</div><div class="drawer-info-value">' + (value || '-') + '</div></div>';
+    }
+    switch(tab) {
+        case 'extend':
+            bodyHtml = '<div style="width:520px;"><div class="drawer-info-grid">' +
+                field('字段名称', '入职日期') +
+                field('字段编码', 'EXT_JOIN_DATE') +
+                field('字段类型', '日期') +
+                field('字段值', '2023-06-15') +
+                field('是否必填', '<span class="tag tag-green">是</span>') +
+                field('排序号', '3') +
+                field('创建时间', '2025-01-10 10:30:00') +
+                field('更新时间', '2025-02-15 09:00:00') +
+                '<div class="drawer-info-item full"><div class="drawer-info-label">备注说明</div><div class="drawer-info-value">员工入职日期记录，用于计算工龄等</div></div>' +
+                '</div></div>';
+            break;
+        case 'orgLink':
+            bodyHtml = '<div style="width:520px;"><div class="drawer-info-grid">' +
+                field('机构名称', '云上（江西）大数据发展有限公司') +
+                field('是否主机构', '<span class="tag tag-gray">否</span>') +
+                '<div class="drawer-info-item full"><div class="drawer-info-label">机构路径</div><div class="drawer-info-value">江西省/赣政通/省政务信息中心/云上（江西）大数据发展有限公司</div></div>' +
+                field('关联时间', '2025-02-01 14:00:00') +
+                field('关联操作人', '管理员') +
+                '<div class="drawer-info-item full"><div class="drawer-info-label">关联原因</div><div class="drawer-info-value">借调至云上公司参与项目建设，期限1年</div></div>' +
+                '</div></div>';
+            break;
+        case 'position':
+            bodyHtml = '<div style="width:520px;"><div class="drawer-info-grid">' +
+                field('岗位名称', '高级工程师') +
+                field('岗位类型', '技术岗') +
+                field('任职状态', '<span class="tag tag-green">在职</span>') +
+                field('是否主岗', '<span class="tag tag-green">是</span>') +
+                field('任职机构', '省政务信息中心') +
+                field('任职开始时间', '2023-06-15') +
+                field('任职结束时间', '-') +
+                field('任职文号', '赣政通人〔2023〕15号') +
+                '<div class="drawer-info-item full"><div class="drawer-info-label">备注</div><div class="drawer-info-value">主岗任职，技术序列，高级工程师岗位</div></div>' +
+                '</div></div>';
+            break;
+        case 'title':
+            bodyHtml = '<div style="width:520px;"><div class="drawer-info-grid">' +
+                field('职称名称', '高级工程师') +
+                field('职称级别', '副高级') +
+                field('职称系列', '工程系列') +
+                field('证书编号', 'ZC2023001') +
+                field('授予时间', '2023-10-15') +
+                field('授予单位', '江西省人力资源和社会保障厅') +
+                field('状态', '<span class="tag tag-green">有效</span>') +
+                '<div class="drawer-info-item full"><div class="drawer-info-label">证书附件</div><div class="drawer-info-value"><i class="fa fa-file-pdf-o" style="color:#FF4D4F;margin-right:6px;"></i>高级工程师证书.pdf <span style="color:#165DFF;cursor:pointer;">下载</span></div></div>' +
+                '</div></div>';
+            break;
+        case 'level':
+            bodyHtml = '<div style="width:520px;"><div class="drawer-info-grid">' +
+                field('职级名称', '正科级') +
+                field('职级层次', '乡科级') +
+                field('任职状态', '<span class="tag tag-green">现任</span>') +
+                field('是否主任职', '<span class="tag tag-green">是</span>') +
+                field('任职机构', '省政务信息中心') +
+                field('任职时间', '2023-10-15') +
+                field('免去时间', '-') +
+                field('任免文号', '赣政通人〔2023〕20号') +
+                '<div class="drawer-info-item full"><div class="drawer-info-label">备注</div><div class="drawer-info-value">乡科级正职，现任职务</div></div>' +
+                '</div></div>';
+            break;
+        case 'duty':
+            bodyHtml = '<div style="width:520px;"><div class="drawer-info-grid">' +
+                field('职务名称', '技术部经理') +
+                field('职务层级', '中层') +
+                field('任职状态', '<span class="tag tag-green">现任</span>') +
+                field('任职机构', '省政务信息中心') +
+                field('所属部门', '技术研发部') +
+                field('任职开始时间', '2023-10-15') +
+                field('任职结束时间', '-') +
+                field('任免文号', '赣政通人〔2023〕25号') +
+                '<div class="drawer-info-item full"><div class="drawer-info-label">职责描述</div><div class="drawer-info-value">负责技术部整体管理工作，包括技术规划、团队建设、项目管理、质量把控等。带领团队完成年度技术目标，推动技术创新和技术积累。</div></div>' +
+                '</div></div>';
+            break;
+        case 'approval':
+            bodyHtml = '<div style="width:520px;"><div class="drawer-info-grid">' +
+                field('审批类型', '职务晋升审批') +
+                field('审批状态', '<span class="tag tag-orange">审批中</span>') +
+                field('目标机构', '省政务信息中心') +
+                field('目标岗位', '技术部经理') +
+                field('申请时间', '2024-03-01') +
+                field('期望生效时间', '2024-04-01') +
+                field('当前审批人', '李总监') +
+                field('申请部门', '技术研发部') +
+                '<div class="drawer-info-item full"><div class="drawer-info-label">审批原因</div><div class="drawer-info-value">工作表现突出，技术能力强，带领团队完成多个重要项目，拟晋升技术部经理职务</div></div>' +
+                '<div class="drawer-info-item full"><div class="drawer-info-label">附件材料</div><div class="drawer-info-value"><i class="fa fa-file-pdf-o" style="color:#FF4D4F;margin-right:6px;"></i>职务晋升申请.pdf <span style="color:#165DFF;cursor:pointer;">查看</span></div></div>' +
+                '</div></div>';
+            break;
+        default:
+            bodyHtml = '<div style="width:480px;"><div class="drawer-info-grid"><div class="drawer-info-item"><div class="drawer-info-label">名称</div><div class="drawer-info-value">示例数据</div></div><div class="drawer-info-item"><div class="drawer-info-label">状态</div><div class="drawer-info-value"><span class="tag tag-green">正常</span></div></div><div class="drawer-info-item"><div class="drawer-info-label">创建时间</div><div class="drawer-info-value">2025-01-10 10:00:00</div></div><div class="drawer-info-item"><div class="drawer-info-label">创建人</div><div class="drawer-info-value">管理员</div></div><div class="drawer-info-item full"><div class="drawer-info-label">备注</div><div class="drawer-info-value">这是一条示例详情数据，用于展示查看功能。</div></div></div></div>';
+    }
+    openModal(titles[tab] || '详情', bodyHtml, function() {
         closeModal();
     }, '关闭');
 }
@@ -9443,29 +9861,58 @@ function showVersionRecordModal(pageKey, rowId) {
     openModal(id, title, body, '<button class="px-4 py-1.5 text-sm rounded" style="background:var(--primary);color:#fff;" onclick="closeModal(\'' + id + '\')">关闭</button>', 'large');
 }
 function openModal(id, title, bodyHtml, footerHtml, size) {
+    // 智能参数适配：支持 openModal(title, bodyHtml, onOk) 三参数形式（确认弹窗/简单表单）
+    // 和 openModal(id, title, bodyHtml, footer, size) 五参数形式
+    var realId = id;
+    var realTitle = title;
+    var realBody = bodyHtml;
+    var realFooter = footerHtml;
+    var realSize = size;
+
+    // 如果第2个参数是HTML字符串（包含标签），第3个参数是函数，则为三参数形式
+    if (typeof title === 'string' && (title.indexOf('<') > -1) && typeof bodyHtml === 'function') {
+        realId = 'modal_' + Date.now();
+        realTitle = id;
+        realBody = title;
+        var onOk = bodyHtml;
+        realFooter = '<button class="btn btn-default btn-sm" onclick="closeModal(\'' + realId + '\')">取消</button>' +
+                     '<button class="btn btn-primary btn-sm" onclick="(' + onOk.toString() + ')()">确定</button>';
+        realSize = 'normal';
+    }
+    // 如果第3个参数是function，第4个是字符串（按钮文本）
+    else if (typeof bodyHtml === 'function' && typeof footerHtml === 'string') {
+        realId = 'modal_' + Date.now();
+        realTitle = id;
+        realBody = title;
+        var onOk2 = bodyHtml;
+        var okText = footerHtml;
+        realFooter = '<button class="btn btn-primary btn-sm" onclick="(' + onOk2.toString() + ')()">' + okText + '</button>';
+        realSize = size || 'normal';
+    }
+
     // 移除已存在的同名弹窗
-    closeModal(id);
+    closeModal(realId);
     const sizes = { small: '420px', normal: '560px', large: '800px', xlarge: '1000px' };
-    const width = sizes[size] || sizes.normal;
+    const width = sizes[realSize] || sizes.normal;
     modalZIndex += 10;
     var currentZ = modalZIndex;
     const modal = document.createElement('div');
     modal.className = 'modal-mask show';
-    modal.id = id;
+    modal.id = realId;
     modal.style.zIndex = currentZ;
     modal.innerHTML = `
         <div class="modal-box" style="width:${width};max-width:95%;z-index:${currentZ + 1};">
             <div class="modal-header">
-                <span class="font-medium" style="font-size:16px;">${title}</span>
-                <i class="fa fa-times cursor-pointer" style="color:#999;" onclick="closeModal('${id}')"></i>
+                <span class="font-medium" style="font-size:16px;">${realTitle}</span>
+                <i class="fa fa-times cursor-pointer" style="color:#999;" onclick="closeModal('${realId}')"></i>
             </div>
-            <div class="modal-body">${bodyHtml}</div>
-            ${footerHtml ? `<div class="modal-footer">${footerHtml}</div>` : ''}
+            <div class="modal-body">${realBody}</div>
+            ${realFooter ? `<div class="modal-footer">${realFooter}</div>` : ''}
         </div>
     `;
     // 点击遮罩关闭
     modal.addEventListener('click', function(e) {
-        if (e.target === modal) closeModal(id);
+        if (e.target === modal) closeModal(realId);
     });
     $('modalLayer').appendChild(modal);
 }
@@ -13974,28 +14421,76 @@ var descData = {
         acceptance: '1.拓展信息可排序 2.升降序可切换' }
     ],
     'user': [
-        { id: '24', title: '用户批量删除-增加该功能', status: '符合', changeType: '新增', walkthroughDesc: '对用户批量删除进行配置管理操作，增加该功能', rules: '支持复选框多选+全选+批量删除+二次确认', implementation: 'page-user 页面，复选框+全选+批量删除+确认弹窗',
-        acceptance: '1.可多选 2.可全选 3.批量删除有确认' },
-        { id: '25', title: '用户查询字段排序-增加该功能', status: '符合', changeType: '新增', walkthroughDesc: '对用户查询字段排序进行配置管理操作，增加该功能', rules: '用户列表支持按姓名、创建时间排序', implementation: 'page-user 页面，表头可排序',
-        acceptance: '1.表头可排序 2.升降序可切换' },
-        { id: '26', title: '批量导入-改成上传多个excel文件', status: '符合', changeType: '功能升级', walkthroughDesc: '对批量导入进行配置管理操作，改成上传多个excel文件', rules: '支持拖拽上传多个Excel文件；每个文件独立校验', implementation: 'page-user 页面，导入按钮→多文件导入弹窗',
-        acceptance: '1.可拖拽多文件 2.独立校验 3.结果可查看' },
-        { id: '27', title: '用户拓展信息编辑-增加该功能', status: '符合', changeType: '新增', walkthroughDesc: '对用户拓展信息编辑进行配置管理操作，增加该功能', rules: '用户详情弹窗中"拓展信息"Tab支持查看/编辑切换', implementation: 'page-user 页面，查看弹窗→Tab页签式详情，"拓展信息"Tab可编辑',
-        acceptance: '1.详情有拓展信息Tab 2.可编辑 3.可保存' },
-        { id: '28', title: '用户拓展信息查询字段排序-增加该功能', status: '符合', changeType: '新增', walkthroughDesc: '对用户拓展信息查询字段排序进行配置管理操作，增加该功能', rules: '拓展信息子列表支持字段排序', implementation: 'page-user 页面，拓展信息Tab内子列表可排序',
-        acceptance: '1.拓展信息可排序 2.升降序可切换' },
-        { id: '29', title: '用户机构关联批量删除+查询字段排序', status: '符合', changeType: '新增', walkthroughDesc: '对用户机构关联批量删除和查询字段排序进行配置管理操作，增加该功能', rules: '用户详情"机构关联"Tab支持子表格+复选框+全选+批量删除+字段排序', implementation: 'page-user 页面，查看弹窗→"机构关联"Tab，子表格+批量删除+排序',
-        acceptance: '1.有机构关联Tab 2.可批量删除 3.可排序' },
-        { id: '30', title: '用户岗位关联查询字段排序', status: '符合', changeType: '新增', walkthroughDesc: '对用户岗位关联查询字段排序进行配置管理操作，增加该功能', rules: '用户详情"岗位关联"Tab支持子表格+字段排序', implementation: 'page-user 页面，查看弹窗→"岗位关联"Tab，子表格+排序',
-        acceptance: '1.有岗位关联Tab 2.可排序' },
-        { id: '31', title: '用户职称关联批量删除+查询字段排序+查询', status: '符合', changeType: '新增', walkthroughDesc: '对用户职称关联批量删除、查询字段排序、查询进行配置管理操作，增加该功能', rules: '用户详情"职称关联"Tab支持子表格+复选框+全选+批量删除+字段排序+条件查询', implementation: 'page-user 页面，查看弹窗→"职称关联"Tab，子表格+批量删除+排序+查询',
-        acceptance: '1.有职称关联Tab 2.可批量删除 3.可排序 4.可查询' },
-        { id: '32', title: '用户职级关联批量删除+查询字段排序+查询', status: '符合', changeType: '新增', walkthroughDesc: '对用户职级关联批量删除、查询字段排序、查询进行配置管理操作，增加该功能', rules: '用户详情"职级关联"Tab支持子表格+复选框+全选+批量删除+字段排序+条件查询', implementation: 'page-user 页面，查看弹窗→"职级关联"Tab，子表格+批量删除+排序+查询',
-        acceptance: '1.有职级关联Tab 2.可批量删除 3.可排序 4.可查询' },
-        { id: '33', title: '用户职务关联查询字段排序+查询', status: '符合', changeType: '新增', walkthroughDesc: '对用户职务关联查询字段排序、查询进行配置管理操作，增加该功能', rules: '用户详情"职务关联"Tab支持子表格+字段排序+条件查询', implementation: 'page-user 页面，查看弹窗→"职务关联"Tab，子表格+排序+查询',
-        acceptance: '1.有职务关联Tab 2.可排序 3.可查询' },
-        { id: '34', title: '用户任职审批信息查询-增加该功能', status: '符合', changeType: '新增', walkthroughDesc: '对用户任职审批信息查询进行配置管理操作，增加该功能', rules: '用户详情"任职审批信息"Tab支持子表格+字段排序+条件查询', implementation: 'page-user 页面，查看弹窗→"任职审批信息"Tab，子表格+排序',
-        acceptance: '1.有任职审批Tab 2.可查询 3.可排序' }
+        { id: '24', title: '用户批量删除', status: '符合', changeType: '新增', walkthroughDesc: '对用户批量删除进行配置管理操作', rules: '支持复选框多选+全选+批量删除+二次确认', implementation: '用户列表页，工具栏"批量删除"按钮+复选框+全选+确认弹窗',
+        acceptance: '1.可多选 2.可全选 3.批量删除有二次确认 4.提示成功删除数量' },
+        { id: '24b', title: '批量导入', status: '符合', changeType: '功能升级', walkthroughDesc: '对批量导入进行配置管理操作', rules: '支持拖拽上传多个Excel文件；每个文件独立校验；显示文件队列和校验结果；支持下载模板', implementation: '用户列表页，"批量导入"按钮→多文件导入弹窗（拖拽区+文件队列+独立校验+结果表）',
+        acceptance: '1.可拖拽多文件 2.独立校验 3.文件队列显示 4.结果可查看 5.可下载模板' },
+        { id: '24c', title: '用户机构关联查询字段排序', status: '符合', changeType: '新增', walkthroughDesc: '对用户机构关联查询字段排序进行配置管理操作', rules: '用户详情"机构关联"Tab子表格支持按机构名称、关联时间等字段排序', implementation: '用户抽屉→"机构关联"Tab，表头可点击排序（升降序切换）',
+        acceptance: '1.机构名称可排序 2.关联时间可排序 3.升降序可切换' },
+        { id: '24d', title: '用户拓展信息批量删除', status: '符合', changeType: '新增', walkthroughDesc: '对用户拓展信息批量删除进行配置管理操作', rules: '用户详情"拓展信息"Tab支持子表格+复选框+全选+批量删除+二次确认', implementation: '用户抽屉→"拓展信息"Tab，工具栏"批量删除"按钮+复选框+确认弹窗',
+        acceptance: '1.可多选 2.可全选 3.批量删除有二次确认 4.提示删除数量' },
+        { id: '24e', title: '用户任职履历信息查询', status: '符合', changeType: '新增', walkthroughDesc: '对用户任职履历信息查询进行配置管理操作', rules: '用户详情"任职审批"Tab支持按审批类型、状态筛选查询；展示完整任职审批履历', implementation: '用户抽屉→"任职审批"Tab，查询区（审批类型+状态）+审批履历列表',
+        acceptance: '1.可按审批类型查询 2.可按状态筛选 3.审批履历完整展示' },
+        { id: '25a', title: '用户岗位关联新增', status: '符合', changeType: '新增', walkthroughDesc: '对用户岗位关联新增进行配置管理操作', rules: '支持选择岗位、设置任职状态/开始时间/结束时间/任职机构/是否主岗/任职文号等', implementation: '用户抽屉→"岗位关联"Tab，"新增关联"按钮→新增弹窗（岗位名称下拉+任职状态+任职时间+任职机构+是否主岗+任职文号+备注）',
+        acceptance: '1.有新增按钮 2.弹窗字段完整 3.保存成功提示' },
+        { id: '25b', title: '用户岗位关联修改', status: '符合', changeType: '新增', walkthroughDesc: '对用户岗位关联修改进行配置管理操作', rules: '支持修改任职状态、任职时间、任职机构、是否主岗、任职文号、备注等信息', implementation: '用户抽屉→"岗位关联"Tab，行操作"编辑"→编辑弹窗（字段可修改+保存）',
+        acceptance: '1.有编辑操作 2.弹窗字段可编辑 3.保存成功提示' },
+        { id: '25c', title: '用户岗位关联删除', status: '符合', changeType: '新增', walkthroughDesc: '对用户岗位关联删除进行配置管理操作', rules: '支持单条删除+二次确认', implementation: '用户抽屉→"岗位关联"Tab，行操作"删除"→确认弹窗',
+        acceptance: '1.有删除操作 2.删除有二次确认 3.删除后列表刷新' },
+        { id: '25d', title: '用户岗位关联批量删除', status: '符合', changeType: '新增', walkthroughDesc: '对用户岗位关联批量删除进行配置管理操作', rules: '支持复选框多选+全选+批量删除+二次确认', implementation: '用户抽屉→"岗位关联"Tab，工具栏"批量解除"按钮+复选框+确认弹窗',
+        acceptance: '1.可多选 2.可全选 3.批量删除有二次确认' },
+        { id: '25e', title: '用户岗位关联查询字段排序', status: '符合', changeType: '新增', walkthroughDesc: '对用户岗位关联查询字段排序进行配置管理操作', rules: '岗位关联子表格支持按岗位名称、任职时间等字段排序', implementation: '用户抽屉→"岗位关联"Tab，表头可点击排序',
+        acceptance: '1.岗位名称可排序 2.任职时间可排序 3.升降序可切换' },
+        { id: '25f', title: '用户岗位关联查看', status: '符合', changeType: '新增', walkthroughDesc: '对用户岗位关联查看进行配置管理操作', rules: '支持查看岗位关联详情（岗位名称/类型/任职状态/任职机构/任职时间/任职文号等）', implementation: '用户抽屉→"岗位关联"Tab，行操作"查看"→详情弹窗（信息项展示）',
+        acceptance: '1.有查看操作 2.详情字段完整 3.布局清晰' },
+        { id: '25g', title: '用户岗位关联查询', status: '符合', changeType: '新增', walkthroughDesc: '对用户岗位关联查询进行配置管理操作', rules: '支持按岗位类型筛选查询', implementation: '用户抽屉→"岗位关联"Tab，查询区（岗位类型下拉+查询+重置）',
+        acceptance: '1.可按类型筛选 2.查询按钮可触发 3.重置按钮可清空' },
+        { id: '26a', title: '用户职称关联新增', status: '符合', changeType: '新增', walkthroughDesc: '对用户职称关联新增进行配置管理操作', rules: '支持选择职称、设置级别/系列/证书编号/授予时间/授予单位/状态/证书附件等', implementation: '用户抽屉→"职称关联"Tab，"新增关联"按钮→新增弹窗（职称名称+级别+系列+证书编号+授予时间+授予单位+状态+证书附件）',
+        acceptance: '1.有新增按钮 2.弹窗字段完整 3.支持附件上传' },
+        { id: '26b', title: '用户职称关联修改', status: '符合', changeType: '新增', walkthroughDesc: '对用户职称关联修改进行配置管理操作', rules: '支持修改职称级别、证书编号、授予时间、授予单位、状态、证书附件等', implementation: '用户抽屉→"职称关联"Tab，行操作"编辑"→编辑弹窗',
+        acceptance: '1.有编辑操作 2.字段可修改 3.保存成功提示' },
+        { id: '26c', title: '用户职称关联删除', status: '符合', changeType: '新增', walkthroughDesc: '对用户职称关联删除进行配置管理操作', rules: '支持单条删除+二次确认', implementation: '用户抽屉→"职称关联"Tab，行操作"删除"→确认弹窗',
+        acceptance: '1.有删除操作 2.删除有二次确认' },
+        { id: '26d', title: '用户职称关联批量删除', status: '符合', changeType: '新增', walkthroughDesc: '对用户职称关联批量删除进行配置管理操作', rules: '支持复选框多选+全选+批量删除+二次确认', implementation: '用户抽屉→"职称关联"Tab，工具栏"批量删除"按钮+复选框+确认弹窗',
+        acceptance: '1.可多选 2.可全选 3.批量删除有二次确认' },
+        { id: '26e', title: '用户职称关联查询字段排序', status: '符合', changeType: '新增', walkthroughDesc: '对用户职称关联查询字段排序进行配置管理操作', rules: '职称关联子表格支持按职称名称、授予时间等字段排序', implementation: '用户抽屉→"职称关联"Tab，表头可点击排序',
+        acceptance: '1.职称名称可排序 2.授予时间可排序 3.升降序可切换' },
+        { id: '26f', title: '用户职称关联查看', status: '符合', changeType: '新增', walkthroughDesc: '对用户职称关联查看进行配置管理操作', rules: '支持查看职称关联详情（职称名称/级别/系列/证书编号/授予时间/授予单位/状态/附件）', implementation: '用户抽屉→"职称关联"Tab，行操作"查看"→详情弹窗',
+        acceptance: '1.有查看操作 2.详情字段完整' },
+        { id: '26g', title: '用户职称关联查询', status: '符合', changeType: '新增', walkthroughDesc: '对用户职称关联查询进行配置管理操作', rules: '支持按职称级别、状态筛选查询', implementation: '用户抽屉→"职称关联"Tab，查询区（级别+状态+查询+重置）',
+        acceptance: '1.可按级别筛选 2.可按状态筛选' },
+        { id: '27a', title: '用户职级关联新增', status: '符合', changeType: '新增', walkthroughDesc: '对用户职级关联新增进行配置管理操作', rules: '支持选择职级、设置层次/任职状态/任职时间/免去时间/任职机构/是否主任职/任免文号等', implementation: '用户抽屉→"职级关联"Tab，"新增关联"按钮→新增弹窗',
+        acceptance: '1.有新增按钮 2.弹窗字段完整' },
+        { id: '27b', title: '用户职级关联修改', status: '符合', changeType: '新增', walkthroughDesc: '对用户职级关联修改进行配置管理操作', rules: '支持修改职级、任职状态、任职时间、免去时间、任职机构、是否主任职、任免文号等', implementation: '用户抽屉→"职级关联"Tab，行操作"编辑"→编辑弹窗',
+        acceptance: '1.有编辑操作 2.字段可修改' },
+        { id: '27c', title: '用户职级关联删除', status: '符合', changeType: '新增', walkthroughDesc: '对用户职级关联删除进行配置管理操作', rules: '支持单条删除+二次确认', implementation: '用户抽屉→"职级关联"Tab，行操作"删除"→确认弹窗',
+        acceptance: '1.有删除操作 2.删除有二次确认' },
+        { id: '27d', title: '用户职级关联批量删除', status: '符合', changeType: '新增', walkthroughDesc: '对用户职级关联批量删除进行配置管理操作', rules: '支持复选框多选+全选+批量删除+二次确认', implementation: '用户抽屉→"职级关联"Tab，工具栏"批量删除"按钮+复选框+确认弹窗',
+        acceptance: '1.可多选 2.可全选 3.批量删除有二次确认' },
+        { id: '27e', title: '用户职级关联查询字段排序', status: '符合', changeType: '新增', walkthroughDesc: '对用户职级关联查询字段排序进行配置管理操作', rules: '职级关联子表格支持按职级名称、任职时间等字段排序', implementation: '用户抽屉→"职级关联"Tab，表头可点击排序',
+        acceptance: '1.职级名称可排序 2.任职时间可排序 3.升降序可切换' },
+        { id: '27f', title: '用户职级关联查看', status: '符合', changeType: '新增', walkthroughDesc: '对用户职级关联查看进行配置管理操作', rules: '支持查看职级关联详情（职级名称/层次/任职状态/任职机构/任职时间/任免文号等）', implementation: '用户抽屉→"职级关联"Tab，行操作"查看"→详情弹窗',
+        acceptance: '1.有查看操作 2.详情字段完整' },
+        { id: '27g', title: '用户职级关联查询', status: '符合', changeType: '新增', walkthroughDesc: '对用户职级关联查询进行配置管理操作', rules: '支持按职级层次、任职状态筛选查询', implementation: '用户抽屉→"职级关联"Tab，查询区（层次+状态+查询+重置）',
+        acceptance: '1.可按层次筛选 2.可按状态筛选' },
+        { id: '28a', title: '用户职务关联新增', status: '符合', changeType: '新增', walkthroughDesc: '对用户职务关联新增进行配置管理操作', rules: '支持选择职务、设置层级/任职状态/任职机构/所属部门/任职时间/任免文号/职责描述等', implementation: '用户抽屉→"职务关联"Tab，"新增关联"按钮→新增弹窗',
+        acceptance: '1.有新增按钮 2.弹窗字段完整' },
+        { id: '28b', title: '用户职务关联修改', status: '符合', changeType: '新增', walkthroughDesc: '对用户职务关联修改进行配置管理操作', rules: '支持修改职务、任职状态、任职机构、所属部门、任职时间、任免文号、职责描述等', implementation: '用户抽屉→"职务关联"Tab，行操作"编辑"→编辑弹窗',
+        acceptance: '1.有编辑操作 2.字段可修改' },
+        { id: '28c', title: '用户职务关联删除', status: '符合', changeType: '新增', walkthroughDesc: '对用户职务关联删除进行配置管理操作', rules: '支持单条删除+二次确认', implementation: '用户抽屉→"职务关联"Tab，行操作"删除"→确认弹窗',
+        acceptance: '1.有删除操作 2.删除有二次确认' },
+        { id: '28d', title: '用户职务关联批量删除', status: '符合', changeType: '新增', walkthroughDesc: '对用户职务关联批量删除进行配置管理操作', rules: '支持复选框多选+全选+批量删除+二次确认', implementation: '用户抽屉→"职务关联"Tab，工具栏"批量删除"按钮+复选框+确认弹窗',
+        acceptance: '1.可多选 2.可全选 3.批量删除有二次确认' },
+        { id: '28e', title: '用户职务关联查询字段排序', status: '符合', changeType: '新增', walkthroughDesc: '对用户职务关联查询字段排序进行配置管理操作', rules: '职务关联子表格支持按职务名称、任职时间等字段排序', implementation: '用户抽屉→"职务关联"Tab，表头可点击排序',
+        acceptance: '1.职务名称可排序 2.任职时间可排序 3.升降序可切换' },
+        { id: '28f', title: '用户职务关联查看', status: '符合', changeType: '新增', walkthroughDesc: '对用户职务关联查看进行配置管理操作', rules: '支持查看职务关联详情（职务名称/层级/任职状态/任职机构/所属部门/任职时间/任免文号/职责描述）', implementation: '用户抽屉→"职务关联"Tab，行操作"查看"→详情弹窗',
+        acceptance: '1.有查看操作 2.详情字段完整' },
+        { id: '28g', title: '用户职务关联查询', status: '符合', changeType: '新增', walkthroughDesc: '对用户职务关联查询进行配置管理操作', rules: '支持按职务层级、任职状态筛选查询', implementation: '用户抽屉→"职务关联"Tab，查询区（层级+状态+查询+重置）',
+        acceptance: '1.可按层级筛选 2.可按状态筛选' },
+        { id: '29a', title: '用户任职审批信息新增', status: '符合', changeType: '新增', walkthroughDesc: '对用户任职审批信息新增进行配置管理操作', rules: '支持选择审批类型、设置目标机构/目标岗位/申请时间/期望生效时间/审批原因/附件材料等', implementation: '用户抽屉→"任职审批"Tab，"新增审批"按钮→新增弹窗（审批类型+目标机构+目标岗位+申请时间+期望生效时间+审批原因+附件材料）',
+        acceptance: '1.有新增审批按钮 2.弹窗字段完整 3.支持附件上传' },
+        { id: '29b', title: '用户任职审批信息查询', status: '符合', changeType: '新增', walkthroughDesc: '对用户任职审批信息查询进行配置管理操作', rules: '支持按审批类型、审批状态筛选查询；展示完整审批履历列表', implementation: '用户抽屉→"任职审批"Tab，查询区（审批类型+状态+查询+重置）+审批列表',
+        acceptance: '1.可按类型查询 2.可按状态筛选 3.审批履历完整展示' }
     ],
     'title-level': [
         { id: '35', title: '职称查询字段排序+多文件导入', status: '符合', changeType: '新增+功能升级', walkthroughDesc: '对职称查询字段排序进行配置管理操作（新增）；对职称导入改成上传多个excel文件（功能升级）', rules: '职称列表支持字段排序；支持拖拽上传多个Excel文件；每个文件独立校验', implementation: 'title-level 页面，类型列区分职称，表头可排序+多文件导入弹窗',
