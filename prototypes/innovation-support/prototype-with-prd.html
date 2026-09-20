@@ -7398,19 +7398,34 @@ function renderTicketCcPage() {
     if (activeTab === 'config') {
         // 抄送配置
         var cfg = config.ccConfig;
-        html += renderQueryArea(cfg.query || [], stateKey);
-        html += renderToolbar(cfg.toolbar || [], stateKey, 'ticket-cc', 'config');
-        html += renderTable(cfg.columns, cfg.data, stateKey, 'ticket-cc-config');
-        html += renderPagination(cfg.data.length, st.page, st.pageSize, stateKey);
+        html += renderQueryArea('ticket-cc-config', cfg);
+        html += renderTicketCcToolbar('config');
+        html += '<div id="tableContainer_ticket-cc-config"></div>';
+        html += renderPagination('ticket-cc-config', cfg.data.length);
     } else {
         // 抄送记录
         var rec = config.ccRecords;
-        html += renderQueryArea(rec.query || [], stateKey);
-        html += renderToolbar(rec.toolbar || [], stateKey, 'ticket-cc', 'record');
-        html += renderTable(rec.columns, rec.data, stateKey, 'ticket-cc-record');
-        html += renderPagination(rec.data.length, st.page, st.pageSize, stateKey);
+        html += renderQueryArea('ticket-cc-record', rec);
+        html += renderTicketCcToolbar('record');
+        html += '<div id="tableContainer_ticket-cc-record"></div>';
+        html += renderPagination('ticket-cc-record', rec.data.length);
     }
 
+    html += '</div>';
+    return html;
+}
+
+/** 工单抄送管理 - 工具栏渲染 */
+function renderTicketCcToolbar(tabKey) {
+    var html = '<div class="flex items-center gap-2 mb-4">';
+    if (tabKey === 'config') {
+        html += '<button class="px-4 py-1.5 text-sm rounded border flex items-center gap-1" style="border-color:var(--primary);color:var(--primary);background:#fff;" onclick="openTicketCcConfigAddModal()"><i class="fa fa-plus"></i><span>新增</span></button>';
+        html += '<button class="px-4 py-1.5 text-sm rounded border flex items-center gap-1" style="border-color:var(--danger);color:var(--danger);background:#fff;" onclick="showToast(\'请选择要删除的记录\',\'warning\')"><i class="fa fa-trash-o"></i><span>批量删除</span></button>';
+    } else {
+        html += '<button class="px-4 py-1.5 text-sm rounded border flex items-center gap-1" style="border-color:var(--primary);color:var(--primary);background:#fff;" onclick="openTicketCcRecordAddModal()"><i class="fa fa-plus"></i><span>新增</span></button>';
+        html += '<button class="px-4 py-1.5 text-sm rounded border flex items-center gap-1" style="border-color:var(--danger);color:var(--danger);background:#fff;" onclick="showToast(\'请选择要删除的记录\',\'warning\')"><i class="fa fa-trash-o"></i><span>批量删除</span></button>';
+        html += '<button class="px-4 py-1.5 text-sm rounded border flex items-center gap-1" style="border-color:var(--primary);color:var(--primary);background:#fff;" onclick="showToast(\'导出成功\',\'success\')"><i class="fa fa-download"></i><span>导出</span></button>';
+    }
     html += '</div>';
     return html;
 }
@@ -7467,7 +7482,7 @@ function renderPage(pageKey) {
     if (config.type === 'ticket-cc') {
         main.innerHTML = renderTicketCcPage();
         // 渲染当前表格
-        const tabKey = state.currentTab['ticket-cc'] || 'config';
+        const tabKey = (state.pages['ticket-cc'] && state.pages['ticket-cc'].activeTab) || 'config';
         if (tabKey === 'config') {
             const ccConfig = config.ccConfig;
             const subId = 'ticket-cc-config';
@@ -8135,12 +8150,18 @@ function changePageSize(pageKey, size) {
 /** 操作按钮统一处理 */
 function handleAction(actionKey, pageKey, rowId) {
     switch (actionKey) {
-        case 'edit': openEditModal(pageKey, rowId); break;
+        case 'edit':
+            if (pageKey === 'ticket-cc-config') { openTicketCcConfigEditModal(rowId); break; }
+            if (pageKey === 'ticket-cc-record') { openTicketCcRecordEditModal(rowId); break; }
+            openEditModal(pageKey, rowId); break;
         case 'delete': openDeleteConfirm(pageKey, rowId); break;
         case 'addChild': showToast('新增子机构', 'info'); break;
         case 'view':
             if (pageKey === 'user') { openUserDrawer(rowId); break; }
             if (pageKey === 'org') { openOrgDrawer(rowId); break; }
+            if (pageKey === 'ticket-cc-config') { openTicketCcConfigViewModal(rowId); break; }
+            if (pageKey === 'ticket-cc-record') { openTicketCcRecordViewModal(rowId); break; }
+            if (pageKey === 'ticket-cc-mine_ccMine') { openTicketCcDetailModal(rowId); break; }
             openViewModal(pageKey, rowId); break;
         case 'approval': openApprovalModal(pageKey, rowId); break;
         case 'permAssign': openPermAssignModal(pageKey, rowId); break;
@@ -8158,6 +8179,13 @@ function handleAction(actionKey, pageKey, rowId) {
         case 'disable': showToast('禁用用户', 'warning'); break;
         case 'sync': showToast('同步用户', 'info'); break;
         case 'resetPwd': showToast('重置密码', 'info'); break;
+        // 工单中心 - 我的代办
+        case 'handle': openTicketHandleModal(rowId); break;
+        case 'transfer': openTicketTransferModal(rowId); break;
+        // 工单中心 - 抄送我的工单
+        case 'forward': openTicketForwardModal(rowId); break;
+        case 'rate': openTicketRateModal(rowId); break;
+        case 'upload': openTicketUploadModal(rowId); break;
         default: showToast('操作: ' + actionKey, 'info');
     }
 }
@@ -8359,21 +8387,25 @@ function openAddModal(pageKey) {
         body += renderFormField('状态', `<span class="toggle-switch on" id="add_status" onclick="this.classList.toggle('on')"></span>`);
     } else if (pageKey === 'ticket-record') {
         body = '<div class="grid grid-cols-2 gap-4">';
-        body += renderFormField('工单编号', `<input type="text" class="form-input w-full" id="add_ticketNo" value="${esc(row.ticketNo)}" readonly style="background:#F5F5F5;" />`);
-        body += renderFormField('工单标题', `<input type="text" class="form-input w-full" id="add_title" value="${esc(row.title)}" />`, true);
-        body += renderFormField('工单类型', `<select class="form-input w-full" id="add_ticketType"><option value="general" ${row.ticketType === 'general' ? 'selected' : ''}>通用工单</option><option value="consult" ${row.ticketType === 'consult' ? 'selected' : ''}>咨询建议</option><option value="fault" ${row.ticketType === 'fault' ? 'selected' : ''}>故障报修</option><option value="business" ${row.ticketType === 'business' ? 'selected' : ''}>业务办理</option><option value="auth" ${row.ticketType === 'auth' ? 'selected' : ''}>权限申请</option><option value="suggest" ${row.ticketType === 'suggest' ? 'selected' : ''}>功能建议</option></select>`, true);
-        body += renderFormField('申请人', `<input type="text" class="form-input w-full" id="add_applicant" value="${esc(row.applicant || '')}" />`);
-        body += renderFormField('申请时间', `<input type="text" class="form-input w-full" id="add_applyTime" value="${esc(row.applyTime || '')}" />`);
-        body += renderFormField('办理人', `<input type="text" class="form-input w-full" id="add_handler" value="${esc(row.handler)}" />`);
-        body += renderFormField('办理时间', `<input type="text" class="form-input w-full" id="add_handleTime" value="${esc(row.handleTime)}" />`);
-        body += renderFormField('办理状态', `<select class="form-input w-full" id="add_handleStatus"><option value="pending" ${row.handleStatus === 'pending' ? 'selected' : ''}>待办理</option><option value="processing" ${row.handleStatus === 'processing' ? 'selected' : ''}>办理中</option><option value="completed" ${row.handleStatus === 'completed' ? 'selected' : ''}>已完成</option><option value="rejected" ${row.handleStatus === 'rejected' ? 'selected' : ''}>已退回</option><option value="closed" ${row.handleStatus === 'closed' ? 'selected' : ''}>已关闭</option></select>`, true);
+        body += renderFormField('标题', `<input type="text" class="form-input w-full" id="add_title" placeholder="请输入工单标题" />`, true);
+        body += renderFormField('工单号', `<input type="text" class="form-input w-full" id="add_ticketNo" placeholder="自动生成" readonly style="background:#F5F5F5;" />`);
+        body += renderFormField('工单类型', `<select class="form-input w-full" id="add_ticketType"><option value="">请选择</option><option value="general">通用工单</option><option value="consult">咨询建议</option><option value="fault">故障报修</option><option value="business">业务办理</option><option value="auth">权限申请</option><option value="suggest">功能建议</option></select>`, true);
+        body += renderFormField('工单来源', `<select class="form-input w-full" id="add_source"><option value="">请选择</option><option value="online">线上提交</option><option value="phone">电话工单</option><option value="email">邮件工单</option><option value="manual">手工录入</option></select>`, true);
+        body += renderFormField('提交人', `<input type="text" class="form-input w-full" id="add_submitter" placeholder="请输入提交人" />`, true);
+        body += renderFormField('提交时间', `<input type="text" class="form-input w-full" id="add_submitTime" placeholder="YYYY-MM-DD HH:mm:ss" />`);
+        body += renderFormField('紧急程度', `<select class="form-input w-full" id="add_urgency"><option value="">请选择</option><option value="high">高</option><option value="medium">中</option><option value="low">低</option></select>`, true);
+        body += renderFormField('优先级', `<select class="form-input w-full" id="add_priority"><option value="">请选择</option><option value="high">高</option><option value="medium">中</option><option value="low">低</option></select>`, true);
+        body += renderFormField('承办人', `<input type="text" class="form-input w-full" id="add_handler" placeholder="请输入承办人" />`);
+        body += renderFormField('承办部门', `<input type="text" class="form-input w-full" id="add_handleDept" placeholder="请输入承办部门" />`);
+        body += renderFormField('办理状态', `<select class="form-input w-full" id="add_handleStatus"><option value="">请选择</option><option value="pending">待办理</option><option value="processing">办理中</option><option value="completed">已完成</option><option value="transferred">已转办</option><option value="rejected">已退回</option><option value="closed">已关闭</option></select>`, true);
+        body += renderFormField('办理结果', `<select class="form-input w-full" id="add_handleResultType"><option value="">请选择</option><option value="resolved">已解决</option><option value="partially">部分解决</option><option value="unresolved">未解决</option></select>`);
         body += '</div>';
-        body += renderFormField('办理结果', `<textarea class="form-input w-full" id="add_handleResult" rows="3">${esc(row.handleResult || '')}</textarea>`);
+        body += renderFormField('办理结果说明', `<textarea class="form-input w-full" id="add_handleResult" rows="2" placeholder="请输入办理结果说明"></textarea>`);
         body += '<div class="grid grid-cols-2 gap-4">';
-        body += renderFormField('办理用时', `<input type="text" class="form-input w-full" id="add_handleDuration" value="${esc(row.handleDuration || '')}" />`);
-        body += renderFormField('操作IP', `<input type="text" class="form-input w-full" id="add_handleIp" value="${esc(row.handleIp || '')}" />`);
+        body += renderFormField('办理时间', `<input type="text" class="form-input w-full" id="add_handleTime" placeholder="YYYY-MM-DD HH:mm:ss" />`);
+        body += renderFormField('附件', `<div style="border:1px dashed #D9D9D9;border-radius:4px;padding:16px;text-align:center;cursor:pointer;color:#999;font-size:13px;" onclick="showToast('请选择文件','info')"><i class="fa fa-cloud-upload" style="font-size:20px;display:block;margin-bottom:4px;"></i>点击上传附件</div>`);
         body += '</div>';
-        body += renderFormField('备注', `<textarea class="form-input w-full" id="add_remark" rows="3">${esc(row.remark || '')}</textarea>`);
+        body += renderFormField('备注', `<textarea class="form-input w-full" id="add_remark" rows="2" placeholder="请输入备注"></textarea>`);
     } else if (pageKey === 'notice') {
         body = renderFormField('公告标题', `<input type="text" class="form-input w-full" id="add_title" placeholder="请输入公告标题" />`, true);
         body += renderFormField('公告类型', `<select class="form-input w-full" id="add_type"><option value="">请选择</option><option value="notice">通知</option><option value="announcement">公告</option><option value="system">系统消息</option></select>`, true);
@@ -14091,6 +14123,541 @@ function initCompare() {
     }
     initPageSelector();
     updateDescriptions(currentPage);
+}
+
+/* ============================================================
+ * 工单中心 - 抄送配置管理弹窗
+ * ============================================================ */
+function openTicketCcConfigAddModal() {
+    var id = 'modal_cc_config_add';
+    var body = renderTicketCcConfigForm({});
+    var footer = `
+        <button class="px-4 py-1.5 text-sm rounded border" style="border-color:#D9D9D9;color:var(--text-secondary);background:#fff;" onclick="closeModal('${id}')">取消</button>
+        <button class="px-4 py-1.5 text-sm text-white rounded" style="background:var(--primary);" onclick="saveTicketCcConfig('add', null, '${id}')">确认</button>
+    `;
+    openModal(id, '新增抄送配置', body, footer, 'normal');
+}
+
+function openTicketCcConfigEditModal(rowId) {
+    var data = pageConfigs['ticket-cc'].ccConfig.data;
+    var row = data.find(function(r) { return r.id === rowId; });
+    if (!row) return;
+    var id = 'modal_cc_config_edit';
+    var body = renderTicketCcConfigForm(row);
+    var footer = `
+        <button class="px-4 py-1.5 text-sm rounded border" style="border-color:#D9D9D9;color:var(--text-secondary);background:#fff;" onclick="closeModal('${id}')">取消</button>
+        <button class="px-4 py-1.5 text-sm text-white rounded" style="background:var(--primary);" onclick="saveTicketCcConfig('edit', ${rowId}, '${id}')">保存</button>
+    `;
+    openModal(id, '编辑抄送配置', body, footer, 'normal');
+}
+
+function openTicketCcConfigViewModal(rowId) {
+    var data = pageConfigs['ticket-cc'].ccConfig.data;
+    var row = data.find(function(r) { return r.id === rowId; });
+    if (!row) return;
+    var id = 'modal_cc_config_view';
+    var ccWayText = row.ccWay === 'default' ? '默认抄送' : '自定义抄送';
+    var ticketTypeMap = { general: '通用工单', equipment: '设备申请', auth: '权限申请' };
+    var statusText = row.status ? '启用' : '停用';
+    var body = `
+        <div class="drawer-info-grid">
+            <div class="drawer-info-item"><div class="drawer-info-label">抄送配置名称</div><div class="drawer-info-value">${esc(row.name || '')}</div></div>
+            <div class="drawer-info-item"><div class="drawer-info-label">抄送方式</div><div class="drawer-info-value">${ccWayText}</div></div>
+            <div class="drawer-info-item"><div class="drawer-info-label">适用工单类型</div><div class="drawer-info-value">${ticketTypeMap[row.ticketType] || row.ticketType || ''}</div></div>
+            <div class="drawer-info-item"><div class="drawer-info-label">状态</div><div class="drawer-info-value">${statusText}</div></div>
+            <div class="drawer-info-item"><div class="drawer-info-label">触发节点</div><div class="drawer-info-value">${esc(row.triggerNode || '提交时')}</div></div>
+            <div class="drawer-info-item"><div class="drawer-info-label">排序号</div><div class="drawer-info-value">${esc(row.sortNo || '1')}</div></div>
+            <div class="drawer-info-item full"><div class="drawer-info-label">抄送对象</div><div class="drawer-info-value">${esc(row.ccTarget || '部门负责人,分管领导')}</div></div>
+            <div class="drawer-info-item"><div class="drawer-info-label">创建时间</div><div class="drawer-info-value">${esc(row.createTime || '')}</div></div>
+        </div>
+    `;
+    var footer = `
+        <button class="px-4 py-1.5 text-sm rounded border" style="border-color:#D9D9D9;color:var(--text-secondary);background:#fff;" onclick="closeModal('${id}')">关闭</button>
+    `;
+    openModal(id, '查看抄送配置', body, footer, 'normal');
+}
+
+function renderTicketCcConfigForm(row) {
+    row = row || {};
+    var body = '';
+    body += renderFormField('抄送配置名称', `<input type="text" class="form-input w-full" id="cc_cfg_name" value="${esc(row.name || '')}" placeholder="请输入配置名称" />`, true);
+    body += renderFormField('抄送方式', `<select class="form-input w-full" id="cc_cfg_ccWay" onchange="toggleCcWayConfig(this.value)">
+        <option value="default" ${row.ccWay === 'default' ? 'selected' : ''}>默认抄送</option>
+        <option value="custom" ${row.ccWay === 'custom' ? 'selected' : ''}>自定义抄送</option>
+    </select>`, true);
+    body += '<div class="info-bar blue" style="font-size:12px;padding:6px 12px;margin-bottom:12px;"><i class="fa fa-info-circle"></i> <span id="ccWayTip">默认抄送：设置后自动抄送默认抄送对象</span></div>';
+    body += renderFormField('适用工单类型', `<select class="form-input w-full" id="cc_cfg_ticketType">
+        <option value="">请选择</option>
+        <option value="general" ${row.ticketType === 'general' ? 'selected' : ''}>通用工单</option>
+        <option value="equipment" ${row.ticketType === 'equipment' ? 'selected' : ''}>设备申请</option>
+        <option value="auth" ${row.ticketType === 'auth' ? 'selected' : ''}>权限申请</option>
+    </select>`, true);
+    body += renderFormField('抄送对象', `<textarea class="form-input w-full" id="cc_cfg_ccTarget" rows="2" placeholder="请输入抄送对象，多个用逗号分隔">${esc(row.ccTarget || '')}</textarea>`, true);
+    body += renderFormField('触发节点', `<select class="form-input w-full" id="cc_cfg_triggerNode">
+        <option value="submit" ${row.triggerNode === 'submit' ? 'selected' : ''}>提交时</option>
+        <option value="approve" ${row.triggerNode === 'approve' ? 'selected' : ''}>审批通过时</option>
+        <option value="complete" ${row.triggerNode === 'complete' ? 'selected' : ''}>完成时</option>
+        <option value="all" ${row.triggerNode === 'all' ? 'selected' : ''}>全部节点</option>
+    </select>`, true);
+    body += '<div class="grid grid-cols-2 gap-4">';
+    body += renderFormField('排序号', `<input type="number" class="form-input" id="cc_cfg_sortNo" value="${row.sortNo || 1}" min="1" style="width:100%;" />`);
+    body += renderFormField('状态', `<span class="toggle-switch ${row.status !== false ? 'on' : ''}" id="cc_cfg_status" onclick="this.classList.toggle('on')"></span>`);
+    body += '</div>';
+    return body;
+}
+
+function toggleCcWayConfig(value) {
+    var tip = $('ccWayTip');
+    if (tip) {
+        tip.textContent = value === 'default' ? '默认抄送：设置后自动抄送默认抄送对象' : '自定义抄送：设置后抄送时需要选择抄送对象';
+    }
+}
+
+function saveTicketCcConfig(mode, rowId, modalId) {
+    var data = pageConfigs['ticket-cc'].ccConfig.data;
+    var statusEl = $('cc_cfg_status');
+    var row = {
+        name: $('cc_cfg_name').value,
+        ccWay: $('cc_cfg_ccWay').value,
+        ticketType: $('cc_cfg_ticketType').value,
+        ccTarget: $('cc_cfg_ccTarget').value,
+        triggerNode: $('cc_cfg_triggerNode').value,
+        sortNo: parseInt($('cc_cfg_sortNo').value) || 1,
+        status: statusEl ? statusEl.classList.contains('on') : true,
+        createTime: formatNow()
+    };
+    if (mode === 'add') {
+        row.id = Date.now();
+        data.unshift(row);
+    } else {
+        var idx = data.findIndex(function(r) { return r.id === rowId; });
+        if (idx >= 0) {
+            row.id = rowId;
+            data[idx] = row;
+        }
+    }
+    closeModal(modalId);
+    showToast('操作成功', 'success');
+    // 重新渲染表格
+    renderTable('tableContainer_ticket-cc-config', pageConfigs['ticket-cc'].ccConfig.columns, data, 'ticket-cc-config');
+}
+
+/* ============================================================
+ * 工单中心 - 抄送记录管理弹窗
+ * ============================================================ */
+function openTicketCcRecordAddModal() {
+    var id = 'modal_cc_record_add';
+    var body = renderTicketCcRecordForm({});
+    var footer = `
+        <button class="px-4 py-1.5 text-sm rounded border" style="border-color:#D9D9D9;color:var(--text-secondary);background:#fff;" onclick="closeModal('${id}')">取消</button>
+        <button class="px-4 py-1.5 text-sm text-white rounded" style="background:var(--primary);" onclick="saveTicketCcRecord('add', null, '${id}')">确认</button>
+    `;
+    openModal(id, '新增抄送记录', body, footer, 'normal');
+}
+
+function openTicketCcRecordEditModal(rowId) {
+    var data = pageConfigs['ticket-cc'].ccRecords.data;
+    var row = data.find(function(r) { return r.id === rowId; });
+    if (!row) return;
+    var id = 'modal_cc_record_edit';
+    var body = renderTicketCcRecordForm(row);
+    var footer = `
+        <button class="px-4 py-1.5 text-sm rounded border" style="border-color:#D9D9D9;color:var(--text-secondary);background:#fff;" onclick="closeModal('${id}')">取消</button>
+        <button class="px-4 py-1.5 text-sm text-white rounded" style="background:var(--primary);" onclick="saveTicketCcRecord('edit', ${rowId}, '${id}')">保存</button>
+    `;
+    openModal(id, '编辑抄送记录', body, footer, 'normal');
+}
+
+function openTicketCcRecordViewModal(rowId) {
+    var data = pageConfigs['ticket-cc'].ccRecords.data;
+    var row = data.find(function(r) { return r.id === rowId; });
+    if (!row) return;
+    var id = 'modal_cc_record_view';
+    var typeMap = { general: '通用工单', equipment: '设备申请', auth: '权限申请' };
+    var wayMap = { default: '默认抄送', custom: '自定义抄送' };
+    var statusMap = { read: '已读', unread: '未读' };
+    var body = `
+        <div class="drawer-info-grid">
+            <div class="drawer-info-item"><div class="drawer-info-label">工单标题</div><div class="drawer-info-value">${esc(row.title || '')}</div></div>
+            <div class="drawer-info-item"><div class="drawer-info-label">工单号</div><div class="drawer-info-value">${esc(row.ticketNo || '')}</div></div>
+            <div class="drawer-info-item"><div class="drawer-info-label">工单类型</div><div class="drawer-info-value">${typeMap[row.ticketType] || row.ticketType || ''}</div></div>
+            <div class="drawer-info-item"><div class="drawer-info-label">抄送方式</div><div class="drawer-info-value">${wayMap[row.ccWay] || row.ccWay || ''}</div></div>
+            <div class="drawer-info-item"><div class="drawer-info-label">抄送对象</div><div class="drawer-info-value">${esc(row.ccTarget || row.ccUser || '')}</div></div>
+            <div class="drawer-info-item"><div class="drawer-info-label">抄送人</div><div class="drawer-info-value">${esc(row.ccUser || '')}</div></div>
+            <div class="drawer-info-item"><div class="drawer-info-label">抄送时间</div><div class="drawer-info-value">${esc(row.ccTime || '')}</div></div>
+            <div class="drawer-info-item"><div class="drawer-info-label">阅读状态</div><div class="drawer-info-value">${statusMap[row.readStatus] || row.readStatus || ''}</div></div>
+        </div>
+    `;
+    var footer = `
+        <button class="px-4 py-1.5 text-sm rounded border" style="border-color:#D9D9D9;color:var(--text-secondary);background:#fff;" onclick="closeModal('${id}')">关闭</button>
+    `;
+    openModal(id, '查看抄送记录', body, footer, 'normal');
+}
+
+function renderTicketCcRecordForm(row) {
+    row = row || {};
+    var body = '';
+    body += '<div class="grid grid-cols-2 gap-4">';
+    body += renderFormField('工单标题', `<input type="text" class="form-input w-full" id="cc_rec_title" value="${esc(row.title || '')}" placeholder="请输入工单标题" />`, true);
+    body += renderFormField('工单号', `<input type="text" class="form-input w-full" id="cc_rec_ticketNo" value="${esc(row.ticketNo || '')}" placeholder="请输入工单号" />`, true);
+    body += renderFormField('工单类型', `<select class="form-input w-full" id="cc_rec_ticketType">
+        <option value="">请选择</option>
+        <option value="general" ${row.ticketType === 'general' ? 'selected' : ''}>通用工单</option>
+        <option value="equipment" ${row.ticketType === 'equipment' ? 'selected' : ''}>设备申请</option>
+        <option value="auth" ${row.ticketType === 'auth' ? 'selected' : ''}>权限申请</option>
+    </select>`, true);
+    body += renderFormField('抄送方式', `<select class="form-input w-full" id="cc_rec_ccWay">
+        <option value="">请选择</option>
+        <option value="default" ${row.ccWay === 'default' ? 'selected' : ''}>默认抄送</option>
+        <option value="custom" ${row.ccWay === 'custom' ? 'selected' : ''}>自定义抄送</option>
+    </select>`, true);
+    body += renderFormField('抄送对象', `<input type="text" class="form-input w-full" id="cc_rec_ccTarget" value="${esc(row.ccTarget || '')}" placeholder="请输入抄送对象" />`, true);
+    body += renderFormField('抄送人', `<input type="text" class="form-input w-full" id="cc_rec_ccUser" value="${esc(row.ccUser || '')}" placeholder="请输入抄送人" />`, true);
+    body += renderFormField('抄送时间', `<input type="text" class="form-input w-full" id="cc_rec_ccTime" value="${esc(row.ccTime || '')}" placeholder="YYYY-MM-DD HH:mm:ss" />`, true);
+    body += renderFormField('阅读状态', `<select class="form-input w-full" id="cc_rec_readStatus">
+        <option value="unread" ${row.readStatus === 'unread' ? 'selected' : ''}>未读</option>
+        <option value="read" ${row.readStatus === 'read' ? 'selected' : ''}>已读</option>
+    </select>`, true);
+    body += '</div>';
+    return body;
+}
+
+function saveTicketCcRecord(mode, rowId, modalId) {
+    var data = pageConfigs['ticket-cc'].ccRecords.data;
+    var row = {
+        title: $('cc_rec_title').value,
+        ticketNo: $('cc_rec_ticketNo').value,
+        ticketType: $('cc_rec_ticketType').value,
+        ccWay: $('cc_rec_ccWay').value,
+        ccTarget: $('cc_rec_ccTarget').value,
+        ccUser: $('cc_rec_ccUser').value,
+        ccTime: $('cc_rec_ccTime').value || formatNow(),
+        readStatus: $('cc_rec_readStatus').value
+    };
+    if (mode === 'add') {
+        row.id = Date.now();
+        data.unshift(row);
+    } else {
+        var idx = data.findIndex(function(r) { return r.id === rowId; });
+        if (idx >= 0) {
+            row.id = rowId;
+            data[idx] = row;
+        }
+    }
+    closeModal(modalId);
+    showToast('操作成功', 'success');
+    renderTable('tableContainer_ticket-cc-record', pageConfigs['ticket-cc'].ccRecords.columns, data, 'ticket-cc-record');
+}
+
+/* ============================================================
+ * 工单中心 - 我的代办 - 办理弹窗
+ * ============================================================ */
+function openTicketHandleModal(rowId) {
+    var data = pageConfigs['ticket-my-todo'].data;
+    var row = data.find(function(r) { return r.id === rowId; });
+    if (!row) return;
+    var id = 'modal_ticket_handle';
+    var typeMap = { general: '通用工单', equipment: '设备申请', auth: '权限申请' };
+    var body = '';
+    body += '<div class="grid grid-cols-2 gap-4">';
+    body += renderFormField('工单标题', `<input type="text" class="form-input w-full" value="${esc(row.title)}" readonly style="background:#F5F5F5;" />`);
+    body += renderFormField('工单号', `<input type="text" class="form-input w-full" value="${esc(row.ticketNo)}" readonly style="background:#F5F5F5;" />`);
+    body += renderFormField('工单类型', `<input type="text" class="form-input w-full" value="${typeMap[row.type] || row.type}" readonly style="background:#F5F5F5;" />`);
+    body += renderFormField('提交人', `<input type="text" class="form-input w-full" value="${esc(row.submitter)}" readonly style="background:#F5F5F5;" />`);
+    body += '</div>';
+    body += renderFormField('办理状态', `<select class="form-input w-full" id="handle_status">
+        <option value="processing">办理中</option>
+        <option value="completed">已完成</option>
+        <option value="transferred">已转办</option>
+        <option value="returned">已退回</option>
+    </select>`, true);
+    body += renderFormField('办理结果', `<div class="flex gap-6">
+        <label class="flex items-center gap-2 cursor-pointer"><input type="radio" name="handleResult" value="satisfied" checked /> 满意</label>
+        <label class="flex items-center gap-2 cursor-pointer"><input type="radio" name="handleResult" value="average" /> 一般</label>
+        <label class="flex items-center gap-2 cursor-pointer"><input type="radio" name="handleResult" value="unsatisfied" /> 不满意</label>
+    </div>
+    <div class="flex gap-6 mt-2">
+        <label class="flex items-center gap-2 cursor-pointer"><input type="radio" name="handleResult2" value="resolved" /> 解决</label>
+        <label class="flex items-center gap-2 cursor-pointer"><input type="radio" name="handleResult2" value="partially" /> 部分解决</label>
+        <label class="flex items-center gap-2 cursor-pointer"><input type="radio" name="handleResult2" value="unresolved" /> 未解决</label>
+    </div>`, true);
+    body += renderFormField('办理意见', `<textarea class="form-input w-full" id="handle_opinion" rows="4" placeholder="请输入办理意见"></textarea>`, true);
+    body += renderFormField('附件上传', `<div style="border:1px dashed #D9D9D9;border-radius:4px;padding:20px;text-align:center;cursor:pointer;color:#999;font-size:13px;" onclick="showToast('请选择文件','info')">
+        <i class="fa fa-cloud-upload" style="font-size:24px;display:block;margin-bottom:8px;color:#165DFF;"></i>
+        <div>点击或拖拽文件到此处上传</div>
+        <div style="font-size:12px;margin-top:4px;color:#bbb;">支持多个文件上传</div>
+    </div>`);
+    body += renderFormField('办理时长', `<input type="text" class="form-input w-full" value="自动计算" readonly style="background:#F5F5F5;" />`);
+    var footer = `
+        <button class="px-4 py-1.5 text-sm rounded border" style="border-color:#D9D9D9;color:var(--text-secondary);background:#fff;" onclick="closeModal('${id}')">取消</button>
+        <button class="px-4 py-1.5 text-sm text-white rounded" style="background:var(--primary);" onclick="saveTicketHandle(${rowId}, '${id}')">保存</button>
+    `;
+    openModal(id, '办理工单', body, footer, 'normal');
+}
+
+function saveTicketHandle(rowId, modalId) {
+    var data = pageConfigs['ticket-my-todo'].data;
+    var idx = data.findIndex(function(r) { return r.id === rowId; });
+    if (idx >= 0) {
+        data[idx].status = $('handle_status').value;
+    }
+    closeModal(modalId);
+    showToast('操作成功', 'success');
+    renderPage('ticket-my-todo');
+}
+
+/* ============================================================
+ * 工单中心 - 我的代办 - 移交弹窗
+ * ============================================================ */
+function openTicketTransferModal(rowId) {
+    var data = pageConfigs['ticket-my-todo'].data;
+    var row = data.find(function(r) { return r.id === rowId; });
+    if (!row) return;
+    var id = 'modal_ticket_transfer';
+    var now = formatNow();
+    var body = '';
+    body += renderFormField('工单标题', `<input type="text" class="form-input w-full" value="${esc(row.title)}" readonly style="background:#F5F5F5;" />`);
+    body += renderFormField('当前承办人', `<input type="text" class="form-input w-full" value="当前用户" readonly style="background:#F5F5F5;" />`);
+    body += renderFormField('移交给', `<select class="form-input w-full" id="transfer_to">
+        <option value="">请选择承办人</option>
+        <option value="张三">张三 - 政务服务处</option>
+        <option value="李四">李四 - 技术保障处</option>
+        <option value="王五">王五 - 数据管理处</option>
+        <option value="赵六">赵六 - 综合协调处</option>
+        <option value="钱七">钱七 - 运维管理处</option>
+    </select>`, true);
+    body += renderFormField('移交原因', `<textarea class="form-input w-full" id="transfer_reason" rows="4" placeholder="请输入移交原因"></textarea>`, true);
+    body += renderFormField('移交时间', `<input type="text" class="form-input w-full" value="${now}" readonly style="background:#F5F5F5;" />`);
+    var footer = `
+        <button class="px-4 py-1.5 text-sm rounded border" style="border-color:#D9D9D9;color:var(--text-secondary);background:#fff;" onclick="closeModal('${id}')">取消</button>
+        <button class="px-4 py-1.5 text-sm text-white rounded" style="background:var(--primary);" onclick="saveTicketTransfer(${rowId}, '${id}')">确认移交</button>
+    `;
+    openModal(id, '工单移交', body, footer, 'normal');
+}
+
+function saveTicketTransfer(rowId, modalId) {
+    var transferTo = $('transfer_to').value;
+    if (!transferTo) {
+        showToast('请选择移交对象', 'warning');
+        return;
+    }
+    var reason = $('transfer_reason').value;
+    if (!reason || reason.trim() === '') {
+        showToast('请输入移交原因', 'warning');
+        return;
+    }
+    closeModal(modalId);
+    showToast('操作成功', 'success');
+}
+
+/* ============================================================
+ * 工单中心 - 抄送我的工单 - 转发弹窗
+ * ============================================================ */
+function openTicketForwardModal(rowId) {
+    var tabData = pageConfigs['ticket-cc-mine'].tabConfigs;
+    var data = (tabData.stat && tabData.stat.data) || [];
+    var row = data.find(function(r) { return r.id === rowId; });
+    var title = row ? row.name : '工单转发';
+    var id = 'modal_ticket_forward';
+    var body = '';
+    body += renderFormField('工单标题', `<input type="text" class="form-input w-full" value="${esc(title)}" readonly style="background:#F5F5F5;" />`);
+    body += renderFormField('原抄送对象', `<input type="text" class="form-input w-full" value="部门负责人,分管领导" readonly style="background:#F5F5F5;" />`);
+    body += renderFormField('转发给', `<select class="form-input w-full" id="forward_to" multiple size="5" style="height:100px;">
+        <option value="张三">张三</option>
+        <option value="李四">李四</option>
+        <option value="王五">王五</option>
+        <option value="赵六">赵六</option>
+        <option value="钱七">钱七</option>
+        <option value="孙八">孙八</option>
+        <option value="周九">周九</option>
+    </select>
+    <div style="font-size:12px;color:#999;margin-top:4px;">按住Ctrl可多选</div>`, true);
+    body += renderFormField('转发说明', `<textarea class="form-input w-full" id="forward_remark" rows="3" placeholder="请输入转发说明"></textarea>`);
+    body += renderFormField('附件', `<div style="border:1px dashed #D9D9D9;border-radius:4px;padding:16px;text-align:center;cursor:pointer;color:#999;font-size:13px;" onclick="showToast('请选择文件','info')">
+        <i class="fa fa-paperclip" style="font-size:18px;display:block;margin-bottom:4px;"></i>
+        <div>点击上传附件（可选）</div>
+    </div>`);
+    var footer = `
+        <button class="px-4 py-1.5 text-sm rounded border" style="border-color:#D9D9D9;color:var(--text-secondary);background:#fff;" onclick="closeModal('${id}')">取消</button>
+        <button class="px-4 py-1.5 text-sm text-white rounded" style="background:var(--primary);" onclick="saveTicketForward(${rowId}, '${id}')">确认转发</button>
+    `;
+    openModal(id, '转发工单', body, footer, 'normal');
+}
+
+function saveTicketForward(rowId, modalId) {
+    var forwardTo = $('forward_to');
+    var selected = [];
+    for (var i = 0; i < forwardTo.options.length; i++) {
+        if (forwardTo.options[i].selected) selected.push(forwardTo.options[i].value);
+    }
+    if (selected.length === 0) {
+        showToast('请选择转发对象', 'warning');
+        return;
+    }
+    closeModal(modalId);
+    showToast('操作成功', 'success');
+}
+
+/* ============================================================
+ * 工单中心 - 抄送我的工单 - 评分弹窗
+ * ============================================================ */
+function openTicketRateModal(rowId) {
+    var tabData = pageConfigs['ticket-cc-mine'].tabConfigs;
+    var data = (tabData.ccMine && tabData.ccMine.data) || [];
+    var row = data.find(function(r) { return r.id === rowId; });
+    var title = row ? row.title : '工单评分';
+    var id = 'modal_ticket_rate';
+    var body = '';
+    body += renderFormField('工单标题', `<input type="text" class="form-input w-full" value="${esc(title)}" readonly style="background:#F5F5F5;" />`);
+    body += renderFormField('评分星级', `<div id="starRating" style="font-size:24px;cursor:pointer;">
+        <i class="fa fa-star-o" style="color:#FAAD14;" onclick="setStarRating(1)" onmouseover="previewStarRating(1)" onmouseout="resetStarRating()"></i>
+        <i class="fa fa-star-o" style="color:#FAAD14;" onclick="setStarRating(2)" onmouseover="previewStarRating(2)" onmouseout="resetStarRating()"></i>
+        <i class="fa fa-star-o" style="color:#FAAD14;" onclick="setStarRating(3)" onmouseover="previewStarRating(3)" onmouseout="resetStarRating()"></i>
+        <i class="fa fa-star-o" style="color:#FAAD14;" onclick="setStarRating(4)" onmouseover="previewStarRating(4)" onmouseout="resetStarRating()"></i>
+        <i class="fa fa-star-o" style="color:#FAAD14;" onclick="setStarRating(5)" onmouseover="previewStarRating(5)" onmouseout="resetStarRating()"></i>
+        <span id="ratingText" style="font-size:13px;margin-left:8px;color:#999;">请评分</span>
+    </div>`, true);
+    body += renderFormField('评分内容', `<textarea class="form-input w-full" id="rate_content" rows="4" placeholder="请输入您的评价内容"></textarea>`);
+    body += renderFormField('是否匿名', `<span class="toggle-switch" id="rate_anonymous" onclick="this.classList.toggle('on')"></span>
+    <span class="ml-2 text-sm" style="color:#999;">开启后评分将不显示您的姓名</span>`);
+    var footer = `
+        <button class="px-4 py-1.5 text-sm rounded border" style="border-color:#D9D9D9;color:var(--text-secondary);background:#fff;" onclick="closeModal('${id}')">取消</button>
+        <button class="px-4 py-1.5 text-sm text-white rounded" style="background:var(--primary);" onclick="saveTicketRate(${rowId}, '${id}')">提交评分</button>
+    `;
+    openModal(id, '工单评分', body, footer, 'normal');
+    // 初始化评分
+    window._currentRating = 0;
+}
+
+var _currentRating = 0;
+function setStarRating(n) {
+    _currentRating = n;
+    updateStarDisplay(n);
+    var texts = ['请评分', '非常不满意', '不满意', '一般', '满意', '非常满意'];
+    $('ratingText').textContent = texts[n] || '请评分';
+    $('ratingText').style.color = n > 0 ? '#FAAD14' : '#999';
+}
+
+function previewStarRating(n) {
+    updateStarDisplay(n);
+}
+
+function resetStarRating() {
+    updateStarDisplay(_currentRating);
+}
+
+function updateStarDisplay(n) {
+    var container = $('starRating');
+    if (!container) return;
+    var stars = container.querySelectorAll('i');
+    for (var i = 0; i < stars.length; i++) {
+        if (i < n) {
+            stars[i].className = 'fa fa-star';
+        } else {
+            stars[i].className = 'fa fa-star-o';
+        }
+    }
+}
+
+function saveTicketRate(rowId, modalId) {
+    if (_currentRating === 0) {
+        showToast('请选择评分星级', 'warning');
+        return;
+    }
+    closeModal(modalId);
+    showToast('操作成功', 'success');
+}
+
+/* ============================================================
+ * 工单中心 - 抄送我的工单 - 上传附件弹窗
+ * ============================================================ */
+function openTicketUploadModal(rowId) {
+    var tabData = pageConfigs['ticket-cc-mine'].tabConfigs;
+    var data = (tabData.ccMine && tabData.ccMine.data) || [];
+    var row = data.find(function(r) { return r.id === rowId; });
+    var title = row ? row.title : '上传附件';
+    var id = 'modal_ticket_upload';
+    var body = '';
+    body += renderFormField('工单标题', `<input type="text" class="form-input w-full" value="${esc(title)}" readonly style="background:#F5F5F5;" />`);
+    body += renderFormField('附件名称', `<input type="text" class="form-input w-full" id="upload_name" placeholder="请输入附件名称" />`, true);
+    body += renderFormField('附件类型', `<select class="form-input w-full" id="upload_type">
+        <option value="">请选择</option>
+        <option value="doc">文档</option>
+        <option value="image">图片</option>
+        <option value="video">视频</option>
+        <option value="audio">音频</option>
+        <option value="archive">压缩包</option>
+        <option value="other">其他</option>
+    </select>`, true);
+    body += renderFormField('附件文件', `<div style="border:2px dashed #D9D9D9;border-radius:8px;padding:32px;text-align:center;cursor:pointer;color:#999;font-size:13px;transition:all 0.2s;" onmouseover="this.style.borderColor='#165DFF'" onmouseout="this.style.borderColor='#D9D9D9'" onclick="showToast('请选择文件','info')">
+        <i class="fa fa-cloud-upload" style="font-size:32px;display:block;margin-bottom:8px;color:#165DFF;"></i>
+        <div style="font-size:14px;color:#333;margin-bottom:4px;">点击或拖拽文件到此处上传</div>
+        <div style="font-size:12px;color:#bbb;">支持 doc, pdf, jpg, png 等格式，单个文件不超过50MB</div>
+    </div>`, true);
+    body += renderFormField('备注说明', `<textarea class="form-input w-full" id="upload_remark" rows="3" placeholder="请输入备注说明（可选）"></textarea>`);
+    var footer = `
+        <button class="px-4 py-1.5 text-sm rounded border" style="border-color:#D9D9D9;color:var(--text-secondary);background:#fff;" onclick="closeModal('${id}')">取消</button>
+        <button class="px-4 py-1.5 text-sm text-white rounded" style="background:var(--primary);" onclick="saveTicketUpload(${rowId}, '${id}')">确认上传</button>
+    `;
+    openModal(id, '上传附件', body, footer, 'normal');
+}
+
+function saveTicketUpload(rowId, modalId) {
+    var name = $('upload_name').value;
+    if (!name || name.trim() === '') {
+        showToast('请输入附件名称', 'warning');
+        return;
+    }
+    closeModal(modalId);
+    showToast('操作成功', 'success');
+}
+
+/* ============================================================
+ * 工单中心 - 抄送我的工单 - 查看详情弹窗
+ * ============================================================ */
+function openTicketCcDetailModal(rowId) {
+    var tabData = pageConfigs['ticket-cc-mine'].tabConfigs;
+    var data = (tabData.ccMine && tabData.ccMine.data) || [];
+    var row = data.find(function(r) { return r.id === rowId; });
+    if (!row) return;
+    var id = 'modal_ticket_cc_detail';
+    var typeMap = { general: '通用工单', equipment: '设备申请', auth: '权限申请' };
+    var readMap = { read: '已读', unread: '未读' };
+    var body = `
+        <div class="drawer-section-title" style="font-size:14px;font-weight:600;margin-bottom:12px;padding-left:8px;border-left:3px solid #165DFF;line-height:1;">基本信息</div>
+        <div class="drawer-info-grid" style="display:grid;grid-template-columns:1fr 1fr;gap:12px 20px;margin-bottom:20px;">
+            <div class="drawer-info-item"><div class="drawer-info-label" style="font-size:12px;color:#86909C;">工单标题</div><div class="drawer-info-value" style="font-size:13px;color:#1D2129;">${esc(row.title)}</div></div>
+            <div class="drawer-info-item"><div class="drawer-info-label" style="font-size:12px;color:#86909C;">工单类型</div><div class="drawer-info-value" style="font-size:13px;color:#1D2129;">${typeMap[row.type] || row.type}</div></div>
+            <div class="drawer-info-item"><div class="drawer-info-label" style="font-size:12px;color:#86909C;">发起人</div><div class="drawer-info-value" style="font-size:13px;color:#1D2129;">${esc(row.initiator)}</div></div>
+            <div class="drawer-info-item"><div class="drawer-info-label" style="font-size:12px;color:#86909C;">抄送时间</div><div class="drawer-info-value" style="font-size:13px;color:#1D2129;">${esc(row.ccTime)}</div></div>
+            <div class="drawer-info-item"><div class="drawer-info-label" style="font-size:12px;color:#86909C;">阅读状态</div><div class="drawer-info-value" style="font-size:13px;color:#1D2129;">${readMap[row.isRead] || row.isRead}</div></div>
+            <div class="drawer-info-item"><div class="drawer-info-label" style="font-size:12px;color:#86909C;">工单号</div><div class="drawer-info-value" style="font-size:13px;color:#1D2129;">GD2025040${row.id.toString().padStart(3, '0')}</div></div>
+        </div>
+        <div class="drawer-section-title" style="font-size:14px;font-weight:600;margin-bottom:12px;padding-left:8px;border-left:3px solid #165DFF;line-height:1;">工单内容</div>
+        <div style="background:#FAFBFC;border:1px solid #E5E6EB;border-radius:4px;padding:12px;font-size:13px;color:#4E5969;line-height:1.8;margin-bottom:20px;">
+            这是工单的详细内容描述。工单内容会显示在此处，包括问题描述、需求详情、处理进展等信息。用户可以通过查看详情了解工单的完整处理过程和当前状态。
+        </div>
+        <div class="drawer-section-title" style="font-size:14px;font-weight:600;margin-bottom:12px;padding-left:8px;border-left:3px solid #165DFF;line-height:1;">处理记录</div>
+        <div style="border:1px solid #E5E6EB;border-radius:4px;overflow:hidden;">
+            <table class="drawer-sub-table" style="width:100%;border-collapse:collapse;font-size:12px;">
+                <thead><tr>
+                    <th style="background:#F7F8FA;color:#4E5969;font-weight:500;padding:8px 12px;text-align:left;border-bottom:1px solid #E5E6EB;">时间</th>
+                    <th style="background:#F7F8FA;color:#4E5969;font-weight:500;padding:8px 12px;text-align:left;border-bottom:1px solid #E5E6EB;">操作人</th>
+                    <th style="background:#F7F8FA;color:#4E5969;font-weight:500;padding:8px 12px;text-align:left;border-bottom:1px solid #E5E6EB;">操作</th>
+                    <th style="background:#F7F8FA;color:#4E5969;font-weight:500;padding:8px 12px;text-align:left;border-bottom:1px solid #E5E6EB;">说明</th>
+                </tr></thead>
+                <tbody>
+                    <tr><td style="padding:8px 12px;border-bottom:1px solid #F2F3F5;">2025-04-01 09:30:00</td><td style="padding:8px 12px;border-bottom:1px solid #F2F3F5;">张明</td><td style="padding:8px 12px;border-bottom:1px solid #F2F3F5;">提交工单</td><td style="padding:8px 12px;border-bottom:1px solid #F2F3F5;">用户提交工单申请</td></tr>
+                    <tr><td style="padding:8px 12px;border-bottom:1px solid #F2F3F5;">2025-04-01 09:35:00</td><td style="padding:8px 12px;border-bottom:1px solid #F2F3F5;">系统</td><td style="padding:8px 12px;border-bottom:1px solid #F2F3F5;">自动抄送</td><td style="padding:8px 12px;border-bottom:1px solid #F2F3F5;">系统自动抄送相关人员</td></tr>
+                    <tr><td style="padding:8px 12px;border-bottom:1px solid #F2F3F5;">2025-04-01 10:00:00</td><td style="padding:8px 12px;border-bottom:1px solid #F2F3F5;">李主任</td><td style="padding:8px 12px;border-bottom:1px solid #F2F3F5;">审批</td><td style="padding:8px 12px;border-bottom:1px solid #F2F3F5;">审批通过，转相关部门处理</td></tr>
+                </tbody>
+            </table>
+        </div>
+    `;
+    var footer = `
+        <button class="px-4 py-1.5 text-sm rounded border" style="border-color:#D9D9D9;color:var(--text-secondary);background:#fff;" onclick="closeModal('${id}')">关闭</button>
+    `;
+    openModal(id, '工单详情', body, footer, 'large');
 }
 
 if (document.readyState === 'loading') {
