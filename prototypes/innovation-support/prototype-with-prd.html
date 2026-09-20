@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
@@ -628,7 +628,7 @@ var navConfig = [
         key: 'g-provider', label: '软件服务商工作台', icon: 'fa-building', type: 'group',
         children: [
             { key: 'provider-notice', label: '消息通知管理', type: 'page' },
-            { key: 'provider-manual-notice', label: '手动通知管理', type: 'page' },
+
             { key: 'provider-entry', label: '软件服务商入驻管理', type: 'page' },
             { key: 'provider', label: '软件服务商管理', type: 'page' },
         ]
@@ -4596,34 +4596,6 @@ var pageConfigs = {
             { id: 8, title: '新功能上线公告', msgType: 'system', receiver: '全部服务商', readStatus: 'read', sendTime: '2025-04-08 10:00:00' },
         ],
     },
-
-    /* ---------- 软件服务商工作台 - 手动通知管理 ---------- */
-    'provider-manual-notice': {
-        type: 'table',
-        breadcrumb: ['软件服务商工作台', '手动通知管理', '站内消息'],
-        query: [
-            { key: 'title', label: '消息标题', type: 'input', placeholder: '请输入消息标题' },
-            { key: 'readStatus', label: '已读状态', type: 'select', placeholder: '请选择', options: [{ value: '', label: '全部' }, { value: 'read', label: '已读' }, { value: 'unread', label: '未读' }] },
-        ],
-        toolbar: [{ type: 'add', text: '新增消息' }, { type: 'batchDelete' }],
-        columns: [
-            { type: 'checkbox' },
-            { type: 'index', title: '序号' },
-            { key: 'title', title: '消息标题', sortable: true },
-            { key: 'msgType', title: '消息类型', type: 'tag', tagMap: { 'system': { text: '系统通知', color: 'blue' }, 'audit': { text: '审核通知', color: 'orange' }, 'business': { text: '业务通知', color: 'green' } } },
-            { key: 'receiver', title: '接收人' },
-            { key: 'readStatus', title: '已读状态', type: 'tag', tagMap: { 'read': { text: '已读', color: 'gray' }, 'unread': { text: '未读', color: 'red' } } },
-            { key: 'sendTime', title: '发送时间', sortable: true },
-            { type: 'actions', title: '操作', actions: [{ key: 'view', label: '查看' }, { key: 'edit', label: '编辑' }, { key: 'delete', label: '删除', danger: true }] },
-        ],
-        data: [
-            { id: 1, title: '手动发送-系统维护通知', msgType: 'system', receiver: '全部服务商', readStatus: 'read', sendTime: '2025-04-01 09:00:00' },
-            { id: 2, title: '手动发送-应用审核通知', msgType: 'audit', receiver: '江西科创软件有限公司', readStatus: 'unread', sendTime: '2025-04-02 10:30:00' },
-            { id: 3, title: '手动发送-业务提醒通知', msgType: 'business', receiver: '南昌智慧科技股份公司', readStatus: 'read', sendTime: '2025-04-03 14:00:00' },
-            { id: 4, title: '手动发送-节假日通知', msgType: 'system', receiver: '全部服务商', readStatus: 'unread', sendTime: '2025-04-04 16:00:00' },
-            { id: 5, title: '手动发送-培训通知', msgType: 'system', receiver: '指定服务商', readStatus: 'read', sendTime: '2025-04-05 08:30:00' },
-            { id: 6, title: '手动发送-对账通知', msgType: 'business', receiver: '九江数据服务有限公司', readStatus: 'unread', sendTime: '2025-04-06 11:00:00' },
-        ],
     },
 
     /* ---------- 软件服务商工作台 - 软件服务商入驻管理 ---------- */
@@ -16002,7 +15974,7 @@ var prdData = {
 
     /* ---------- 手动通知管理 ---------- */
     'manual-notice': {
-        background: '【手动通知管理】复制一份通知管理命名为手动通知管理，功能一致；用于手动发送各类通知消息，支持通知模板选择、接收人配置、发送方式设置等。手动通知管理是通知待办子系统的重要模块，用于管理人员手动发送各类通知消息。支持系统通知、业务通知、紧急通知三种类型，可通过穿梭框选择通知用户，实现精准的消息触达。',
+        background: '【手动通知管理】<span style="color:#FF4D4F;">复制一份通知管理命名为手动通知管理，功能一致</span>；用于手动发送各类通知消息，支持通知模板选择、接收人配置、发送方式设置等。手动通知管理是通知待办子系统的重要模块，用于管理人员手动发送各类通知消息。支持系统通知、业务通知、紧急通知三种类型，可通过穿梭框选择通知用户，实现精准的消息触达。',
         targetUsers: '系统管理员、通知管理员、部门管理员',
         coreFeatures: '1.多条件组合查询 2.新增通知 3.查看通知详情 4.通知用户（穿梭框选择） 5.列表字段排序 6.草稿/已发送状态管理',
         businessFlow: '进入手动通知管理页 -> 点击"新增通知" -> 填写通知标题 -> 选择通知类型 -> 编辑通知内容 -> 保存为草稿/直接发送 -> 点击"通知用户" -> 打开选择用户弹窗 -> 穿梭框选择目标用户 -> 确认发送 -> 发送成功 -> 状态变为已发送',
@@ -16265,28 +16237,6 @@ var prdData = {
         acceptance: '1.新增消息功能正常 2.编辑消息功能正常 3.删除有二次确认 4.批量删除有二次确认 5.查询条件可用 6.表头可排序 7.查看详情正常 8.已读/未读状态正确显示 9.Tag标签显示正确 10.分页功能正常',
         redFields: ['addFlow', 'editFlow', 'readUnreadFlow'],
 },
-
-    /* ---------- 软件服务商工作台 - 手动通知管理 ---------- */
-    'provider-manual-notice': {
-        background: '【手动通知管理】<span style="color:#FF4D4F;">复制一份通知管理命名为手动通知管理，功能一致</span>。手动通知管理是软件服务商工作台的手动消息发送模块，支持运营人员手动创建和发送站内消息通知，用于人工触发的通知场景。',
-        targetUsers: '系统管理员、平台管理员、运营人员',
-        coreFeatures: '1.手动通知新增 2.手动通知修改 3.手动通知删除 4.手动通知批量删除 5.手动通知查询字段排序 6.手动通知查询 7.手动通知查看 8.手动通知已读/未读状态管理',
-        businessFlow: '进入手动通知管理页 → 查询消息列表（按标题/已读状态）→ 新增消息 → 填写标题/类型/接收人/内容 → 发送 → 列表刷新 → 查看消息详情 → 标记已读/未读 → 删除/批量删除消息',
-        pageInfo: '单页列表（无Tab）；支持消息标题/已读状态查询；支持新增消息、查看、编辑、删除、批量删除；列表字段：复选框、序号、消息标题、消息类型（标签）、接收人、已读状态（标签）、发送时间、操作；支持字段排序。',
-        dataModel: '核心实体：手动通知（id/消息标题/消息类型/接收人/消息内容/已读状态/发送时间/发送人）。枚举值：消息类型（系统通知/审核通知/业务通知）、已读状态（已读/未读）。',
-        addFlow: '【手动通知新增】点击"新增消息"按钮 → 打开新增弹窗 → 填写消息标题（必填）→ 选择消息类型（必填，系统通知/审核通知/业务通知）→ 选择接收人（必填，全部服务商/指定服务商）→ 编辑消息内容（必填）→ 点击发送 → 校验通过 → 新增成功，Toast提示。',
-        editFlow: '【手动通知修改】点击操作列"编辑" → 打开编辑弹窗 → 回显消息信息 → 修改消息标题/类型/接收人/内容 → 点击保存 → 校验通过 → 更新成功，Toast提示。',
-        deleteFlow: '【手动通知删除】单条删除：点击"删除" → 二次确认弹窗 → 确认删除 → 删除成功 → Toast提示。',
-        batchDeleteFlow: '【手动通知批量删除】勾选多条记录 → 点击"批量删除"按钮 → 弹出二次确认弹窗（显示选中数量）→ 确认删除 → 批量删除 → Toast提示成功删除数量。',
-        queryFlow: '【手动通知查询】支持消息标题（模糊）、已读状态（下拉）多条件组合查询，AND关系。支持分页查询，默认10条/页。',
-        sortConfig: '【手动通知查询字段排序】支持消息标题、发送时间字段排序。点击表头切换升序/降序，箭头图标标识。默认按发送时间降序排列。',
-        viewFlow: '【手动通知查看】点击消息标题或操作列"查看" → 打开消息详情弹窗 → 展示消息完整信息（标题、类型、接收人、内容、发送时间、已读状态等）→ 查看后自动标记为已读 → 关闭返回列表。',
-        readUnreadFlow: '【手动通知已读/未读】未读消息标题加粗显示，已读消息正常显示；查看消息后自动标记为已读；支持在列表中手动标记已读/未读（行操作或批量操作）。',
-        exceptionHandling: '1.标题为空：提示"请输入消息标题" 2.内容为空：提示"请输入消息内容" 3.空数据状态：列表显示空状态占位图+提示文字"暂无消息"',
-        permissionReq: '1.系统管理员：拥有全部权限（新增/编辑/删除/批量删除/查询/查看） 2.平台管理员：拥有全部权限 3.运营人员：拥有新增/查看/查询权限 4.服务商：仅接收消息，无管理权限',
-        interaction: '多条件组合查询；表头点击排序；复选框多选+批量操作；新增/编辑弹窗；删除二次确认；查看详情弹窗；已读/未读状态标识',
-        acceptance: '1.新增消息功能正常 2.编辑消息功能正常 3.删除有二次确认 4.批量删除有二次确认 5.查询条件可用 6.表头可排序 7.查看详情正常 8.已读/未读状态正确显示 9.Tag标签显示正确 10.分页功能正常',
-        redFields: ['background'],
 },
     'provider-entry': {
         background: '【软件服务商入驻管理】软件服务商入驻管理是软件服务商工作台的核心管理模块，负责管理软件服务商的入驻申请、审核流程以及服务商与应用的关联关系。支持服务商入驻全生命周期管理和应用关联管理，确保服务商资质的严格审核和应用关联关系的有效维护。',
