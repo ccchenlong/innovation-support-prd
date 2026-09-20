@@ -2137,50 +2137,98 @@ var pageConfigs = {
     /* ---------- 工作台管理 ---------- */
     'workbench-manage': {
         type: 'custom',
-        renderType: 'workbench-card',
+        renderType: 'workbench-tab-card',
         breadcrumb: ['工作台管理', '工作台管理'],
-        query: [
-            { key: 'name', label: '工作台名', type: 'input', placeholder: '请输入工作台名' },
-            { key: 'workbench', label: '请选择工作台', type: 'select', placeholder: '请选择工作台', options: [{ value: '', label: '全部' }, { value: 'gov', label: '政务办公类' }, { value: 'service', label: '民生服务类' }, { value: 'economy', label: '经济运行类' }] },
-            { key: 'bizType', label: '请选择业务类型', type: 'select', placeholder: '请选择业务类型', options: [{ value: '', label: '全部' }, { value: 'standard', label: '标准工作台' }, { value: 'custom', label: '自定义工作台' }] },
+        tabs: [
+            { key: 'standard', label: '标准工作台' },
+            { key: 'thirdparty', label: '第三方工作台' },
         ],
-        toolbar: [
-            { type: 'add', text: '新增', onClick: 'openCreateWorkbenchModal()' },
-            { text: '批量更新模板', icon: 'fa-refresh', onClick: 'batchUpdateTemplate()' },
-            { text: '批量进度查询', icon: 'fa-tasks', onClick: 'batchProgressQuery()' },
-        ],
-        sortOptions: [
-            { key: 'createTime', label: '创建时间' },
-            { key: 'updateTime', label: '更新时间' },
-            { key: 'name', label: '名称' },
-            { key: 'bizType', label: '业务类型' },
-        ],
-        cardData: [
-            { id: 1, name: '测试单位工作台(复制)', createType: '模板创建', category: '级别种类77', workbenchType: '标准工作台', templateRef: true, currentVersion: '-', createTime: '2026-09-18 16:20:44', status: false, previews: [
-                { type: 'desktop', status: '待更新' },
-                { type: 'mobile', status: '已发布' },
-            ]},
-            { id: 2, name: '测试111111', createType: '模板创建', category: '另外分类', workbenchType: '标准工作台', templateRef: true, currentVersion: '-', createTime: '2026-09-16 11:24:22', status: false, previews: [
-                { type: 'desktop', status: '待发布' },
-                { type: 'mobile', status: '待发布' },
-            ]},
-            { id: 3, name: '宜春市工作台111(复制-1)', createType: '模板创建', category: '级别种类77', workbenchType: '', templateRef: true, currentVersion: '-', createTime: '2026-09-14 17:46:58', status: false, previews: [
-                { type: 'desktop', status: '已发布' },
-                { type: 'mobile', status: '已发布' },
-            ]},
-            { id: 4, name: '测试类型(复制)', createType: '模板创建', category: '级别', workbenchType: '标准工作台', templateRef: true, currentVersion: '-', createTime: '2026-09-14 11:15:45', status: false, previews: [
-                { type: 'desktop', status: '待更新' },
-                { type: 'mobile', status: '已发布' },
-            ]},
-            { id: 5, name: '测试类型', createType: '模板创建', category: '级别', workbenchType: '标准工作台', templateRef: true, currentVersion: 'V20260914.002', createTime: '2026-09-14 11:13:11', status: true, previews: [
-                { type: 'desktop', status: '已发布' },
-                { type: 'mobile', status: '已发布' },
-            ]},
-            { id: 6, name: '委屈翁(复制)', createType: '模板创建', category: '种类77', workbenchType: '', templateRef: true, currentVersion: '-', createTime: '2026-08-20 15:13:12', status: false, previews: [
-                { type: 'desktop', status: '待更新' },
-                { type: 'mobile', status: '已发布' },
-            ]},
-        ],
+        tabConfigs: {
+            'standard': {
+                query: [
+                    { key: 'name', label: '工作台名', type: 'input', placeholder: '请输入工作台名' },
+                    { key: 'workbench', label: '请选择工作台', type: 'select', placeholder: '请选择工作台', options: [{ value: '', label: '全部' }, { value: 'gov', label: '政务办公类' }, { value: 'service', label: '民生服务类' }, { value: 'economy', label: '经济运行类' }] },
+                    { key: 'bizType', label: '请选择业务类型', type: 'select', placeholder: '请选择业务类型', options: [{ value: '', label: '全部' }, { value: 'standard', label: '标准工作台' }, { value: 'custom', label: '自定义工作台' }] },
+                ],
+                toolbar: [
+                    { type: 'add', text: '新增', onClick: 'openCreateWorkbenchModal()' },
+                    { text: '批量更新模板', icon: 'fa-refresh', onClick: 'batchUpdateTemplate()' },
+                    { text: '批量进度查询', icon: 'fa-tasks', onClick: 'batchProgressQuery()' },
+                ],
+                sortOptions: [
+                    { key: 'createTime', label: '创建时间' },
+                    { key: 'updateTime', label: '更新时间' },
+                    { key: 'name', label: '名称' },
+                    { key: 'bizType', label: '业务类型' },
+                ],
+                cardData: [
+                    { id: 1, name: '测试单位工作台(复制)', createType: '模板创建', category: '级别种类77', workbenchType: '标准工作台', templateRef: true, currentVersion: '-', createTime: '2026-09-18 16:20:44', status: false, previews: [
+                        { type: 'desktop', status: '待更新' },
+                        { type: 'mobile', status: '已发布' },
+                    ]},
+                    { id: 2, name: '测试111111', createType: '模板创建', category: '另外分类', workbenchType: '标准工作台', templateRef: true, currentVersion: '-', createTime: '2026-09-16 11:24:22', status: false, previews: [
+                        { type: 'desktop', status: '待发布' },
+                        { type: 'mobile', status: '待发布' },
+                    ]},
+                    { id: 3, name: '宜春市工作台111(复制-1)', createType: '模板创建', category: '级别种类77', workbenchType: '', templateRef: true, currentVersion: '-', createTime: '2026-09-14 17:46:58', status: false, previews: [
+                        { type: 'desktop', status: '已发布' },
+                        { type: 'mobile', status: '已发布' },
+                    ]},
+                    { id: 4, name: '测试类型(复制)', createType: '模板创建', category: '级别', workbenchType: '标准工作台', templateRef: true, currentVersion: '-', createTime: '2026-09-14 11:15:45', status: false, previews: [
+                        { type: 'desktop', status: '待更新' },
+                        { type: 'mobile', status: '已发布' },
+                    ]},
+                    { id: 5, name: '测试类型', createType: '模板创建', category: '级别', workbenchType: '标准工作台', templateRef: true, currentVersion: 'V20260914.002', createTime: '2026-09-14 11:13:11', status: true, previews: [
+                        { type: 'desktop', status: '已发布' },
+                        { type: 'mobile', status: '已发布' },
+                    ]},
+                    { id: 6, name: '委屈翁(复制)', createType: '模板创建', category: '种类77', workbenchType: '', templateRef: true, currentVersion: '-', createTime: '2026-08-20 15:13:12', status: false, previews: [
+                        { type: 'desktop', status: '待更新' },
+                        { type: 'mobile', status: '已发布' },
+                    ]},
+                ],
+            },
+            'thirdparty': {
+                query: [
+                    { key: 'name', label: '工作台名', type: 'input', placeholder: '请输入工作台名' },
+                    { key: 'provider', label: '软件服务商', type: 'input', placeholder: '请输入服务商名称' },
+                    { key: 'auditStatus', label: '审核状态', type: 'select', placeholder: '请选择', options: [{ value: '', label: '全部' }, { value: 'pending', label: '待审核' }, { value: 'approved', label: '审核通过' }, { value: 'rejected', label: '审核不通过' }, { value: 'offline', label: '已下架' }] },
+                ],
+                toolbar: [
+                    { text: '批量审核', icon: 'fa-check-square-o', onClick: 'batchAuditThirdParty()' },
+                    { text: '批量上架', icon: 'fa-arrow-up', onClick: 'batchOnlineThirdParty()' },
+                    { text: '批量下架', icon: 'fa-arrow-down', onClick: 'batchOfflineThirdParty()' },
+                ],
+                sortOptions: [
+                    { key: 'createTime', label: '提交时间' },
+                    { key: 'auditTime', label: '审核时间' },
+                    { key: 'name', label: '名称' },
+                    { key: 'provider', label: '服务商' },
+                ],
+                cardData: [
+                    { id: 101, name: '智慧政务协同工作台', provider: '江西智慧政务科技有限公司', providerType: '软件服务商', category: '政务办公类', auditStatus: 'approved', onlineStatus: true, currentVersion: 'V20260910.001', submitTime: '2026-09-10 09:30:00', auditTime: '2026-09-12 14:20:00', previews: [
+                        { type: 'desktop', status: '已发布' },
+                        { type: 'mobile', status: '已发布' },
+                    ]},
+                    { id: 102, name: '民生服务一站式工作台', provider: '江西民生科技有限公司', providerType: '软件服务商', category: '民生服务类', auditStatus: 'pending', onlineStatus: false, currentVersion: 'V1.0.0', submitTime: '2026-09-18 11:00:00', auditTime: '', previews: [
+                        { type: 'desktop', status: '待审核' },
+                        { type: 'mobile', status: '待审核' },
+                    ]},
+                    { id: 103, name: '经济运行监测工作台', provider: '江西数字经济研究院', providerType: '软件服务商', category: '经济运行类', auditStatus: 'rejected', onlineStatus: false, currentVersion: 'V0.9.0', submitTime: '2026-09-15 16:45:00', auditTime: '2026-09-17 10:30:00', rejectReason: '功能不完整，缺少数据导出模块', previews: [
+                        { type: 'desktop', status: '审核不通过' },
+                        { type: 'mobile', status: '审核不通过' },
+                    ]},
+                    { id: 104, name: '市场监管执法工作台', provider: '江西智联科技有限公司', providerType: '软件服务商', category: '市场监管类', auditStatus: 'approved', onlineStatus: false, currentVersion: 'V20260820.003', submitTime: '2026-08-15 10:00:00', auditTime: '2026-08-20 15:00:00', previews: [
+                        { type: 'desktop', status: '已下架' },
+                        { type: 'mobile', status: '已下架' },
+                    ]},
+                    { id: 105, name: '应急指挥调度工作台', provider: '江西应急科技有限公司', providerType: '软件服务商', category: '应急管理类', auditStatus: 'pending', onlineStatus: false, currentVersion: 'V1.2.0', submitTime: '2026-09-19 08:30:00', auditTime: '', previews: [
+                        { type: 'desktop', status: '待审核' },
+                        { type: 'mobile', status: '待审核' },
+                    ]},
+                ],
+            },
+        },
     },
 
     /* ---------- 模板管理 ---------- */
@@ -9460,6 +9508,10 @@ function renderPage(pageKey) {
         main.innerHTML = renderCategoryTreeListPage(pageKey);
         return;
     }
+    if (config.renderType === 'workbench-tab-card') {
+        main.innerHTML = renderWorkbenchTabCardPage(pageKey);
+        return;
+    }
     if (config.renderType === 'workbench-card') {
         main.innerHTML = renderWorkbenchCardPage(pageKey);
         return;
@@ -9472,6 +9524,214 @@ function renderPage(pageKey) {
     // 通用列表页
     main.innerHTML = renderListPage(pageKey, false);
     renderTable('tableContainer_' + pageKey, config.columns, getPageData(pageKey), pageKey);
+}
+
+/** 当前工作台Tab */
+var currentWorkbenchTab = 'standard';
+
+/** 渲染工作台管理-双Tab卡片列表页 */
+function renderWorkbenchTabCardPage(pageKey) {
+    var config = pageConfigs[pageKey];
+    var html = '<div class="page-container">';
+    html += renderBreadcrumb(config.breadcrumb);
+    html += '<div class="page-card">';
+
+    // Tab切换
+    html += '<div class="tab-nav" style="margin-bottom:20px;border-bottom:1px solid var(--border-color);">';
+    for (var t = 0; t < config.tabs.length; t++) {
+        var tab = config.tabs[t];
+        var active = tab.key === currentWorkbenchTab ? 'active' : '';
+        html += '<span class="tab-nav-item ' + active + '" onclick="switchWorkbenchTab(\'' + tab.key + '\', \'' + pageKey + '\')">' + tab.label + '</span>';
+    }
+    html += '</div>';
+
+    // Tab内容区
+    html += '<div id="workbenchTabContent">';
+    html += renderWorkbenchTabContent(pageKey, currentWorkbenchTab);
+    html += '</div>';
+
+    html += '</div></div>';
+    return html;
+}
+
+function switchWorkbenchTab(tabKey, pageKey) {
+    currentWorkbenchTab = tabKey;
+    var content = document.getElementById('workbenchTabContent');
+    if (content) {
+        content.innerHTML = renderWorkbenchTabContent(pageKey, tabKey);
+    }
+    // 更新Tab激活状态
+    var tabItems = document.querySelectorAll('.tab-nav-item');
+    var config = pageConfigs[pageKey];
+    for (var i = 0; i < tabItems.length; i++) {
+        if (config.tabs[i] && config.tabs[i].key === tabKey) {
+            tabItems[i].classList.add('active');
+        } else {
+            tabItems[i].classList.remove('active');
+        }
+    }
+}
+
+function renderWorkbenchTabContent(pageKey, tabKey) {
+    var config = pageConfigs[pageKey];
+    var tabConfig = config.tabConfigs[tabKey];
+    var html = '';
+
+    // 查询区
+    html += '<div class="query-area">';
+    html += '<div class="query-row">';
+    for (var q = 0; q < tabConfig.query.length; q++) {
+        var item = tabConfig.query[q];
+        html += '<div class="query-item">';
+        html += '<label class="query-label">' + item.label + '</label>';
+        if (item.type === 'input') {
+            html += '<input type="text" class="form-input" placeholder="' + (item.placeholder || '') + '" />';
+        } else if (item.type === 'select') {
+            html += '<select class="form-input"><option value="">' + (item.placeholder || '请选择') + '</option>';
+            if (item.options) {
+                for (var o = 0; o < item.options.length; o++) {
+                    html += '<option value="' + item.options[o].value + '">' + item.options[o].label + '</option>';
+                }
+            }
+            html += '</select>';
+        }
+        html += '</div>';
+    }
+    html += '<div class="query-item query-actions">';
+    html += '<button class="btn btn-primary"><i class="fa fa-search"></i> 查询</button>';
+    html += '<button class="btn btn-default"><i class="fa fa-refresh"></i> 重置</button>';
+    html += '</div>';
+    html += '</div></div>';
+
+    // 工具栏
+    html += '<div class="toolbar">';
+    html += '<div class="toolbar-left">';
+    for (var t = 0; t < tabConfig.toolbar.length; t++) {
+        var btn = tabConfig.toolbar[t];
+        var btnClass = btn.type === 'add' ? 'btn btn-primary' : 'btn btn-default';
+        var icon = btn.icon ? '<i class="fa ' + btn.icon + '"></i> ' : '';
+        var click = btn.onClick ? ' onclick="' + btn.onClick + '"' : '';
+        html += '<button class="' + btnClass + '"' + click + '>' + icon + btn.text + '</button>';
+    }
+    html += '</div>';
+    html += '<div class="toolbar-right">';
+    html += '<span class="text-sm" style="color:var(--text-secondary);margin-right:8px;">排序方式</span>';
+    if (tabConfig.sortOptions) {
+        for (var s = 0; s < tabConfig.sortOptions.length; s++) {
+            var sort = tabConfig.sortOptions[s];
+            html += '<span class="text-sm sort-link" style="margin-right:12px;cursor:pointer;color:var(--text-secondary);" onclick="sortWorkbench(\'' + sort.key + '\')">' + sort.label + ' <i class="fa fa-sort" style="font-size:12px;"></i></span>';
+        }
+    }
+    html += '<span class="text-sm" style="color:var(--text-tertiary);cursor:pointer;"><i class="fa fa-question-circle"></i></span>';
+    html += '</div>';
+    html += '</div>';
+
+    // 卡片网格
+    var data = tabConfig.cardData || [];
+    html += '<div class="workbench-card-grid">';
+    for (var i = 0; i < data.length; i++) {
+        var item = data[i];
+        if (tabKey === 'thirdparty') {
+            html += renderThirdPartyWorkbenchCard(item);
+        } else {
+            html += renderWorkbenchCard(item);
+        }
+    }
+    html += '</div>';
+
+    return html;
+}
+
+/** 渲染第三方工作台卡片 */
+function renderThirdPartyWorkbenchCard(item) {
+    var html = '<div class="workbench-card">';
+    // 卡片头部
+    html += '<div class="wb-card-header">';
+    html += '<div class="wb-card-title" style="font-size:14px;">' + item.name + '</div>';
+    // 审核状态标签
+    var statusTag = '';
+    if (item.auditStatus === 'approved') {
+        statusTag = '<span class="tag tag-green">审核通过</span>';
+    } else if (item.auditStatus === 'pending') {
+        statusTag = '<span class="tag tag-orange">待审核</span>';
+    } else if (item.auditStatus === 'rejected') {
+        statusTag = '<span class="tag tag-red">审核不通过</span>';
+    } else if (item.auditStatus === 'offline') {
+        statusTag = '<span class="tag tag-gray">已下架</span>';
+    }
+    html += statusTag;
+    html += '</div>';
+
+    // 服务商信息
+    html += '<div class="wb-card-info" style="margin-top:8px;">';
+    html += '<span class="wb-info-label">服务商：</span>';
+    html += '<span class="wb-info-value" style="color:var(--text-secondary);">' + item.provider + '</span>';
+    html += '</div>';
+
+    // 分类
+    if (item.category) {
+        html += '<div class="wb-card-category"><span class="tag tag-light-blue">' + item.category + '</span></div>';
+    }
+
+    // 上架状态
+    html += '<div class="wb-card-info">';
+    html += '<span class="wb-info-label">上架状态：</span>';
+    html += '<span class="wb-info-value">' + (item.onlineStatus ? '已上架' : '未上架') + '</span>';
+    html += '</div>';
+
+    // 版本
+    html += '<div class="wb-card-info">';
+    html += '<span class="wb-info-label">当前版本：</span>';
+    html += '<span class="wb-info-value">' + item.currentVersion + '</span>';
+    html += '</div>';
+
+    // 提交/审核时间
+    html += '<div class="wb-card-info" style="color:var(--text-tertiary);">';
+    html += '提交时间：' + item.submitTime;
+    html += '</div>';
+    if (item.auditTime) {
+        html += '<div class="wb-card-info" style="color:var(--text-tertiary);">';
+        html += '审核时间：' + item.auditTime;
+        html += '</div>';
+    }
+
+    // 预览图区域
+    html += '<div class="wb-preview-area">';
+    for (var p = 0; p < item.previews.length; p++) {
+        var pv = item.previews[p];
+        var statusColor = pv.status === '已发布' ? 'tag-green' : (pv.status === '待审核' ? 'tag-orange' : (pv.status === '审核不通过' ? 'tag-red' : 'tag-gray'));
+        var previewIcon = pv.type === 'desktop' ? 'fa-desktop' : 'fa-mobile';
+        var previewBg = pv.type === 'desktop'
+            ? 'linear-gradient(180deg,#E8F3FF 0%,#F0F5FF 100%)'
+            : 'linear-gradient(180deg,#E8F3FF 0%,#F0F5FF 100%)';
+        html += '<div class="wb-preview-item">';
+        html += '<div class="wb-preview-tag tag ' + statusColor + '">' + pv.status + '</div>';
+        html += '<div class="wb-preview-img" style="background:' + previewBg + ';">';
+        html += '<i class="fa ' + previewIcon + '" style="font-size:28px;color:#165DFF;opacity:0.5;"></i>';
+        html += '</div>';
+        html += '</div>';
+    }
+    html += '</div>';
+
+    // 底部操作区
+    html += '<div class="wb-card-footer">';
+    html += '<div style="display:flex;gap:12px;">';
+    html += '<button class="btn btn-text btn-sm" onclick="viewThirdPartyWorkbench(' + item.id + ')">查看</button>';
+    if (item.auditStatus === 'pending') {
+        html += '<button class="btn btn-text btn-sm" style="color:#00B42A;" onclick="auditThirdPartyWorkbench(' + item.id + ', \'pass\')">审核通过</button>';
+        html += '<button class="btn btn-text btn-sm" style="color:#F53F3F;" onclick="auditThirdPartyWorkbench(' + item.id + ', \'reject\')">审核不通过</button>';
+    } else if (item.auditStatus === 'approved' && item.onlineStatus) {
+        html += '<button class="btn btn-text btn-sm" style="color:#FF7D00;" onclick="offlineThirdPartyWorkbench(' + item.id + ')">下架</button>';
+    } else if (item.auditStatus === 'approved' && !item.onlineStatus) {
+        html += '<button class="btn btn-text btn-sm" style="color:#00B42A;" onclick="onlineThirdPartyWorkbench(' + item.id + ')">上架</button>';
+    } else if (item.auditStatus === 'rejected') {
+        html += '<button class="btn btn-text btn-sm" onclick="viewRejectReason(' + item.id + ')">查看原因</button>';
+    }
+    html += '</div>';
+    html += '</div>';
+
+    html += '</div>';
+    return html;
 }
 
 /** 渲染工作台管理卡片列表页 */
@@ -9616,6 +9876,51 @@ function toggleWorkbenchStatus(id, el) {
 
 function showWorkbenchMoreMenu(id, el) {
     showToast('更多操作菜单', 'info');
+}
+
+/* ---------- 第三方工作台操作 ---------- */
+function viewThirdPartyWorkbench(id) {
+    showToast('查看第三方工作台详情', 'info');
+}
+
+function auditThirdPartyWorkbench(id, action) {
+    if (action === 'reject') {
+        showModal('审核不通过', function() {
+            showToast('已审核不通过', 'warning');
+        }, '请填写不通过原因', true, '确认不通过');
+    } else {
+        showConfirm('确认审核通过该第三方工作台吗？', function() {
+            showToast('审核通过成功', 'success');
+        });
+    }
+}
+
+function onlineThirdPartyWorkbench(id) {
+    showConfirm('确认上架该第三方工作台吗？上架后用户可使用。', function() {
+        showToast('上架成功', 'success');
+    });
+}
+
+function offlineThirdPartyWorkbench(id) {
+    showConfirm('确认下架该第三方工作台吗？下架后用户将无法使用。', function() {
+        showToast('下架成功', 'warning');
+    });
+}
+
+function viewRejectReason(id) {
+    showModal('审核不通过原因', null, '功能不完整，缺少数据导出模块。请补充相关功能后重新提交审核。', false, '知道了');
+}
+
+function batchAuditThirdParty() {
+    showToast('批量审核功能', 'info');
+}
+
+function batchOnlineThirdParty() {
+    showToast('批量上架功能', 'info');
+}
+
+function batchOfflineThirdParty() {
+    showToast('批量下架功能', 'info');
 }
 
 function openCreateWorkbenchModal() {
@@ -16119,26 +16424,32 @@ var prdData = {
         redFields: ['lineUserDeleteFlow', 'lineUserBatchDeleteFlow', 'lineAdminAddFlow', 'lineAdminBatchRemoveFlow', 'lineAdminQueryFlow'],
 },
     'workbench-manage': {
-        background: '【工作台管理】工作台管理是工作台管理子系统的核心模块，负责工作台的创建、配置和版本管理。采用卡片式布局展示工作台列表，支持基于空白创建和基于工作台复刻两种创建方式，支持模板引用和更新、多端预览（桌面端/移动端）、启用/停用切换、历史版本管理等功能。',
-        targetUsers: '系统管理员、工作台管理员、平台管理员',
-        coreFeatures: '1.工作台卡片式列表展示 2.基于空白创建工作台 3.基于工作台复刻创建 4.批量更新模板 5.批量进度查询 6.工作台多条件查询（名称/工作台/业务类型） 7.字段排序（创建时间/更新时间/名称/业务类型） 8.工作台启用/停用切换 9.工作台历史版本查看 10.桌面端/移动端预览 11.模板引用可更新提示',
-        businessFlow: '进入工作台管理页 → 查看工作台卡片列表 → 点击"新增" → 选择创建方式（空白创建/工作台复刻）→ 填写信息创建工作台 → 创建成功 → 卡片展示预览效果 → 点击卡片进入编辑 → 发布版本 → 查看历史版本 → 切换启用/停用状态',
-        pageInfo: '卡片式布局（3列网格）；顶部查询区（工作台名+工作台+业务类型）；工具栏（新增/批量更新模板/批量进度查询）；排序方式（创建时间/更新时间/名称/业务类型）；每张卡片包含：工作台名称、创建类型标签、分类标签、工作台类型、引用模板状态、当前版本、创建时间、桌面端+移动端预览图（带状态标签）、启用/停用开关、更多操作菜单。',
-        dataModel: '核心实体：工作台（id/名称/创建类型/分类/工作台类型/模板引用状态/当前版本/创建时间/状态/预览配置）；工作台版本（id/工作台ID/版本号/首页类型/发布人/操作时间）。枚举值：创建类型（模板创建/空白创建/复刻创建）、工作台类型（标准工作台/自定义工作台）、状态（启用/停用）、发布状态（已发布/待发布/待更新）、首页类型（桌面端/移动端）。',
-        createFlow: '【工作台新增】点击"新增"按钮 → 弹出创建工作台选择弹窗 → 选择创建方式：①基于空白创建：跳转到空白工作台编辑页，从零开始配置工作台组件和布局；②基于工作台复刻：选择已有工作台 → 自动复制该工作台的全部配置 → 进入编辑页修改 → 保存创建新工作台。',
-        batchUpdateTemplateFlow: '【批量更新模板】选择需要更新模板的工作台 → 点击"批量更新模板"按钮 → 选择目标模板版本 → 确认更新 → 系统后台批量处理 → 完成后Toast提示成功数量/失败数量。引用模板可更新的工作台会显示"引用模板可更新"蓝色标签。',
-        batchProgressFlow: '【批量进度查询】点击"批量进度查询"按钮 → 打开进度查询弹窗 → 展示最近批量操作记录（操作类型/操作时间/总数量/成功数量/失败数量/状态）→ 可查看失败详情。',
-        queryFlow: '【工作台查询】支持工作台名（模糊搜索）、工作台（下拉分类）、业务类型（下拉）多条件组合查询，AND关系。支持分页查询，默认每页按3列多行网格展示。',
-        sortConfig: '【工作台排序】支持创建时间、更新时间、名称、业务类型四种排序方式。点击排序文字切换升序/降序，箭头图标标识。默认按创建时间降序排列。',
-        versionRecordFlow: '【历史版本】点击卡片更多操作 → 选择"版本记录" → 打开历史版本弹窗 → 展示版本列表（版本号/首页类型/发布人/操作时间）→ 点击版本号可查看该版本详情或回滚。',
-        statusToggleFlow: '【启用/停用】点击卡片底部开关 → 切换工作台启用/停用状态 → 停用后用户无法访问该工作台 → 切换时Toast提示当前状态。',
-        previewFlow: '【多端预览】每张卡片展示桌面端和移动端两个预览缩略图，右上角标注发布状态（已发布/待发布/待更新）。点击预览图可放大查看详情。',
-        fieldRules: '1.工作台名称：必填，2-50字符，同一分类下唯一 2.工作台类型：必选，标准工作台/自定义工作台 3.分类：可选，用于工作台归类 4.版本号：自动生成，格式为V+日期+序号（如V20260914.002） 5.状态：枚举启用/停用，默认停用',
-        exceptionHandling: '1.名称重复：保存时提示"工作台名称已存在" 2.模板更新失败：批量更新时记录失败原因，完成后汇总展示 3.停用已分配工作台：提示"该工作台已分配给N个用户，停用后用户将无法访问，确认停用？" 4.空数据状态：显示空状态占位图+提示"暂无工作台"',
-        permissionReq: '1.系统管理员：拥有全部权限（创建/编辑/删除/版本管理/批量操作/启停） 2.工作台管理员：拥有创建/编辑/版本管理/启停权限 3.平台管理员：拥有查询和查看权限 4.普通用户：无访问权限',
-        interaction: '卡片式网格布局；创建方式选择弹窗；批量更新模板/进度查询；多条件查询+排序；启停开关；历史版本弹窗；多端预览缩略图；更多操作下拉菜单',
-        acceptance: '1.卡片式布局正常，3列展示 2.新增按钮打开创建方式选择弹窗 3.基于空白创建可跳转 4.基于工作台复刻可跳转 5.批量更新模板按钮可用 6.批量进度查询按钮可用 7.查询条件完整可用 8.排序方式可用 9.每张卡片信息完整（名称/类型/版本/预览/状态） 10.启用/停用开关可切换 11.历史版本弹窗正常 12.桌面端+移动端预览图正确显示状态标签',
-        redFields: ['createFlow', 'batchUpdateTemplateFlow', 'batchProgressFlow', 'queryFlow', 'sortConfig', 'versionRecordFlow', 'statusToggleFlow', 'previewFlow'],
+        background: '【工作台管理】工作台管理是工作台管理子系统的核心模块，分为标准工作台和第三方工作台两大类别，采用双Tab卡片式布局。标准工作台由平台内部创建和管理，支持基于空白创建和工作台复刻两种创建方式；第三方工作台由软件服务商提交，经平台审核通过后上架供用户使用。支持模板引用、多端预览、版本管理、审核管理、上架下架等完整生命周期管理。',
+        targetUsers: '系统管理员、工作台管理员、平台管理员、运营人员',
+        coreFeatures: '1.双Tab结构（标准工作台/第三方工作台） 2.标准工作台卡片式列表 3.基于空白创建工作台 4.基于工作台复刻创建 5.批量更新模板 6.批量进度查询 7.第三方工作台审核管理 8.第三方工作台上架/下架 9.第三方工作台批量审核/批量上架/批量下架 10.工作台多条件查询 11.字段排序 12.工作台启用/停用切换 13.历史版本查看 14.桌面端/移动端预览',
+        businessFlow: '进入工作台管理页 → 选择Tab（标准工作台/第三方工作台）→ 标准工作台：查看卡片列表 → 新增/编辑/版本管理/启停；第三方工作台：查看服务商提交的工作台 → 审核通过/不通过 → 上架/下架 → 查看审核原因',
+        pageInfo: '双Tab卡片式布局（标准工作台Tab + 第三方工作台Tab）；标准工作台Tab：查询（名称/工作台/业务类型）+ 工具栏（新增/批量更新模板/批量进度查询）+ 排序 + 卡片网格；第三方工作台Tab：查询（名称/软件服务商/审核状态）+ 工具栏（批量审核/批量上架/批量下架）+ 排序 + 卡片网格；每张卡片含名称、状态标签、服务商/分类、版本、预览图、操作按钮。',
+        dataModel: '核心实体：工作台（id/名称/创建类型/分类/工作台类型/模板引用状态/当前版本/创建时间/状态/预览配置）、第三方工作台（id/名称/服务商ID/服务商名称/分类/审核状态/上架状态/当前版本/提交时间/审核时间/驳回原因/预览配置）、工作台版本（id/工作台ID/版本号/首页类型/发布人/操作时间）。枚举值：创建类型（模板创建/空白创建/复刻创建）、审核状态（待审核/审核通过/审核不通过/已下架）、上架状态（已上架/未上架）、状态（启用/停用）、发布状态（已发布/待发布/待更新/待审核/审核不通过/已下架）。',
+        createFlow: '【工作台新增-标准工作台】点击"新增"按钮 → 弹出创建工作台选择弹窗 → 选择创建方式：①基于空白创建：跳转到空白工作台编辑页，从零开始配置；②基于工作台复刻：选择已有工作台 → 自动复制全部配置 → 进入编辑页修改 → 保存创建新工作台。',
+        thirdPartyAuditFlow: '【第三方工作台审核】在第三方工作台Tab → 待审核状态的工作台 → 点击"审核通过" → 二次确认 → 审核通过，状态变更为审核通过；或点击"审核不通过" → 弹出不通过原因弹窗 → 填写原因 → 确认提交 → 状态变更为审核不通过，服务商可查看原因并修改后重新提交。',
+        thirdPartyOnlineFlow: '【第三方工作台上架】审核通过且未上架的工作台 → 点击"上架" → 二次确认（提示上架后用户可使用）→ 上架成功，状态变更为已上架。',
+        thirdPartyOfflineFlow: '【第三方工作台下架】已上架的工作台 → 点击"下架" → 二次确认（提示下架后用户无法使用）→ 下架成功，状态变更为已下架。',
+        thirdPartyBatchFlow: '【第三方工作台批量操作】批量审核：勾选多条待审核记录 → 点击"批量审核" → 选择审核结果（通过/不通过）→ 填写不通过原因（不通过时）→ 确认批量处理；批量上架：勾选多条审核通过且未上架记录 → 点击"批量上架" → 二次确认 → 批量上架；批量下架：勾选多条已上架记录 → 点击"批量下架" → 二次确认 → 批量下架。',
+        batchUpdateTemplateFlow: '【批量更新模板-标准工作台】选择需要更新模板的工作台 → 点击"批量更新模板"按钮 → 选择目标模板版本 → 确认更新 → 系统后台批量处理 → 完成后Toast提示成功数量/失败数量。',
+        batchProgressFlow: '【批量进度查询】点击"批量进度查询"按钮 → 打开进度查询弹窗 → 展示最近批量操作记录 → 可查看失败详情。',
+        standardQueryFlow: '【标准工作台查询】支持工作台名（模糊）、工作台分类（下拉）、业务类型（下拉）多条件组合查询，AND关系。支持分页，默认3列网格展示。',
+        thirdPartyQueryFlow: '【第三方工作台查询】支持工作台名（模糊）、软件服务商（模糊）、审核状态（下拉：待审核/审核通过/审核不通过/已下架）多条件组合查询，AND关系。支持分页，3列网格展示。',
+        standardSortFlow: '【标准工作台排序】支持创建时间、更新时间、名称、业务类型排序。点击排序文字切换升序/降序，默认按创建时间降序。',
+        thirdPartySortFlow: '【第三方工作台排序】支持提交时间、审核时间、名称、服务商排序。点击排序文字切换升序/降序，默认按提交时间降序。',
+        versionRecordFlow: '【历史版本-标准工作台】点击卡片更多操作 → 选择"版本记录" → 打开历史版本弹窗 → 展示版本列表 → 可查看详情或回滚。',
+        statusToggleFlow: '【启用/停用-标准工作台】点击卡片底部开关 → 切换工作台启用/停用状态 → 停用后用户无法访问。',
+        previewFlow: '【多端预览】每张卡片展示桌面端和移动端两个预览缩略图，右上角标注发布状态/审核状态。',
+        fieldRules: '1.工作台名称：必填，2-50字符，同一分类下唯一 2.服务商名称：第三方工作台必填 3.审核状态：枚举待审核/审核通过/审核不通过/已下架 4.版本号：自动生成，格式V+日期+序号 5.驳回原因：审核不通过时必填',
+        exceptionHandling: '1.名称重复：提示"工作台名称已存在" 2.模板更新失败：记录失败原因并汇总展示 3.停用已分配工作台：提示已分配用户数量 4.审核不通过必填原因：未填写时拦截提示 5.上架已上架工作台：拦截提示 6.空数据状态：显示空状态占位图+提示',
+        permissionReq: '1.系统管理员：全部权限（标准工作台CRUD/版本管理/批量操作 + 第三方工作台审核/上架/下架/批量操作） 2.工作台管理员：标准工作台创建/编辑/版本管理/启停 3.平台管理员：查询查看 + 第三方工作台审核/上架/下架 4.运营人员：查询查看权限 5.普通用户：无访问权限',
+        interaction: '双Tab切换；卡片式网格布局；创建方式选择弹窗；审核弹窗（含不通过原因）；上架/下架二次确认；批量操作；多条件查询+排序；启停开关；历史版本弹窗；多端预览缩略图；更多操作下拉菜单',
+        acceptance: '1.双Tab切换正常（标准工作台/第三方工作台） 2.标准工作台卡片信息完整 3.第三方工作台卡片含服务商和审核状态 4.新增按钮打开创建方式选择弹窗 5.批量更新模板/进度查询可用 6.第三方工作台审核通过/不通过功能正常 7.第三方工作台上架/下架功能正常 8.批量审核/批量上架/批量下架按钮可用 9.两个Tab查询条件各自独立 10.两个Tab排序方式各自可用 11.标准工作台启用/停用开关可切换 12.桌面端+移动端预览图正确显示状态标签',
+        redFields: ['createFlow', 'thirdPartyAuditFlow', 'thirdPartyOnlineFlow', 'thirdPartyOfflineFlow', 'thirdPartyBatchFlow', 'thirdPartyQueryFlow', 'thirdPartySortFlow', 'standardQueryFlow', 'standardSortFlow', 'versionRecordFlow', 'statusToggleFlow', 'previewFlow'],
     },
     'workbench-template': {
         background: '【模式A+B】工作台模板管理分为基本信息管理和模板配置管理两部分，独立Tab页展示。走查覆盖4项功能点：①工作台模板基本信息批量删除（符合，新增）②工作台模板基本信息查询字段排序（符合，新增）③工作台模板配置批量删除（符合，新增）④工作台模板配置查询字段排序（符合，新增）。原型实现：双Tab结构（基本信息/模板配置）；基本信息Tab管理模板主数据，支持CRUD+批量删除+排序；模板配置Tab管理模板配置项（组件配置/布局配置/主题配置），支持CRUD+批量删除+排序。两部分功能独立，验收标准明确区分。',
