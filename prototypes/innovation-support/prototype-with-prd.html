@@ -1598,7 +1598,7 @@ var pageConfigs = {
             { key: 'title', label: '职称关联' },
             { key: 'level', label: '职级关联' },
             { key: 'duty', label: '职务关联' },
-            { key: 'approval', label: '任职审批' },
+            { key: 'approval', label: '任职履历' },
         ],
         drawerData: {
             basic: function(user) {
@@ -6530,32 +6530,32 @@ function renderUserDrawerTabContent(user, tabKey, drawerData) {
         html += '</tbody></table></div>';
     } else if (tabKey === 'approval') {
         html += '<div class="drawer-info-section">';
-        html += '<div class="drawer-section-title">任职审批</div>';
+        html += '<div class="drawer-section-title">任职履历</div>';
         // 查询区
         html += '<div style="display:flex;align-items:center;gap:8px;margin-bottom:12px;">';
-        html += '<input type="text" class="form-input text-sm" placeholder="请输入审批类型" style="width:180px;padding:6px 10px;" />';
-        html += '<select class="form-input text-sm" style="width:120px;padding:6px 10px;"><option>全部状态</option><option>已通过</option><option>审批中</option><option>已驳回</option></select>';
+        html += '<input type="text" class="form-input text-sm" placeholder="请输入履历类型" style="width:180px;padding:6px 10px;" />';
+        html += '<select class="form-input text-sm" style="width:120px;padding:6px 10px;"><option>全部状态</option><option>已生效</option><option>审批中</option><option>已驳回</option></select>';
         html += '<button class="btn btn-default btn-sm"><i class="fa fa-search"></i> 查询</button>';
         html += '<button class="btn btn-default btn-sm">重置</button>';
         html += '</div>';
         // 工具栏
         html += '<div style="display:flex;align-items:center;gap:8px;margin-bottom:12px;">';
-        html += '<button class="btn btn-primary btn-sm" onclick="addUserDrawerItem(\'approval\')"><i class="fa fa-plus"></i> 新增审批</button>';
+        html += '<button class="btn btn-primary btn-sm" onclick="addUserDrawerItem(\'approval\')"><i class="fa fa-plus"></i> 新增履历</button>';
         html += '</div>';
         // 表格
         html += '<table class="drawer-sub-table"><thead><tr>';
         html += '<th style="width:50px;">序号</th>';
-        html += '<th onclick="sortDrawerTable(\'approval\',\'approvalType\')" style="cursor:pointer;">审批类型' + sortIcon + '</th>';
-        html += '<th>目标机构</th>';
-        html += '<th onclick="sortDrawerTable(\'approval\',\'status\')" style="cursor:pointer;">审批状态' + sortIcon + '</th>';
+        html += '<th onclick="sortDrawerTable(\'approval\',\'approvalType\')" style="cursor:pointer;">履历类型' + sortIcon + '</th>';
+        html += '<th>任职机构</th>';
+        html += '<th onclick="sortDrawerTable(\'approval\',\'status\')" style="cursor:pointer;">状态' + sortIcon + '</th>';
         html += '<th>审批人</th>';
-        html += '<th onclick="sortDrawerTable(\'approval\',\'approveTime\')" style="cursor:pointer;">审批时间' + sortIcon + '</th>';
+        html += '<th onclick="sortDrawerTable(\'approval\',\'approveTime\')" style="cursor:pointer;">生效时间' + sortIcon + '</th>';
         html += '<th style="width:100px;">操作</th>';
         html += '</tr></thead><tbody>';
         var apprData = drawerData.approval || [];
         for (var r = 0; r < apprData.length; r++) {
             var statusTag = '';
-            if (apprData[r].status === 'approved') statusTag = '<span class="tag tag-green">已通过</span>';
+            if (apprData[r].status === 'approved') statusTag = '<span class="tag tag-green">已生效</span>';
             else if (apprData[r].status === 'rejected') statusTag = '<span class="tag tag-red">已驳回</span>';
             else statusTag = '<span class="tag tag-orange">审批中</span>';
             html += '<tr><td>' + (r + 1) + '</td>';
@@ -6580,7 +6580,7 @@ function addUserDrawerItem(tab) {
         title: '新增职称关联',
         level: '新增职级关联',
         duty: '新增职务关联',
-        approval: '新增任职审批'
+        approval: '新增任职履历'
     };
     var bodyHtml = '';
     switch(tab) {
@@ -6755,7 +6755,7 @@ function editUserDrawerItem(tab, id) {
         title: '编辑职称关联',
         level: '编辑职级关联',
         duty: '编辑职务关联',
-        approval: '编辑任职审批'
+        approval: '编辑任职履历'
     };
     var bodyHtml = '';
     switch(tab) {
@@ -6952,7 +6952,7 @@ function viewUserDrawerItem(tab, id) {
         title: '职称关联详情',
         level: '职级关联详情',
         duty: '职务关联详情',
-        approval: '任职审批详情'
+        approval: '任职履历详情'
     };
     var bodyHtml = '';
     function field(label, value) {
