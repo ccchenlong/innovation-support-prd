@@ -4105,6 +4105,7 @@ var pageConfigs = {
             { key: 'resource', label: '资源中心管理' },
             { key: 'guide', label: '开发指南管理' },
             { key: 'helpCenter', label: '帮助中心管理' },
+            { key: 'notice', label: '通知公告管理' },
         ],
         tabConfigs: {
             'banner': {
@@ -4421,6 +4422,54 @@ var pageConfigs = {
                     { id: 6, title: '接口返回403错误怎么处理', category: 'exception', viewCount: 6543, isFaq: true, status: true, updateTime: '2025-04-06 08:30:00' , isTop: false},
                     { id: 7, title: '如何配置应用回调地址', category: 'permission', viewCount: 5430, isFaq: false, status: true, updateTime: '2025-04-07 10:15:00' , isTop: false},
                     { id: 8, title: '实名认证失败原因有哪些', category: 'account', viewCount: 4321, isFaq: false, status: true, updateTime: '2025-04-08 13:45:00' , isTop: false},
+                ],
+            },
+            'notice': {
+                query: [
+                    { key: 'title', label: '公告标题', type: 'input', placeholder: '请输入公告标题' },
+                    { key: 'type', label: '公告类型', type: 'select', placeholder: '请选择', options: [{ value: '', label: '全部' }, { value: 'system', label: '系统通知' }, { value: 'business', label: '业务公告' }, { value: 'activity', label: '活动通知' }, { value: 'upgrade', label: '升级维护' }] },
+                    { key: 'status', label: '发布状态', type: 'select', placeholder: '请选择', options: [{ value: '', label: '全部' }, { value: 'published', label: '已发布' }, { value: 'draft', label: '草稿' }, { value: 'timing', label: '定时发布' }] },
+                    { key: 'isTop', label: '是否置顶', type: 'select', placeholder: '请选择', options: [{ value: '', label: '全部' }, { value: 'true', label: '已置顶' }, { value: 'false', label: '未置顶' }] },
+                ],
+                toolbar: [{ type: 'add', text: '新增公告' }, { type: 'batchDelete' }],
+                columns: [
+                    { type: 'checkbox' },
+                    { type: 'index', title: '序号' },
+                    { key: 'title', title: '公告标题', sortable: true },
+                    { key: 'type', title: '公告类型', type: 'tag', tagMap: { 'system': { text: '系统通知', color: 'blue' }, 'business': { text: '业务公告', color: 'green' }, 'activity': { text: '活动通知', color: 'orange' }, 'upgrade': { text: '升级维护', color: 'purple' } } },
+                    { key: 'publishScope', title: '发布范围' },
+                    { key: 'isTop', title: '置顶', type: 'tag', tagMap: { true: { text: '置顶', color: 'red' }, false: { text: '普通', color: 'gray' } } },
+                    { key: 'viewCount', title: '浏览量' },
+                    { key: 'status', title: '状态', type: 'tag', tagMap: { 'published': { text: '已发布', color: 'green' }, 'draft': { text: '草稿', color: 'gray' }, 'timing': { text: '定时发布', color: 'orange' } } },
+                    { key: 'publishTime', title: '发布时间', sortable: true },
+                    { type: 'actions', title: '操作', actions: [{ key: 'view', label: '查看' }, { key: 'edit', label: '编辑' }, { key: 'delete', label: '删除', danger: true }, { key: 'top', label: '置顶', hideWhen: { field: 'isTop', value: true } }, { key: 'untop', label: '取消置顶', hideWhen: { field: 'isTop', value: false } }] },
+                ],
+                formFields: [
+                    { key: 'section1', label: '基本信息', type: 'section-title' },
+                    { key: 'title', label: '公告标题', type: 'input', required: true, maxLength: 100, charCount: true },
+                    { key: 'type', label: '公告类型', type: 'select', required: true, options: [{ value: 'system', label: '系统通知' }, { value: 'business', label: '业务公告' }, { value: 'activity', label: '活动通知' }, { value: 'upgrade', label: '升级维护' }] },
+                    { key: 'publishScope', label: '发布范围', type: 'radio', required: true, options: [{ value: 'all', label: '全部用户', checked: true }, { value: 'developer', label: '开发者' }, { value: 'provider', label: '服务商' }, { value: 'admin', label: '管理员' }] },
+                    { key: 'section2', label: '公告内容', type: 'section-title' },
+                    { key: 'content', label: '公告内容', type: 'large-textarea', required: true, tip: '支持富文本格式，可插入图片、链接等' },
+                    { key: 'section3', label: '发布设置', type: 'section-title' },
+                    { key: 'isTop', label: '是否置顶', type: 'toggle', tip: '置顶公告将在首页通知公告区最顶部展示' },
+                    { key: 'sortNo', label: '排序号', type: 'number', defaultValue: 1, min: 1 },
+                    { key: 'status', label: '发布方式', type: 'radio', required: true, options: [{ value: 'draft', label: '保存草稿' }, { value: 'published', label: '立即发布' }, { value: 'timing', label: '定时发布' }] },
+                    { key: 'timingTime', label: '定时发布时间', type: 'datetime', tip: '选择定时发布的具体时间' },
+                    { key: 'section4', label: '附件与其他', type: 'section-title' },
+                    { key: 'attachments', label: '附件上传', type: 'file-upload', uploadTip: '点击或拖拽上传附件', uploadDesc: '支持PDF/Word/Excel等格式，单个不超过20MB', multiple: true },
+                    { key: 'viewCount', label: '初始浏览量', type: 'number', defaultValue: 0, min: 0 },
+                ],
+                modalSize: 'xlarge',
+                data: [
+                    { id: 1, title: '关于平台系统升级维护的通知', type: 'upgrade', publishScope: '全部用户', isTop: true, viewCount: 15680, status: 'published', publishTime: '2025-04-01 09:00:00' },
+                    { id: 2, title: '新能力上线：人脸识别接口正式开放', type: 'business', publishScope: '开发者', isTop: false, viewCount: 12450, status: 'published', publishTime: '2025-04-02 10:30:00' },
+                    { id: 3, title: '开发者大会报名开始啦', type: 'activity', publishScope: '全部用户', isTop: true, viewCount: 9876, status: 'published', publishTime: '2025-04-03 08:00:00' },
+                    { id: 4, title: '系统安全策略更新通知', type: 'system', publishScope: '全部用户', isTop: false, viewCount: 8650, status: 'published', publishTime: '2025-04-04 14:00:00' },
+                    { id: 5, title: 'API接口v3.0版本发布预告', type: 'upgrade', publishScope: '开发者', isTop: false, viewCount: 7234, status: 'timing', publishTime: '2025-04-10 00:00:00' },
+                    { id: 6, title: '服务商入驻流程优化公告', type: 'business', publishScope: '服务商', isTop: false, viewCount: 6543, status: 'published', publishTime: '2025-04-05 11:00:00' },
+                    { id: 7, title: '五一假期平台服务安排', type: 'system', publishScope: '全部用户', isTop: false, viewCount: 5430, status: 'draft', publishTime: '' },
+                    { id: 8, title: 'SDK v2.1版本发布说明', type: 'upgrade', publishScope: '开发者', isTop: false, viewCount: 4321, status: 'published', publishTime: '2025-04-06 16:00:00' },
                 ],
             },
         },
@@ -15047,11 +15096,11 @@ var prdData = {
 
     /* ---------- 门户配置 ---------- */
     'portal-config': {
-        background: '【门户配置】门户配置是开放门户管理的统一配置中心，将原来分散的轮播图、接入步骤、应用案例、开放能力、资源中心、开发指南、帮助中心等首页配置模块整合为统一的7Tab配置页面，便于运营人员集中管理门户展示内容。',
+        background: '【门户配置】门户配置是开放门户管理的统一配置中心，将原来分散的轮播图、接入步骤、应用案例、开放能力、资源中心、开发指南、帮助中心、通知公告等首页配置模块整合为统一的8Tab配置页面，便于运营人员集中管理门户展示内容。',
         targetUsers: '系统管理员、平台管理员、内容运营人员',
-        coreFeatures: '1.轮播图管理 2.接入步骤管理 3.应用案例管理 4.开放能力管理 5.资源中心管理 6.开发指南管理 7.帮助中心管理',
-        businessFlow: '进入门户配置页 → 选择对应Tab → 进行内容管理（新增/编辑/删除/排序等操作）→ 保存配置 → 门户前端实时更新展示',
-        pageInfo: '7个Tab页（轮播图管理/接入步骤/应用案例管理/开放能力管理/资源中心管理/开发指南管理/帮助中心管理）；各Tab独立配置管理',
+        coreFeatures: '1.轮播图管理 2.接入步骤管理 3.应用案例管理 4.开放能力管理 5.资源中心管理 6.开发指南管理 7.帮助中心管理 8.通知公告管理',
+        businessFlow: '进入门户配置页 → 选择对应Tab → 进行内容管理（新增/编辑/删除/排序/置顶等操作）→ 保存配置 → 门户前端实时更新展示',
+        pageInfo: '8个Tab页（轮播图管理/接入步骤/应用案例管理/开放能力管理/资源中心管理/开发指南管理/帮助中心管理/通知公告管理）；各Tab独立配置管理',
         dataModel: '核心实体：轮播图、接入步骤、应用案例、开放能力、资源中心、开发指南、帮助中心。各实体独立维护配置数据。',
         addFlow: '轮播图：点击"新增" → 上传轮播图 → 填写标题 → 设置跳转链接 → 设置状态 → 保存。接入步骤：点击"新增" → 上传步骤图 → 填写标题 → 填写链接地址 → 选择状态 → 保存。应用案例：点击"新增" → 填写案例信息 → 上传封面 → 保存。其他Tab类似操作。',
         editFlow: '各Tab点击"编辑" → 打开编辑弹窗 → 修改对应字段 → 保存更新',
@@ -15061,8 +15110,8 @@ var prdData = {
         viewFlow: '各Tab配置项支持查看详情',
         exceptionHandling: '1.必填项为空：对应提示 2.上传格式错误：格式提示 3.空数据状态：空状态占位显示',
         permissionReq: '1.系统管理员：拥有全部权限 2.平台管理员：拥有全部权限 3.内容运营人员：拥有新增/编辑/查询权限',
-        interaction: '7Tab切换；各Tab独立的查询、列表、新增、编辑、删除操作；部分Tab支持排序调整',
-        acceptance: '1.7个Tab切换正常 2.轮播图管理功能完整 3.接入步骤管理功能完整 4.应用案例管理功能完整 5.开放能力管理功能完整 6.资源中心管理功能完整 7.开发指南管理功能完整 8.帮助中心管理功能完整 9.各Tab数据独立 10.面包屑导航正确',
+        interaction: '8Tab切换；各Tab独立的查询、列表、新增、编辑、删除操作；各Tab支持置顶/取消置顶；部分Tab支持排序调整',
+        acceptance: '1.8个Tab切换正常 2.轮播图管理功能完整 3.接入步骤管理功能完整 4.应用案例管理功能完整 5.开放能力管理功能完整 6.资源中心管理功能完整 7.开发指南管理功能完整 8.帮助中心管理功能完整 9.通知公告管理功能完整 10.各Tab数据独立 11.置顶功能正常 12.面包屑导航正确',
         bannerAddFlow: '【Banner管理-新增】在Banner管理Tab → 点击"新增"按钮 → 打开新增弹窗 → 上传Banner图片（必填，支持jpg/png，尺寸校验）→ 填写Banner标题（必填）、跳转链接（选填）→ 选择展示位置 → 设置排序号 → 设置状态（启用/停用）→ 点击保存 → 校验通过 → 新增成功 → 列表刷新。',
         bannerEditFlow: '【Banner管理-修改】点击操作列"编辑" → 打开编辑弹窗 → 回显Banner信息 → 修改可编辑字段 → 可重新上传图片 → 点击保存 → 更新成功 → 列表刷新。',
         bannerDeleteFlow: '【Banner管理-删除】点击操作列"删除" → 弹出二次确认弹窗 → 确认删除 → 逻辑删除 → Toast提示成功 → 列表刷新。',
@@ -15087,7 +15136,14 @@ var prdData = {
         resourceTopFlow: '【资源中心-置顶】资源中心管理Tab支持置顶功能。置顶资源在门户首页资源下载区优先展示。支持按是否置顶筛选查询。',
         guideTopFlow: '【开发指南-置顶】开发指南管理Tab支持置顶功能。置顶指南在门户首页开发指南区域优先展示。支持按是否置顶筛选查询。',
         helpCenterTopFlow: '【帮助中心-置顶】帮助中心管理Tab支持置顶功能。置顶帮助内容在门户首页帮助中心区域优先展示，常见问题可置顶显示。支持按是否置顶筛选查询。',
-        redFields: ['addFlow', 'editFlow', 'deleteFlow', 'sortConfig', 'viewFlow', 'queryFlow', 'topFlow', 'bannerTopFlow', 'accessStepsTopFlow', 'appCaseTopFlow', 'abilityTopFlow', 'resourceTopFlow', 'guideTopFlow', 'helpCenterTopFlow', 'bannerAddFlow', 'bannerEditFlow', 'bannerDeleteFlow', 'bannerSortConfig', 'bannerQueryFlow', 'abilityAddFlow', 'abilityEditFlow', 'abilityDeleteFlow', 'abilitySortConfig', 'abilityQueryFlow', 'resourceAddFlow', 'resourceEditFlow', 'resourceDeleteFlow', 'resourceSortConfig', 'resourceQueryFlow', 'guideAddFlow'],
+        noticeAddFlow: '【通知公告-新增】在通知公告管理Tab → 点击"新增公告"按钮 → 打开新增弹窗 → 填写公告标题（必填，100字符内）→ 选择公告类型（系统通知/业务公告/活动通知/升级维护）→ 设置发布范围（全部用户/开发者/服务商/管理员）→ 编辑公告内容（富文本，必填）→ 设置是否置顶 → 设置排序号 → 选择发布方式（保存草稿/立即发布/定时发布）→ 定时发布需设置发布时间 → 可上传附件 → 点击保存/发布 → 校验通过 → 操作成功 → 列表刷新。',
+        noticeEditFlow: '【通知公告-修改】点击操作列"编辑" → 打开编辑弹窗 → 回显公告全部信息 → 修改可编辑字段 → 可调整发布状态 → 点击保存 → 更新成功 → 列表刷新。已发布公告编辑后可选择重新发布或保存修改。',
+        noticeDeleteFlow: '【通知公告-删除】点击操作列"删除" → 弹出二次确认弹窗 → 确认删除 → 逻辑删除 → Toast提示成功 → 列表刷新。',
+        noticeQueryFlow: '【通知公告-查询】支持公告标题（模糊）、公告类型（下拉）、发布状态（下拉）、是否置顶（下拉）多条件组合查询，AND关系。支持分页查询。',
+        noticeSortConfig: '【通知公告-排序】支持公告标题、发布时间、排序号字段排序。点击表头切换升序/降序。默认按发布时间降序排列。',
+        noticeTopFlow: '【通知公告-置顶】通知公告管理Tab支持置顶功能。置顶公告在门户首页通知公告区域优先展示，始终排在最前面。支持按是否置顶筛选查询。操作列动态显示"置顶"/"取消置顶"按钮。新增/编辑时可通过"是否置顶"开关设置。',
+        noticeViewFlow: '【通知公告-查看】点击操作列"查看" → 打开查看弹窗 → 展示公告完整信息（标题、类型、发布范围、内容、附件、发布时间、状态、浏览量等）→ 关闭返回列表。',
+        redFields: ['addFlow', 'editFlow', 'deleteFlow', 'sortConfig', 'viewFlow', 'queryFlow', 'topFlow', 'bannerTopFlow', 'accessStepsTopFlow', 'appCaseTopFlow', 'abilityTopFlow', 'resourceTopFlow', 'guideTopFlow', 'helpCenterTopFlow', 'noticeTopFlow', 'bannerAddFlow', 'bannerEditFlow', 'bannerDeleteFlow', 'bannerSortConfig', 'bannerQueryFlow', 'abilityAddFlow', 'abilityEditFlow', 'abilityDeleteFlow', 'abilitySortConfig', 'abilityQueryFlow', 'resourceAddFlow', 'resourceEditFlow', 'resourceDeleteFlow', 'resourceSortConfig', 'resourceQueryFlow', 'guideAddFlow', 'noticeAddFlow', 'noticeEditFlow', 'noticeDeleteFlow', 'noticeQueryFlow', 'noticeSortConfig', 'noticeViewFlow'],
     },
 
 
@@ -15363,6 +15419,13 @@ function renderPrdCard(pageKey, pageName, prd) {
     html += renderSection('resourceTopFlow', '资源中心-置顶', prd.resourceTopFlow);
     html += renderSection('guideTopFlow', '开发指南-置顶', prd.guideTopFlow);
     html += renderSection('helpCenterTopFlow', '帮助中心-置顶', prd.helpCenterTopFlow);
+    html += renderSection('noticeAddFlow', '通知公告-新增', prd.noticeAddFlow);
+    html += renderSection('noticeEditFlow', '通知公告-修改', prd.noticeEditFlow);
+    html += renderSection('noticeDeleteFlow', '通知公告-删除', prd.noticeDeleteFlow);
+    html += renderSection('noticeQueryFlow', '通知公告-查询', prd.noticeQueryFlow);
+    html += renderSection('noticeSortConfig', '通知公告-排序', prd.noticeSortConfig);
+    html += renderSection('noticeTopFlow', '通知公告-置顶', prd.noticeTopFlow);
+    html += renderSection('noticeViewFlow', '通知公告-查看', prd.noticeViewFlow);
 
     // 工单相关
     html += renderSection('fillFlow', '工单填报', prd.fillFlow);
