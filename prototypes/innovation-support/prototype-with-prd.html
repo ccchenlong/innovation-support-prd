@@ -3060,7 +3060,7 @@ var pageConfigs = {
                     { key: 'status', label: '同步状态', type: 'select', placeholder: '请选择', options: [{ value: '', label: '全部' }, { value: 'success', label: '成功' }, { value: 'fail', label: '失败' }, { value: 'processing', label: '进行中' }] },
                     { key: 'operator', label: '同步人', type: 'input', placeholder: '请输入同步人' },
                 ],
-                toolbar: [],
+                toolbar: [{ type: 'export' }],
                 columns: [
                     { type: 'index', title: '序号' },
                     { key: 'recordId', title: '记录ID', sortable: true },
@@ -3437,6 +3437,10 @@ var pageConfigs = {
                 ],
             },
             'infoEncrypt': {
+                query: [
+                    { key: 'encryptType', label: '加密类型', type: 'select', placeholder: '请选择', options: [{ value: '', label: '全部' }, { value: 'symmetric', label: '对称加密' }, { value: 'asymmetric', label: '非对称加密' }, { value: 'sm', label: '国密算法' }] },
+                    { key: 'enabled', label: '状态', type: 'select', placeholder: '请选择', options: [{ value: '', label: '全部' }, { value: 'true', label: '启用' }, { value: 'false', label: '停用' }] },
+                ],
                 toolbar: [],
                 columns: [
                     { type: 'index', title: '序号' },
@@ -3446,10 +3450,10 @@ var pageConfigs = {
                     { key: 'updateTime', title: '更新时间', sortable: true },
                 ],
                 data: [
-                    { id: 1, encryptAlgorithm: 'AES-256', keyLength: '256位', enabled: true, updateTime: '2025-01-10 10:00:00' },
-                    { id: 2, encryptAlgorithm: 'RSA-2048', keyLength: '2048位', enabled: true, updateTime: '2025-01-10 10:00:00' },
-                    { id: 3, encryptAlgorithm: 'SM4', keyLength: '128位', enabled: true, updateTime: '2025-01-10 10:00:00' },
-                    { id: 4, encryptAlgorithm: 'SM2', keyLength: '256位', enabled: false, updateTime: '2025-01-10 10:00:00' },
+                    { id: 1, encryptAlgorithm: 'AES-256', keyLength: '256位', encryptType: 'symmetric', enabled: true, updateTime: '2025-01-10 10:00:00' },
+                    { id: 2, encryptAlgorithm: 'RSA-2048', keyLength: '2048位', encryptType: 'asymmetric', enabled: true, updateTime: '2025-01-10 10:00:00' },
+                    { id: 3, encryptAlgorithm: 'SM4', keyLength: '128位', encryptType: 'sm', enabled: true, updateTime: '2025-01-10 10:00:00' },
+                    { id: 4, encryptAlgorithm: 'SM2', keyLength: '256位', encryptType: 'sm', enabled: false, updateTime: '2025-01-10 10:00:00' },
                 ],
             },
             'apiSettings': {
@@ -3481,28 +3485,49 @@ var pageConfigs = {
                 columns: [
                     { type: 'index', title: '序号' },
                     { key: 'settingItem', title: '设置项' },
-                    { key: 'settingValue', title: '开关', type: 'tag', tagMap: { '开': { text: '开启', color: 'green' }, '关': { text: '关闭', color: 'gray' } } },
+                    { key: 'enabled', title: '状态', type: 'toggle' },
                     { key: 'description', title: '说明' },
                 ],
                 data: [
-                    { id: 1, settingItem: 'IP黑名单功能', settingValue: '关', description: '开启后，黑名单中的IP地址将无法访问系统' },
+                    { id: 1, settingItem: 'IP黑名单功能', enabled: false, description: '开启后，黑名单中的IP地址将无法访问系统' },
                 ],
             },
             'sysInfo': {
-                toolbar: [{ type: 'custom', text: '恢复默认', icon: 'fa-undo' }],
+                toolbar: [{ type: 'add', text: '新增配置' }, { type: 'custom', text: '恢复默认', icon: 'fa-undo', onClick: "showToast('已恢复默认设置','success')" }],
+                query: [
+                    { key: 'configName', label: '配置项名称', type: 'input', placeholder: '请输入配置项名称' },
+                    { key: 'configType', label: '配置类型', type: 'select', placeholder: '请选择', options: [{ value: '', label: '全部' }, { value: 'system', label: '系统参数' }, { value: 'env', label: '环境变量' }, { value: 'thirdparty', label: '第三方配置' }] },
+                    { key: 'status', label: '状态', type: 'select', placeholder: '请选择', options: [{ value: '', label: '全部' }, { value: 'true', label: '启用' }, { value: 'false', label: '停用' }] },
+                ],
                 columns: [
                     { type: 'index', title: '序号' },
-                    { key: 'settingItem', title: '设置项', sortable: true },
-                    { key: 'settingValue', title: '设置值' },
-                    { type: 'actions', title: '操作', actions: [{ key: 'edit', label: '修改' }] },
+                    { key: 'configName', title: '配置项名称', sortable: true },
+                    { key: 'configCode', title: '配置项编码', sortable: true },
+                    { key: 'configValue', title: '配置值' },
+                    { key: 'configType', title: '配置类型', type: 'tag', tagMap: { 'system': { text: '系统参数', color: 'blue' }, 'env': { text: '环境变量', color: 'green' }, 'thirdparty': { text: '第三方配置', color: 'purple' } } },
+                    { key: 'sortNo', title: '排序号' },
+                    { key: 'status', title: '状态', type: 'toggle' },
+                    { type: 'actions', title: '操作', actions: [{ key: 'edit', label: '编辑' }, { key: 'delete', label: '删除', danger: true }] },
                 ],
+                formFields: [
+                    { key: 'configName', label: '配置项名称', type: 'input', required: true, maxLength: 50, placeholder: '请输入配置项名称' },
+                    { key: 'configCode', label: '配置项编码', type: 'input', required: true, placeholder: '请输入配置项编码（唯一标识）' },
+                    { key: 'configValue', label: '配置值', type: 'input', required: true, placeholder: '请输入配置值' },
+                    { key: 'configType', label: '配置类型', type: 'select', required: true, options: [{ value: 'system', label: '系统参数' }, { value: 'env', label: '环境变量' }, { value: 'thirdparty', label: '第三方配置' }] },
+                    { key: 'description', label: '配置描述', type: 'textarea', rows: 3, placeholder: '请输入配置描述（可选）' },
+                    { key: 'sortNo', label: '排序号', type: 'number', defaultValue: 1, min: 1 },
+                    { key: 'status', label: '状态', type: 'radio', required: true, options: [{ value: true, label: '启用', checked: true }, { value: false, label: '停用' }] },
+                ],
+                modalSize: 'large',
                 data: [
-                    { id: 1, settingItem: '系统名称', settingValue: '赣政通创新支撑平台' },
-                    { id: 2, settingItem: '系统版本', settingValue: 'v1.1.0' },
-                    { id: 3, settingItem: '备案号', settingValue: '赣ICP备XXXXXXXX号' },
-                    { id: 4, settingItem: '客服电话', settingValue: '400-888-8888' },
-                    { id: 5, settingItem: '客服邮箱', settingValue: 'support@example.com' },
-                    { id: 6, settingItem: '系统Logo', settingValue: '[Logo图片]' },
+                    { id: 1, configName: '系统名称', configCode: 'SYS_NAME', configValue: '赣政通创新支撑平台', configType: 'system', description: '系统显示名称', sortNo: 1, status: true },
+                    { id: 2, configName: '系统版本', configCode: 'SYS_VERSION', configValue: 'v1.1.0', configType: 'system', description: '当前系统版本号', sortNo: 2, status: true },
+                    { id: 3, configName: '备案号', configCode: 'SYS_ICP', configValue: '赣ICP备XXXXXXXX号', configType: 'system', description: '网站备案号', sortNo: 3, status: true },
+                    { id: 4, configName: '客服电话', configCode: 'SERVICE_PHONE', configValue: '400-888-8888', configType: 'system', description: '客服联系电话', sortNo: 4, status: true },
+                    { id: 5, configName: '客服邮箱', configCode: 'SERVICE_EMAIL', configValue: 'support@example.com', configType: 'system', description: '客服联系邮箱', sortNo: 5, status: true },
+                    { id: 6, configName: 'API网关地址', configCode: 'API_GATEWAY_URL', configValue: 'https://api.example.com/gateway', configType: 'thirdparty', description: '第三方API网关地址', sortNo: 10, status: true },
+                    { id: 7, configName: '文件存储路径', configCode: 'FILE_STORAGE_PATH', configValue: '/data/storage', configType: 'env', description: '文件上传存储路径', sortNo: 20, status: true },
+                    { id: 8, configName: '调试模式', configCode: 'DEBUG_MODE', configValue: 'false', configType: 'env', description: '是否开启调试模式', sortNo: 30, status: false },
                 ],
             },
         },
@@ -8452,18 +8477,20 @@ function updateBatchButtonState(pageKey) {
 /** 8. Toggle 开关 */
 function toggleSwitch(element, pageKey, rowId, field) {
     element.classList.toggle('on');
-    // 更新数据
-    const config = pageConfigs[pageKey];
-    if (pageKey === 'admin-auth') {
-        const tab = state.currentTab['admin-auth'];
-        const row = config.tabData[tab].find(r => r.id === rowId);
-        if (row) row[field] = !row[field];
-    } else {
-        const row = (config.data || []).find(r => r.id === rowId);
+    const isOn = element.classList.contains('on');
+    // 更新数据 - 使用 resolvePageConfig 支持 tab-table 页面
+    const resolved = resolvePageConfig(pageKey);
+    if (resolved) {
+        const data = resolved.getData();
+        const row = data.find(r => r.id === rowId);
         if (row) row[field] = !row[field];
     }
-    const isOn = element.classList.contains('on');
-    showToast(`${isOn ? '已开启' : '已关闭'}`, isOn ? 'success' : 'info');
+    // IP黑名单特殊提示
+    if (pageKey.indexOf('ipBlacklist') >= 0) {
+        showToast(isOn ? '已开启IP黑名单' : '已关闭IP黑名单', isOn ? 'success' : 'info');
+    } else {
+        showToast(`${isOn ? '已开启' : '已关闭'}`, isOn ? 'success' : 'info');
+    }
 }
 
 /** 10. Tab 切换 */
@@ -8777,26 +8804,28 @@ function renderFormField(label, controlHtml, required) {
 }
 
 /** 根据 formFields 配置批量生成表单 */
-function renderFormFieldsFromConfig(fields, prefix) {
+function renderFormFieldsFromConfig(fields, prefix, rowData) {
     let html = '';
+    const isEdit = !!rowData;
     for (const f of fields) {
         const fieldKey = f.key;
         const fieldLabel = f.label || f.key;
         const required = f.required === true;
         const placeholder = f.placeholder || ('请输入' + fieldLabel);
         const id = prefix + fieldKey;
+        const val = isEdit && rowData[fieldKey] !== undefined ? rowData[fieldKey] : (f.defaultValue !== undefined ? f.defaultValue : '');
         let inputHtml = '';
 
         switch (f.type) {
             case 'input':
-                const defVal = f.defaultValue || '';
+                const defVal = val;
                 inputHtml = `<input type="text" class="form-input w-full" id="${id}" placeholder="${placeholder}" value="${defVal}" ${f.maxLength ? 'maxlength="' + f.maxLength + '"' : ''} ${f.disabled ? 'disabled style="background:#F5F7FA;cursor:not-allowed;"' : ''} />`;
                 if (f.charCount) {
                     inputHtml += `<div style="text-align:right;font-size:12px;color:var(--text-tertiary);margin-top:2px;">0/${f.maxLength || 100}</div>`;
                 }
                 break;
             case 'number':
-                inputHtml = `<input type="number" class="form-input" id="${id}" style="width:150px;" value="${f.defaultValue || 1}" min="${f.min || 0}" />`;
+                inputHtml = `<input type="number" class="form-input" id="${id}" style="width:150px;" value="${val !== '' ? val : 1}" min="${f.min || 0}" />`;
                 break;
             case 'select':
                 const opts = f.options || [];
@@ -8804,17 +8833,17 @@ function renderFormFieldsFromConfig(fields, prefix) {
                 for (const opt of opts) {
                     const v = typeof opt === 'object' ? opt.value : opt;
                     const l = typeof opt === 'object' ? opt.label : opt;
-                    optsHtml += `<option value="${v}">${l}</option>`;
+                    optsHtml += `<option value="${v}" ${String(val) === String(v) ? 'selected' : ''}>${l}</option>`;
                 }
                 inputHtml = `<select class="form-input w-full" id="${id}">${optsHtml}</select>`;
                 break;
             case 'textarea':
                 const rows = f.rows || 3;
-                inputHtml = `<textarea class="form-input w-full" id="${id}" rows="${rows}" placeholder="${placeholder}"></textarea>`;
+                inputHtml = `<textarea class="form-input w-full" id="${id}" rows="${rows}" placeholder="${placeholder}">${val}</textarea>`;
                 break;
             case 'richtext':
             case 'large-textarea':
-                inputHtml = `<textarea class="form-input w-full" id="${id}" rows="8" placeholder="${placeholder}" style="font-family:inherit;line-height:1.6;"></textarea>`;
+                inputHtml = `<textarea class="form-input w-full" id="${id}" rows="8" placeholder="${placeholder}" style="font-family:inherit;line-height:1.6;">${val}</textarea>`;
                 if (f.tip) {
                     inputHtml += `<div style="font-size:12px;color:var(--text-tertiary);margin-top:4px;">${f.tip}</div>`;
                 }
@@ -8825,14 +8854,16 @@ function renderFormFieldsFromConfig(fields, prefix) {
                 for (const opt of radioOpts) {
                     const v = typeof opt === 'object' ? opt.value : opt;
                     const l = typeof opt === 'object' ? opt.label : opt;
-                    radioHtml += `<label class="flex items-center gap-1 cursor-pointer"><input type="radio" name="${id}" value="${v}" ${opt.checked ? 'checked' : ''} /> ${l}</label>`;
+                    const checked = isEdit ? (String(val) === String(v)) : (opt.checked ? true : false);
+                    radioHtml += `<label class="flex items-center gap-1 cursor-pointer"><input type="radio" name="${id}" value="${v}" ${checked ? 'checked' : ''} /> ${l}</label>`;
                 }
                 radioHtml += '</div>';
                 inputHtml = radioHtml;
                 break;
             case 'toggle':
             case 'switch':
-                inputHtml = `<span class="toggle-switch on" id="${id}" onclick="this.classList.toggle('on')"></span>`;
+                const toggleOn = isEdit ? val : (f.defaultValue !== false);
+                inputHtml = `<span class="toggle-switch ${toggleOn ? 'on' : ''}" id="${id}" onclick="this.classList.toggle('on')"></span>`;
                 if (f.tip) {
                     inputHtml += `<span class="ml-2 text-sm" style="color:var(--text-tertiary);">${f.tip}</span>`;
                 }
@@ -8950,13 +8981,13 @@ function openAddModal(pageKey) {
 
     // tab-table 页面：优先使用 formFields，否则根据 columns 动态生成表单
     if (resolved && resolved.tabKey) {
-        const tabConfig = resolved.config;
+        const tabConfig = resolved.tabConfig;
         // 优先使用 formFields
         if (tabConfig && tabConfig.formFields && tabConfig.formFields.length > 0) {
             body = renderFormFieldsFromConfig(tabConfig.formFields, 'add_');
             const modalSize = tabConfig.modalSize || 'large';
-            const footer = '<button class="px-4 py-1.5 text-sm rounded border" style="border-color:#D9D9D9;color:var(--text-secondary);background:#fff;" onclick="closeModal(\'' + id + '\')">取消</button><button class="px-4 py-1.5 text-sm text-white rounded" style="background:var(--primary);" onclick="saveAdd(\'' + pageKey + '\', \'' + id + '\')">确定</button>';
-            openModal(id, '新增' + (config.title || ''), body, footer, modalSize);
+            const footer = '<button class="px-4 py-1.5 text-sm rounded border" style="border-color:#D9D9D9;color:var(--text-secondary);background:#fff;" onclick="closeModal(\'' + id + '\')">取消</button><button class="px-4 py-1.5 text-sm text-white rounded" style="background:var(--primary);" onclick="confirmAdd(\'' + pageKey + '\', \'' + id + '\')">确定</button>';
+            openModal(id, '新增', body, footer, modalSize);
             return;
         }
         const cols = resolved.columns || [];
@@ -9289,7 +9320,7 @@ function openAddModal(pageKey) {
         // 通用 formFields 渲染（非 tab-table 页面）
         body = renderFormFieldsFromConfig(config.formFields, 'add_');
         const modalSize = config.modalSize || 'large';
-        const footer = '<button class="px-4 py-1.5 text-sm rounded border" style="border-color:#D9D9D9;color:var(--text-secondary);background:#fff;" onclick="closeModal(\'' + id + '\')">取消</button><button class="px-4 py-1.5 text-sm text-white rounded" style="background:var(--primary);" onclick="saveAdd(\'' + pageKey + '\', \'' + id + '\')">确定</button>';
+        const footer = '<button class="px-4 py-1.5 text-sm rounded border" style="border-color:#D9D9D9;color:var(--text-secondary);background:#fff;" onclick="closeModal(\'' + id + '\')">取消</button><button class="px-4 py-1.5 text-sm text-white rounded" style="background:var(--primary);" onclick="confirmAdd(\'' + pageKey + '\', \'' + id + '\')">确定</button>';
         openModal(id, '新增' + (config.toolbar && config.toolbar[0] ? config.toolbar[0].text.replace('新增', '') : ''), body, footer, modalSize);
         return;
     } else {
@@ -9330,10 +9361,21 @@ function confirmAdd(pageKey, modalId) {
         newRow[key] = input.value;
     });
     
-    // 读取选中的 radio
-    var checkedRadio = modal.querySelector('input[type="radio"]:checked');
-    if (checkedRadio && checkedRadio.name) {
-        newRow[checkedRadio.name] = checkedRadio.value;
+    // 读取选中的 radio（支持多组）
+    var prefix = 'add_';
+    var radioGroups = {};
+    modal.querySelectorAll('input[type="radio"]').forEach(function(radio) {
+        var groupName = radio.name.replace(prefix, '');
+        if (!radioGroups[groupName] && radio.checked) {
+            var val = radio.value;
+            // 布尔值转换
+            if (val === 'true') val = true;
+            else if (val === 'false') val = false;
+            radioGroups[groupName] = val;
+        }
+    });
+    for (var rKey in radioGroups) {
+        newRow[rKey] = radioGroups[rKey];
     }
     
     // 读取 toggle 开关状态
@@ -9402,8 +9444,17 @@ function openEditModal(pageKey, rowId) {
         }
     }
 
-    // tab-table 页面：根据 columns 动态生成编辑表单
+    // tab-table 页面：优先使用 formFields，否则根据 columns 动态生成编辑表单
     if (resolved.tabKey) {
+        const tabConfig = resolved.tabConfig;
+        // 优先使用 formFields
+        if (tabConfig && tabConfig.formFields && tabConfig.formFields.length > 0) {
+            body = renderFormFieldsFromConfig(tabConfig.formFields, 'edit_', row);
+            const modalSize = tabConfig.modalSize || 'large';
+            const footer = '<button class="px-4 py-1.5 text-sm rounded border" style="border-color:#D9D9D9;color:var(--text-secondary);background:#fff;" onclick="closeModal(\'' + id + '\')">取消</button><button class="px-4 py-1.5 text-sm text-white rounded" style="background:var(--primary);" onclick="confirmEdit(\'' + pageKey + '\', \'' + id + '\', ' + rowId + ')">确定</button>';
+            openModal(id, '编辑', body, footer, modalSize);
+            return;
+        }
         for (const col of cols) {
             if (col.type === 'checkbox' || col.type === 'index' || col.type === 'actions') continue;
             const fieldKey = col.key;
@@ -9579,10 +9630,20 @@ function confirmEdit(pageKey, modalId, rowId) {
         }
     });
     
-    // 读取选中的 radio
-    var checkedRadio = modal.querySelector('input[type="radio"]:checked');
-    if (checkedRadio && checkedRadio.name) {
-        row[checkedRadio.name] = checkedRadio.value;
+    // 读取选中的 radio（支持多组）
+    var radioGroups = {};
+    modal.querySelectorAll('input[type="radio"]').forEach(function(radio) {
+        var groupName = radio.name.replace(prefix, '');
+        if (!radioGroups[groupName] && radio.checked) {
+            var val = radio.value;
+            // 布尔值转换
+            if (val === 'true') val = true;
+            else if (val === 'false') val = false;
+            radioGroups[groupName] = val;
+        }
+    });
+    for (var rKey in radioGroups) {
+        row[rKey] = radioGroups[rKey];
     }
     
     // 读取 toggle 开关状态
@@ -11428,7 +11489,7 @@ function openDeleteConfirm(pageKey, rowId) {
     const data = resolved.getData();
     const row = data.find(r => r.id === rowId);
     if (!row) return;
-    const name = row.name || row.title || row.roleName || row.userName || ('ID:' + rowId);
+    const name = row.name || row.title || row.roleName || row.userName || row.configName || row.settingItem || row.apiName || ('ID:' + rowId);
     const id = 'modal_delete_' + pageKey;
     const body = `<div class="text-center py-4">
         <i class="fa fa-exclamation-triangle text-3xl mb-3" style="color:var(--warning);"></i>
