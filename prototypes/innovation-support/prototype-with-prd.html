@@ -619,7 +619,6 @@ var navConfig = [
                 key: 's-org-setting', label: '组织机构设置', type: 'subgroup',
                 children: [
                     { key: 'title-level', label: '职级职称管理', type: 'page' },
-                    { key: 'position-manage', label: '职务管理', type: 'page' },
                     { key: 'ext-field', label: '拓展字段管理', type: 'page' },
                 ]
             },
@@ -1615,29 +1614,41 @@ var pageConfigs = {
                 ];
             },
             extend: [
-                { fieldName: '入职日期', fieldValue: '2023-06-15', fieldType: '日期', updateTime: '2025-01-10 10:30:00' },
-                { fieldName: '学历', fieldValue: '本科', fieldType: '下拉', updateTime: '2025-01-10 10:30:00' },
-                { fieldName: '专业', fieldValue: '计算机科学与技术', fieldType: '文本', updateTime: '2025-01-10 10:30:00' },
-                { fieldName: '籍贯', fieldValue: '江西南昌', fieldType: '文本', updateTime: '2025-01-10 10:30:00' },
+                { id: 1, fieldName: '入职日期', fieldValue: '2023-06-15', fieldType: '日期', updateTime: '2025-01-10 10:30:00' },
+                { id: 2, fieldName: '学历', fieldValue: '本科', fieldType: '下拉', updateTime: '2025-01-10 10:30:00' },
+                { id: 3, fieldName: '专业', fieldValue: '计算机科学与技术', fieldType: '文本', updateTime: '2025-01-10 10:30:00' },
+                { id: 4, fieldName: '籍贯', fieldValue: '江西南昌', fieldType: '文本', updateTime: '2025-01-10 10:30:00' },
+                { id: 5, fieldName: '工号', fieldValue: 'EMP001', fieldType: '文本', updateTime: '2025-01-10 10:30:00' },
+                { id: 6, fieldName: '紧急联系人', fieldValue: '张女士', fieldType: '文本', updateTime: '2025-02-15 09:00:00' },
             ],
             orgLink: [
-                { orgName: '省政务信息中心', orgPath: '江西省/赣政通/省政务信息中心', isMain: true, linkTime: '2025-01-10 10:00:00' },
-                { orgName: '云上（江西）大数据发展有限公司', orgPath: '江西省/赣政通/省政务信息中心/云上（江西）大数据发展有限公司', isMain: false, linkTime: '2025-02-01 14:00:00' },
+                { id: 1, orgName: '省政务信息中心', orgPath: '江西省/赣政通/省政务信息中心', isMain: true, linkTime: '2025-01-10 10:00:00' },
+                { id: 2, orgName: '云上（江西）大数据发展有限公司', orgPath: '江西省/赣政通/省政务信息中心/云上（江西）大数据发展有限公司', isMain: false, linkTime: '2025-02-01 14:00:00' },
+                { id: 3, orgName: '赣政通', orgPath: '江西省/赣政通', isMain: false, linkTime: '2025-03-10 09:00:00' },
             ],
             position: [
-                { positionName: '高级工程师', positionType: '技术岗', linkTime: '2023-06-15' },
+                { id: 1, positionName: '高级工程师', positionType: '技术岗', linkTime: '2023-06-15', status: 'active' },
+                { id: 2, positionName: '产品经理', positionType: '管理岗', linkTime: '2024-03-01', status: 'active' },
+                { id: 3, positionName: '前端开发工程师', positionType: '技术岗', linkTime: '2022-01-10', status: 'inactive' },
             ],
             title: [
-                { titleName: '高级工程师', rank: '副高级', certNo: 'ZC2023001', grantDate: '2023-10-15' },
+                { id: 1, titleName: '高级工程师', rank: '副高级', certNo: 'ZC2023001', grantDate: '2023-10-15', status: 'active' },
+                { id: 2, titleName: '中级工程师', rank: '中级', certNo: 'ZC2021002', grantDate: '2021-08-20', status: 'active' },
+                { id: 3, titleName: '系统集成项目管理工程师', rank: '中级', certNo: 'ZC2022003', grantDate: '2022-05-10', status: 'active' },
             ],
             level: [
-                { levelName: '正科级', rank: '正科', appointDate: '2023-10-15' },
+                { id: 1, levelName: '正科级', rank: '正科', appointDate: '2023-10-15', status: 'active' },
+                { id: 2, levelName: '副科级', rank: '副科', appointDate: '2021-06-01', status: 'inactive' },
             ],
             duty: [
-                { dutyName: '技术部经理', dutyLevel: '中层', orgName: '省政务信息中心', appointDate: '2023-10-15' },
+                { id: 1, dutyName: '技术部经理', dutyLevel: '中层', orgName: '省政务信息中心', appointDate: '2023-10-15', status: 'active' },
+                { id: 2, dutyName: '产品部副经理', dutyLevel: '中层', orgName: '云上（江西）大数据发展有限公司', appointDate: '2024-06-01', status: 'active' },
+                { id: 3, dutyName: '开发组组长', dutyLevel: '基层', orgName: '省政务信息中心', appointDate: '2022-03-15', status: 'inactive' },
             ],
             approval: [
-                { approvalType: '机构任职审批', targetOrg: '云上（江西）大数据发展有限公司', status: 'approved', approver: '王主任', approveTime: '2025-02-01 14:30:00' },
+                { id: 1, approvalType: '机构任职审批', targetOrg: '云上（江西）大数据发展有限公司', status: 'approved', approver: '王主任', approveTime: '2025-02-01 14:30:00' },
+                { id: 2, approvalType: '岗位调整审批', targetOrg: '省政务信息中心', status: 'approved', approver: '李总监', approveTime: '2024-03-01 10:00:00' },
+                { id: 3, approvalType: '职务晋升审批', targetOrg: '省政务信息中心', status: 'pending', approver: '-', approveTime: '-' },
             ],
         },
     },
@@ -1743,7 +1754,7 @@ var pageConfigs = {
                     { key: 'dutyType', label: '职务类型', type: 'select', placeholder: '请选择', options: [{ value: '', label: '全部' }, { value: 'manage', label: '管理岗' }, { value: 'tech', label: '技术岗' }, { value: 'admin', label: '行政岗' }] },
                     { key: 'status', label: '状态', type: 'select', placeholder: '请选择', options: [{ value: '', label: '全部' }, { value: 'true', label: '启用' }, { value: 'false', label: '停用' }] },
                 ],
-                toolbar: [{ type: 'add', text: '新增职务' }, { type: 'import' }, { type: 'batchDelete' }],
+                toolbar: [{ type: 'add', text: '新增职务' }, { type: 'batchDelete' }, { type: 'import' }, { type: 'export' }],
                 columns: [
                     { type: 'checkbox' },
                     { type: 'index', title: '序号' },
@@ -3645,41 +3656,41 @@ var pageConfigs = {
             'deptHistory': {
                 query: [
                     { key: 'userName', label: '用户姓名', type: 'input', placeholder: '请输入用户姓名' },
-                    { key: 'employeeNo', label: '工号', type: 'input', placeholder: '请输入工号' },
-                    { key: 'appointType', label: '任职类型', type: 'select', placeholder: '请选择', options: [{ value: '', label: '全部' }, { value: 'promote', label: '晋升' }, { value: 'transfer', label: '调岗' }, { value: 'demote', label: '降职' }, { value: 'resign', label: '离职' }] },
-                    { key: 'status', label: '状态', type: 'select', placeholder: '请选择', options: [{ value: '', label: '全部' }, { value: 'active', label: '生效中' }, { value: 'pending', label: '待生效' }, { value: 'invalid', label: '已失效' }] },
+                    { key: 'deptName', label: '任职部门', type: 'input', placeholder: '请输入部门名称' },
+                    { key: 'status', label: '任职状态', type: 'select', placeholder: '请选择', options: [{ value: '', label: '全部' }, { value: 'active', label: '在职' }, { value: 'left', label: '已离任' }, { value: 'pending', label: '待生效' }] },
+                    { key: 'dateRange', label: '任职时间范围', type: 'dateRange' },
                 ],
                 toolbar: [{ type: 'add', text: '新增任职' }, { type: 'batchDelete' }],
                 columns: [
                     { type: 'checkbox' },
                     { type: 'index', title: '序号' },
                     { key: 'userName', title: '用户姓名', sortable: true },
-                    { key: 'employeeNo', title: '工号' },
-                    { key: 'fromDept', title: '原部门' },
-                    { key: 'toDept', title: '新部门' },
-                    { key: 'appointType', title: '任职类型', type: 'tag', tagMap: { 'promote': { text: '晋升', color: 'green' }, 'transfer': { text: '调岗', color: 'blue' }, 'demote': { text: '降职', color: 'orange' }, 'resign': { text: '离职', color: 'red' } } },
-                    { key: 'effectiveDate', title: '生效日期', sortable: true },
-                    { key: 'status', title: '状态', type: 'tag', tagMap: { 'active': { text: '生效中', color: 'green' }, 'pending': { text: '待生效', color: 'orange' }, 'invalid': { text: '已失效', color: 'gray' } } },
+                    { key: 'deptName', title: '任职部门', sortable: true },
+                    { key: 'dutyName', title: '职务' },
+                    { key: 'positionName', title: '岗位' },
+                    { key: 'startDate', title: '任职开始时间', sortable: true },
+                    { key: 'endDate', title: '任职结束时间' },
+                    { key: 'status', title: '任职状态', type: 'tag', tagMap: { 'active': { text: '在职', color: 'green' }, 'left': { text: '已离任', color: 'gray' }, 'pending': { text: '待生效', color: 'orange' } } },
                     { type: 'actions', title: '操作', actions: [{ key: 'view', label: '查看' }, { key: 'edit', label: '编辑' }, { key: 'delete', label: '删除', danger: true }] },
                 ],
                 data: [
-                    { id: 1, userName: '张三', employeeNo: 'EMP001', fromDept: '技术部', toDept: '技术部', appointType: 'promote', effectiveDate: '2025-01-01', status: 'active' },
-                    { id: 2, userName: '李四', employeeNo: 'EMP002', fromDept: '市场部', toDept: '销售部', appointType: 'transfer', effectiveDate: '2025-02-15', status: 'active' },
-                    { id: 3, userName: '王五', employeeNo: 'EMP003', fromDept: '研发部', toDept: '测试部', appointType: 'demote', effectiveDate: '2025-03-01', status: 'active' },
-                    { id: 4, userName: '赵六', employeeNo: 'EMP004', fromDept: '人事部', toDept: '-', appointType: 'resign', effectiveDate: '2025-03-10', status: 'invalid' },
-                    { id: 5, userName: '钱七', employeeNo: 'EMP005', fromDept: '财务部', toDept: '财务部', appointType: 'promote', effectiveDate: '2025-04-01', status: 'pending' },
-                    { id: 6, userName: '孙八', employeeNo: 'EMP006', fromDept: '运营部', toDept: '产品部', appointType: 'transfer', effectiveDate: '2025-04-10', status: 'pending' },
-                    { id: 7, userName: '周九', employeeNo: 'EMP007', fromDept: '技术部', toDept: '技术部', appointType: 'promote', effectiveDate: '2024-12-01', status: 'active' },
-                    { id: 8, userName: '吴十', employeeNo: 'EMP008', fromDept: '销售部', toDept: '市场部', appointType: 'transfer', effectiveDate: '2025-01-20', status: 'active' },
-                    { id: 9, userName: '郑十一', employeeNo: 'EMP009', fromDept: '客服部', toDept: '-', appointType: 'resign', effectiveDate: '2025-02-28', status: 'invalid' },
-                    { id: 10, userName: '冯十二', employeeNo: 'EMP010', fromDept: '行政部', toDept: '人事部', appointType: 'transfer', effectiveDate: '2025-03-15', status: 'active' },
+                    { id: 1, userName: '张三', deptName: '技术部', dutyName: '技术部经理', positionName: '高级工程师', startDate: '2023-06-15', endDate: '-', status: 'active' },
+                    { id: 2, userName: '李四', deptName: '产品部', dutyName: '产品部副经理', positionName: '产品经理', startDate: '2024-03-01', endDate: '-', status: 'active' },
+                    { id: 3, userName: '王五', deptName: '研发部', dutyName: '开发组组长', positionName: '前端开发工程师', startDate: '2022-01-10', endDate: '2024-06-30', status: 'left' },
+                    { id: 4, userName: '赵六', deptName: '设计部', dutyName: '设计主管', positionName: 'UI设计师', startDate: '2024-01-15', endDate: '-', status: 'active' },
+                    { id: 5, userName: '钱七', deptName: '运维部', dutyName: '运维工程师', positionName: '运维工程师', startDate: '2025-02-01', endDate: '-', status: 'pending' },
+                    { id: 6, userName: '孙八', deptName: '行政部', dutyName: '行政主管', positionName: '行政专员', startDate: '2023-08-20', endDate: '-', status: 'active' },
+                    { id: 7, userName: '周九', deptName: '技术部', dutyName: '测试工程师', positionName: '测试工程师', startDate: '2024-05-10', endDate: '2025-03-31', status: 'left' },
+                    { id: 8, userName: '吴十', deptName: '市场部', dutyName: '市场专员', positionName: '市场专员', startDate: '2025-01-01', endDate: '-', status: 'active' },
+                    { id: 9, userName: '郑十一', deptName: '人事部', dutyName: '人事主管', positionName: '人事专员', startDate: '2022-11-01', endDate: '-', status: 'active' },
+                    { id: 10, userName: '冯十二', deptName: '财务部', dutyName: '财务专员', positionName: '财务专员', startDate: '2024-09-01', endDate: '-', status: 'pending' },
                 ],
             },
             'approvalConfig': {
                 query: [
                     { key: 'configName', label: '配置名称', type: 'input', placeholder: '请输入配置名称' },
                     { key: 'approvalType', label: '审批类型', type: 'select', placeholder: '请选择', options: [{ value: '', label: '全部' }, { value: 'promote', label: '晋升审批' }, { value: 'transfer', label: '调岗审批' }, { value: 'demote', label: '降职审批' }, { value: 'resign', label: '离职审批' }] },
-                    { key: 'enabled', label: '是否启用', type: 'select', placeholder: '请选择', options: [{ value: '', label: '全部' }, { value: '1', label: '启用' }, { value: '0', label: '停用' }] },
+                    { key: 'status', label: '状态', type: 'select', placeholder: '请选择', options: [{ value: '', label: '全部' }, { value: '1', label: '启用' }, { value: '0', label: '停用' }] },
                 ],
                 toolbar: [{ type: 'add', text: '新增配置' }, { type: 'batchDelete' }],
                 columns: [
@@ -3687,84 +3698,52 @@ var pageConfigs = {
                     { type: 'index', title: '序号' },
                     { key: 'configName', title: '配置名称', sortable: true },
                     { key: 'approvalType', title: '审批类型', type: 'tag', tagMap: { 'promote': { text: '晋升审批', color: 'green' }, 'transfer': { text: '调岗审批', color: 'blue' }, 'demote': { text: '降职审批', color: 'orange' }, 'resign': { text: '离职审批', color: 'red' } } },
-                    { key: 'approvalNodes', title: '审批节点' },
-                    { key: 'approver', title: '审批人' },
-                    { key: 'enabled', title: '是否启用', type: 'toggle' },
+                    { key: 'nodeCount', title: '审批节点数', sortable: true },
+                    { key: 'status', title: '状态', type: 'tag', tagMap: { true: { text: '启用', color: 'green' }, false: { text: '停用', color: 'red' } } },
+                    { key: 'createTime', title: '创建时间', sortable: true },
                     { type: 'actions', title: '操作', actions: [{ key: 'view', label: '查看' }, { key: 'edit', label: '编辑' }, { key: 'delete', label: '删除', danger: true }] },
                 ],
                 data: [
-                    { id: 1, configName: '部门经理晋升审批', approvalType: 'promote', approvalNodes: '直属领导→部门总监→HR', approver: '多级审批', enabled: true },
-                    { id: 2, configName: '跨部门调岗审批', approvalType: 'transfer', approvalNodes: '原部门领导→新部门领导→HR', approver: '多级审批', enabled: true },
-                    { id: 3, configName: '员工降职审批', approvalType: 'demote', approvalNodes: '部门总监→HR总监→总经理', approver: '多级审批', enabled: true },
-                    { id: 4, configName: '员工离职审批', approvalType: 'resign', approvalNodes: '直属领导→部门经理→HR→行政', approver: '多级审批', enabled: true },
-                    { id: 5, configName: '高管晋升审批', approvalType: 'promote', approvalNodes: 'CEO→董事会', approver: '多级审批', enabled: false },
-                    { id: 6, configName: '同部门调岗审批', approvalType: 'transfer', approvalNodes: '部门经理→HR', approver: '二级审批', enabled: true },
+                    { id: 1, configName: '部门经理晋升审批', approvalType: 'promote', nodeCount: 3, status: true, createTime: '2025-01-10 10:00:00' },
+                    { id: 2, configName: '跨部门调岗审批', approvalType: 'transfer', nodeCount: 3, status: true, createTime: '2025-01-12 14:30:00' },
+                    { id: 3, configName: '员工降职审批', approvalType: 'demote', nodeCount: 3, status: true, createTime: '2025-01-15 09:15:00' },
+                    { id: 4, configName: '员工离职审批', approvalType: 'resign', nodeCount: 4, status: true, createTime: '2025-01-18 16:45:00' },
+                    { id: 5, configName: '高管晋升审批', approvalType: 'promote', nodeCount: 2, status: false, createTime: '2025-02-01 11:20:00' },
+                    { id: 6, configName: '同部门调岗审批', approvalType: 'transfer', nodeCount: 2, status: true, createTime: '2025-02-10 08:30:00' },
                 ],
             },
             'orgRecord': {
                 query: [
                     { key: 'userName', label: '用户姓名', type: 'input', placeholder: '请输入用户姓名' },
                     { key: 'orgName', label: '机构名称', type: 'input', placeholder: '请输入机构名称' },
-                    { key: 'status', label: '任职状态', type: 'select', placeholder: '请选择', options: [{ value: '', label: '全部' }, { value: 'active', label: '在职' }, { value: 'left', label: '已离任' }] },
+                    { key: 'appointType', label: '任职类型', type: 'select', placeholder: '请选择', options: [{ value: '', label: '全部' }, { value: 'appoint', label: '任命' }, { value: 'transfer', label: '调任' }, { value: 'promote', label: '晋升' }, { value: 'demote', label: '降职' }, { value: 'dismiss', label: '免职' }] },
+                    { key: 'dateRange', label: '任职时间范围', type: 'dateRange' },
                 ],
                 toolbar: [{ type: 'add', text: '新增任职' }, { type: 'batchDelete' }],
                 columns: [
                     { type: 'checkbox' },
                     { type: 'index', title: '序号' },
                     { key: 'userName', title: '用户姓名', sortable: true },
-                    { key: 'orgName', title: '机构名称' },
-                    { key: 'position', title: '任职岗位' },
+                    { key: 'orgName', title: '机构名称', sortable: true },
+                    { key: 'appointType', title: '任职类型', type: 'tag', tagMap: { 'appoint': { text: '任命', color: 'blue' }, 'transfer': { text: '调任', color: 'green' }, 'promote': { text: '晋升', color: 'purple' }, 'demote': { text: '降职', color: 'orange' }, 'dismiss': { text: '免职', color: 'red' } } },
+                    { key: 'dutyName', title: '任职职务' },
                     { key: 'startTime', title: '任职开始时间', sortable: true },
                     { key: 'endTime', title: '任职结束时间' },
-                    { key: 'status', title: '任职状态', type: 'tag', tagMap: { 'active': { text: '在职', color: 'green' }, 'left': { text: '已离任', color: 'gray' } } },
+                    { key: 'status', title: '状态', type: 'tag', tagMap: { 'active': { text: '在职', color: 'green' }, 'left': { text: '已离任', color: 'gray' } } },
                     { type: 'actions', title: '操作', actions: [{ key: 'view', label: '查看' }, { key: 'edit', label: '编辑' }, { key: 'delete', label: '删除', danger: true }] },
                 ],
                 data: [
-                    { id: 1, userName: '陈龙', orgName: '云上（江西）大数据发展有限公司', position: '总经理', startTime: '2023-01-01', endTime: '-', status: 'active' },
-                    { id: 2, userName: '李娜', orgName: '云上（江西）大数据发展有限公司', position: '技术总监', startTime: '2023-03-15', endTime: '-', status: 'active' },
-                    { id: 3, userName: '王强', orgName: '赣州市分公司', position: '经理', startTime: '2022-06-01', endTime: '2024-12-31', status: 'left' },
-                    { id: 4, userName: '张伟', orgName: '南昌市分公司', position: '副经理', startTime: '2024-01-01', endTime: '-', status: 'active' },
-                    { id: 5, userName: '刘芳', orgName: '九江市分公司', position: '主管', startTime: '2023-08-01', endTime: '-', status: 'active' },
-                    { id: 6, userName: '陈明', orgName: '上饶市分公司', position: '专员', startTime: '2024-03-01', endTime: '-', status: 'active' },
-                    { id: 7, userName: '赵丽', orgName: '宜春市分公司', position: '经理', startTime: '2022-01-01', endTime: '2024-06-30', status: 'left' },
-                    { id: 8, userName: '孙鹏', orgName: '吉安市分公司', position: '副经理', startTime: '2024-07-01', endTime: '-', status: 'active' },
-                    { id: 9, userName: '周静', orgName: '抚州市分公司', position: '主管', startTime: '2023-11-01', endTime: '-', status: 'active' },
-                    { id: 10, userName: '吴磊', orgName: '萍乡市分公司', position: '专员', startTime: '2024-05-01', endTime: '-', status: 'active' },
+                    { id: 1, userName: '陈龙', orgName: '云上（江西）大数据发展有限公司', appointType: 'appoint', dutyName: '总经理', startTime: '2023-01-01', endTime: '-', status: 'active' },
+                    { id: 2, userName: '李娜', orgName: '云上（江西）大数据发展有限公司', appointType: 'promote', dutyName: '技术总监', startTime: '2023-03-15', endTime: '-', status: 'active' },
+                    { id: 3, userName: '王强', orgName: '赣州市分公司', appointType: 'transfer', dutyName: '经理', startTime: '2022-06-01', endTime: '2024-12-31', status: 'left' },
+                    { id: 4, userName: '张伟', orgName: '南昌市分公司', appointType: 'promote', dutyName: '副经理', startTime: '2024-01-01', endTime: '-', status: 'active' },
+                    { id: 5, userName: '刘芳', orgName: '九江市分公司', appointType: 'appoint', dutyName: '主管', startTime: '2023-08-01', endTime: '-', status: 'active' },
+                    { id: 6, userName: '赵丽', orgName: '宜春市分公司', appointType: 'dismiss', dutyName: '经理', startTime: '2022-01-01', endTime: '2024-06-30', status: 'left' },
+                    { id: 7, userName: '孙鹏', orgName: '吉安市分公司', appointType: 'demote', dutyName: '副经理', startTime: '2024-07-01', endTime: '-', status: 'active' },
+                    { id: 8, userName: '周静', orgName: '抚州市分公司', appointType: 'transfer', dutyName: '主管', startTime: '2023-11-01', endTime: '-', status: 'active' },
                 ],
             },
         },
-    },
-
-    /* ---------- 职务管理 ---------- */
-    'position-manage': {
-        breadcrumb: ['组织机构管理', '组织机构设置', '职务管理'],
-        query: [
-            { key: 'name', label: '职务名称', type: 'input', placeholder: '请输入职务名称' },
-            { key: 'code', label: '职务编码', type: 'input', placeholder: '请输入职务编码' },
-            { key: 'status', label: '状态', type: 'select', placeholder: '请选择', options: [{ value: '', label: '全部' }, { value: '1', label: '启用' }, { value: '0', label: '停用' }] },
-        ],
-        toolbar: [{ type: 'add', text: '新增职务' }, { type: 'batchDelete' }, { type: 'import' }, { type: 'export' }],
-        columns: [
-            { type: 'checkbox' },
-            { type: 'index', title: '序号' },
-            { key: 'name', title: '职务名称', sortable: true },
-            { key: 'code', title: '职务编码', sortable: true },
-            { key: 'level', title: '职务级别' },
-            { key: 'sortNo', title: '排序号' },
-            { key: 'status', title: '状态', type: 'tag', tagMap: { true: { text: '启用', color: 'green' }, false: { text: '停用', color: 'red' } } },
-            { key: 'createTime', title: '创建时间', sortable: true },
-            { type: 'actions', title: '操作', actions: [{ key: 'edit', label: '编辑' }, { key: 'delete', label: '删除', danger: true }] },
-        ],
-        data: [
-            { id: 1, name: '总经理', code: 'POS_GM', level: '高管级', sortNo: 1, status: true, createTime: '2025-01-01 10:00:00' },
-            { id: 2, name: '副总经理', code: 'POS_DGM', level: '高管级', sortNo: 2, status: true, createTime: '2025-01-01 10:00:00' },
-            { id: 3, name: '总监', code: 'POS_DIR', level: '总监级', sortNo: 3, status: true, createTime: '2025-01-02 11:00:00' },
-            { id: 4, name: '经理', code: 'POS_MGR', level: '经理级', sortNo: 4, status: true, createTime: '2025-01-03 09:00:00' },
-            { id: 5, name: '副经理', code: 'POS_DMGR', level: '经理级', sortNo: 5, status: true, createTime: '2025-01-04 14:00:00' },
-            { id: 6, name: '主管', code: 'POS_SUP', level: '主管级', sortNo: 6, status: true, createTime: '2025-01-05 16:00:00' },
-            { id: 7, name: '专员', code: 'POS_SPEC', level: '专员级', sortNo: 7, status: true, createTime: '2025-01-06 08:30:00' },
-            { id: 8, name: '助理', code: 'POS_ASST', level: '助理级', sortNo: 8, status: false, createTime: '2025-01-07 10:15:00' },
-        ],
     },
 
     /* ---------- 开放门户管理 - 接入步骤管理 ---------- */
@@ -5134,7 +5113,6 @@ var _newFeaturePages = [
     'user',                 // 用户管理
     'org',                  // 机构管理
     'title-level',          // 职级职称管理
-    'position-manage',      // 职务管理（新增）
     'provider-notice',      // 消息通知管理
     'provider-entry',       // 软件服务商入驻管理
     'provider',             // 软件服务商管理
@@ -5551,6 +5529,62 @@ function filterLineList(keyword) {
     }
 }
 
+// 条线用户操作
+function removeLineUser(id, name) {
+    openModal('确认移除', '<div style="width:400px;padding:10px 0;"><i class="fa fa-exclamation-circle" style="color:#FAAD14;font-size:20px;margin-right:8px;"></span>确定要将用户「' + name + '」从条线中移除吗？</div>', function() {
+        showToast('移除成功', 'success');
+        closeModal();
+    }, '确认移除', 'btn-danger');
+}
+
+function batchRemoveLineUsers() {
+    var checks = document.querySelectorAll('.line-user-checkbox:checked');
+    if (checks.length === 0) {
+        showToast('请先选择要移除的用户', 'warning');
+        return;
+    }
+    openModal('批量移除', '<div style="width:400px;padding:10px 0;"><i class="fa fa-exclamation-circle" style="color:#FAAD14;font-size:20px;margin-right:8px;"></span>确定要将选中的 ' + checks.length + ' 个用户从条线中移除吗？</div>', function() {
+        showToast('批量移除成功', 'success');
+        closeModal();
+    }, '确认移除', 'btn-danger');
+}
+
+// 条线管理员操作
+function openLineAdminAddModal() {
+    var content = '<div style="width:520px;">';
+    content += '<div style="margin-bottom:16px;"><label class="form-label">选择用户</label>';
+    content += '<div style="display:inline-block;position:relative;"><input type="text" class="form-input" style="width:380px;" placeholder="请输入用户姓名/账号搜索" /><div style="position:absolute;top:100%;left:0;right:0;background:#fff;border:1px solid #D9D9D9;border-radius:4px;margin-top:4px;max-height:200px;overflow-y:auto;z-index:10;">';
+    content += '<div style="padding:8px 12px;cursor:pointer;display:flex;align-items:center;gap:8px;" onmouseover="this.style.background=\'#F5F7FA\'" onmouseout="this.style.background=\'\'"><input type="radio" name="adminUser" /><span>张三（zhangsan）- 省政务信息中心</span></div>';
+    content += '<div style="padding:8px 12px;cursor:pointer;display:flex;align-items:center;gap:8px;" onmouseover="this.style.background=\'#F5F7FA\'" onmouseout="this.style.background=\'\'"><input type="radio" name="adminUser" /><span>李四（lisi）- 省政务信息中心</span></div>';
+    content += '</div></div></div>';
+    content += '<div style="margin-bottom:16px;"><label class="form-label">管理范围</label>';
+    content += '<select class="form-input" style="width:380px;"><option>全部机构</option><option>县级机构</option><option>乡镇机构</option></select></div>';
+    content += '</div>';
+    openModal('新增条线管理员', content, function() {
+        showToast('新增成功', 'success');
+        closeModal();
+    });
+}
+
+function removeLineAdmin(id, name) {
+    openModal('确认移除', '<div style="width:400px;padding:10px 0;"><i class="fa fa-exclamation-circle" style="color:#FAAD14;font-size:20px;margin-right:8px;"></span>确定要将管理员「' + name + '」从条线中移除吗？</div>', function() {
+        showToast('移除成功', 'success');
+        closeModal();
+    }, '确认移除', 'btn-danger');
+}
+
+function batchRemoveLineAdmins() {
+    var checks = document.querySelectorAll('.line-admin-checkbox:checked');
+    if (checks.length === 0) {
+        showToast('请先选择要移除的管理员', 'warning');
+        return;
+    }
+    openModal('批量移除', '<div style="width:400px;padding:10px 0;"><i class="fa fa-exclamation-circle" style="color:#FAAD14;font-size:20px;margin-right:8px;"></span>确定要将选中的 ' + checks.length + ' 个管理员从条线中移除吗？</div>', function() {
+        showToast('批量移除成功', 'success');
+        closeModal();
+    }, '确认移除', 'btn-danger');
+}
+
 function toggleDictTreeNode(pageKey, id) {
     if (!state.treeExpanded[pageKey]) state.treeExpanded[pageKey] = {};
     if (state.treeExpanded[pageKey][id]) {
@@ -5660,7 +5694,6 @@ var _overviewModules = [
         { key: 'line', label: '机构条线管理' },
         { key: 'user-appointment', label: '用户任职管理' },
         { key: 'title-level', label: '职级职称管理' },
-        { key: 'position-manage', label: '职务管理' },
         { key: 'ext-field', label: '拓展字段管理' },
     ]},
     { name: '软件服务商工作台', icon: 'fa-building', color: '#FA8C16', pages: [
@@ -6185,6 +6218,24 @@ function renderUserDrawerBody(user, activeTab) {
 
 function renderUserDrawerTabContent(user, tabKey, drawerData) {
     var html = '';
+    var sortIcon = '<span class="sort-icon"><i class="fa fa-sort"></i></span>';
+
+    // 工具栏生成函数
+    function renderToolbar(addText, batchText, addOnClick, batchOnClick) {
+        var t = '<div style="display:flex;align-items:center;gap:8px;margin-bottom:12px;">';
+        t += '<button class="btn btn-primary btn-sm" onclick="' + addOnClick + '"><i class="fa fa-plus"></i> ' + addText + '</button>';
+        t += '<button class="btn btn-default btn-sm" onclick="' + batchOnClick + '"><i class="fa fa-trash-o"></i> ' + batchText + '</button>';
+        t += '</div>';
+        return t;
+    }
+
+    // 操作列生成函数
+    function renderActions(id, tab) {
+        return '<a href="javascript:;" class="link-btn" onclick="viewUserDrawerItem(\'' + tab + '\',' + id + ')">查看</a>' +
+               ' <a href="javascript:;" class="link-btn" onclick="editUserDrawerItem(\'' + tab + '\',' + id + ')">编辑</a>' +
+               ' <a href="javascript:;" class="link-btn danger" onclick="deleteUserDrawerItem(\'' + tab + '\',' + id + ')">删除</a>';
+    }
+
     if (tabKey === 'basic') {
         var basicFields = typeof drawerData.basic === 'function' ? drawerData.basic(user) : drawerData.basic || [];
         html += '<div class="drawer-info-section">';
@@ -6201,75 +6252,331 @@ function renderUserDrawerTabContent(user, tabKey, drawerData) {
     } else if (tabKey === 'extend') {
         html += '<div class="drawer-info-section">';
         html += '<div class="drawer-section-title">拓展信息</div>';
-        html += '<table class="drawer-sub-table"><thead><tr><th>字段名称</th><th>字段值</th><th>字段类型</th><th>更新时间</th></tr></thead><tbody>';
+        // 查询区
+        html += '<div style="display:flex;align-items:center;gap:8px;margin-bottom:12px;">';
+        html += '<input type="text" class="form-input text-sm" placeholder="请输入字段名称" style="width:200px;padding:6px 10px;" />';
+        html += '<button class="btn btn-default btn-sm"><i class="fa fa-search"></i> 查询</button>';
+        html += '<button class="btn btn-default btn-sm">重置</button>';
+        html += '</div>';
+        // 工具栏
+        html += renderToolbar('新增拓展信息', '批量删除', "addUserDrawerItem('extend')", "batchDeleteUserDrawerItem('extend')");
+        // 表格
+        html += '<table class="drawer-sub-table"><thead><tr>';
+        html += '<th style="width:36px;"><input type="checkbox" onclick="toggleDrawerAllCheck(this,\'extend\')" /></th>';
+        html += '<th style="width:50px;">序号</th>';
+        html += '<th onclick="sortDrawerTable(\'extend\',\'fieldName\')" style="cursor:pointer;">字段名称' + sortIcon + '</th>';
+        html += '<th>字段值</th>';
+        html += '<th onclick="sortDrawerTable(\'extend\',\'fieldType\')" style="cursor:pointer;">字段类型' + sortIcon + '</th>';
+        html += '<th onclick="sortDrawerTable(\'extend\',\'updateTime\')" style="cursor:pointer;">更新时间' + sortIcon + '</th>';
+        html += '<th style="width:180px;">操作</th>';
+        html += '</tr></thead><tbody>';
         var extData = drawerData.extend || [];
         for (var j = 0; j < extData.length; j++) {
-            html += '<tr><td>' + extData[j].fieldName + '</td><td>' + extData[j].fieldValue + '</td><td>' + extData[j].fieldType + '</td><td>' + extData[j].updateTime + '</td></tr>';
+            html += '<tr><td><input type="checkbox" class="drawer-checkbox-extend" data-id="' + extData[j].id + '" /></td>';
+            html += '<td>' + (j + 1) + '</td>';
+            html += '<td>' + extData[j].fieldName + '</td>';
+            html += '<td>' + extData[j].fieldValue + '</td>';
+            html += '<td>' + extData[j].fieldType + '</td>';
+            html += '<td>' + extData[j].updateTime + '</td>';
+            html += '<td>' + renderActions(extData[j].id, 'extend') + '</td></tr>';
         }
         html += '</tbody></table></div>';
     } else if (tabKey === 'orgLink') {
         html += '<div class="drawer-info-section">';
         html += '<div class="drawer-section-title">机构关联</div>';
-        html += '<table class="drawer-sub-table"><thead><tr><th>机构名称</th><th>机构路径</th><th>主机构</th><th>关联时间</th></tr></thead><tbody>';
+        // 查询区
+        html += '<div style="display:flex;align-items:center;gap:8px;margin-bottom:12px;">';
+        html += '<input type="text" class="form-input text-sm" placeholder="请输入机构名称" style="width:200px;padding:6px 10px;" />';
+        html += '<button class="btn btn-default btn-sm"><i class="fa fa-search"></i> 查询</button>';
+        html += '<button class="btn btn-default btn-sm">重置</button>';
+        html += '</div>';
+        // 工具栏
+        html += renderToolbar('关联机构', '批量解除', "addUserDrawerItem('orgLink')", "batchDeleteUserDrawerItem('orgLink')");
+        // 表格
+        html += '<table class="drawer-sub-table"><thead><tr>';
+        html += '<th style="width:36px;"><input type="checkbox" onclick="toggleDrawerAllCheck(this,\'orgLink\')" /></th>';
+        html += '<th style="width:50px;">序号</th>';
+        html += '<th onclick="sortDrawerTable(\'orgLink\',\'orgName\')" style="cursor:pointer;">机构名称' + sortIcon + '</th>';
+        html += '<th onclick="sortDrawerTable(\'orgLink\',\'orgPath\')" style="cursor:pointer;">机构路径' + sortIcon + '</th>';
+        html += '<th>主机构</th>';
+        html += '<th onclick="sortDrawerTable(\'orgLink\',\'linkTime\')" style="cursor:pointer;">关联时间' + sortIcon + '</th>';
+        html += '<th style="width:120px;">操作</th>';
+        html += '</tr></thead><tbody>';
         var orgData = drawerData.orgLink || [];
         for (var k = 0; k < orgData.length; k++) {
             var isMainTag = orgData[k].isMain
                 ? '<span class="tag tag-green">是</span>'
                 : '<span class="tag tag-gray">否</span>';
-            html += '<tr><td>' + orgData[k].orgName + '</td><td>' + orgData[k].orgPath + '</td><td>' + isMainTag + '</td><td>' + orgData[k].linkTime + '</td></tr>';
+            html += '<tr><td><input type="checkbox" class="drawer-checkbox-orgLink" data-id="' + orgData[k].id + '" /></td>';
+            html += '<td>' + (k + 1) + '</td>';
+            html += '<td>' + orgData[k].orgName + '</td>';
+            html += '<td>' + orgData[k].orgPath + '</td>';
+            html += '<td>' + isMainTag + '</td>';
+            html += '<td>' + orgData[k].linkTime + '</td>';
+            html += '<td><a href="javascript:;" class="link-btn" onclick="viewUserDrawerItem(\'orgLink\',' + orgData[k].id + ')">查看</a> <a href="javascript:;" class="link-btn danger" onclick="deleteUserDrawerItem(\'orgLink\',' + orgData[k].id + ')">解除</a></td></tr>';
         }
         html += '</tbody></table></div>';
     } else if (tabKey === 'position') {
         html += '<div class="drawer-info-section">';
         html += '<div class="drawer-section-title">岗位关联</div>';
-        html += '<table class="drawer-sub-table"><thead><tr><th>岗位名称</th><th>岗位类型</th><th>任职时间</th></tr></thead><tbody>';
+        // 查询区
+        html += '<div style="display:flex;align-items:center;gap:8px;margin-bottom:12px;">';
+        html += '<input type="text" class="form-input text-sm" placeholder="请输入岗位名称" style="width:180px;padding:6px 10px;" />';
+        html += '<select class="form-input text-sm" style="width:120px;padding:6px 10px;"><option>全部类型</option><option>技术岗</option><option>管理岗</option></select>';
+        html += '<button class="btn btn-default btn-sm"><i class="fa fa-search"></i> 查询</button>';
+        html += '<button class="btn btn-default btn-sm">重置</button>';
+        html += '</div>';
+        // 工具栏
+        html += renderToolbar('新增关联', '批量解除', "addUserDrawerItem('position')", "batchDeleteUserDrawerItem('position')");
+        // 表格
+        html += '<table class="drawer-sub-table"><thead><tr>';
+        html += '<th style="width:36px;"><input type="checkbox" onclick="toggleDrawerAllCheck(this,\'position\')" /></th>';
+        html += '<th style="width:50px;">序号</th>';
+        html += '<th onclick="sortDrawerTable(\'position\',\'positionName\')" style="cursor:pointer;">岗位名称' + sortIcon + '</th>';
+        html += '<th onclick="sortDrawerTable(\'position\',\'positionType\')" style="cursor:pointer;">岗位类型' + sortIcon + '</th>';
+        html += '<th onclick="sortDrawerTable(\'position\',\'linkTime\')" style="cursor:pointer;">任职时间' + sortIcon + '</th>';
+        html += '<th>状态</th>';
+        html += '<th style="width:180px;">操作</th>';
+        html += '</tr></thead><tbody>';
         var posData = drawerData.position || [];
         for (var m = 0; m < posData.length; m++) {
-            html += '<tr><td>' + posData[m].positionName + '</td><td>' + posData[m].positionType + '</td><td>' + posData[m].linkTime + '</td></tr>';
+            var posStatus = posData[m].status === 'active'
+                ? '<span class="tag tag-green">在职</span>'
+                : '<span class="tag tag-gray">已离任</span>';
+            html += '<tr><td><input type="checkbox" class="drawer-checkbox-position" data-id="' + posData[m].id + '" /></td>';
+            html += '<td>' + (m + 1) + '</td>';
+            html += '<td>' + posData[m].positionName + '</td>';
+            html += '<td>' + posData[m].positionType + '</td>';
+            html += '<td>' + posData[m].linkTime + '</td>';
+            html += '<td>' + posStatus + '</td>';
+            html += '<td>' + renderActions(posData[m].id, 'position') + '</td></tr>';
         }
         html += '</tbody></table></div>';
     } else if (tabKey === 'title') {
         html += '<div class="drawer-info-section">';
         html += '<div class="drawer-section-title">职称关联</div>';
-        html += '<table class="drawer-sub-table"><thead><tr><th>职称名称</th><th>级别</th><th>证书编号</th><th>授予时间</th></tr></thead><tbody>';
+        // 查询区
+        html += '<div style="display:flex;align-items:center;gap:8px;margin-bottom:12px;">';
+        html += '<input type="text" class="form-input text-sm" placeholder="请输入职称名称" style="width:180px;padding:6px 10px;" />';
+        html += '<select class="form-input text-sm" style="width:120px;padding:6px 10px;"><option>全部级别</option><option>正高级</option><option>副高级</option><option>中级</option><option>初级</option></select>';
+        html += '<button class="btn btn-default btn-sm"><i class="fa fa-search"></i> 查询</button>';
+        html += '<button class="btn btn-default btn-sm">重置</button>';
+        html += '</div>';
+        // 工具栏
+        html += renderToolbar('新增关联', '批量解除', "addUserDrawerItem('title')", "batchDeleteUserDrawerItem('title')");
+        // 表格
+        html += '<table class="drawer-sub-table"><thead><tr>';
+        html += '<th style="width:36px;"><input type="checkbox" onclick="toggleDrawerAllCheck(this,\'title\')" /></th>';
+        html += '<th style="width:50px;">序号</th>';
+        html += '<th onclick="sortDrawerTable(\'title\',\'titleName\')" style="cursor:pointer;">职称名称' + sortIcon + '</th>';
+        html += '<th onclick="sortDrawerTable(\'title\',\'rank\')" style="cursor:pointer;">级别' + sortIcon + '</th>';
+        html += '<th>证书编号</th>';
+        html += '<th onclick="sortDrawerTable(\'title\',\'grantDate\')" style="cursor:pointer;">授予时间' + sortIcon + '</th>';
+        html += '<th style="width:180px;">操作</th>';
+        html += '</tr></thead><tbody>';
         var titleData = drawerData.title || [];
         for (var n = 0; n < titleData.length; n++) {
-            html += '<tr><td>' + titleData[n].titleName + '</td><td>' + titleData[n].rank + '</td><td>' + titleData[n].certNo + '</td><td>' + titleData[n].grantDate + '</td></tr>';
+            html += '<tr><td><input type="checkbox" class="drawer-checkbox-title" data-id="' + titleData[n].id + '" /></td>';
+            html += '<td>' + (n + 1) + '</td>';
+            html += '<td>' + titleData[n].titleName + '</td>';
+            html += '<td>' + titleData[n].rank + '</td>';
+            html += '<td>' + titleData[n].certNo + '</td>';
+            html += '<td>' + titleData[n].grantDate + '</td>';
+            html += '<td>' + renderActions(titleData[n].id, 'title') + '</td></tr>';
         }
         html += '</tbody></table></div>';
     } else if (tabKey === 'level') {
         html += '<div class="drawer-info-section">';
         html += '<div class="drawer-section-title">职级关联</div>';
-        html += '<table class="drawer-sub-table"><thead><tr><th>职级名称</th><th>级别</th><th>任职时间</th></tr></thead><tbody>';
+        // 查询区
+        html += '<div style="display:flex;align-items:center;gap:8px;margin-bottom:12px;">';
+        html += '<input type="text" class="form-input text-sm" placeholder="请输入职级名称" style="width:180px;padding:6px 10px;" />';
+        html += '<select class="form-input text-sm" style="width:120px;padding:6px 10px;"><option>全部级别</option><option>正厅</option><option>副厅</option><option>正处</option><option>副处</option><option>正科</option><option>副科</option></select>';
+        html += '<button class="btn btn-default btn-sm"><i class="fa fa-search"></i> 查询</button>';
+        html += '<button class="btn btn-default btn-sm">重置</button>';
+        html += '</div>';
+        // 工具栏
+        html += renderToolbar('新增关联', '批量解除', "addUserDrawerItem('level')", "batchDeleteUserDrawerItem('level')");
+        // 表格
+        html += '<table class="drawer-sub-table"><thead><tr>';
+        html += '<th style="width:36px;"><input type="checkbox" onclick="toggleDrawerAllCheck(this,\'level\')" /></th>';
+        html += '<th style="width:50px;">序号</th>';
+        html += '<th onclick="sortDrawerTable(\'level\',\'levelName\')" style="cursor:pointer;">职级名称' + sortIcon + '</th>';
+        html += '<th onclick="sortDrawerTable(\'level\',\'rank\')" style="cursor:pointer;">级别' + sortIcon + '</th>';
+        html += '<th onclick="sortDrawerTable(\'level\',\'appointDate\')" style="cursor:pointer;">任职时间' + sortIcon + '</th>';
+        html += '<th>状态</th>';
+        html += '<th style="width:180px;">操作</th>';
+        html += '</tr></thead><tbody>';
         var levelData = drawerData.level || [];
         for (var p = 0; p < levelData.length; p++) {
-            html += '<tr><td>' + levelData[p].levelName + '</td><td>' + levelData[p].rank + '</td><td>' + levelData[p].appointDate + '</td></tr>';
+            var lvStatus = levelData[p].status === 'active'
+                ? '<span class="tag tag-green">在职</span>'
+                : '<span class="tag tag-gray">已离任</span>';
+            html += '<tr><td><input type="checkbox" class="drawer-checkbox-level" data-id="' + levelData[p].id + '" /></td>';
+            html += '<td>' + (p + 1) + '</td>';
+            html += '<td>' + levelData[p].levelName + '</td>';
+            html += '<td>' + levelData[p].rank + '</td>';
+            html += '<td>' + levelData[p].appointDate + '</td>';
+            html += '<td>' + lvStatus + '</td>';
+            html += '<td>' + renderActions(levelData[p].id, 'level') + '</td></tr>';
         }
         html += '</tbody></table></div>';
     } else if (tabKey === 'duty') {
         html += '<div class="drawer-info-section">';
         html += '<div class="drawer-section-title">职务关联</div>';
-        html += '<table class="drawer-sub-table"><thead><tr><th>职务名称</th><th>职务级别</th><th>任职机构</th><th>任职时间</th></tr></thead><tbody>';
+        // 查询区
+        html += '<div style="display:flex;align-items:center;gap:8px;margin-bottom:12px;">';
+        html += '<input type="text" class="form-input text-sm" placeholder="请输入职务名称" style="width:180px;padding:6px 10px;" />';
+        html += '<select class="form-input text-sm" style="width:120px;padding:6px 10px;"><option>全部级别</option><option>高层</option><option>中层</option><option>基层</option></select>';
+        html += '<button class="btn btn-default btn-sm"><i class="fa fa-search"></i> 查询</button>';
+        html += '<button class="btn btn-default btn-sm">重置</button>';
+        html += '</div>';
+        // 工具栏
+        html += renderToolbar('新增关联', '批量解除', "addUserDrawerItem('duty')", "batchDeleteUserDrawerItem('duty')");
+        // 表格
+        html += '<table class="drawer-sub-table"><thead><tr>';
+        html += '<th style="width:36px;"><input type="checkbox" onclick="toggleDrawerAllCheck(this,\'duty\')" /></th>';
+        html += '<th style="width:50px;">序号</th>';
+        html += '<th onclick="sortDrawerTable(\'duty\',\'dutyName\')" style="cursor:pointer;">职务名称' + sortIcon + '</th>';
+        html += '<th onclick="sortDrawerTable(\'duty\',\'dutyLevel\')" style="cursor:pointer;">职务级别' + sortIcon + '</th>';
+        html += '<th>任职机构</th>';
+        html += '<th onclick="sortDrawerTable(\'duty\',\'appointDate\')" style="cursor:pointer;">任职时间' + sortIcon + '</th>';
+        html += '<th style="width:180px;">操作</th>';
+        html += '</tr></thead><tbody>';
         var dutyData = drawerData.duty || [];
         for (var q = 0; q < dutyData.length; q++) {
-            html += '<tr><td>' + dutyData[q].dutyName + '</td><td>' + dutyData[q].dutyLevel + '</td><td>' + dutyData[q].orgName + '</td><td>' + dutyData[q].appointDate + '</td></tr>';
+            var dutyStatus = dutyData[q].status === 'active'
+                ? '<span class="tag tag-green">在职</span>'
+                : '<span class="tag tag-gray">已离任</span>';
+            html += '<tr><td><input type="checkbox" class="drawer-checkbox-duty" data-id="' + dutyData[q].id + '" /></td>';
+            html += '<td>' + (q + 1) + '</td>';
+            html += '<td>' + dutyData[q].dutyName + '</td>';
+            html += '<td>' + dutyData[q].dutyLevel + '</td>';
+            html += '<td>' + dutyData[q].orgName + '</td>';
+            html += '<td>' + dutyData[q].appointDate + '</td>';
+            html += '<td>' + renderActions(dutyData[q].id, 'duty') + '</td></tr>';
         }
         html += '</tbody></table></div>';
     } else if (tabKey === 'approval') {
         html += '<div class="drawer-info-section">';
         html += '<div class="drawer-section-title">任职审批</div>';
-        html += '<table class="drawer-sub-table"><thead><tr><th>审批类型</th><th>目标机构</th><th>审批状态</th><th>审批人</th><th>审批时间</th></tr></thead><tbody>';
+        // 查询区
+        html += '<div style="display:flex;align-items:center;gap:8px;margin-bottom:12px;">';
+        html += '<input type="text" class="form-input text-sm" placeholder="请输入审批类型" style="width:180px;padding:6px 10px;" />';
+        html += '<select class="form-input text-sm" style="width:120px;padding:6px 10px;"><option>全部状态</option><option>已通过</option><option>审批中</option><option>已驳回</option></select>';
+        html += '<button class="btn btn-default btn-sm"><i class="fa fa-search"></i> 查询</button>';
+        html += '<button class="btn btn-default btn-sm">重置</button>';
+        html += '</div>';
+        // 工具栏
+        html += '<div style="display:flex;align-items:center;gap:8px;margin-bottom:12px;">';
+        html += '<button class="btn btn-primary btn-sm" onclick="addUserDrawerItem(\'approval\')"><i class="fa fa-plus"></i> 新增审批</button>';
+        html += '</div>';
+        // 表格
+        html += '<table class="drawer-sub-table"><thead><tr>';
+        html += '<th style="width:50px;">序号</th>';
+        html += '<th onclick="sortDrawerTable(\'approval\',\'approvalType\')" style="cursor:pointer;">审批类型' + sortIcon + '</th>';
+        html += '<th>目标机构</th>';
+        html += '<th onclick="sortDrawerTable(\'approval\',\'status\')" style="cursor:pointer;">审批状态' + sortIcon + '</th>';
+        html += '<th>审批人</th>';
+        html += '<th onclick="sortDrawerTable(\'approval\',\'approveTime\')" style="cursor:pointer;">审批时间' + sortIcon + '</th>';
+        html += '<th style="width:100px;">操作</th>';
+        html += '</tr></thead><tbody>';
         var apprData = drawerData.approval || [];
         for (var r = 0; r < apprData.length; r++) {
             var statusTag = '';
             if (apprData[r].status === 'approved') statusTag = '<span class="tag tag-green">已通过</span>';
             else if (apprData[r].status === 'rejected') statusTag = '<span class="tag tag-red">已驳回</span>';
             else statusTag = '<span class="tag tag-orange">审批中</span>';
-            html += '<tr><td>' + apprData[r].approvalType + '</td><td>' + apprData[r].targetOrg + '</td><td>' + statusTag + '</td><td>' + apprData[r].approver + '</td><td>' + apprData[r].approveTime + '</td></tr>';
+            html += '<tr><td>' + (r + 1) + '</td>';
+            html += '<td>' + apprData[r].approvalType + '</td>';
+            html += '<td>' + apprData[r].targetOrg + '</td>';
+            html += '<td>' + statusTag + '</td>';
+            html += '<td>' + apprData[r].approver + '</td>';
+            html += '<td>' + apprData[r].approveTime + '</td>';
+            html += '<td><a href="javascript:;" class="link-btn" onclick="viewUserDrawerItem(\'approval\',' + apprData[r].id + ')">查看</a></td></tr>';
         }
         html += '</tbody></table></div>';
     }
     return html;
+}
+
+// 抽屉Tab操作函数
+function addUserDrawerItem(tab) {
+    var titles = {
+        extend: '新增拓展信息',
+        orgLink: '关联机构',
+        position: '新增岗位关联',
+        title: '新增职称关联',
+        level: '新增职级关联',
+        duty: '新增职务关联',
+        approval: '新增任职审批'
+    };
+    openModal(titles[tab] || '新增', '<div style="width:480px;"><div style="margin-bottom:12px;"><label class="form-label">名称</label><input type="text" class="form-input" style="width:320px;" placeholder="请输入" /></div><div style="margin-bottom:12px;"><label class="form-label">备注</label><textarea class="form-input" style="width:320px;height:80px;" placeholder="请输入备注"></textarea></div></div>', function() {
+        showToast('新增成功', 'success');
+        closeModal();
+    });
+}
+
+function editUserDrawerItem(tab, id) {
+    var titles = {
+        extend: '编辑拓展信息',
+        position: '编辑岗位关联',
+        title: '编辑职称关联',
+        level: '编辑职级关联',
+        duty: '编辑职务关联'
+    };
+    openModal(titles[tab] || '编辑', '<div style="width:480px;"><div style="margin-bottom:12px;"><label class="form-label">名称</label><input type="text" class="form-input" style="width:320px;" value="示例数据" /></div><div style="margin-bottom:12px;"><label class="form-label">备注</label><textarea class="form-input" style="width:320px;height:80px;">示例备注</textarea></div></div>', function() {
+        showToast('修改成功', 'success');
+        closeModal();
+    });
+}
+
+function deleteUserDrawerItem(tab, id) {
+    openModal('确认删除', '<div style="width:400px;padding:10px 0;"><i class="fa fa-exclamation-circle" style="color:#FAAD14;font-size:20px;margin-right:8px;"></span>确定要删除该条记录吗？删除后不可恢复。</div>', function() {
+        showToast('删除成功', 'success');
+        closeModal();
+    }, '确认删除', 'btn-danger');
+}
+
+function batchDeleteUserDrawerItem(tab) {
+    var labels = {
+        extend: '拓展信息',
+        orgLink: '机构关联',
+        position: '岗位关联',
+        title: '职称关联',
+        level: '职级关联',
+        duty: '职务关联'
+    };
+    openModal('批量删除', '<div style="width:400px;padding:10px 0;"><i class="fa fa-exclamation-circle" style="color:#FAAD14;font-size:20px;margin-right:8px;"></span>确定要批量删除选中的' + (labels[tab] || '') + '记录吗？删除后不可恢复。</div>', function() {
+        showToast('批量删除成功', 'success');
+        closeModal();
+    }, '确认删除', 'btn-danger');
+}
+
+function viewUserDrawerItem(tab, id) {
+    var titles = {
+        extend: '拓展信息详情',
+        orgLink: '机构关联详情',
+        position: '岗位关联详情',
+        title: '职称关联详情',
+        level: '职级关联详情',
+        duty: '职务关联详情',
+        approval: '任职审批详情'
+    };
+    openModal(titles[tab] || '详情', '<div style="width:480px;"><div class="drawer-info-grid"><div class="drawer-info-item"><div class="drawer-info-label">名称</div><div class="drawer-info-value">示例数据</div></div><div class="drawer-info-item"><div class="drawer-info-label">状态</div><div class="drawer-info-value"><span class="tag tag-green">正常</span></div></div><div class="drawer-info-item"><div class="drawer-info-label">创建时间</div><div class="drawer-info-value">2025-01-10 10:00:00</div></div><div class="drawer-info-item"><div class="drawer-info-label">创建人</div><div class="drawer-info-value">管理员</div></div><div class="drawer-info-item full"><div class="drawer-info-label">备注</div><div class="drawer-info-value">这是一条示例详情数据，用于展示查看功能。</div></div></div></div>', function() {
+        closeModal();
+    }, '关闭');
+}
+
+function toggleDrawerAllCheck(checkbox, tab) {
+    var checks = document.querySelectorAll('.drawer-checkbox-' + tab);
+    for (var i = 0; i < checks.length; i++) {
+        checks[i].checked = checkbox.checked;
+    }
+}
+
+function sortDrawerTable(tab, field) {
+    showToast('按' + field + '排序', 'info');
 }
 
 function renderOrgDrawerPage(pageKey) {
@@ -7200,7 +7507,7 @@ function renderLineLayoutPage(pageKey) {
             break;
         }
     }
-    var lineTab = state.lineTab || 'org'; // org | user | admin
+    var lineTab = state.lineTab || 'user'; // user | admin
 
     var html = '<div class="p-4">';
     html += renderBreadcrumb(config.breadcrumb);
@@ -7233,159 +7540,156 @@ function renderLineLayoutPage(pageKey) {
     html += '</div>';
     html += '</div>';
 
-    // 右侧：机构管理 / 用户管理 / 管理员管理 Tab
+    // 右侧：条线用户 / 条线管理员 Tab
     html += '<div class="flex-1 bg-white rounded flex flex-col overflow-hidden" style="border:1px solid #f0f0f0;">';
     // Tab 切换
     html += '<div class="flex border-b" style="border-color:#f0f0f0;">';
-    html += '<div class="line-tab ' + (lineTab === 'org' ? 'active' : '') + '" onclick="switchLineTab(\'org\')">机构管理</div>';
-    html += '<div class="line-tab ' + (lineTab === 'user' ? 'active' : '') + '" onclick="switchLineTab(\'user\')">用户管理</div>';
-    html += '<div class="line-tab ' + (lineTab === 'admin' ? 'active' : '') + '" onclick="switchLineTab(\'admin\')">管理员管理</div>';
+    html += '<div class="line-tab ' + (lineTab === 'user' ? 'active' : '') + '" onclick="switchLineTab(\'user\')">条线用户</div>';
+    html += '<div class="line-tab ' + (lineTab === 'admin' ? 'active' : '') + '" onclick="switchLineTab(\'admin\')">条线管理员</div>';
     html += '</div>';
 
     if (currentLine) {
-        if (lineTab === 'org') {
-            // 机构管理 Tab
+        if (lineTab === 'user') {
+            // 条线用户 Tab
             html += '<div class="p-4 flex-1 overflow-auto flex flex-col">';
-            html += '<div class="flex items-center justify-between mb-3">';
-            html += '<div class="flex items-center gap-2">';
-            html += '<span class="text-sm px-3 py-1 rounded" style="background:#E8F3FF;color:var(--primary);"><i class="fa fa-building-o"></i> ' + currentLine.name + '</span>';
+            // 查询区
+            html += '<div style="display:flex;align-items:center;gap:12px;margin-bottom:16px;flex-wrap:wrap;">';
+            html += '<div style="display:flex;align-items:center;gap:6px;">';
+            html += '<label style="font-size:13px;color:var(--text-secondary);">用户姓名：</label>';
+            html += '<input type="text" class="form-input text-sm" placeholder="请输入用户姓名" style="width:180px;padding:6px 10px;" />';
             html += '</div>';
-            html += '<div style="display:flex;gap:6px;align-items:center;">';
-            html += '<button class="btn btn-primary btn-sm" onclick="showToast(\'关联机构\',\'info\')"><i class="fa fa-link"></i> 关联机构</button>';
-            html += '<button class="btn btn-default btn-sm" onclick="showToast(\'批量删除\',\'warning\')"><i class="fa fa-trash-o"></i> 批量删除</button>';
-            html += '<button class="btn btn-default btn-sm" onclick="showToast(\'批量查看\',\'info\')"><i class="fa fa-eye"></i> 批量查看</button>';
-            html += '</div></div>';
-            html += '<div class="flex items-center gap-2 mb-3">';
-            html += '<input type="text" class="form-input text-sm" placeholder="请输入机构名称/编码" style="width:240px;padding:6px 10px;" />';
-            html += '<button class="btn btn-default btn-sm"><i class="fa fa-search"></i></button>';
-            html += '';
+            html += '<div style="display:flex;align-items:center;gap:6px;">';
+            html += '<label style="font-size:13px;color:var(--text-secondary);">账号：</label>';
+            html += '<input type="text" class="form-input text-sm" placeholder="请输入账号" style="width:160px;padding:6px 10px;" />';
             html += '</div>';
+            html += '<button class="btn btn-primary btn-sm"><i class="fa fa-search"></i> 查询</button>';
+            html += '<button class="btn btn-default btn-sm">重置</button>';
+            html += '</div>';
+            // 工具栏
+            html += '<div style="display:flex;align-items:center;gap:8px;margin-bottom:12px;">';
+            html += '<button class="btn btn-danger btn-sm" onclick="batchRemoveLineUsers()"><i class="fa fa-trash-o"></i> 批量移除</button>';
+            html += '<span style="margin-left:auto;font-size:13px;color:var(--text-secondary);">当前条线：<b style="color:var(--primary);">' + currentLine.name + '</b></span>';
+            html += '</div>';
+            // 表格
             html += '<div class="flex-1 border rounded" style="border-color:#f0f0f0;">';
-            var orgData = currentLine.orgs || [
-                { id: 1, name: '江西省人民政府', type: '省级', code: 'JX-GOV' },
-                { id: 2, name: '赣州市人民政府', type: '市级', code: 'GZ-GOV' },
-                { id: 3, name: '南昌市人民政府', type: '市级', code: 'NC-GOV' },
+            var lineUserData = currentLine.lineUsers || [
+                { id: 1, name: '张三', account: 'zhangsan', orgName: '省政务信息中心', joinTime: '2025-01-15 10:00:00' },
+                { id: 2, name: '李四', account: 'lisi', orgName: '省政务信息中心', joinTime: '2025-01-20 14:30:00' },
+                { id: 3, name: '王五', account: 'wangwu', orgName: '云上（江西）大数据发展有限公司', joinTime: '2025-02-01 09:15:00' },
+                { id: 4, name: '赵六', account: 'zhaoliu', orgName: '云上（江西）大数据发展有限公司', joinTime: '2025-02-10 16:45:00' },
+                { id: 5, name: '钱七', account: 'qianqi', orgName: '赣政通', joinTime: '2025-02-15 11:20:00' },
+                { id: 6, name: '孙八', account: 'sunba', orgName: '赣州市人民政府', joinTime: '2025-03-01 08:30:00' },
+                { id: 7, name: '周九', account: 'zhoujiu', orgName: '南昌市人民政府', joinTime: '2025-03-10 10:10:00' },
             ];
             html += '<table class="data-table" style="margin:0;"><thead><tr>';
             html += '<th style="width:40px;"><input type="checkbox" onclick="toggleAllCheckboxes(this)" /></th>';
-            html += '<th>机构名称</th>';
-            html += '<th style="width:120px;">机构类型</th>';
-            html += '<th style="width:140px;">机构编码</th>';
-            html += '<th style="width:100px;">操作</th>';
-            html += '</tr></thead><tbody>';
-            for (var k = 0; k < orgData.length; k++) {
-                var org = orgData[k];
-                html += '<tr>';
-                html += '<td><input type="checkbox" /></td>';
-                html += '<td>' + org.name + '</td>';
-                html += '<td><span class="tag tag-blue">' + org.type + '</span></td>';
-                html += '<td>' + org.code + '</td>';
-                html += '<td><a href="javascript:;" class="link-btn danger" onclick="showToast(\'取消关联\',\'warning\')">取消关联</a></td>';
-                html += '</tr>';
-            }
-            if (orgData.length === 0) {
-                html += '<tr><td colspan="5" style="text-align:center;padding:40px;color:var(--text-tertiary);">';
-                html += '<i class="fa fa-file-text-o" style="font-size:32px;opacity:0.3;"></i>';
-                html += '<div class="text-sm mt-2">暂无数据</div>';
-                html += '</td></tr>';
-            }
-            html += '</tbody></table>';
-            html += '</div>';
-            html += '</div>';
-        } else if (lineTab === 'user') {
-            // 用户管理 Tab
-            html += '<div class="p-4 flex-1 overflow-auto flex flex-col">';
-            html += '<div class="flex items-center justify-between mb-3">';
-            html += '<div class="flex items-center gap-2">';
-            html += '<span class="text-sm px-3 py-1 rounded" style="background:#E8F3FF;color:var(--primary);"><i class="fa fa-building-o"></i> ' + currentLine.name + '</span>';
-            html += '</div>';
-            html += '<div style="display:flex;gap:6px;align-items:center;">';
-            html += '<button class="btn btn-primary btn-sm" onclick="showToast(\'关联用户\',\'info\')"><i class="fa fa-user-plus"></i> 关联用户</button>';
-            html += '<button class="btn btn-default btn-sm" onclick="showToast(\'批量删除\',\'warning\')"><i class="fa fa-trash-o"></i> 批量删除</button>';
-            html += '</div></div>';
-            html += '<div class="flex items-center gap-2 mb-3">';
-            html += '<input type="text" class="form-input text-sm" placeholder="请输入用户姓名/手机号" style="width:240px;padding:6px 10px;" />';
-            html += '<button class="btn btn-default btn-sm"><i class="fa fa-search"></i></button>';
-            html += '';
-            html += '</div>';
-            html += '<div class="flex-1 border rounded" style="border-color:#f0f0f0;">';
-            var userData = currentLine.users || [
-                { id: 1, name: '张三', phone: '138****1234', dept: '办公室' },
-                { id: 2, name: '李四', phone: '139****5678', dept: '信息中心' },
-                { id: 3, name: '王五', phone: '137****9012', dept: '业务处' },
-            ];
-            html += '<table class="data-table" style="margin:0;"><thead><tr>';
-            html += '<th style="width:40px;"><input type="checkbox" onclick="toggleAllCheckboxes(this)" /></th>';
+            html += '<th style="width:60px;">序号</th>';
             html += '<th>用户姓名</th>';
-            html += '<th style="width:140px;">手机号</th>';
-            html += '<th style="width:160px;">所在部门</th>';
-            html += '<th style="width:100px;">操作</th>';
+            html += '<th style="width:140px;">账号</th>';
+            html += '<th>所属机构</th>';
+            html += '<th style="width:160px;">加入时间</th>';
+            html += '<th style="width:80px;">操作</th>';
             html += '</tr></thead><tbody>';
-            for (var m = 0; m < userData.length; m++) {
-                var u = userData[m];
+            for (var m = 0; m < lineUserData.length; m++) {
+                var u = lineUserData[m];
                 html += '<tr>';
-                html += '<td><input type="checkbox" /></td>';
+                html += '<td><input type="checkbox" class="line-user-checkbox" data-id="' + u.id + '" /></td>';
+                html += '<td>' + (m + 1) + '</td>';
                 html += '<td>' + u.name + '</td>';
-                html += '<td>' + u.phone + '</td>';
-                html += '<td>' + u.dept + '</td>';
-                html += '<td><a href="javascript:;" class="link-btn danger" onclick="showToast(\'删除用户\',\'warning\')">删除</a></td>';
+                html += '<td>' + u.account + '</td>';
+                html += '<td>' + u.orgName + '</td>';
+                html += '<td>' + u.joinTime + '</td>';
+                html += '<td><a href="javascript:;" class="link-btn danger" onclick="removeLineUser(' + u.id + ',\'' + u.name + '\')">移除</a></td>';
                 html += '</tr>';
             }
-            if (userData.length === 0) {
-                html += '<tr><td colspan="5" style="text-align:center;padding:40px;color:var(--text-tertiary);">';
+            if (lineUserData.length === 0) {
+                html += '<tr><td colspan="7" style="text-align:center;padding:40px;color:var(--text-tertiary);">';
                 html += '<i class="fa fa-file-text-o" style="font-size:32px;opacity:0.3;"></i>';
-                html += '<div class="text-sm mt-2">暂无数据</div>';
+                html += '<div class="text-sm mt-2">暂无条线用户</div>';
                 html += '</td></tr>';
             }
             html += '</tbody></table>';
+            html += '</div>';
+            // 分页
+            html += '<div style="display:flex;justify-content:flex-end;align-items:center;gap:8px;margin-top:12px;font-size:13px;color:var(--text-secondary);">';
+            html += '<span>共 ' + lineUserData.length + ' 条</span>';
+            html += '<button class="page-btn disabled"><i class="fa fa-angle-left"></i></button>';
+            html += '<button class="page-btn active">1</button>';
+            html += '<button class="page-btn disabled"><i class="fa fa-angle-right"></i></button>';
             html += '</div>';
             html += '</div>';
         } else {
-            // 管理员管理 Tab
+            // 条线管理员 Tab
             html += '<div class="p-4 flex-1 overflow-auto flex flex-col">';
-            html += '<div class="flex items-center justify-between mb-3">';
-            html += '<div class="flex items-center gap-2">';
-            html += '<span class="text-sm px-3 py-1 rounded" style="background:#E8F3FF;color:var(--primary);"><i class="fa fa-user-circle-o"></i> ' + currentLine.name + ' - 管理员</span>';
+            // 查询区
+            html += '<div style="display:flex;align-items:center;gap:12px;margin-bottom:16px;flex-wrap:wrap;">';
+            html += '<div style="display:flex;align-items:center;gap:6px;">';
+            html += '<label style="font-size:13px;color:var(--text-secondary);">管理员姓名：</label>';
+            html += '<input type="text" class="form-input text-sm" placeholder="请输入管理员姓名" style="width:180px;padding:6px 10px;" />';
             html += '</div>';
-            html += '<div style="display:flex;gap:6px;align-items:center;">';
-            html += '<button class="btn btn-primary btn-sm" onclick="showToast(\'新增管理员\',\'success\')"><i class="fa fa-user-plus"></i> 新增管理员</button>';
-            html += '<button class="btn btn-default btn-sm" onclick="showToast(\'批量移除\',\'warning\')"><i class="fa fa-user-times"></i> 批量移除</button>';
-            html += '</div></div>';
-            html += '<div class="flex items-center gap-2 mb-3">';
-            html += '<input type="text" class="form-input text-sm" placeholder="请输入管理员姓名/手机号" style="width:240px;padding:6px 10px;" />';
-            html += '<button class="btn btn-default btn-sm"><i class="fa fa-search"></i> 查询</button>';
+            html += '<div style="display:flex;align-items:center;gap:6px;">';
+            html += '<label style="font-size:13px;color:var(--text-secondary);">状态：</label>';
+            html += '<select class="form-input text-sm" style="width:120px;padding:6px 10px;">';
+            html += '<option value="">全部</option><option value="1">启用</option><option value="0">停用</option>';
+            html += '</select>';
             html += '</div>';
+            html += '<button class="btn btn-primary btn-sm"><i class="fa fa-search"></i> 查询</button>';
+            html += '<button class="btn btn-default btn-sm">重置</button>';
+            html += '</div>';
+            // 工具栏
+            html += '<div style="display:flex;align-items:center;gap:8px;margin-bottom:12px;">';
+            html += '<button class="btn btn-primary btn-sm" onclick="openLineAdminAddModal()"><i class="fa fa-user-plus"></i> 新增管理员</button>';
+            html += '<button class="btn btn-danger btn-sm" onclick="batchRemoveLineAdmins()"><i class="fa fa-user-times"></i> 批量移除</button>';
+            html += '<span style="margin-left:auto;font-size:13px;color:var(--text-secondary);">当前条线：<b style="color:var(--primary);">' + currentLine.name + '</b></span>';
+            html += '</div>';
+            // 表格
             html += '<div class="flex-1 border rounded" style="border-color:#f0f0f0;">';
-            var adminData = currentLine.admins || [
-                { id: 1, name: '赵管理员', phone: '138****0001', dept: '信息中心', role: '条线管理员' },
-                { id: 2, name: '钱管理员', phone: '139****0002', dept: '办公室', role: '条线管理员' },
+            var lineAdminData = currentLine.lineAdmins || [
+                { id: 1, name: '赵伟', account: 'zhaowei', scope: '于都条线全部机构', status: true },
+                { id: 2, name: '钱敏', account: 'qianmin', scope: '于都条线-县级机构', status: true },
+                { id: 3, name: '孙强', account: 'sunqiang', scope: '于都条线-乡镇机构', status: true },
+                { id: 4, name: '周丽', account: 'zhouli', scope: '于都条线全部机构', status: true },
+                { id: 5, name: '吴刚', account: 'wugang', scope: '于都条线-县级机构', status: false },
+                { id: 6, name: '郑华', account: 'zhenghua', scope: '于都条线-乡镇机构', status: true },
             ];
             html += '<table class="data-table" style="margin:0;"><thead><tr>';
             html += '<th style="width:40px;"><input type="checkbox" onclick="toggleAllCheckboxes(this)" /></th>';
+            html += '<th style="width:60px;">序号</th>';
             html += '<th>管理员姓名</th>';
-            html += '<th style="width:140px;">手机号</th>';
-            html += '<th style="width:160px;">所在部门</th>';
-            html += '<th style="width:120px;">角色</th>';
-            html += '<th style="width:100px;">操作</th>';
+            html += '<th style="width:140px;">账号</th>';
+            html += '<th>管理范围</th>';
+            html += '<th style="width:80px;">状态</th>';
+            html += '<th style="width:80px;">操作</th>';
             html += '</tr></thead><tbody>';
-            for (var n = 0; n < adminData.length; n++) {
-                var ad = adminData[n];
+            for (var n = 0; n < lineAdminData.length; n++) {
+                var ad = lineAdminData[n];
+                var statusTag = ad.status
+                    ? '<span class="tag tag-green">启用</span>'
+                    : '<span class="tag tag-red">停用</span>';
                 html += '<tr>';
-                html += '<td><input type="checkbox" /></td>';
+                html += '<td><input type="checkbox" class="line-admin-checkbox" data-id="' + ad.id + '" /></td>';
+                html += '<td>' + (n + 1) + '</td>';
                 html += '<td>' + ad.name + '</td>';
-                html += '<td>' + ad.phone + '</td>';
-                html += '<td>' + ad.dept + '</td>';
-                html += '<td><span class="tag tag-blue">' + ad.role + '</span></td>';
-                html += '<td><a href="javascript:;" class="link-btn danger" onclick="showToast(\'移除管理员\',\'warning\')">移除</a></td>';
+                html += '<td>' + ad.account + '</td>';
+                html += '<td>' + ad.scope + '</td>';
+                html += '<td>' + statusTag + '</td>';
+                html += '<td><a href="javascript:;" class="link-btn danger" onclick="removeLineAdmin(' + ad.id + ',\'' + ad.name + '\')">移除</a></td>';
                 html += '</tr>';
             }
-            if (adminData.length === 0) {
-                html += '<tr><td colspan="6" style="text-align:center;padding:40px;color:var(--text-tertiary);">';
+            if (lineAdminData.length === 0) {
+                html += '<tr><td colspan="7" style="text-align:center;padding:40px;color:var(--text-tertiary);">';
                 html += '<i class="fa fa-file-text-o" style="font-size:32px;opacity:0.3;"></i>';
                 html += '<div class="text-sm mt-2">暂无管理员</div>';
                 html += '</td></tr>';
             }
             html += '</tbody></table>';
+            html += '</div>';
+            // 分页
+            html += '<div style="display:flex;justify-content:flex-end;align-items:center;gap:8px;margin-top:12px;font-size:13px;color:var(--text-secondary);">';
+            html += '<span>共 ' + lineAdminData.length + ' 条</span>';
+            html += '<button class="page-btn disabled"><i class="fa fa-angle-left"></i></button>';
+            html += '<button class="page-btn active">1</button>';
+            html += '<button class="page-btn disabled"><i class="fa fa-angle-right"></i></button>';
             html += '</div>';
             html += '</div>';
         }
@@ -13740,7 +14044,7 @@ var prdData = {
         redFields: ['addFlow', 'editFlow', 'deleteFlow', 'importFlow', 'queryFlow'],
 },
     'user': {
-        background: '【模式A+B+F+任职管理】用户查询字段排序、批量删除、多Excel文件导入 + 用户任职全生命周期管理。用户管理是组织机构管理中功能点最多的模块。走查覆盖23项功能点：①用户批量删除（符合，新增）②用户查询字段排序（符合，新增）③批量导入（符合，改成上传多个Excel文件）④用户机构关联批量删除（符合，新增）⑤用户机构关联查询字段排序（符合，新增）⑥用户拓展信息编辑（符合，新增）⑦用户拓展信息查询字段排序（符合，新增）⑧用户岗位关联查询字段排序（符合，新增）⑨用户职称关联批量删除（符合，新增）⑩用户职称关联查询字段排序（符合，新增）⑪用户职称关联查询（符合，新增）⑫用户职级关联批量删除（符合，新增）⑬用户职级关联查询字段排序（符合，新增）⑭用户职级关联查询（符合，新增）⑮用户职务关联查询字段排序（符合，新增）⑯用户职务关联查询（符合，新增）⑰用户任职审批信息查询（符合，新增）⑱调整任职（符合，新增）⑲添加任职（符合，新增）⑳编辑任职（符合，新增）㉑解职/批量解职（符合，新增）㉒主职/兼职管理（符合，新增）㉓兼职方式配置（内部/外部/临时兼职）（符合，新增）。原型实现：用户列表页支持批量删除+表头排序+多文件导入；点击操作列"查看"或行点击打开右侧抽屉详情，抽屉内含8个Tab页签（基本信息/拓展信息/机构关联/岗位关联/职称关联/职级关联/职务关联/任职审批），各Tab子表格展示对应关联数据；调整任职采用抽屉+Tab结构，支持任职列表管理（添加任职、批量解职、编辑、解职），支持主职/兼职两种任职类型，兼职支持内部兼职/外部兼职/临时兼职三种方式。',
+        background: '【模式A+B+F+任职管理】用户查询字段排序、批量删除、多Excel文件导入 + 用户任职全生命周期管理。用户管理是组织机构管理中功能点最多的模块。走查覆盖35项功能点：①用户批量删除（符合）②批量导入（符合）③用户机构关联查询字段排序（符合）④用户拓展信息批量删除（符合）⑤用户任职履历信息查询（符合）⑥-⑫用户岗位关联7项（新增/修改/删除/批量删除/查询字段排序/查看/查询）⑬-⑲用户职称关联7项（新增/修改/删除/批量删除/查询字段排序/查看/查询）⑳-㉖用户职级关联7项（新增/修改/删除/批量删除/查询字段排序/查看/查询）㉗-㉝用户职务关联7项（新增/修改/删除/批量删除/查询字段排序/查看/查询）㉞用户任职审批信息新增（符合）㉟用户任职审批信息查询（符合）。原型实现：用户列表页支持批量删除+表头排序+多文件导入；点击操作列"查看"打开右侧抽屉详情，抽屉内含8个Tab页签（基本信息/拓展信息/机构关联/岗位关联/职称关联/职级关联/职务关联/任职审批），各Tab子表格展示对应关联数据，支持完整CRUD、批量删除、查询排序、查看等操作。',
         targetUsers: '系统管理员、分级管理员',
         coreFeatures: '1.用户列表 + 右侧抽屉详情（8个Tab：基本信息/拓展信息/机构关联/岗位关联/职称关联/职级关联/职务关联/任职审批） 2.多条件组合查询 3.列表字段排序 4.编辑用户管理 5.批量删除 6.Excel导入 7.用户任职全生命周期管理',
         businessFlow: '进入用户管理页 → 查询筛选用户列表 → 点击查看/行点击 → 打开右侧抽屉详情 → 切换Tab查看各维度信息（基本信息/拓展信息/机构关联/岗位关联/职称关联/职级关联/职务关联/任职审批） → 编辑用户信息 → 保存 → 批量删除用户 → 二次确认',
@@ -13775,21 +14079,57 @@ var prdData = {
         exportDetailFlow: '【导出详情】点击操作列"更多→导出详情" → 导出该用户的完整信息（基础信息+扩展信息+任职信息+权限信息）→ 导出格式为Excel → 自动下载文件。',
         batchImportFlow: '【批量导入用户】点击"批量导入"按钮 → 打开导入弹窗 → 下载导入模板 → 填写用户数据 → 上传Excel文件 → 系统解析并预览数据（成功/失败标记）→ 确认导入 → 批量新增用户 → Toast提示成功导入数量，失败的支持下载错误报告。',
         templateDownloadFlow: '【模板下载】在批量导入弹窗 → 点击"下载模板"按钮 → 下载用户导入模板（Excel格式）→ 模板包含必填字段说明和示例数据。',
-        redFields: ['addFlow', 'editFlow', 'deleteFlow', 'batchDeleteFlow', 'sortConfig', 'viewFlow', 'queryFlow', 'importFlow', 'exportFlow', 'passwordResetFlow', 'extInfoDeleteFlow', 'extInfoBatchDeleteFlow', 'extInfoSortConfig', 'postBatchDeleteFlow', 'postSortConfig', 'titleBatchDeleteFlow', 'titleSortConfig', 'rankBatchDeleteFlow', 'rankSortConfig', 'enableFlow', 'disableFlow', 'lockFlow', 'unlockFlow', 'moveOrgFlow', 'batchMoveFlow', 'roleAssignFlow', 'permAssignFlow', 'avatarUploadFlow', 'exportDetailFlow', 'batchImportFlow', 'templateDownloadFlow'],
+        orgRelateSortConfig: '【机构关联-排序】在用户详情-机构关联Tab中 → 支持机构名称、机构编码、关联时间字段排序 → 点击表头切换升序/降序 → 箭头图标标识排序状态。',
+        extInfoQueryFlow: '【拓展信息-查询】在用户详情-拓展信息Tab中 → 支持字段名称（模糊）、字段类型（下拉）多条件查询 → 点击查询按钮过滤列表 → 支持分页查询。',
+        postAddFlow: '【岗位关联-新增】在用户详情-岗位关联Tab中 → 点击"新增关联"按钮 → 打开新增弹窗 → 选择岗位（支持搜索）→ 填写关联时间 → 选择岗位类型（主岗/兼岗）→ 点击保存 → 校验通过 → 关联成功 → Toast提示 → 列表刷新。',
+        postEditFlow: '【岗位关联-修改】点击操作列"编辑" → 打开编辑弹窗 → 回显关联信息 → 修改可编辑字段（岗位类型、关联时间等）→ 点击保存 → 更新成功 → 列表刷新。',
+        postDeleteFlow: '【岗位关联-删除】点击操作列"解除关联" → 弹出二次确认弹窗 → 确认解除 → 删除关联关系 → Toast提示"解除成功" → 列表刷新。',
+        postViewFlow: '【岗位关联-查看】点击操作列"查看" → 打开详情弹窗 → 展示岗位关联完整信息 → 查看模式只读。',
+        postQueryFlow: '【岗位关联-查询】支持岗位名称（模糊）、岗位类型（下拉）多条件组合查询，AND关系。支持分页查询。',
+        titleAddFlow: '【职称关联-新增】在用户详情-职称关联Tab中 → 点击"新增关联"按钮 → 打开新增弹窗 → 选择职称 → 填写获取时间 → 选择级别 → 填写证书编号 → 点击保存 → 校验通过 → 关联成功 → Toast提示 → 列表刷新。',
+        titleEditFlow: '【职称关联-修改】点击操作列"编辑" → 打开编辑弹窗 → 回显关联信息 → 修改可编辑字段 → 点击保存 → 更新成功 → 列表刷新。',
+        titleDeleteFlow: '【职称关联-删除】点击操作列"解除关联" → 弹出二次确认弹窗 → 确认解除 → 删除关联关系 → Toast提示 → 列表刷新。',
+        titleViewFlow: '【职称关联-查看】点击操作列"查看" → 打开详情弹窗 → 展示职称关联完整信息 → 查看模式只读。',
+        titleQueryFlow: '【职称关联-查询】支持职称名称（模糊）、级别（下拉）多条件组合查询，AND关系。支持分页查询。',
+        rankAddFlow: '【职级关联-新增】在用户详情-职级关联Tab中 → 点击"新增关联"按钮 → 打开新增弹窗 → 选择职级 → 填写获取时间 → 选择级别 → 点击保存 → 校验通过 → 关联成功 → Toast提示 → 列表刷新。',
+        rankEditFlow: '【职级关联-修改】点击操作列"编辑" → 打开编辑弹窗 → 回显关联信息 → 修改可编辑字段 → 点击保存 → 更新成功 → 列表刷新。',
+        rankDeleteFlow: '【职级关联-删除】点击操作列"解除关联" → 弹出二次确认弹窗 → 确认解除 → 删除关联关系 → Toast提示 → 列表刷新。',
+        rankViewFlow: '【职级关联-查看】点击操作列"查看" → 打开详情弹窗 → 展示职级关联完整信息 → 查看模式只读。',
+        rankQueryFlow: '【职级关联-查询】支持职级名称（模糊）、级别（下拉）多条件组合查询，AND关系。支持分页查询。',
+        dutyAddFlow: '【职务关联-新增】在用户详情-职务关联Tab中 → 点击"新增关联"按钮 → 打开新增弹窗 → 选择职务 → 填写任职时间 → 选择职务类型 → 点击保存 → 校验通过 → 关联成功 → Toast提示 → 列表刷新。',
+        dutyEditFlow: '【职务关联-修改】点击操作列"编辑" → 打开编辑弹窗 → 回显关联信息 → 修改可编辑字段 → 点击保存 → 更新成功 → 列表刷新。',
+        dutyDeleteFlow: '【职务关联-删除】点击操作列"解除关联" → 弹出二次确认弹窗 → 确认解除 → 删除关联关系 → Toast提示 → 列表刷新。',
+        dutyBatchDeleteFlow: '【职务关联-批量删除】勾选多条职务关联记录 → 点击"批量解除关联"按钮 → 弹出二次确认弹窗 → 确认解除 → 批量删除关联关系 → Toast提示成功解除数量。',
+        dutySortConfig: '【职务关联-排序】支持职务名称、职务类型、任职时间字段排序。点击表头切换升序/降序，箭头图标标识。',
+        dutyViewFlow: '【职务关联-查看】点击操作列"查看" → 打开详情弹窗 → 展示职务关联完整信息 → 查看模式只读。',
+        dutyQueryFlow: '【职务关联-查询】支持职务名称（模糊）、职务类型（下拉）多条件组合查询，AND关系。支持分页查询。',
+        appointApprovalAddFlow: '【任职审批-新增】在用户详情-任职审批Tab中 → 点击"新增审批"按钮 → 打开新增弹窗 → 选择审批类型 → 选择任职部门/职务 → 填写生效时间 → 提交审批 → Toast提示"提交成功，等待审批" → 列表刷新。',
+        appointApprovalQueryFlow: '【任职审批-查询】支持审批类型（下拉）、审批状态（下拉）、提交时间范围多条件组合查询，AND关系。支持分页查询。',
+        workHistoryQueryFlow: '【任职履历信息查询】在用户详情-任职审批Tab中 → 展示用户所有任职履历记录 → 支持按任职部门、任职状态、时间范围查询 → 列表按时间倒序排列。',
+        redFields: ['batchDeleteFlow', 'batchImportFlow', 'orgRelateSortConfig', 'extInfoBatchDeleteFlow', 'workHistoryQueryFlow', 'postAddFlow', 'postEditFlow', 'postDeleteFlow', 'postBatchDeleteFlow', 'postSortConfig', 'postViewFlow', 'postQueryFlow', 'titleAddFlow', 'titleEditFlow', 'titleDeleteFlow', 'titleBatchDeleteFlow', 'titleSortConfig', 'titleViewFlow', 'titleQueryFlow', 'rankAddFlow', 'rankEditFlow', 'rankDeleteFlow', 'rankBatchDeleteFlow', 'rankSortConfig', 'rankViewFlow', 'rankQueryFlow', 'dutyAddFlow', 'dutyEditFlow', 'dutyDeleteFlow', 'dutyBatchDeleteFlow', 'dutySortConfig', 'dutyViewFlow', 'dutyQueryFlow', 'appointApprovalAddFlow', 'appointApprovalQueryFlow'],
 },
     'title-level': {
-        background: '【模式A+B+F】岗位管理完整CRUD + 职称/职级查询排序 + 多文件导入。职级职称管理是组织机构设置的子模块，包含岗位管理、职称管理、职级管理三个Tab页。走查覆盖：岗位管理7项（①新增②编辑③删除④批量删除⑤查看⑥查询⑦查询字段排序）、职称管理3项（①查询字段排序②导入③批量删除）、职级管理3项（①查询字段排序②导入③批量删除）。原型实现：Tab布局，岗位管理Tab支持完整CRUD+批量删除+查询排序+查看；职称/职级Tab支持查询排序+多文件导入+批量删除。',
+        background: '【模式A+B+F】岗位管理完整CRUD + 职称/职级/职务查询排序 + 多文件导入导出。职级职称管理是组织机构设置的子模块，包含岗位管理、职称管理、职级管理、职务管理4个Tab页。走查覆盖：岗位管理7项（①新增②编辑③删除④批量删除⑤查看⑥查询⑦查询字段排序）、职称管理3项（①查询字段排序②导入③批量删除）、职级管理3项（①查询字段排序②导入③批量删除）、职务管理10项（①职务管理信息②新增③修改④删除⑤批量删除⑥查询字段排序⑦查看⑧查询⑨导入⑩导出）。原型实现：Tab布局，岗位管理Tab支持完整CRUD+批量删除+查询排序+查看；职称/职级Tab支持查询排序+多文件导入+批量删除；职务管理Tab支持完整CRUD+批量删除+查询排序+查看+导入导出。',
         targetUsers: '系统管理员',
-        coreFeatures: '1.Tab页布局（岗位管理/职称管理/职级管理） 2.岗位管理完整CRUD 3.多条件组合查询 4.列表字段排序 5.批量删除 6.Excel多文件导入 7.详情查看',
-        businessFlow: '进入职级职称管理页 → 切换Tab → 岗位管理Tab：查询/新增/编辑/删除/批量删除/查看 → 职称管理Tab：查询/排序/导入/批量删除 → 职级管理Tab：查询/排序/导入/批量删除',
-        pageInfo: 'Tab布局（3个Tab页）；岗位管理支持完整CRUD+批量删除+查询排序+查看；职称/职级管理支持查询排序+多文件导入+批量删除',
-        dataModel: '核心实体：岗位管理（id/岗位名称/岗位编码/岗位类型/排序号/状态/创建时间/创建人/备注）、职称管理（id/职称名称/职称编码/级别/排序号/状态/创建时间/创建人）、职级管理（id/职级名称/职级编码/级别/排序号/状态/创建时间/创建人）。',
+        coreFeatures: '1.Tab页布局（岗位管理/职称管理/职级管理/职务管理） 2.岗位管理完整CRUD 3.多条件组合查询 4.列表字段排序 5.批量删除 6.Excel多文件导入导出 7.详情查看',
+        businessFlow: '进入职级职称管理页 → 切换Tab → 岗位管理Tab：查询/新增/编辑/删除/批量删除/查看 → 职称管理Tab：查询/排序/导入/批量删除 → 职级管理Tab：查询/排序/导入/批量删除 → 职务管理Tab：查询/新增/编辑/删除/批量删除/查看/导入导出',
+        pageInfo: 'Tab布局（4个Tab页）；岗位管理支持完整CRUD+批量删除+查询排序+查看；职称/职级管理支持查询排序+多文件导入+批量删除；职务管理支持完整CRUD+批量删除+查询排序+查看+导入导出',
+        dataModel: '核心实体：岗位管理（id/岗位名称/岗位编码/岗位类型/排序号/状态/创建时间/创建人/备注）、职称管理（id/职称名称/职称编码/级别/排序号/状态/创建时间/创建人）、职级管理（id/职级名称/职级编码/级别/排序号/状态/创建时间/创建人）、职务管理（id/职务名称/职务编码/职务类型/排序号/状态/备注/创建时间/创建人）。',
         addFlow: '【岗位管理】点击"新增岗位" → 打开新增弹窗 → 填写岗位名称（必填，唯一校验，2-50字符） → 填写岗位编码（必填，唯一校验，字母数字下划线，2-30字符） → 选择岗位类型（必填，下拉选择：管理岗/技术岗/设计岗/行政岗/其他） → 设置排序号（数字，默认0，0-9999） → 选择状态（启用/停用，默认启用） → 填写备注（选填，多行文本，最多500字符） → 点击保存 → 前端校验通过 → 后端唯一性校验 → 新增成功，Toast提示 → 列表刷新显示新记录',
         editFlow: '【岗位管理】点击操作列"编辑" → 打开编辑弹窗 → 回显所有字段信息 → 修改可编辑字段 → 点击保存 → 前端格式校验 → 后端数据一致性校验 → 更新成功，Toast提示 → 列表刷新。编辑约束：岗位编码创建后不可修改；状态切换即时生效并记录操作日志。',
         deleteFlow: '【岗位管理】单条删除：点击操作列"删除" → 弹出二次确认弹窗 → 确认删除 → 逻辑删除（修改状态为已删除，保留数据痕迹）→ Toast提示"删除成功" → 列表刷新。批量删除：勾选多条记录 → 点击"批量删除"按钮 → 弹出二次确认弹窗（显示选中数量）→ 确认删除 → 批量逻辑删除 → Toast提示成功删除数量。删除约束：已被引用的数据不可删除，需先解除引用关系；启用状态的数据删除时有拦截提示；删除操作记录操作日志。',
         viewFlow: '【岗位管理】点击操作列"查看" → 打开详情弹窗 → 展示岗位全部信息（基本信息+创建信息） → 支持"编辑"快捷跳转 → 关闭弹窗返回列表',
-        queryFlow: '支持多条件组合查询，多条件为AND关系。查询操作：输入/选择条件后点击"查询"按钮 → 列表按条件过滤显示 → 点击"重置"按钮清空所有条件，恢复默认列表。支持分页查询，默认10条/页，可切换每页条数（10/20/50/100）。查询字段：岗位名称（模糊匹配）、岗位编码（模糊匹配）、状态（精确匹配）；职称名称、状态；职级名称、状态。',
-        sortConfig: '支持列表字段排序。排序方式：点击表头切换排序状态，顺序为 无排序→升序→降序→无排序 循环切换；排序状态用箭头图标标识（↑升序，↓降序）；默认按排序号升序排列，无排序号字段则按创建时间降序。仅支持单列排序。可排序字段：岗位名称、岗位编码、排序号、创建时间；职称名称、职称编码、排序号、创建时间；职级名称、职级编码、排序号、创建时间。',
+        queryFlow: '支持多条件组合查询，多条件为AND关系。查询操作：输入/选择条件后点击"查询"按钮 → 列表按条件过滤显示 → 点击"重置"按钮清空所有条件，恢复默认列表。支持分页查询，默认10条/页，可切换每页条数（10/20/50/100）。查询字段：岗位名称（模糊匹配）、岗位编码（模糊匹配）、状态（精确匹配）；职称名称、状态；职级名称、状态；职务名称、职务类型、状态。',
+        sortConfig: '支持列表字段排序。排序方式：点击表头切换排序状态，顺序为 无排序→升序→降序→无排序 循环切换；排序状态用箭头图标标识（↑升序，↓降序）；默认按排序号升序排列，无排序号字段则按创建时间降序。仅支持单列排序。可排序字段：岗位名称、岗位编码、排序号、创建时间；职称名称、职称编码、排序号、创建时间；职级名称、职级编码、排序号、创建时间；职务名称、职务编码、排序号、创建时间。',
+        dutyAddFlow: '【职务管理-新增】在职务管理Tab → 点击"新增职务"按钮 → 打开新增弹窗 → 填写职务名称（必填，唯一校验，2-50字符）→ 填写职务编码（必填，唯一校验，字母数字下划线，2-30字符）→ 选择职务类型（管理岗/技术岗/行政岗）→ 设置排序号 → 选择状态 → 填写备注 → 点击保存 → 校验通过 → 新增成功 → Toast提示 → 列表刷新。',
+        dutyEditFlow: '【职务管理-修改】点击操作列"编辑" → 打开编辑弹窗 → 回显所有字段信息 → 修改可编辑字段 → 点击保存 → 更新成功 → Toast提示 → 列表刷新。职务编码创建后不可修改。',
+        dutyDeleteFlow: '【职务管理-删除】点击操作列"删除" → 弹出二次确认弹窗 → 确认删除 → 逻辑删除 → Toast提示"删除成功" → 列表刷新。已被引用的职务不可删除。',
+        dutyBatchDeleteFlow: '【职务管理-批量删除】勾选多条职务记录 → 点击"批量删除"按钮 → 弹出二次确认弹窗（显示选中数量）→ 确认删除 → 批量逻辑删除 → Toast提示成功删除数量。含被引用数据自动跳过。',
+        dutySortConfig: '【职务管理-排序】支持职务名称、职务编码、排序号、创建时间字段排序。点击表头切换升序/降序，箭头图标标识。默认按排序号升序排列。',
+        dutyViewFlow: '【职务管理-查看】点击操作列"查看" → 打开详情弹窗 → 展示职务全部信息（名称/编码/类型/排序号/状态/备注/创建信息）→ 查看模式只读。',
+        dutyQueryFlow: '【职务管理-查询】支持职务名称（模糊）、职务类型（下拉）、状态（下拉）多条件组合查询，AND关系。支持分页查询。',
+        dutyImportFlow: '【职务管理-导入】点击"导入"按钮 → 打开导入弹窗 → 下载模板 → 填写数据 → 上传Excel文件 → 系统校验 → 导入完成显示结果 → 支持下载错误报告。',
+        dutyExportFlow: '【职务管理-导出】点击"导出"按钮 → 按当前筛选条件导出职务数据 → Excel格式 → 自动下载。',
         fieldRules: {
             position: [
                 { field: '岗位名称', key: 'name', required: true, type: '文本输入', unique: true, length: '2-50个字符', format: '支持中英文、数字、特殊字符', placeholder: '请输入岗位名称', defaultValue: '无', desc: '岗位的显示名称，同一机构下不可重复' },
@@ -13825,7 +14165,7 @@ var prdData = {
         importFlow: '【职称/职级管理】点击"批量导入"按钮 → 打开导入弹窗 → 支持选择多个Excel文件 → 显示已选文件列表 → 点击"开始导入" → 逐文件校验 → 导入完成显示结果（成功/失败数量）→ 支持下载错误报告。',
         exportFlow: '点击"导出"按钮 → 按当前筛选条件导出数据 → 支持导出为Excel格式 → 导出完成后自动下载 → 导出大数量时提示等待。',
         moveFlow: '【职务移动】选择职务记录 → 点击"移动"按钮 → 打开移动弹窗 → 选择目标分类（职务/职称/职级/岗级）→ 确认移动 → 职务分类更新 → Toast提示成功。支持批量移动。',
-        redFields: ['addFlow', 'editFlow', 'deleteFlow', 'batchDeleteFlow', 'sortConfig', 'viewFlow', 'queryFlow', 'importFlow', 'exportFlow', 'moveFlow'],
+        redFields: ['addFlow', 'editFlow', 'deleteFlow', 'batchDeleteFlow', 'sortConfig', 'viewFlow', 'queryFlow', 'importFlow', 'exportFlow', 'moveFlow', 'dutyAddFlow', 'dutyEditFlow', 'dutyDeleteFlow', 'dutyBatchDeleteFlow', 'dutySortConfig', 'dutyViewFlow', 'dutyQueryFlow', 'dutyImportFlow', 'dutyExportFlow'],
 },
     'ext-field': {
         background: '【模式G】拓展字段修改，支持编辑已有字段配置。拓展字段管理是组织机构设置的子模块，用于统一管理机构和用户的自定义拓展字段。走查覆盖1项功能点：①拓展字段修改（符合，新增）。原型实现：列表展示字段名称、编码、类型、适用实体（机构/用户Tag）、是否必填、状态；新增/编辑弹窗支持配置字段类型（文本/数字/日期/下拉/多行文本）、适用实体、必填、校验规则、默认值。',
@@ -13900,20 +14240,24 @@ var prdData = {
         acceptance: '1.批量删除有二次确认 2.查询条件完整可用 3.表头可排序 4.分页功能正常'
     },
     'line': {
-        background: '【模式A+B+C】条线查询排序、批量删除、条线管理员统一纳入赣政通管理员体系。机构条线管理是组织机构管理的子模块。走查覆盖11项功能点：条线管理5项（符合，新增）：①条线查询字段排序②条线机构批量删除③条线机构批量查看（可查看多个条线下的机构）④条线机构批量查询字段排序⑤条线机构批量查询（同时可查询多个机构信息）；条线用户3项（符合，新增）：⑥条线用户删除⑦条线用户批量删除⑧条线用户查询字段排序；条线管理员3项（部分符合，实现方式有变更）：⑨条线管理员新增⑩条线管理员批量移除⑪条线管理员查询，统一纳入赣政通管理员体系。原型实现：列表表头支持排序；工具栏含"条线机构批量查看"和"条线用户管理"按钮；批量查看弹窗支持多选条线→查询→机构列表；用户管理弹窗含查询区+用户列表+全选+批量删除+表头排序；条线管理员在管理员授权页统一管理。',
+        background: '【模式A+B+C】机构条线管理是组织机构管理的子模块，负责条线下的用户管理和管理员配置。走查覆盖5项功能点：条线用户2项（①条线用户删除②条线用户批量删除）；条线管理员3项（③条线管理员新增④条线管理员批量移除⑤条线管理员查询）。原型实现：左侧条线列表，右侧2Tab布局（条线用户/条线管理员）；条线用户Tab展示用户列表，支持单条移除和批量移除；条线管理员Tab支持查询、新增管理员、批量移除管理员，管理员可设置管理范围。',
         targetUsers: '系统管理员、分级管理员',
-        coreFeatures: '1.多条件组合查询 2.列表字段排序 3.新增条线管理 4.单条删除 5.批量删除 6.详情查看',
-        businessFlow: '进入条线管理页 → 设置查询条件 → 查看列表数据 → 点击新增 → 填写表单 → 保存 → 点击删除 → 二次确认 → 删除成功 → 勾选多条 → 批量删除 → 二次确认 → 点击查看 → 查看详情',
-        pageInfo: '支持多条件查询；支持字段排序；支持新增；支持单条删除；支持批量删除；支持详情查看',
-        dataModel: '核心实体：条线管理（id/名称/编码/排序号/状态/创建时间/创建人）；支持新增/删除操作；支持批量操作。',
-        addFlow: '点击"新增"按钮 → 打开新增弹窗 → 填写名称（必填，唯一校验）、编码（必填，唯一校验，字母数字下划线） → 选择状态（启用/停用，默认启用） → 设置排序号（数字，默认0） → 点击保存 → 前端校验通过 → 后端唯一性校验 → 新增成功，Toast提示 → 列表刷新显示新记录',
-        deleteFlow: '单条删除：点击操作列"删除" → 弹出二次确认弹窗 → 确认删除 → 逻辑删除（修改状态为已删除，保留数据痕迹）→ Toast提示"删除成功" → 列表刷新。批量删除：勾选多条记录 → 点击"批量删除"按钮 → 弹出二次确认弹窗（显示选中数量）→ 确认删除 → 批量逻辑删除 → Toast提示成功删除数量。删除约束：已被引用的数据不可删除，需先解除引用关系；启用状态的数据删除时有拦截提示；删除操作记录操作日志。',
+        coreFeatures: '1.左侧条线列表 + 右侧2Tab布局（条线用户/条线管理员） 2.条线用户管理（删除/批量删除） 3.条线管理员管理（新增/批量移除/查询）',
+        businessFlow: '进入机构条线管理页 → 左侧选择条线 → 右侧切换Tab → 条线用户Tab：查看用户列表 → 单条移除/批量移除 → 二次确认；条线管理员Tab：设置查询条件 → 查询管理员 → 新增管理员 → 选择用户+设置管理范围 → 保存 → 批量移除 → 二次确认',
+        pageInfo: '左侧条线列表，右侧2Tab（条线用户/条线管理员）；条线用户：列表+删除+批量删除；条线管理员：查询+列表+新增+批量移除',
+        dataModel: '核心实体：条线（id/名称/编码/状态/排序号）、条线用户（id/条线ID/用户ID/加入时间）、条线管理员（id/条线ID/用户ID/管理范围/状态/创建时间）。',
+        lineUserDeleteFlow: '【条线用户删除】在条线用户Tab中 → 点击操作列"移除" → 弹出二次确认弹窗"确定移除该用户出条线吗？" → 确认移除 → 用户移出条线 → Toast提示"移除成功" → 列表刷新。',
+        lineUserBatchDeleteFlow: '【条线用户批量删除】在条线用户Tab中 → 勾选多条用户记录 → 点击"批量移除"按钮 → 弹出二次确认弹窗（显示选中数量）→ 确认移除 → 批量移出条线 → Toast提示成功移除数量。',
+        lineAdminAddFlow: '【条线管理员新增】在条线管理员Tab中 → 点击"新增管理员"按钮 → 打开新增弹窗 → 选择用户（支持搜索）→ 设置管理范围（全部条线/指定条线）→ 设置状态（启用/停用）→ 点击保存 → 校验通过 → 新增成功 → Toast提示 → 列表刷新。',
+        lineAdminBatchRemoveFlow: '【条线管理员批量移除】在条线管理员Tab中 → 勾选多条管理员记录 → 点击"批量移除"按钮 → 弹出二次确认弹窗（显示选中数量）→ 确认移除 → 批量移除管理员身份 → Toast提示成功移除数量。',
+        lineAdminQueryFlow: '【条线管理员查询】支持管理员姓名（模糊）、状态（下拉）多条件组合查询，AND关系。查询操作：输入/选择条件后点击"查询"按钮 → 列表按条件过滤 → 点击"重置"清空条件。支持分页查询，默认10条/页。',
         queryFlow: '支持多条件组合查询，多条件为AND关系。查询操作：输入/选择条件后点击"查询"按钮 → 列表按条件过滤显示 → 点击"重置"按钮清空所有条件，恢复默认列表。支持分页查询，默认10条/页，可切换每页条数（10/20/50/100）。',
-        sortConfig: '支持列表字段排序。排序方式：点击表头切换排序状态，顺序为 无排序→升序→降序→无排序 循环切换；排序状态用箭头图标标识（↑升序，↓降序）；默认按排序号升序排列，无排序号字段则按创建时间降序。仅支持单列排序。',
-        exceptionHandling: '1.名称重复：保存时提示"名称已存在，请重新输入" 2.编码重复：保存时提示"编码已存在，请重新输入" 3.编码格式错误：提示"编码只能包含字母、数字和下划线" 4.删除被引用数据：拦截删除并提示"该数据已被引用，无法删除，请先解除引用" 5.批量删除含被引用数据：自动跳过被引用数据，提示"成功删除N条，M条因被引用已跳过" 6.空数据状态：列表显示空状态占位图+提示文字"暂无数据" 7.网络异常：Toast提示"网络连接失败，请稍后重试" 8.数据加载失败：显示"加载失败，点击重试"按钮',
-        permissionReq: '1.系统管理员：拥有全部权限（新增/删除/批量删除/查询/排序） 2.平台管理员：拥有全部权限 3.分级管理员：仅查询权限，不可新增、编辑、删除 4.普通用户：无访问权限，菜单不可见',
-        interaction: '多条件组合查询；表头点击排序；复选框多选+批量操作；新增弹窗表单；删除二次确认；详情查看',
-        redFields: ['addFlow', 'editFlow', 'deleteFlow', 'sortConfig', 'queryFlow'],
+        sortConfig: '支持列表字段排序。排序方式：点击表头切换排序状态，顺序为 无排序→升序→降序→无排序 循环切换；排序状态用箭头图标标识（↑升序，↓降序）。仅支持单列排序。',
+        exceptionHandling: '1.条线下无用户：显示空状态占位图 2.删除最后一个管理员：拦截提示"条线至少保留一名管理员" 3.空数据状态：列表显示空状态占位图+提示文字"暂无数据" 4.网络异常：Toast提示"网络连接失败，请稍后重试" 5.数据加载失败：显示"加载失败，点击重试"按钮',
+        permissionReq: '1.系统管理员：拥有全部权限（条线用户删除/批量删除/管理员新增/移除/查询） 2.平台管理员：拥有全部权限 3.分级管理员：仅查询权限 4.普通用户：无访问权限，菜单不可见',
+        interaction: '左侧条线列表选择；Tab切换（2个Tab）；复选框多选+批量操作；移除二次确认；新增管理员弹窗表单；多条件组合查询',
+        acceptance: '1.左侧条线列表正常 2.条线用户Tab正常（列表/删除/批量删除） 3.条线管理员Tab正常（查询/新增/批量移除） 4.批量操作有二次确认 5.分页功能正常 6.Tab切换正常',
+        redFields: ['lineUserDeleteFlow', 'lineUserBatchDeleteFlow', 'lineAdminAddFlow', 'lineAdminBatchRemoveFlow', 'lineAdminQueryFlow'],
 },
     'workbench-manage': {
         background: '【工作台管理】工作台管理是工作台管理子系统的核心模块，负责管理标准工作台配置和第三方工作台配置两大类。标准工作台为平台内置工作台，由系统管理员统一配置和维护版本；第三方工作台由外部服务商提供，支持完整的增删改查和版本管理。走查覆盖8个功能点：标准工作台配置（版本信息新增/查询）+ 第三方工作台配置（信息新增/修改/删除/查询/版本新增/版本查询）。',
