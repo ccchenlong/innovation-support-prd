@@ -86,6 +86,7 @@
         .tag-orange { background: #FFF7E6; color: #D48806; }
         .tag-red { background: #FFF1F0; color: #CF1322; }
         .tag-gray { background: #FAFAFA; color: #666666; border: 1px solid #E8E8E8; }
+        .tag-purple { background: #F9F0FF; color: #722ED1; }
 
         /* 按钮 active */
         button:active, .btn:active, a:active { transform: scale(0.96); }
@@ -2239,7 +2240,7 @@ var pageConfigs = {
             { key: 'supplier', title: '供应商' },
             { key: 'monitorStatus', title: '监测状态', type: 'tag', tagMap: { 'enabled': { text: '监测中', color: 'green' }, 'disabled': { text: '未监测', color: 'gray' }, 'alert': { text: '告警', color: 'red' } } },
             { key: 'createTime', title: '创建时间', sortable: true },
-            { type: 'actions', title: '操作', actions: [{ key: 'detail', label: '详情' }, { key: 'appConfig', label: '应用配置' }, { key: 'appLog', label: '应用日志' }, { key: 'change', label: '变更申请' }, { key: 'subApp', label: '子应用管理' }, { key: 'monitor', label: '监测配置' }] },
+            { type: 'actions', title: '操作', actions: [{ key: 'detail', label: '详情' }, { key: 'appConfig', label: '应用配置' }, { key: 'appLog', label: '应用日志' }, { key: 'change', label: '变更申请' }, { key: 'subApp', label: '子应用管理' }] },
         ],
         data: [
             { id: 1, name: '智慧办公系统', domain: '政务办公', monitorStatus: 'enabled', status: 'running', builder: '省政务服务办', supplier: '云上江西', createTime: '2025-01-15 10:30:00',
@@ -2320,6 +2321,9 @@ var pageConfigs = {
             { key: 'subLog', label: '订阅日志' },
             { key: 'fullPushLog', label: '全量推送日志' },
             { key: 'incPushLog', label: '增量推送日志' },
+            { key: 'fullPushAggregate', label: '全量推送日志汇集' },
+            { key: 'incPushAggregate', label: '增量推送日志汇集' },
+            { key: 'pushLogConfigMgmt', label: '推送日志配置管理' },
         ],
         tabConfigs: {
             'opConfig': {
@@ -2543,6 +2547,95 @@ var pageConfigs = {
                     { id: 408, logId: 'INC202503200008', triggerType: '定时触发', pushTime: '2025-03-20 08:00:00', pushStatus: 'success', pushCount: 384 },
                     { id: 409, logId: 'INC202503200009', triggerType: '事件触发', pushTime: '2025-03-20 07:30:00', pushStatus: 'failed', pushCount: 0 },
                     { id: 410, logId: 'INC202503200010', triggerType: '实时触发', pushTime: '2025-03-20 07:00:00', pushStatus: 'success', pushCount: 256 },
+                ],
+            },
+            'fullPushAggregate': {
+                query: [
+                    { key: 'appName', label: '应用名称', type: 'input', placeholder: '请输入应用名称' },
+                    { key: 'pushStatus', label: '推送状态', type: 'select', placeholder: '请选择', options: [{ value: '', label: '全部' }, { value: 'success', label: '成功' }, { value: 'failed', label: '失败' }, { value: 'processing', label: '进行中' }] },
+                    { key: 'dateRange', label: '推送时间范围', type: 'input', placeholder: '开始时间 - 结束时间' },
+                ],
+                toolbar: [{ type: 'export' }],
+                columns: [
+                    { type: 'index', title: '序号' },
+                    { key: 'appName', title: '应用名称' },
+                    { key: 'batchNo', title: '推送批次号', sortable: true },
+                    { key: 'dataCount', title: '数据量（条）', sortable: true },
+                    { key: 'pushStatus', title: '推送状态', type: 'tag', tagMap: { 'success': { text: '成功', color: 'green' }, 'failed': { text: '失败', color: 'red' }, 'processing': { text: '进行中', color: 'blue' } } },
+                    { key: 'startTime', title: '推送开始时间', sortable: true },
+                    { key: 'endTime', title: '推送结束时间' },
+                    { key: 'duration', title: '耗时' },
+                    { type: 'actions', title: '操作', actions: [{ key: 'view', label: '查看详情' }, { key: 'retry', label: '重推', danger: false }] },
+                ],
+                data: [
+                    { id: 501, appName: '智慧办公系统', batchNo: 'BATCH202503200001', dataCount: 15234, pushStatus: 'success', startTime: '2025-03-20 00:00:00', endTime: '2025-03-20 00:15:30', duration: '15分30秒' },
+                    { id: 502, appName: '民生服务平台', batchNo: 'BATCH202503200002', dataCount: 28561, pushStatus: 'success', startTime: '2025-03-20 00:10:00', endTime: '2025-03-20 00:35:20', duration: '25分20秒' },
+                    { id: 503, appName: '经济运行监测系统', batchNo: 'BATCH202503200003', dataCount: 8923, pushStatus: 'failed', startTime: '2025-03-20 01:00:00', endTime: '2025-03-20 01:05:12', duration: '5分12秒' },
+                    { id: 504, appName: '市场监管综合平台', batchNo: 'BATCH202503200004', dataCount: 32100, pushStatus: 'success', startTime: '2025-03-20 02:00:00', endTime: '2025-03-20 02:42:18', duration: '42分18秒' },
+                    { id: 505, appName: '应急指挥系统', batchNo: 'BATCH202503200005', dataCount: 5678, pushStatus: 'processing', startTime: '2025-03-20 03:00:00', endTime: '-', duration: '进行中' },
+                    { id: 506, appName: '政务协同平台', batchNo: 'BATCH202503190001', dataCount: 12456, pushStatus: 'success', startTime: '2025-03-19 00:00:00', endTime: '2025-03-19 00:18:45', duration: '18分45秒' },
+                    { id: 507, appName: '数据分析平台', batchNo: 'BATCH202503190002', dataCount: 45678, pushStatus: 'failed', startTime: '2025-03-19 01:30:00', endTime: '2025-03-19 01:38:22', duration: '8分22秒' },
+                    { id: 508, appName: '智慧办公系统', batchNo: 'BATCH202503190003', dataCount: 14890, pushStatus: 'success', startTime: '2025-03-19 00:00:00', endTime: '2025-03-19 00:14:50', duration: '14分50秒' },
+                ],
+            },
+            'incPushAggregate': {
+                query: [
+                    { key: 'appName', label: '应用名称', type: 'input', placeholder: '请输入应用名称' },
+                    { key: 'pushStatus', label: '推送状态', type: 'select', placeholder: '请选择', options: [{ value: '', label: '全部' }, { value: 'success', label: '成功' }, { value: 'failed', label: '失败' }] },
+                    { key: 'dataType', label: '数据类型', type: 'select', placeholder: '请选择', options: [{ value: '', label: '全部' }, { value: 'org', label: '组织' }, { value: 'user', label: '用户' }, { value: 'role', label: '角色' }, { value: 'perm', label: '权限' }] },
+                    { key: 'dateRange', label: '推送时间范围', type: 'input', placeholder: '开始时间 - 结束时间' },
+                ],
+                toolbar: [{ type: 'export' }],
+                columns: [
+                    { type: 'index', title: '序号' },
+                    { key: 'appName', title: '应用名称' },
+                    { key: 'dataType', title: '数据类型', type: 'tag', tagMap: { 'org': { text: '组织', color: 'blue' }, 'user': { text: '用户', color: 'green' }, 'role': { text: '角色', color: 'orange' }, 'perm': { text: '权限', color: 'red' } } },
+                    { key: 'changeType', title: '变更类型', type: 'tag', tagMap: { 'add': { text: '新增', color: 'green' }, 'update': { text: '修改', color: 'blue' }, 'delete': { text: '删除', color: 'red' } } },
+                    { key: 'dataCount', title: '数据量（条）' },
+                    { key: 'pushStatus', title: '推送状态', type: 'tag', tagMap: { 'success': { text: '成功', color: 'green' }, 'failed': { text: '失败', color: 'red' } } },
+                    { key: 'pushTime', title: '推送时间', sortable: true },
+                    { key: 'duration', title: '耗时' },
+                    { type: 'actions', title: '操作', actions: [{ key: 'view', label: '查看详情' }, { key: 'retry', label: '重推', danger: false }] },
+                ],
+                data: [
+                    { id: 601, appName: '智慧办公系统', dataType: 'user', changeType: 'add', dataCount: 128, pushStatus: 'success', pushTime: '2025-03-20 10:30:00', duration: '2.3s' },
+                    { id: 602, appName: '民生服务平台', dataType: 'org', changeType: 'update', dataCount: 56, pushStatus: 'success', pushTime: '2025-03-20 10:25:00', duration: '1.8s' },
+                    { id: 603, appName: '经济运行监测系统', dataType: 'role', changeType: 'add', dataCount: 12, pushStatus: 'success', pushTime: '2025-03-20 10:20:00', duration: '0.9s' },
+                    { id: 604, appName: '市场监管综合平台', dataType: 'perm', changeType: 'delete', dataCount: 8, pushStatus: 'failed', pushTime: '2025-03-20 10:15:00', duration: '3.1s' },
+                    { id: 605, appName: '应急指挥系统', dataType: 'user', changeType: 'update', dataCount: 256, pushStatus: 'success', pushTime: '2025-03-20 10:10:00', duration: '4.2s' },
+                    { id: 606, appName: '政务协同平台', dataType: 'org', changeType: 'add', dataCount: 32, pushStatus: 'success', pushTime: '2025-03-20 10:05:00', duration: '1.5s' },
+                    { id: 607, appName: '数据分析平台', dataType: 'role', changeType: 'update', dataCount: 64, pushStatus: 'success', pushTime: '2025-03-20 10:00:00', duration: '2.0s' },
+                    { id: 608, appName: '智慧办公系统', dataType: 'perm', changeType: 'add', dataCount: 16, pushStatus: 'success', pushTime: '2025-03-20 09:55:00', duration: '0.8s' },
+                    { id: 609, appName: '民生服务平台', dataType: 'user', changeType: 'delete', dataCount: 24, pushStatus: 'failed', pushTime: '2025-03-20 09:50:00', duration: '2.7s' },
+                    { id: 610, appName: '经济运行监测系统', dataType: 'org', changeType: 'update', dataCount: 48, pushStatus: 'success', pushTime: '2025-03-20 09:45:00', duration: '1.9s' },
+                ],
+            },
+            'pushLogConfigMgmt': {
+                query: [
+                    { key: 'name', label: '配置名称', type: 'input', placeholder: '请输入配置名称' },
+                    { key: 'appName', label: '应用名称', type: 'input', placeholder: '请输入应用名称' },
+                    { key: 'status', label: '状态', type: 'select', placeholder: '请选择', options: [{ value: '', label: '全部' }, { value: 'true', label: '启用' }, { value: 'false', label: '停用' }] },
+                ],
+                toolbar: [{ type: 'add', text: '新增配置' }, { type: 'batchDelete' }],
+                columns: [
+                    { type: 'checkbox' },
+                    { type: 'index', title: '序号' },
+                    { key: 'name', title: '配置名称', sortable: true },
+                    { key: 'appName', title: '应用名称' },
+                    { key: 'pushMode', title: '推送方式', type: 'tag', tagMap: { 'full': { text: '全量', color: 'blue' }, 'incremental': { text: '增量', color: 'green' } } },
+                    { key: 'pushFrequency', title: '推送频率', type: 'tag', tagMap: { 'realtime': { text: '实时', color: 'green' }, 'hourly': { text: '每小时', color: 'blue' }, 'daily': { text: '每天', color: 'orange' }, 'weekly': { text: '每周', color: 'purple' }, 'manual': { text: '手动', color: 'gray' } } },
+                    { key: 'pushTarget', title: '推送目标' },
+                    { key: 'status', title: '状态', type: 'tag', tagMap: { true: { text: '启用', color: 'green' }, false: { text: '停用', color: 'red' } } },
+                    { key: 'sortNo', title: '排序号', sortable: true },
+                    { type: 'actions', title: '操作', actions: [{ key: 'view', label: '查看' }, { key: 'edit', label: '编辑' }, { key: 'delete', label: '删除', danger: true }] },
+                ],
+                data: [
+                    { id: 701, name: '智慧办公全量推送配置', appName: '智慧办公系统', pushMode: 'full', pushFrequency: 'daily', pushTarget: 'https://api.example.com/push/full', status: true, sortNo: 1 },
+                    { id: 702, name: '民生服务增量推送', appName: '民生服务平台', pushMode: 'incremental', pushFrequency: 'realtime', pushTarget: 'https://api.example.com/push/inc', status: true, sortNo: 2 },
+                    { id: 703, name: '经济运行每日推送', appName: '经济运行监测系统', pushMode: 'full', pushFrequency: 'daily', pushTarget: 'https://api.example.com/economy', status: true, sortNo: 3 },
+                    { id: 704, name: '市场监管实时推送', appName: '市场监管综合平台', pushMode: 'incremental', pushFrequency: 'realtime', pushTarget: 'https://api.example.com/market', status: false, sortNo: 4 },
+                    { id: 705, name: '应急系统每周推送', appName: '应急指挥系统', pushMode: 'full', pushFrequency: 'weekly', pushTarget: 'https://api.example.com/emergency', status: true, sortNo: 5 },
+                    { id: 706, name: '政务协同手动推送', appName: '政务协同平台', pushMode: 'incremental', pushFrequency: 'manual', pushTarget: 'https://api.example.com/collab', status: true, sortNo: 6 },
                 ],
             },
         },
@@ -3044,7 +3137,7 @@ var pageConfigs = {
                     { key: 'status', label: '流程状态', type: 'select', placeholder: '请选择', options: [{ value: '', label: '全部' }, { value: 'pending', label: '待审批' }, { value: 'processing', label: '审批中' }, { value: 'approved', label: '已通过' }, { value: 'rejected', label: '已驳回' }] },
                     { key: 'applicant', label: '申请人', type: 'input', placeholder: '请输入申请人' },
                 ],
-                toolbar: [{ type: 'add', text: '新增待办' }, { type: 'batchDelete' }, { type: 'export' }],
+                toolbar: [{ type: 'add', text: '新增' }, { type: 'batchDelete' }, { type: 'export' }],
                 columns: [
                     { type: 'checkbox' },
                     { type: 'index', title: '序号' },
@@ -3054,7 +3147,7 @@ var pageConfigs = {
                     { key: 'currentNode', title: '当前节点' },
                     { key: 'applicant', title: '申请人' },
                     { key: 'applyTime', title: '申请时间', sortable: true },
-                    { type: 'actions', title: '操作', actions: [{ key: 'view', label: '查看' }] },
+                    { type: 'actions', title: '操作', actions: [{ key: 'view', label: '查看' }, { key: 'edit', label: '编辑' }, { key: 'delete', label: '删除', danger: true }] },
                 ],
                 data: [
                     { id: 11, instanceId: 'FLW202503001', appName: '智慧办公系统', status: 'approved', currentNode: '已完成', applicant: '张三', applyTime: '2025-03-01 10:00:00' },
@@ -3080,7 +3173,7 @@ var pageConfigs = {
             'config': {
                 query: [
                     { key: 'name', label: '流程名称', type: 'input', placeholder: '请输入流程名称' },
-                    { key: 'changeType', label: '变更类型', type: 'select', placeholder: '请选择', options: [{ value: '', label: '全部' }, { value: 'info', label: '信息变更' }, { value: 'version', label: '版本升级' }, { value: 'scope', label: '范围变更' }] },
+                    { key: 'changeType', label: '变更类型', type: 'select', placeholder: '请选择', options: [{ value: '', label: '全部' }, { value: 'info', label: '应用信息变更' }, { value: 'perm', label: '权限变更' }, { value: 'disable', label: '停用' }, { value: 'cancel', label: '注销' }] },
                     { key: 'status', label: '状态', type: 'select', placeholder: '请选择', options: [{ value: '', label: '全部' }, { value: 'true', label: '启用' }, { value: 'false', label: '停用' }] },
                 ],
                 toolbar: [{ type: 'add', text: '新增流程' }, { type: 'batchDelete' }],
@@ -3089,7 +3182,7 @@ var pageConfigs = {
                     { type: 'index', title: '序号' },
                     { key: 'name', title: '流程名称', sortable: true },
                     { key: 'code', title: '流程编码', sortable: true },
-                    { key: 'changeType', title: '变更类型', type: 'tag', tagMap: { 'info': { text: '信息变更', color: 'blue' }, 'version': { text: '版本升级', color: 'green' }, 'scope': { text: '范围变更', color: 'orange' } } },
+                    { key: 'changeType', title: '变更类型', type: 'tag', tagMap: { 'info': { text: '应用信息变更', color: 'blue' }, 'perm': { text: '权限变更', color: 'green' }, 'disable': { text: '停用', color: 'orange' }, 'cancel': { text: '注销', color: 'red' } } },
                     { key: 'nodeCount', title: '审批节点数' },
                     { key: 'status', title: '状态', type: 'tag', tagMap: { true: { text: '启用', color: 'green' }, false: { text: '停用', color: 'red' } } },
                     { key: 'createTime', title: '创建时间', sortable: true },
@@ -3097,11 +3190,11 @@ var pageConfigs = {
                 ],
                 data: [
                     { id: 1, name: '应用信息变更流程', code: 'ACC_001', changeType: 'info', nodeCount: 2, status: true, createTime: '2025-01-10 10:00:00' },
-                    { id: 2, name: '应用版本升级流程', code: 'ACC_002', changeType: 'version', nodeCount: 3, status: true, createTime: '2025-01-12 14:30:00' },
-                    { id: 3, name: '应用范围变更流程', code: 'ACC_003', changeType: 'scope', nodeCount: 3, status: true, createTime: '2025-01-15 09:15:00' },
-                    { id: 4, name: '简单变更流程', code: 'ACC_004', changeType: 'info', nodeCount: 1, status: false, createTime: '2025-01-18 16:45:00' },
-                    { id: 5, name: '重大版本升级流程', code: 'ACC_005', changeType: 'version', nodeCount: 4, status: true, createTime: '2025-02-01 11:20:00' },
-                    { id: 6, name: '停用应用变更流程', code: 'ACC_006', changeType: 'scope', nodeCount: 2, status: false, createTime: '2025-02-10 08:30:00' },
+                    { id: 2, name: '权限变更审批流程', code: 'ACC_002', changeType: 'perm', nodeCount: 3, status: true, createTime: '2025-01-12 14:30:00' },
+                    { id: 3, name: '应用停用流程', code: 'ACC_003', changeType: 'disable', nodeCount: 3, status: true, createTime: '2025-01-15 09:15:00' },
+                    { id: 4, name: '应用注销流程', code: 'ACC_004', changeType: 'cancel', nodeCount: 4, status: false, createTime: '2025-01-18 16:45:00' },
+                    { id: 5, name: '快速信息变更流程', code: 'ACC_005', changeType: 'info', nodeCount: 1, status: true, createTime: '2025-02-01 11:20:00' },
+                    { id: 6, name: '批量权限变更流程', code: 'ACC_006', changeType: 'perm', nodeCount: 2, status: false, createTime: '2025-02-10 08:30:00' },
                 ],
             },
             'list': {
@@ -3110,7 +3203,7 @@ var pageConfigs = {
                     { key: 'status', label: '流程状态', type: 'select', placeholder: '请选择', options: [{ value: '', label: '全部' }, { value: 'pending', label: '待审批' }, { value: 'processing', label: '审批中' }, { value: 'approved', label: '已通过' }, { value: 'rejected', label: '已驳回' }] },
                     { key: 'applicant', label: '申请人', type: 'input', placeholder: '请输入申请人' },
                 ],
-                toolbar: [{ type: 'batchDelete' }],
+                toolbar: [{ type: 'add', text: '新增' }, { type: 'batchDelete' }, { type: 'export' }],
                 columns: [
                     { type: 'checkbox' },
                     { type: 'index', title: '序号' },
@@ -3120,7 +3213,7 @@ var pageConfigs = {
                     { key: 'currentNode', title: '当前节点' },
                     { key: 'applicant', title: '申请人' },
                     { key: 'applyTime', title: '申请时间', sortable: true },
-                    { type: 'actions', title: '操作', actions: [{ key: 'view', label: '查看' }] },
+                    { type: 'actions', title: '操作', actions: [{ key: 'view', label: '查看' }, { key: 'edit', label: '编辑' }, { key: 'delete', label: '删除', danger: true }] },
                 ],
                 data: [
                     { id: 21, instanceId: 'CHG202503001', appName: '智慧办公系统', status: 'approved', currentNode: '已完成', applicant: '张三', applyTime: '2025-03-02 10:00:00' },
@@ -8174,6 +8267,18 @@ function handleAction(actionKey, pageKey, rowId) {
         case 'monitor': switchPage('app-monitor'); break;
         case 'appConfig': openAppConfigModal(pageKey, rowId); break;
         case 'appLog': openAppLogModal(pageKey, rowId); break;
+        case 'retry':
+            var resolved = resolvePageConfig(pageKey);
+            if (resolved && resolved.tabKey === 'fullPushAggregate') {
+                var row1 = resolved.getData().find(r => r.id === rowId);
+                if (row1) openRetryPushConfirm('fullPushAggregate', row1);
+            } else if (resolved && resolved.tabKey === 'incPushAggregate') {
+                var row2 = resolved.getData().find(r => r.id === rowId);
+                if (row2) openRetryPushConfirm('incPushAggregate', row2);
+            } else {
+                showToast('重推', 'info');
+            }
+            break;
         case 'adjustPost': openAdjustPostModal(rowId); break;
         case 'editUser': openEditUserModal(rowId); break;
         case 'disable': showToast('禁用用户', 'warning'); break;
@@ -8289,6 +8394,12 @@ function openAddModal(pageKey) {
     const config = resolved ? resolved.config : pageConfigs[pageKey];
     if (!config) { showToast('页面配置不存在', 'error'); return; }
 
+    // 应用变更流程 - 自定义新增弹窗
+    if (pageKey === 'app-change-flow' && resolved && resolved.tabKey === 'config') {
+        openAppChangeFlowConfigModal('add', {});
+        return;
+    }
+
     // 应用日志 - 自定义新增弹窗
     if (pageKey === 'app-log' && resolved && resolved.tabKey) {
         const tabKey = resolved.tabKey;
@@ -8298,6 +8409,10 @@ function openAddModal(pageKey) {
         }
         if (tabKey === 'subConfig') {
             openAppLogSubConfigModal('add', {});
+            return;
+        }
+        if (tabKey === 'pushLogConfigMgmt') {
+            openPushLogConfigModal('add', {});
             return;
         }
     }
@@ -8718,6 +8833,12 @@ function openEditModal(pageKey, rowId) {
     const cols = resolved.columns || [];
     let body = '';
 
+    // 应用变更流程 - 自定义编辑弹窗
+    if (pageKey === 'app-change-flow' && resolved.tabKey === 'config') {
+        openAppChangeFlowConfigModal('edit', row);
+        return;
+    }
+
     // 应用日志 - 自定义编辑弹窗
     if (pageKey === 'app-log' && resolved.tabKey) {
         if (resolved.tabKey === 'opConfig') {
@@ -8726,6 +8847,10 @@ function openEditModal(pageKey, rowId) {
         }
         if (resolved.tabKey === 'subConfig') {
             openAppLogSubConfigModal('edit', row);
+            return;
+        }
+        if (resolved.tabKey === 'pushLogConfigMgmt') {
+            openPushLogConfigModal('edit', row);
             return;
         }
     }
@@ -9062,6 +9187,185 @@ function openAppLogSubViewModal(row) {
     openModal(id, '查看日志', body, footer, 'large');
 }
 
+/** 应用日志 - 全量推送日志汇集 - 查看详情弹窗 */
+function openFullPushAggregateViewModal(row) {
+    const id = 'modal_fullPushAgg_view';
+    const r = row || {};
+    let body = '<div style="line-height:2.2;">';
+    body += '<div class="grid grid-cols-2 gap-4">';
+    body += '<div class="flex"><span class="form-label" style="width:100px;">应用名称</span><span style="color:var(--text-primary);">' + esc(r.appName || '') + '</span></div>';
+    body += '<div class="flex"><span class="form-label" style="width:100px;">推送批次号</span><span style="color:var(--text-primary);">' + esc(r.batchNo || '') + '</span></div>';
+    body += '<div class="flex"><span class="form-label" style="width:100px;">数据量</span><span style="color:var(--text-primary);">' + (r.dataCount || 0) + ' 条</span></div>';
+    var statusMap = { success: { text: '成功', color: 'green' }, failed: { text: '失败', color: 'red' }, processing: { text: '进行中', color: 'blue' } };
+    var st = statusMap[r.pushStatus] || { text: r.pushStatus, color: 'gray' };
+    body += '<div class="flex"><span class="form-label" style="width:100px;">推送状态</span><span style="color:var(--text-primary);"><span class="tag tag-' + st.color + '">' + st.text + '</span></span></div>';
+    body += '<div class="flex"><span class="form-label" style="width:100px;">推送开始时间</span><span style="color:var(--text-primary);">' + esc(r.startTime || '') + '</span></div>';
+    body += '<div class="flex"><span class="form-label" style="width:100px;">推送结束时间</span><span style="color:var(--text-primary);">' + esc(r.endTime || '') + '</span></div>';
+    body += '<div class="flex"><span class="form-label" style="width:100px;">耗时</span><span style="color:var(--text-primary);">' + esc(r.duration || '') + '</span></div>';
+    body += '</div>';
+    body += '<div class="mt-4 mb-2 font-medium" style="font-size:14px;">推送明细列表</div>';
+    var details = [];
+    for (var di = 1; di <= 8; di++) {
+        details.push({
+            seq: di,
+            dataType: ['用户数据', '组织数据', '角色数据', '权限数据', '岗位数据'][di % 5],
+            dataCount: Math.floor(1000 + Math.random() * 5000),
+            status: di === 3 && r.pushStatus === 'failed' ? 'failed' : 'success',
+            remark: di === 3 && r.pushStatus === 'failed' ? '连接超时' : '推送成功'
+        });
+    }
+    body += '<table class="data-table" style="font-size:13px;"><thead><tr><th style="padding:8px;width:60px;">序号</th><th style="padding:8px;">数据类型</th><th style="padding:8px;">数据量（条）</th><th style="padding:8px;">状态</th><th style="padding:8px;">备注</th></tr></thead><tbody>';
+    for (var di = 0; di < details.length; di++) {
+        var d = details[di];
+        var dst = d.status === 'success' ? '<span class="tag tag-green">成功</span>' : '<span class="tag tag-red">失败</span>';
+        body += '<tr><td style="padding:8px;">' + d.seq + '</td><td style="padding:8px;">' + d.dataType + '</td><td style="padding:8px;">' + d.dataCount + '</td><td style="padding:8px;">' + dst + '</td><td style="padding:8px;">' + d.remark + '</td></tr>';
+    }
+    body += '</tbody></table>';
+    body += '</div>';
+    const footer = '<button class="px-4 py-1.5 text-sm rounded border" style="border-color:#D9D9D9;color:var(--text-secondary);background:#fff;" onclick="closeModal(\'' + id + '\')">关闭</button>';
+    openModal(id, '全量推送日志详情', body, footer, 'large');
+}
+
+/** 应用日志 - 增量推送日志汇集 - 查看详情弹窗 */
+function openIncPushAggregateViewModal(row) {
+    const id = 'modal_incPushAgg_view';
+    const r = row || {};
+    let body = '<div style="line-height:2.2;">';
+    body += '<div class="grid grid-cols-2 gap-4">';
+    body += '<div class="flex"><span class="form-label" style="width:100px;">应用名称</span><span style="color:var(--text-primary);">' + esc(r.appName || '') + '</span></div>';
+    var dtMap = { org: '组织', user: '用户', role: '角色', perm: '权限' };
+    body += '<div class="flex"><span class="form-label" style="width:100px;">数据类型</span><span style="color:var(--text-primary);">' + (dtMap[r.dataType] || r.dataType || '') + '</span></div>';
+    var ctMap = { add: '新增', update: '修改', delete: '删除' };
+    body += '<div class="flex"><span class="form-label" style="width:100px;">变更类型</span><span style="color:var(--text-primary);">' + (ctMap[r.changeType] || r.changeType || '') + '</span></div>';
+    body += '<div class="flex"><span class="form-label" style="width:100px;">数据量</span><span style="color:var(--text-primary);">' + (r.dataCount || 0) + ' 条</span></div>';
+    var statusMap2 = { success: { text: '成功', color: 'green' }, failed: { text: '失败', color: 'red' } };
+    var st2 = statusMap2[r.pushStatus] || { text: r.pushStatus, color: 'gray' };
+    body += '<div class="flex"><span class="form-label" style="width:100px;">推送状态</span><span style="color:var(--text-primary);"><span class="tag tag-' + st2.color + '">' + st2.text + '</span></span></div>';
+    body += '<div class="flex"><span class="form-label" style="width:100px;">推送时间</span><span style="color:var(--text-primary);">' + esc(r.pushTime || '') + '</span></div>';
+    body += '<div class="flex"><span class="form-label" style="width:100px;">耗时</span><span style="color:var(--text-primary);">' + esc(r.duration || '') + '</span></div>';
+    body += '</div>';
+    body += '<div class="mt-4 mb-2 font-medium" style="font-size:14px;">推送明细列表</div>';
+    var details2 = [];
+    var detailCount = Math.min(r.dataCount || 10, 10);
+    for (var di2 = 1; di2 <= detailCount; di2++) {
+        details2.push({
+            seq: di2,
+            dataId: 'ID' + (10000 + di2),
+            dataName: '数据项' + di2,
+            status: di2 === 4 && r.pushStatus === 'failed' ? 'failed' : 'success',
+            remark: di2 === 4 && r.pushStatus === 'failed' ? '目标服务器返回500错误' : '推送成功'
+        });
+    }
+    body += '<table class="data-table" style="font-size:13px;"><thead><tr><th style="padding:8px;width:60px;">序号</th><th style="padding:8px;">数据ID</th><th style="padding:8px;">数据名称</th><th style="padding:8px;">状态</th><th style="padding:8px;">备注</th></tr></thead><tbody>';
+    for (var di2 = 0; di2 < details2.length; di2++) {
+        var d2 = details2[di2];
+        var dst2 = d2.status === 'success' ? '<span class="tag tag-green">成功</span>' : '<span class="tag tag-red">失败</span>';
+        body += '<tr><td style="padding:8px;">' + d2.seq + '</td><td style="padding:8px;">' + d2.dataId + '</td><td style="padding:8px;">' + d2.dataName + '</td><td style="padding:8px;">' + dst2 + '</td><td style="padding:8px;">' + d2.remark + '</td></tr>';
+    }
+    body += '</tbody></table>';
+    body += '</div>';
+    const footer = '<button class="px-4 py-1.5 text-sm rounded border" style="border-color:#D9D9D9;color:var(--text-secondary);background:#fff;" onclick="closeModal(\'' + id + '\')">关闭</button>';
+    openModal(id, '增量推送日志详情', body, footer, 'large');
+}
+
+/** 应用日志 - 推送日志配置管理 - 新增/编辑弹窗 */
+function openPushLogConfigModal(mode, row) {
+    const id = 'modal_pushLogConfig_' + mode;
+    const isEdit = mode === 'edit';
+    const title = isEdit ? '编辑配置' : '新增配置';
+    const r = row || {};
+    const appList = ['智慧办公系统', '民生服务平台', '经济运行监测系统', '市场监管综合平台', '应急指挥系统', '政务协同平台', '数据分析平台'];
+    const authTypes = ['无', 'API密钥', 'Token'];
+    const dataTypes = ['组织', '用户', '角色', '权限', '岗位'];
+    let body = '<div style="line-height:2;">';
+    body += '<div class="grid grid-cols-2 gap-4">';
+    body += '<div><label class="form-label">配置名称 <span class="text-red-500">*</span></label><input type="text" class="form-input w-full" id="plc_name" value="' + esc(r.name || '') + '"></div>';
+    body += '<div><label class="form-label">应用名称 <span class="text-red-500">*</span></label><select class="form-input w-full" id="plc_appName">';
+    appList.forEach(function(a){ body += '<option' + (r.appName===a?' selected':'') + '>' + a + '</option>'; });
+    body += '</select></div>';
+    body += '<div><label class="form-label">推送方式 <span class="text-red-500">*</span></label>';
+    body += '<div style="display:flex;gap:20px;height:32px;align-items:center;">';
+    body += '<label style="display:inline-flex;align-items:center;gap:4px;"><input type="radio" name="plc_pushMode" value="full" ' + (r.pushMode!=='incremental'?'checked':'') + '>全量</label>';
+    body += '<label style="display:inline-flex;align-items:center;gap:4px;"><input type="radio" name="plc_pushMode" value="incremental" ' + (r.pushMode==='incremental'?'checked':'') + '>增量</label>';
+    body += '</div></div>';
+    body += '<div><label class="form-label">推送频率 <span class="text-red-500">*</span></label><select class="form-input w-full" id="plc_frequency">';
+    var freqOpts = [{v:'realtime',l:'实时'},{v:'hourly',l:'每小时'},{v:'daily',l:'每天'},{v:'weekly',l:'每周'},{v:'manual',l:'手动'}];
+    freqOpts.forEach(function(f){ body += '<option value="' + f.v + '"' + (r.pushFrequency===f.v?' selected':'') + '>' + f.l + '</option>'; });
+    body += '</select></div>';
+    body += '<div><label class="form-label">推送目标URL <span class="text-red-500">*</span></label><input type="text" class="form-input w-full" id="plc_target" value="' + esc(r.pushTarget || 'https://') + '"></div>';
+    body += '<div><label class="form-label">鉴权方式</label><select class="form-input w-full" id="plc_auth">';
+    authTypes.forEach(function(a){ body += '<option' + (r.authType===a?' selected':'') + '>' + a + '</option>'; });
+    body += '</select></div>';
+    body += '<div class="col-span-2"><label class="form-label">数据类型 <span class="text-red-500">*</span></label>';
+    body += '<div style="border:1px solid #D9D9D9;border-radius:4px;padding:8px;">';
+    dataTypes.forEach(function(dt){
+        var checked = (r.dataTypes && r.dataTypes.indexOf(dt) >= 0) ? 'checked' : '';
+        if (!r.dataTypes && dt === '用户') checked = 'checked';
+        body += '<label style="display:inline-flex;align-items:center;margin-right:16px;"><input type="checkbox" class="plc_dataType" ' + checked + ' style="margin-right:4px;">' + dt + '</label>';
+    });
+    body += '</div></div>';
+    body += '<div class="col-span-2"><label class="form-label">过滤条件</label><textarea class="form-input w-full" id="plc_filter" rows="2" placeholder="请输入过滤条件，如：status=1 AND type=\'user\'">' + esc(r.filter || '') + '</textarea></div>';
+    body += '<div><label class="form-label">状态</label><div style="display:flex;align-items:center;height:32px;"><span class="toggle-switch ' + (r.status!==false?'on':'') + '" onclick="this.classList.toggle(\'on\')"></span></div></div>';
+    body += '<div><label class="form-label">排序号</label><input type="number" class="form-input" id="plc_sortNo" style="width:150px;" value="' + (r.sortNo || 1) + '" min="1"></div>';
+    body += '<div class="col-span-2"><label class="form-label">备注</label><textarea class="form-input w-full" id="plc_remark" rows="2" placeholder="请输入备注">' + esc(r.remark || '') + '</textarea></div>';
+    body += '</div>';
+    body += '</div>';
+    const footer = '<button class="px-4 py-1.5 text-sm rounded border" style="border-color:#D9D9D9;color:var(--text-secondary);background:#fff;" onclick="closeModal(\'' + id + '\')">取消</button>' +
+        '<button class="px-4 py-1.5 text-sm rounded text-white" style="background:var(--primary);" onclick="savePushLogConfig(\'' + mode + '\', ' + (r.id || 'null') + ', \'' + id + '\')">确定</button>';
+    openModal(id, title, body, footer, '600px');
+}
+
+/** 保存推送日志配置 */
+function savePushLogConfig(mode, rowId, modalId) {
+    const cfg = pageConfigs['app-log'].tabConfigs['pushLogConfigMgmt'];
+    if (mode === 'add') {
+        var newId = Math.max.apply(null, cfg.data.map(function(d){return d.id;})) + 1;
+        var selectedTypes = [];
+        document.querySelectorAll('.plc_dataType:checked').forEach(function(cb){ selectedTypes.push(cb.parentElement.textContent.trim()); });
+        cfg.data.unshift({
+            id: newId,
+            name: $('plc_name').value || '新配置',
+            appName: $('plc_appName').value,
+            pushMode: document.querySelector('input[name="plc_pushMode"]:checked').value,
+            pushFrequency: $('plc_frequency').value,
+            pushTarget: $('plc_target').value,
+            status: true,
+            sortNo: parseInt($('plc_sortNo').value) || 1
+        });
+        closeModal(modalId);
+        showToast('新增成功', 'success');
+        renderPage('app-log');
+    } else {
+        var row = cfg.data.find(function(x){return x.id===rowId;});
+        if (row) {
+            row.name = $('plc_name').value || row.name;
+            row.appName = $('plc_appName').value;
+            row.pushMode = document.querySelector('input[name="plc_pushMode"]:checked').value;
+            row.pushFrequency = $('plc_frequency').value;
+            row.pushTarget = $('plc_target').value;
+            row.sortNo = parseInt($('plc_sortNo').value) || 1;
+        }
+        closeModal(modalId);
+        showToast('编辑成功', 'success');
+        renderPage('app-log');
+    }
+}
+
+/** 重推确认弹窗 */
+function openRetryPushConfirm(tabKey, row) {
+    const id = 'modal_retry_' + tabKey + '_' + row.id;
+    const body = '<div style="padding:10px 0;">确定要重新推送该批次日志吗？</div>';
+    const footer = '<button class="px-4 py-1.5 text-sm rounded border" style="border-color:#D9D9D9;color:var(--text-secondary);background:#fff;" onclick="closeModal(\'' + id + '\')">取消</button>' +
+        '<button class="px-4 py-1.5 text-sm rounded text-white" style="background:var(--primary);" onclick="doRetryPush(\'' + tabKey + '\', ' + row.id + ', \'' + id + '\')">确定重推</button>';
+    openModal(id, '重推确认', body, footer, 'small');
+}
+
+/** 执行重推 */
+function doRetryPush(tabKey, rowId, modalId) {
+    closeModal(modalId);
+    showToast('已发起重推，请稍候查看结果', 'success');
+}
+
 /** 应用接入流程审批 - 查看弹窗 */
 function openAppAccessFlowViewModal(tabKey, row) {
     const id = 'modal_view_app-access-flow';
@@ -9135,7 +9439,7 @@ function openAppChangeFlowViewModal(tabKey, row) {
         body += '<div class="flex"><span class="form-label" style="width:100px;">流程ID</span><span style="color:var(--text-primary);">' + esc(row.code || '') + '</span></div>';
         body += '<div class="flex"><span class="form-label" style="width:100px;">流程名称</span><span style="color:var(--text-primary);">' + esc(row.name || '') + '</span></div>';
         body += '<div class="flex"><span class="form-label" style="width:100px;">流程类型</span><span style="color:var(--text-primary);">变更审批</span></div>';
-        var ctMap = { info: '信息变更', version: '版本升级', scope: '范围变更' };
+        var ctMap = { info: '应用信息变更', perm: '权限变更', disable: '停用', cancel: '注销' };
         body += '<div class="flex"><span class="form-label" style="width:100px;">变更类型</span><span style="color:var(--text-primary);">' + (ctMap[row.changeType] || row.changeType || '') + '</span></div>';
         body += '<div class="flex"><span class="form-label" style="width:100px;">当前版本</span><span style="color:var(--text-primary);">v1.0</span></div>';
         body += '<div class="flex"><span class="form-label" style="width:100px;">创建时间</span><span style="color:var(--text-primary);">' + esc(row.createTime || '') + '</span></div>';
@@ -9162,7 +9466,7 @@ function openAppChangeFlowViewModal(tabKey, row) {
         body += '<div class="grid grid-cols-2 gap-4">';
         body += '<div class="flex"><span class="form-label" style="width:100px;">申请单号</span><span style="color:var(--text-primary);">' + esc(row.instanceId || '') + '</span></div>';
         body += '<div class="flex"><span class="form-label" style="width:100px;">应用名称</span><span style="color:var(--text-primary);">' + esc(row.appName || '') + '</span></div>';
-        var ctMap2 = { info: '信息变更', version: '版本升级', scope: '范围变更' };
+        var ctMap2 = { info: '应用信息变更', perm: '权限变更', disable: '停用', cancel: '注销' };
         body += '<div class="flex"><span class="form-label" style="width:100px;">变更类型</span><span style="color:var(--text-primary);">' + (ctMap2[row.changeType] || ctMap2[row.status] ? '' : row.changeType || '信息变更') + '</span></div>';
         body += '<div class="flex"><span class="form-label" style="width:100px;">申请人</span><span style="color:var(--text-primary);">' + esc(row.applicant || '') + '</span></div>';
         body += '<div class="flex"><span class="form-label" style="width:100px;">申请时间</span><span style="color:var(--text-primary);">' + esc(row.applyTime || '') + '</span></div>';
@@ -9188,6 +9492,136 @@ function openAppChangeFlowViewModal(tabKey, row) {
     }
     const footer = '<button class="px-4 py-1.5 text-sm rounded border" style="border-color:#D9D9D9;color:var(--text-secondary);background:#fff;" onclick="closeModal(\'' + id + '\')">关闭</button>';
     openModal(id, '查看详情', body, footer, 'large');
+}
+
+/** 应用变更流程审批 - 新增/编辑流程配置弹窗 */
+function openAppChangeFlowConfigModal(mode, row) {
+    const id = 'modal_appChangeFlowConfig_' + mode;
+    const isEdit = mode === 'edit';
+    const title = isEdit ? '修改流程配置' : '新增流程配置';
+    const r = row || {};
+    const appList = ['智慧办公系统', '民生服务平台', '经济运行监测系统', '市场监管综合平台', '应急指挥系统', '政务协同平台'];
+    const changeTypeOpts = [
+        { v: 'info', l: '应用信息变更' },
+        { v: 'perm', l: '权限变更' },
+        { v: 'disable', l: '停用' },
+        { v: 'cancel', l: '注销' },
+    ];
+    const approverTypes = ['指定人员', '角色', '部门负责人', '申请人上级'];
+    const defaultNodes = r.nodes || [
+        { name: '提交申请', approverType: '申请人', approver: '申请人', countersign: false },
+        { name: '一级审批', approverType: '指定人员', approver: '张管理员', countersign: false },
+        { name: '二级审批', approverType: '角色', approver: '应用管理员', countersign: true },
+    ];
+    var nodeIdCounter = 0;
+
+    function renderNodesTable() {
+        var html = '<table class="data-table" style="font-size:13px;margin-bottom:8px;" id="acf_nodesTable">';
+        html += '<thead><tr><th style="padding:8px;width:50px;">序号</th><th style="padding:8px;">节点名称</th><th style="padding:8px;">审批人类型</th><th style="padding:8px;">审批人</th><th style="padding:8px;width:80px;">是否会签</th><th style="padding:8px;width:100px;">操作</th></tr></thead>';
+        html += '<tbody id="acf_nodesBody">';
+        for (var ni = 0; ni < defaultNodes.length; ni++) {
+            var node = defaultNodes[ni];
+            html += renderNodeRow(ni, node);
+        }
+        html += '</tbody></table>';
+        html += '<div style="text-align:right;"><button class="btn btn-default btn-sm" onclick="addAcfNode()"><i class="fa fa-plus"></i> 添加节点</button></div>';
+        return html;
+    }
+
+    function renderNodeRow(idx, node) {
+        var nid = 'acf_node_' + idx;
+        var html = '<tr data-idx="' + idx + '" id="' + nid + '">';
+        html += '<td style="padding:8px;">' + (idx + 1) + '</td>';
+        html += '<td style="padding:8px;"><input type="text" class="form-input" style="width:100%;padding:4px 8px;font-size:12px;" value="' + esc(node.name || '') + '" placeholder="节点名称"></td>';
+        html += '<td style="padding:8px;"><select class="form-input" style="width:100%;padding:4px 8px;font-size:12px;">';
+        approverTypes.forEach(function(t){
+            html += '<option' + (node.approverType===t?' selected':'') + '>' + t + '</option>';
+        });
+        html += '</select></td>';
+        html += '<td style="padding:8px;"><input type="text" class="form-input" style="width:100%;padding:4px 8px;font-size:12px;" value="' + esc(node.approver || '') + '" placeholder="审批人"></td>';
+        html += '<td style="padding:8px;text-align:center;"><input type="checkbox" ' + (node.countersign?'checked':'') + '></td>';
+        html += '<td style="padding:8px;"><button class="btn btn-default btn-sm" onclick="moveAcfNode(' + idx + ', -1)"><i class="fa fa-arrow-up"></i></button> ';
+        html += '<button class="btn btn-default btn-sm" onclick="moveAcfNode(' + idx + ', 1)"><i class="fa fa-arrow-down"></i></button> ';
+        html += '<button class="btn btn-default btn-sm" style="color:var(--danger);" onclick="removeAcfNode(' + idx + ')"><i class="fa fa-trash-o"></i></button></td>';
+        html += '</tr>';
+        return html;
+    }
+
+    // Expose helper functions globally via window
+    window.addAcfNode = function() {
+        var tbody = document.getElementById('acf_nodesBody');
+        if (!tbody) return;
+        var rows = tbody.querySelectorAll('tr');
+        var newIdx = rows.length;
+        var tempDiv = document.createElement('div');
+        tempDiv.innerHTML = '<table><tbody>' + renderNodeRow(newIdx, { name: '', approverType: '指定人员', approver: '', countersign: false }) + '</tbody></table>';
+        tbody.appendChild(tempDiv.firstChild.firstChild);
+        // Re-number
+        var allRows = tbody.querySelectorAll('tr');
+        for (var i = 0; i < allRows.length; i++) {
+            allRows[i].querySelector('td:first-child').textContent = i + 1;
+            allRows[i].setAttribute('data-idx', i);
+        }
+    };
+    window.removeAcfNode = function(idx) {
+        var tbody = document.getElementById('acf_nodesBody');
+        if (!tbody) return;
+        var rows = tbody.querySelectorAll('tr');
+        if (rows.length <= 1) { showToast('至少保留一个节点', 'warning'); return; }
+        rows[idx].remove();
+        // Re-number
+        var allRows = tbody.querySelectorAll('tr');
+        for (var i = 0; i < allRows.length; i++) {
+            allRows[i].querySelector('td:first-child').textContent = i + 1;
+            allRows[i].setAttribute('data-idx', i);
+        }
+    };
+    window.moveAcfNode = function(idx, direction) {
+        var tbody = document.getElementById('acf_nodesBody');
+        if (!tbody) return;
+        var rows = Array.from(tbody.querySelectorAll('tr'));
+        var newIdx = idx + direction;
+        if (newIdx < 0 || newIdx >= rows.length) return;
+        if (direction > 0) {
+            tbody.insertBefore(rows[idx], rows[newIdx + 1] || null);
+        } else {
+            tbody.insertBefore(rows[idx], rows[newIdx]);
+        }
+        // Re-number
+        var allRows = tbody.querySelectorAll('tr');
+        for (var i = 0; i < allRows.length; i++) {
+            allRows[i].querySelector('td:first-child').textContent = i + 1;
+            allRows[i].setAttribute('data-idx', i);
+        }
+    };
+    window.saveAppChangeFlowConfig = function(mode, rowId, modalId) {
+        closeModal(modalId);
+        showToast(mode === 'add' ? '新增成功' : '修改成功', 'success');
+        renderPage('app-change-flow');
+    };
+
+    let body = '<div style="line-height:2;">';
+    body += '<div class="grid grid-cols-2 gap-4">';
+    body += '<div><label class="form-label">流程名称 <span class="text-red-500">*</span></label><input type="text" class="form-input w-full" id="acf_name" value="' + esc(r.name || '') + '" placeholder="请输入流程名称"></div>';
+    body += '<div><label class="form-label">变更类型 <span class="text-red-500">*</span></label><select class="form-input w-full" id="acf_changeType">';
+    changeTypeOpts.forEach(function(o){ body += '<option value="' + o.v + '"' + (r.changeType===o.v?' selected':'') + '>' + o.l + '</option>'; });
+    body += '</select></div>';
+    body += '<div><label class="form-label">所属应用 <span class="text-red-500">*</span></label><select class="form-input w-full" id="acf_appName">';
+    appList.forEach(function(a){ body += '<option' + (r.appName===a?' selected':'') + '>' + a + '</option>'; });
+    body += '</select></div>';
+    body += '<div><label class="form-label">流程编码</label><input type="text" class="form-input w-full" id="acf_code" value="' + esc(r.code || '') + '" placeholder="自动生成" readonly style="background:#F5F7FA;color:var(--text-secondary);"></div>';
+    body += '<div><label class="form-label">状态</label><div style="display:flex;align-items:center;height:32px;"><span class="toggle-switch ' + (r.status!==false?'on':'') + '" onclick="this.classList.toggle(\'on\')"></span></div></div>';
+    body += '<div><label class="form-label">排序号</label><input type="number" class="form-input" id="acf_sortNo" style="width:150px;" value="' + (r.sortNo || 1) + '" min="1"></div>';
+    body += '</div>';
+    body += '<div class="mt-2"><label class="form-label" style="display:block;margin-bottom:6px;">审批节点 <span class="text-red-500">*</span></label>';
+    body += renderNodesTable();
+    body += '</div>';
+    body += '<div class="mt-2"><label class="form-label">备注</label><textarea class="form-input w-full" id="acf_remark" rows="2" placeholder="请输入备注">' + esc(r.remark || '') + '</textarea></div>';
+    body += '</div>';
+
+    const footer = '<button class="px-4 py-1.5 text-sm rounded border" style="border-color:#D9D9D9;color:var(--text-secondary);background:#fff;" onclick="closeModal(\'' + id + '\')">取消</button>' +
+        '<button class="px-4 py-1.5 text-sm rounded text-white" style="background:var(--primary);" onclick="saveAppChangeFlowConfig(\'' + mode + '\', ' + (r.id || 'null') + ', \'' + id + '\')">确定</button>';
+    openModal(id, title, body, footer, '600px');
 }
 
 /* 全局字段中文映射（详情弹窗使用） */
@@ -9287,6 +9721,14 @@ function openViewModal(pageKey, rowId) {
         }
         if (currentTabKey === 'subLog') {
             openAppLogSubViewModal(row);
+            return;
+        }
+        if (currentTabKey === 'fullPushAggregate') {
+            openFullPushAggregateViewModal(row);
+            return;
+        }
+        if (currentTabKey === 'incPushAggregate') {
+            openIncPushAggregateViewModal(row);
             return;
         }
     }
@@ -11602,24 +12044,169 @@ openModal("sa","子应用管理",body,"","normal");
 function openAppConfigModal(pageKey, rowId) {
     var appRow = pageConfigs[pageKey].data.find(function(x){return x.id===rowId});
     var appName = appRow ? (appRow.name || '') : '';
+    var modalId = 'app_config_' + rowId;
+
+    // 配置数据
+    var configItems = [
+        { id: 1, name: '操作日志开关', configType: '日志配置', configValue: '开启', status: true, sortNo: 1, desc: '是否记录操作日志' },
+        { id: 2, name: '登录日志开关', configType: '日志配置', configValue: '开启', status: true, sortNo: 2, desc: '是否记录登录日志' },
+        { id: 3, name: '会话超时时间', configType: '安全配置', configValue: '30分钟', status: true, sortNo: 3, desc: '用户会话超时时长' },
+        { id: 4, name: '密码强度等级', configType: '安全配置', configValue: '中', status: true, sortNo: 4, desc: '密码复杂度要求' },
+        { id: 5, name: '数据备份周期', configType: '系统配置', configValue: '每日', status: true, sortNo: 5, desc: '数据自动备份频率' },
+        { id: 6, name: '接口限流开关', configType: '性能配置', configValue: '关闭', status: false, sortNo: 6, desc: '是否启用API限流' },
+    ];
+
+    // 权限数据
+    var permItems = [
+        { id: 101, permName: '应用查看', permCode: 'app:view', permType: '查询', status: true },
+        { id: 102, permName: '应用新增', permCode: 'app:add', permType: '新增', status: true },
+        { id: 103, permName: '应用编辑', permCode: 'app:edit', permType: '修改', status: true },
+        { id: 104, permName: '应用删除', permCode: 'app:delete', permType: '删除', status: true },
+        { id: 105, permName: '配置管理', permCode: 'app:config', permType: '管理', status: true },
+        { id: 106, permName: '日志查看', permCode: 'app:log:view', permType: '查询', status: true },
+    ];
+
+    function renderConfigTable() {
+        var html = '<div style="margin-bottom:10px;display:flex;gap:8px;align-items:center;flex-wrap:wrap;">';
+        html += '<input type="text" class="form-input" id="cfg_searchName" style="width:160px;padding:4px 8px;font-size:12px;" placeholder="配置名称" />';
+        html += '<select class="form-input" id="cfg_searchType" style="width:120px;padding:4px 8px;font-size:12px;"><option value="">全部类型</option><option value="日志配置">日志配置</option><option value="安全配置">安全配置</option><option value="系统配置">系统配置</option><option value="性能配置">性能配置</option></select>';
+        html += '<select class="form-input" id="cfg_searchStatus" style="width:100px;padding:4px 8px;font-size:12px;"><option value="">全部状态</option><option value="true">启用</option><option value="false">停用</option></select>';
+        html += '<button class="btn btn-primary btn-sm" onclick="showToast(\'查询成功\',\'success\')"><i class="fa fa-search"></i> 查询</button>';
+        html += '<button class="btn btn-default btn-sm" onclick="showToast(\'已重置\',\'info\')"><i class="fa fa-refresh"></i> 重置</button>';
+        html += '<div style="flex:1;"></div>';
+        html += '<button class="btn btn-primary btn-sm" onclick="openAppConfigItemModal(\'add\',' + rowId + ')"><i class="fa fa-plus"></i> 新增配置</button>';
+        html += '<button class="btn btn-default btn-sm" onclick="showAppPermModal(' + rowId + ')"><i class="fa fa-key"></i> 权限查询</button>';
+        html += '</div>';
+        html += '<div style="border:1px solid #E8E8E8;border-radius:4px;overflow:hidden;">';
+        html += '<table class="data-table" style="margin:0;"><thead><tr>';
+        html += '<th style="width:50px;">序号</th><th>配置项名称</th><th style="width:100px;">配置类型</th><th style="width:120px;">配置值</th><th style="width:80px;">状态</th><th style="width:60px;">排序号</th><th style="width:180px;">操作</th></tr></thead><tbody>';
+        for (var ci = 0; ci < configItems.length; ci++) {
+            var item = configItems[ci];
+            var statusTag = item.status ? '<span class="tag tag-green">启用</span>' : '<span class="tag tag-gray">停用</span>';
+            html += '<tr><td>' + (ci+1) + '</td><td>' + item.name + '</td><td>' + item.configType + '</td><td>' + item.configValue + '</td><td>' + statusTag + '</td><td>' + item.sortNo + '</td>';
+            html += '<td><a href="javascript:;" class="link-btn" onclick="viewAppConfigItem(' + item.id + ',' + rowId + ')">查看</a> ';
+            html += '<a href="javascript:;" class="link-btn" onclick="openAppConfigItemModal(\'edit\',' + rowId + ',' + item.id + ')">修改</a> ';
+            html += '<a href="javascript:;" class="link-btn danger" onclick="deleteAppConfigItem(' + item.id + ',' + rowId + ')">删除</a></td></tr>';
+        }
+        html += '</tbody></table></div>';
+        return html;
+    }
+
     var body = '<div style="margin-bottom:12px;color:var(--text-secondary);font-size:13px;">应用：<span style="color:var(--text-primary);font-weight:500;">' + esc(appName) + '</span></div>';
+    body += '<div id="configTableContainer_' + rowId + '">' + renderConfigTable() + '</div>';
+    openModal(modalId, '应用配置 - ' + appName, body, '', 'xlarge');
+}
+
+/** 应用配置项 - 查看弹窗 */
+function viewAppConfigItem(itemId, appId) {
+    var items = {
+        1: { name: '操作日志开关', configType: '日志配置', configValue: '开启', status: true, sortNo: 1, desc: '是否记录操作日志', createTime: '2025-01-10 10:00:00', updateTime: '2025-02-15 14:30:00' },
+        2: { name: '登录日志开关', configType: '日志配置', configValue: '开启', status: true, sortNo: 2, desc: '是否记录登录日志', createTime: '2025-01-10 10:00:00', updateTime: '2025-02-15 14:30:00' },
+        3: { name: '会话超时时间', configType: '安全配置', configValue: '30分钟', status: true, sortNo: 3, desc: '用户会话超时时长', createTime: '2025-01-12 09:00:00', updateTime: '2025-03-01 11:00:00' },
+        4: { name: '密码强度等级', configType: '安全配置', configValue: '中', status: true, sortNo: 4, desc: '密码复杂度要求', createTime: '2025-01-12 09:00:00', updateTime: '2025-02-20 16:00:00' },
+        5: { name: '数据备份周期', configType: '系统配置', configValue: '每日', status: true, sortNo: 5, desc: '数据自动备份频率', createTime: '2025-01-15 14:00:00', updateTime: '2025-03-10 09:30:00' },
+        6: { name: '接口限流开关', configType: '性能配置', configValue: '关闭', status: false, sortNo: 6, desc: '是否启用API限流', createTime: '2025-02-01 11:00:00', updateTime: '2025-03-05 10:00:00' },
+    };
+    var item = items[itemId] || {};
+    var id = 'modal_view_configItem_' + itemId;
+    var body = '<div style="line-height:2.2;">';
+    body += '<div class="grid grid-cols-2 gap-4">';
+    body += '<div class="flex"><span class="form-label" style="width:100px;">配置项名称</span><span style="color:var(--text-primary);">' + esc(item.name || '') + '</span></div>';
+    body += '<div class="flex"><span class="form-label" style="width:100px;">配置类型</span><span style="color:var(--text-primary);">' + esc(item.configType || '') + '</span></div>';
+    body += '<div class="flex"><span class="form-label" style="width:100px;">配置值</span><span style="color:var(--text-primary);">' + esc(item.configValue || '') + '</span></div>';
+    body += '<div class="flex"><span class="form-label" style="width:100px;">排序号</span><span style="color:var(--text-primary);">' + (item.sortNo || '') + '</span></div>';
+    body += '<div class="flex"><span class="form-label" style="width:100px;">状态</span><span style="color:var(--text-primary);">' + (item.status ? '<span class="tag tag-green">启用</span>' : '<span class="tag tag-red">停用</span>') + '</span></div>';
+    body += '<div class="flex"><span class="form-label" style="width:100px;">创建时间</span><span style="color:var(--text-primary);">' + esc(item.createTime || '') + '</span></div>';
+    body += '<div class="flex"><span class="form-label" style="width:100px;">更新时间</span><span style="color:var(--text-primary);">' + esc(item.updateTime || '') + '</span></div>';
+    body += '</div>';
+    body += '<div class="flex mt-2"><span class="form-label" style="width:100px;">配置描述</span><span style="color:var(--text-primary);flex:1;">' + esc(item.desc || '') + '</span></div>';
+    body += '</div>';
+    var footer = '<button class="btn btn-default btn-sm" onclick="closeModal(\'' + id + '\')">关闭</button>';
+    openModal(id, '查看配置项', body, footer, 'normal');
+}
+
+/** 应用配置项 - 新增/编辑弹窗 */
+function openAppConfigItemModal(mode, appId, itemId) {
+    var items = {
+        1: { name: '操作日志开关', configType: '日志配置', configValue: '开启', status: true, sortNo: 1, desc: '是否记录操作日志' },
+        2: { name: '登录日志开关', configType: '日志配置', configValue: '开启', status: true, sortNo: 2, desc: '是否记录登录日志' },
+        3: { name: '会话超时时间', configType: '安全配置', configValue: '30分钟', status: true, sortNo: 3, desc: '用户会话超时时长' },
+    };
+    var r = mode === 'edit' ? (items[itemId] || {}) : {};
+    var id = 'modal_configItem_' + mode + '_' + appId;
+    var title = mode === 'edit' ? '修改配置项' : '新增配置项';
+    var body = '<div style="line-height:2;">';
+    body += '<div class="grid grid-cols-2 gap-4">';
+    body += '<div><label class="form-label">配置项名称 <span class="text-red-500">*</span></label>';
+    if (mode === 'edit') {
+        body += '<input type="text" class="form-input w-full" value="' + esc(r.name || '') + '" readonly style="background:#F5F7FA;color:var(--text-secondary);"></div>';
+    } else {
+        body += '<input type="text" class="form-input w-full" id="ci_name" value="' + esc(r.name || '') + '" placeholder="请输入配置项名称"></div>';
+    }
+    body += '<div><label class="form-label">配置类型 <span class="text-red-500">*</span></label><select class="form-input w-full" id="ci_configType">';
+    var types = ['日志配置', '安全配置', '系统配置', '性能配置'];
+    types.forEach(function(t){ body += '<option' + (r.configType===t?' selected':'') + '>' + t + '</option>'; });
+    body += '</select></div>';
+    body += '<div><label class="form-label">配置值 <span class="text-red-500">*</span></label><input type="text" class="form-input w-full" id="ci_configValue" value="' + esc(r.configValue || '') + '" placeholder="请输入配置值"></div>';
+    body += '<div><label class="form-label">排序号</label><input type="number" class="form-input" id="ci_sortNo" style="width:150px;" value="' + (r.sortNo || 1) + '" min="1"></div>';
+    body += '<div><label class="form-label">状态</label><div style="display:flex;align-items:center;height:32px;"><span class="toggle-switch ' + (r.status!==false?'on':'') + '" onclick="this.classList.toggle(\'on\')"></span></div></div>';
+    body += '</div>';
+    body += '<div><label class="form-label">配置描述</label><textarea class="form-input w-full" id="ci_desc" rows="3" placeholder="请输入配置描述">' + esc(r.desc || '') + '</textarea></div>';
+    body += '</div>';
+    body += '</div>';
+    var footer = '<button class="btn btn-default btn-sm" onclick="closeModal(\'' + id + '\')">取消</button>' +
+        '<button class="btn btn-primary btn-sm" onclick="saveAppConfigItem(\'' + mode + '\',' + appId + ',\'' + id + '\')">确定</button>';
+    openModal(id, title, body, footer, '600px');
+}
+
+/** 保存应用配置项 */
+function saveAppConfigItem(mode, appId, modalId) {
+    closeModal(modalId);
+    showToast(mode === 'add' ? '新增成功' : '修改成功', 'success');
+}
+
+/** 删除应用配置项 */
+function deleteAppConfigItem(itemId, appId) {
+    var id = 'modal_delete_configItem_' + itemId;
+    var body = '<div style="padding:10px 0;">确定要删除该配置项吗？删除后不可恢复。</div>';
+    var footer = '<button class="btn btn-default btn-sm" onclick="closeModal(\'' + id + '\')">取消</button>' +
+        '<button class="btn btn-danger btn-sm" onclick="confirmDeleteConfigItem(' + itemId + ',' + appId + ',\'' + id + '\')">确定删除</button>';
+    openModal(id, '删除确认', body, footer, 'small');
+}
+
+/** 确认删除配置项 */
+function confirmDeleteConfigItem(itemId, appId, modalId) {
+    closeModal(modalId);
+    showToast('删除成功', 'success');
+}
+
+/** 应用权限查询弹窗 */
+function showAppPermModal(appId) {
+    var appRow = pageConfigs['app-list'].data.find(function(x){return x.id===appId});
+    var appName = appRow ? (appRow.name || '') : '';
+    var modalId = 'modal_appPerm_' + appId;
+    var permItems = [
+        { id: 101, permName: '应用查看', permCode: 'app:view', permType: '查询', status: true },
+        { id: 102, permName: '应用新增', permCode: 'app:add', permType: '新增', status: true },
+        { id: 103, permName: '应用编辑', permCode: 'app:edit', permType: '修改', status: true },
+        { id: 104, permName: '应用删除', permCode: 'app:delete', permType: '删除', status: true },
+        { id: 105, permName: '配置管理', permCode: 'app:config', permType: '管理', status: true },
+        { id: 106, permName: '日志查看', permCode: 'app:log:view', permType: '查询', status: true },
+        { id: 107, permName: '权限分配', permCode: 'app:perm:assign', permType: '管理', status: false },
+        { id: 108, permName: '数据导出', permCode: 'app:export', permType: '查询', status: true },
+    ];
+    var body = '<div style="margin-bottom:12px;color:var(--text-secondary);font-size:13px;">应用：<span style="color:var(--text-primary);font-weight:500;">' + esc(appName) + '</span> 共 ' + permItems.length + ' 个权限</div>';
     body += '<div style="border:1px solid #E8E8E8;border-radius:4px;overflow:hidden;">';
     body += '<table class="data-table" style="margin:0;"><thead><tr>';
-    body += '<th style="width:50px;">序号</th><th>配置项名称</th><th>配置项编码</th><th style="width:120px;">配置值</th><th style="width:80px;">状态</th><th style="width:140px;">操作</th></tr></thead><tbody>';
-    var configItems = [
-        { id: 1, name: '应用权限信息查询', code: 'APP_PERM_QUERY', value: '开启', status: true },
-        { id: 2, name: '操作日志配置', code: 'OP_LOG_CONFIG', value: '开启', status: true },
-        { id: 3, name: '订阅日志配置', code: 'SUB_LOG_CONFIG', value: '开启', status: true },
-    ];
-    for (var ci = 0; ci < configItems.length; ci++) {
-        var item = configItems[ci];
-        var statusTag = item.status ? '<span class="tag tag-green">启用</span>' : '<span class="tag tag-gray">停用</span>';
-        body += '<tr><td>' + (ci+1) + '</td><td>' + item.name + '</td><td>' + item.code + '</td><td>' + item.value + '</td><td>' + statusTag + '</td>';
-        body += '<td><a href="javascript:;" class="link-btn" onclick="showToast(\'配置管理：' + item.name + '\',\'info\')">配置管理</a></td></tr>';
+    body += '<th style="width:50px;">序号</th><th>权限名称</th><th>权限编码</th><th style="width:100px;">权限类型</th><th style="width:80px;">状态</th></tr></thead><tbody>';
+    for (var pi = 0; pi < permItems.length; pi++) {
+        var p = permItems[pi];
+        var st = p.status ? '<span class="tag tag-green">启用</span>' : '<span class="tag tag-gray">停用</span>';
+        body += '<tr><td>' + (pi+1) + '</td><td>' + p.permName + '</td><td><code style="background:#F5F7FA;padding:2px 6px;border-radius:3px;font-size:12px;">' + p.permCode + '</code></td><td>' + p.permType + '</td><td>' + st + '</td></tr>';
     }
     body += '</tbody></table></div>';
-    body += '<div class="mt-3" style="text-align:right;"><button class="btn btn-primary" onclick="showToast(\'新增配置项\',\'success\')"><i class="fa fa-plus"></i> 新增配置</button></div>';
-    openModal('app_config_' + rowId, '应用配置 - ' + appName, body, '', 'large');
+    var footer = '<button class="btn btn-default btn-sm" onclick="closeModal(\'' + modalId + '\')">关闭</button>';
+    openModal(modalId, '应用权限信息 - ' + appName, body, footer, 'large');
 }
 
 /** 应用日志弹窗（Tab：操作日志 / 订阅日志） */
