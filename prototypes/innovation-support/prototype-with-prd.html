@@ -4112,6 +4112,7 @@ var pageConfigs = {
                     { key: 'title', label: '轮播图标题', type: 'input', placeholder: '请输入标题' },
                     { key: 'position', label: '位置', type: 'select', placeholder: '请选择', options: [{ value: '', label: '全部' }, { value: 'top', label: '顶部Banner' }, { value: 'middle', label: '中部轮播' }, { value: 'bottom', label: '底部推荐' }] },
                     { key: 'status', label: '状态', type: 'select', placeholder: '请选择', options: [{ value: '', label: '全部' }, { value: '1', label: '启用' }, { value: '0', label: '停用' }] },
+                    { key: 'isTop', label: '是否置顶', type: 'select', placeholder: '请选择', options: [{ value: '', label: '全部' }, { value: 'true', label: '已置顶' }, { value: 'false', label: '未置顶' }] },
                 ],
                 toolbar: [{ type: 'add', text: '新增轮播图' }, { type: 'batchDelete' }],
                 columns: [
@@ -4125,7 +4126,7 @@ var pageConfigs = {
                     { key: 'status', title: '状态', type: 'tag', tagMap: { true: { text: '启用', color: 'green' }, false: { text: '停用', color: 'red' } } },
                     { key: 'viewCount', title: '浏览量' },
                     { key: 'createTime', title: '创建时间', sortable: true },
-                    { type: 'actions', title: '操作', actions: [{ key: 'view', label: '查看' }, { key: 'edit', label: '编辑' }, { key: 'delete', label: '删除', danger: true }] },
+                    { key: 'isTop', title: '置顶', type: 'tag', tagMap: { true: { text: '置顶', color: 'red' }, false: { text: '普通', color: 'gray' } } },                    { type: 'actions', title: '操作', actions: [{ key: 'view', label: '查看' }, { key: 'edit', label: '编辑' }, { key: 'delete', label: '删除', danger: true }, { key: 'top', label: '置顶', hideWhen: { field: 'isTop', value: true } }, { key: 'untop', label: '取消置顶', hideWhen: { field: 'isTop', value: false } }] },
                 ],
                 formFields: [
                     { key: 'title', label: '轮播图标题', type: 'input', required: true, maxLength: 100, charCount: true },
@@ -4134,26 +4135,28 @@ var pageConfigs = {
                     { key: 'linkUrl', label: '链接地址', type: 'input', required: true, placeholder: '请输入跳转链接URL' },
                     { key: 'linkTarget', label: '链接跳转方式', type: 'radio', required: true, options: [{ value: '_blank', label: '新窗口打开', checked: true }, { value: '_self', label: '当前窗口打开' }] },
                     { key: 'sortNo', label: '排序号', type: 'number', defaultValue: 1, min: 1 },
+                    { key: 'isTop', label: '是否置顶', type: 'toggle', tip: '置顶内容将在首页优先展示' },
                     { key: 'status', label: '状态', type: 'radio', required: true, options: [{ value: true, label: '启用', checked: true }, { value: false, label: '停用' }] },
                     { key: 'validTime', label: '有效期', type: 'date-range' },
                     { key: 'remark', label: '备注说明', type: 'textarea', rows: 3, placeholder: '请输入备注说明（可选）' },
                 ],
                 modalSize: 'large',
                 data: [
-                    { id: 1, title: '赣政通开放平台全新上线', image: '', linkUrl: '/home', position: 'top', sortNo: 1, status: true, viewCount: 15680, createTime: '2025-04-01 10:00:00' },
-                    { id: 2, title: '新能力发布：AI智能识别接口', image: '', linkUrl: '/ability/ai', position: 'top', sortNo: 2, status: true, viewCount: 12450, createTime: '2025-04-02 11:00:00' },
-                    { id: 3, title: '开发者大会邀请函', image: '', linkUrl: '/event/dev-conference', position: 'top', sortNo: 3, status: true, viewCount: 9876, createTime: '2025-04-03 09:00:00' },
-                    { id: 4, title: 'SDK v2.0版本正式发布', image: '', linkUrl: '/resource/sdk', position: 'middle', sortNo: 1, status: true, viewCount: 8650, createTime: '2025-04-04 14:00:00' },
-                    { id: 5, title: '安全合规升级公告', image: '', linkUrl: '/notice/security', position: 'middle', sortNo: 2, status: false, viewCount: 5430, createTime: '2025-04-05 16:00:00' },
-                    { id: 6, title: '政务应用精品推荐', image: '', linkUrl: '/app/hall', position: 'bottom', sortNo: 1, status: true, viewCount: 7234, createTime: '2025-04-06 08:30:00' },
-                    { id: 7, title: '数据共享能力专题', image: '', linkUrl: '/data/share', position: 'bottom', sortNo: 2, status: true, viewCount: 6543, createTime: '2025-04-07 10:15:00' },
-                    { id: 8, title: '移动端适配升级公告', image: '', linkUrl: '/notice/mobile', position: 'bottom', sortNo: 3, status: true, viewCount: 4321, createTime: '2025-04-08 13:45:00' },
+                    { id: 1, title: '赣政通开放平台全新上线', image: '', linkUrl: '/home', position: 'top', sortNo: 1, status: true, viewCount: 15680, createTime: '2025-04-01 10:00:00' , isTop: true},
+                    { id: 2, title: '新能力发布：AI智能识别接口', image: '', linkUrl: '/ability/ai', position: 'top', sortNo: 2, status: true, viewCount: 12450, createTime: '2025-04-02 11:00:00' , isTop: false},
+                    { id: 3, title: '开发者大会邀请函', image: '', linkUrl: '/event/dev-conference', position: 'top', sortNo: 3, status: true, viewCount: 9876, createTime: '2025-04-03 09:00:00' , isTop: false},
+                    { id: 4, title: 'SDK v2.0版本正式发布', image: '', linkUrl: '/resource/sdk', position: 'middle', sortNo: 1, status: true, viewCount: 8650, createTime: '2025-04-04 14:00:00' , isTop: false},
+                    { id: 5, title: '安全合规升级公告', image: '', linkUrl: '/notice/security', position: 'middle', sortNo: 2, status: false, viewCount: 5430, createTime: '2025-04-05 16:00:00' , isTop: false},
+                    { id: 6, title: '政务应用精品推荐', image: '', linkUrl: '/app/hall', position: 'bottom', sortNo: 1, status: true, viewCount: 7234, createTime: '2025-04-06 08:30:00' , isTop: false},
+                    { id: 7, title: '数据共享能力专题', image: '', linkUrl: '/data/share', position: 'bottom', sortNo: 2, status: true, viewCount: 6543, createTime: '2025-04-07 10:15:00' , isTop: false},
+                    { id: 8, title: '移动端适配升级公告', image: '', linkUrl: '/notice/mobile', position: 'bottom', sortNo: 3, status: true, viewCount: 4321, createTime: '2025-04-08 13:45:00' , isTop: false},
                 ],
             },
             'accessSteps': {
                 query: [
                     { key: 'title', label: '步骤名称', type: 'input', placeholder: '请输入步骤名称' },
                     { key: 'status', label: '状态', type: 'select', placeholder: '请选择', options: [{ value: '', label: '全部' }, { value: '1', label: '启用' }, { value: '0', label: '停用' }] },
+                    { key: 'isTop', label: '是否置顶', type: 'select', placeholder: '请选择', options: [{ value: '', label: '全部' }, { value: 'true', label: '已置顶' }, { value: 'false', label: '未置顶' }] },
                 ],
                 toolbar: [{ type: 'add', text: '新增步骤' }, { type: 'batchDelete' }, { type: 'custom', text: '上移', icon: 'fa-arrow-up' }, { type: 'custom', text: '下移', icon: 'fa-arrow-down' }],
                 columns: [
@@ -4165,7 +4168,7 @@ var pageConfigs = {
                     { key: 'linkUrl', title: '跳转链接' },
                     { key: 'sortNo', title: '排序号' },
                     { key: 'status', title: '状态', type: 'toggle' },
-                    { type: 'actions', title: '操作', actions: [{ key: 'view', label: '查看' }, { key: 'edit', label: '编辑' }, { key: 'delete', label: '删除', danger: true }, { key: 'moveUp', label: '上移' }, { key: 'moveDown', label: '下移' }] },
+                    { key: 'isTop', title: '置顶', type: 'tag', tagMap: { true: { text: '置顶', color: 'red' }, false: { text: '普通', color: 'gray' } } },                    { type: 'actions', title: '操作', actions: [{ key: 'view', label: '查看' }, { key: 'edit', label: '编辑' }, { key: 'delete', label: '删除', danger: true }, { key: 'top', label: '置顶', hideWhen: { field: 'isTop', value: true } }, { key: 'untop', label: '取消置顶', hideWhen: { field: 'isTop', value: false } }, { key: 'moveUp', label: '上移' }, { key: 'moveDown', label: '下移' }] },
                 ],
                 formFields: [
                     { key: 'title', label: '步骤名称', type: 'input', required: true, maxLength: 50, charCount: true },
@@ -4174,17 +4177,18 @@ var pageConfigs = {
                     { key: 'stepImage', label: '上传步骤图', type: 'image-upload', required: true, uploadTip: '点击或将图片拖拽到这里上传', uploadDesc: '建议尺寸 282*416px，支持 JPG/PNG 格式，大小不超过 1MB' },
                     { key: 'linkUrl', label: '跳转链接', type: 'input', placeholder: '点击步骤后跳转的地址（可选）' },
                     { key: 'sortNo', label: '排序号', type: 'number', defaultValue: 1, min: 1 },
+                    { key: 'isTop', label: '是否置顶', type: 'toggle', tip: '置顶内容将在首页优先展示' },
                     { key: 'status', label: '状态', type: 'radio', required: true, options: [{ value: true, label: '启用', checked: true }, { value: false, label: '停用' }] },
                     { key: 'detailContent', label: '详细说明', type: 'large-textarea', tip: '支持富文本格式，可详细描述步骤的操作说明和注意事项' },
                 ],
                 modalSize: 'large',
                 data: [
-                    { id: 1, stepNo: 'STEP001', title: '应用申请', stepImage: '', description: '注册开发者账号并提交应用申请', linkUrl: '/apply', sortNo: 1, status: true },
-                    { id: 2, stepNo: 'STEP002', title: '资质审核', stepImage: '', description: '平台审核开发者资质和应用信息', linkUrl: '/audit', sortNo: 2, status: true },
-                    { id: 3, stepNo: 'STEP003', title: '接口开发', stepImage: '', description: '获取AppKey，进行接口开发对接', linkUrl: '/develop', sortNo: 3, status: true },
-                    { id: 4, stepNo: 'STEP004', title: '应用测试', stepImage: '', description: '在沙箱环境进行功能测试验证', linkUrl: '/test', sortNo: 4, status: true },
-                    { id: 5, stepNo: 'STEP005', title: '上线审核', stepImage: '', description: '提交上线申请，等待平台审核', linkUrl: '/online-audit', sortNo: 5, status: true },
-                    { id: 6, stepNo: 'STEP006', title: '应用上架', stepImage: '', description: '审核通过后应用正式上架发布', linkUrl: '/online', sortNo: 6, status: true },
+                    { id: 1, stepNo: 'STEP001', title: '应用申请', stepImage: '', description: '注册开发者账号并提交应用申请', linkUrl: '/apply', sortNo: 1, status: true , isTop: true},
+                    { id: 2, stepNo: 'STEP002', title: '资质审核', stepImage: '', description: '平台审核开发者资质和应用信息', linkUrl: '/audit', sortNo: 2, status: true , isTop: false},
+                    { id: 3, stepNo: 'STEP003', title: '接口开发', stepImage: '', description: '获取AppKey，进行接口开发对接', linkUrl: '/develop', sortNo: 3, status: true , isTop: false},
+                    { id: 4, stepNo: 'STEP004', title: '应用测试', stepImage: '', description: '在沙箱环境进行功能测试验证', linkUrl: '/test', sortNo: 4, status: true , isTop: false},
+                    { id: 5, stepNo: 'STEP005', title: '上线审核', stepImage: '', description: '提交上线申请，等待平台审核', linkUrl: '/online-audit', sortNo: 5, status: true , isTop: false},
+                    { id: 6, stepNo: 'STEP006', title: '应用上架', stepImage: '', description: '审核通过后应用正式上架发布', linkUrl: '/online', sortNo: 6, status: true , isTop: false},
                 ],
             },
             'appCase': {
@@ -4192,6 +4196,7 @@ var pageConfigs = {
                     { key: 'title', label: '案例名称', type: 'input', placeholder: '请输入案例名称' },
                     { key: 'industry', label: '行业分类', type: 'select', placeholder: '请选择', options: [{ value: '', label: '全部' }, { value: 'gov', label: '政务' }, { value: 'finance', label: '金融' }, { value: 'edu', label: '教育' }, { value: 'medical', label: '医疗' }, { value: 'traffic', label: '交通' }, { value: 'other', label: '其他' }] },
                     { key: 'status', label: '状态', type: 'select', placeholder: '请选择', options: [{ value: '', label: '全部' }, { value: 'online', label: '已上架' }, { value: 'offline', label: '已下架' }] },
+                    { key: 'isTop', label: '是否置顶', type: 'select', placeholder: '请选择', options: [{ value: '', label: '全部' }, { value: 'true', label: '已置顶' }, { value: 'false', label: '未置顶' }] },
                 ],
                 toolbar: [{ type: 'add', text: '新增案例' }, { type: 'batchDelete' }, { type: 'custom', text: '推荐设置', icon: 'fa-star' }],
                 columns: [
@@ -4204,7 +4209,7 @@ var pageConfigs = {
                     { key: 'viewCount', title: '浏览量' },
                     { key: 'status', title: '状态', type: 'tag', tagMap: { 'online': { text: '已上架', color: 'green' }, 'offline': { text: '已下架', color: 'gray' } } },
                     { key: 'publishTime', title: '发布时间', sortable: true },
-                    { type: 'actions', title: '操作', actions: [{ key: 'view', label: '查看' }, { key: 'edit', label: '编辑' }, { key: 'delete', label: '删除', danger: true }, { key: 'recommend', label: '推荐' }, { key: 'toggleShelf', label: '上下架' }] },
+                    { key: 'isTop', title: '置顶', type: 'tag', tagMap: { true: { text: '置顶', color: 'red' }, false: { text: '普通', color: 'gray' } } },                    { type: 'actions', title: '操作', actions: [{ key: 'view', label: '查看' }, { key: 'edit', label: '编辑' }, { key: 'delete', label: '删除', danger: true }, { key: 'top', label: '置顶', hideWhen: { field: 'isTop', value: true } }, { key: 'untop', label: '取消置顶', hideWhen: { field: 'isTop', value: false } }, { key: 'recommend', label: '推荐' }, { key: 'toggleShelf', label: '上下架' }] },
                 ],
                 formFields: [
                     { key: 'section1', label: '基本信息', type: 'section-title' },
@@ -4219,6 +4224,7 @@ var pageConfigs = {
                     { key: 'section3', label: '其他设置', type: 'section-title' },
                     { key: 'isRecommend', label: '是否推荐', type: 'toggle', tip: '推荐案例将在首页重点展示' },
                     { key: 'sortNo', label: '排序号', type: 'number', defaultValue: 1, min: 1 },
+                    { key: 'isTop', label: '是否置顶', type: 'toggle', tip: '置顶内容将在首页优先展示' },
                     { key: 'status', label: '状态', type: 'radio', required: true, options: [{ value: 'online', label: '上架' }, { value: 'offline', label: '下架', checked: true }] },
                     { key: 'section4', label: 'SEO信息', type: 'section-title' },
                     { key: 'seoTitle', label: 'SEO标题', type: 'input', placeholder: '搜索引擎优化标题' },
@@ -4227,14 +4233,14 @@ var pageConfigs = {
                 ],
                 modalSize: 'xlarge',
                 data: [
-                    { id: 1, title: '政务办公一体化解决方案', coverImage: '', industry: 'gov', isRecommend: true, viewCount: 15680, status: 'online', publishTime: '2025-04-01 10:00:00' },
-                    { id: 2, title: '某市政府数据共享案例', coverImage: '', industry: 'gov', isRecommend: true, viewCount: 12450, status: 'online', publishTime: '2025-04-02 11:00:00' },
-                    { id: 3, title: '智慧银行金融服务平台', coverImage: '', industry: 'finance', isRecommend: false, viewCount: 9876, status: 'online', publishTime: '2025-04-03 09:00:00' },
-                    { id: 4, title: '智慧校园建设方案', coverImage: '', industry: 'edu', isRecommend: true, viewCount: 8650, status: 'offline', publishTime: '2025-04-04 14:00:00' },
-                    { id: 5, title: '三甲医院医疗信息化集成', coverImage: '', industry: 'medical', isRecommend: false, viewCount: 7234, status: 'online', publishTime: '2025-04-05 16:00:00' },
-                    { id: 6, title: '城市智能交通管理系统', coverImage: '', industry: 'traffic', isRecommend: true, viewCount: 6543, status: 'online', publishTime: '2025-04-06 08:30:00' },
-                    { id: 7, title: '企业协同办公最佳实践', coverImage: '', industry: 'other', isRecommend: false, viewCount: 5430, status: 'online', publishTime: '2025-04-07 10:15:00' },
-                    { id: 8, title: '智慧政务服务大厅', coverImage: '', industry: 'gov', isRecommend: false, viewCount: 4321, status: 'online', publishTime: '2025-04-08 13:45:00' },
+                    { id: 1, title: '政务办公一体化解决方案', coverImage: '', industry: 'gov', isRecommend: true, viewCount: 15680, status: 'online', publishTime: '2025-04-01 10:00:00' , isTop: true},
+                    { id: 2, title: '某市政府数据共享案例', coverImage: '', industry: 'gov', isRecommend: true, viewCount: 12450, status: 'online', publishTime: '2025-04-02 11:00:00' , isTop: false},
+                    { id: 3, title: '智慧银行金融服务平台', coverImage: '', industry: 'finance', isRecommend: false, viewCount: 9876, status: 'online', publishTime: '2025-04-03 09:00:00' , isTop: false},
+                    { id: 4, title: '智慧校园建设方案', coverImage: '', industry: 'edu', isRecommend: true, viewCount: 8650, status: 'offline', publishTime: '2025-04-04 14:00:00' , isTop: false},
+                    { id: 5, title: '三甲医院医疗信息化集成', coverImage: '', industry: 'medical', isRecommend: false, viewCount: 7234, status: 'online', publishTime: '2025-04-05 16:00:00' , isTop: false},
+                    { id: 6, title: '城市智能交通管理系统', coverImage: '', industry: 'traffic', isRecommend: true, viewCount: 6543, status: 'online', publishTime: '2025-04-06 08:30:00' , isTop: false},
+                    { id: 7, title: '企业协同办公最佳实践', coverImage: '', industry: 'other', isRecommend: false, viewCount: 5430, status: 'online', publishTime: '2025-04-07 10:15:00' , isTop: false},
+                    { id: 8, title: '智慧政务服务大厅', coverImage: '', industry: 'gov', isRecommend: false, viewCount: 4321, status: 'online', publishTime: '2025-04-08 13:45:00' , isTop: false},
                 ],
             },
             'ability': {
@@ -4242,6 +4248,7 @@ var pageConfigs = {
                     { key: 'name', label: '能力名称', type: 'input', placeholder: '请输入能力名称' },
                     { key: 'category', label: '能力分类', type: 'select', placeholder: '请选择', options: [{ value: '', label: '全部' }, { value: 'auth', label: '身份认证' }, { value: 'data', label: '数据查询' }, { value: 'business', label: '业务办理' }, { value: 'message', label: '消息通知' }, { value: 'pay', label: '支付能力' }, { value: 'other', label: '其他' }] },
                     { key: 'status', label: '状态', type: 'select', placeholder: '请选择', options: [{ value: '', label: '全部' }, { value: 'online', label: '已上线' }, { value: 'offline', label: '已下线' }] },
+                    { key: 'isTop', label: '是否置顶', type: 'select', placeholder: '请选择', options: [{ value: '', label: '全部' }, { value: 'true', label: '已置顶' }, { value: 'false', label: '未置顶' }] },
                 ],
                 toolbar: [{ type: 'add', text: '新增能力' }, { type: 'batchDelete' }],
                 columns: [
@@ -4252,7 +4259,7 @@ var pageConfigs = {
                     { key: 'callCount', title: '调用次数' },
                     { key: 'status', title: '状态', type: 'tag', tagMap: { 'online': { text: '已上线', color: 'green' }, 'offline': { text: '已下线', color: 'gray' } } },
                     { key: 'createTime', title: '创建时间', sortable: true },
-                    { type: 'actions', title: '操作', actions: [{ key: 'view', label: '查看' }, { key: 'edit', label: '编辑' }, { key: 'delete', label: '删除', danger: true }] },
+                    { key: 'isTop', title: '置顶', type: 'tag', tagMap: { true: { text: '置顶', color: 'red' }, false: { text: '普通', color: 'gray' } } },                    { type: 'actions', title: '操作', actions: [{ key: 'view', label: '查看' }, { key: 'edit', label: '编辑' }, { key: 'delete', label: '删除', danger: true }, { key: 'top', label: '置顶', hideWhen: { field: 'isTop', value: true } }, { key: 'untop', label: '取消置顶', hideWhen: { field: 'isTop', value: false } }] },
                 ],
                 formFields: [
                     { key: 'name', label: '能力名称', type: 'input', required: true, maxLength: 50, charCount: true },
@@ -4266,17 +4273,18 @@ var pageConfigs = {
                     { key: 'callCount', label: '调用次数', type: 'number', defaultValue: 0, min: 0 },
                     { key: 'status', label: '状态', type: 'radio', required: true, options: [{ value: 'online', label: '上线' }, { value: 'offline', label: '下线', checked: true }] },
                     { key: 'sortNo', label: '排序号', type: 'number', defaultValue: 1, min: 1 },
+                    { key: 'isTop', label: '是否置顶', type: 'toggle', tip: '置顶内容将在首页优先展示' },
                 ],
                 modalSize: 'large',
                 data: [
-                    { id: 1, name: '用户信息查询', code: 'user_info', category: 'data', callCount: 125680, status: 'online', createTime: '2025-04-01 10:00:00' },
-                    { id: 2, name: '身份认证', code: 'identity_auth', category: 'auth', callCount: 98540, status: 'online', createTime: '2025-04-02 11:00:00' },
-                    { id: 3, name: '消息推送服务', code: 'message_push', category: 'message', callCount: 87650, status: 'online', createTime: '2025-04-03 09:00:00' },
-                    { id: 4, name: 'OCR文字识别', code: 'ocr_recognize', category: 'other', callCount: 76540, status: 'online', createTime: '2025-04-04 14:00:00' },
-                    { id: 5, name: '在线支付', code: 'online_pay', category: 'pay', callCount: 65430, status: 'online', createTime: '2025-04-05 16:00:00' },
-                    { id: 6, name: '业务办理', code: 'business_handle', category: 'business', callCount: 54320, status: 'online', createTime: '2025-04-06 08:30:00' },
-                    { id: 7, name: '组织机构查询', code: 'org_query', category: 'data', callCount: 43210, status: 'online', createTime: '2025-04-07 10:15:00' },
-                    { id: 8, name: '人脸识别', code: 'face_recognize', category: 'auth', callCount: 32100, status: 'offline', createTime: '2025-04-08 13:45:00' },
+                    { id: 1, name: '用户信息查询', code: 'user_info', category: 'data', callCount: 125680, status: 'online', createTime: '2025-04-01 10:00:00' , isTop: true},
+                    { id: 2, name: '身份认证', code: 'identity_auth', category: 'auth', callCount: 98540, status: 'online', createTime: '2025-04-02 11:00:00' , isTop: false},
+                    { id: 3, name: '消息推送服务', code: 'message_push', category: 'message', callCount: 87650, status: 'online', createTime: '2025-04-03 09:00:00' , isTop: false},
+                    { id: 4, name: 'OCR文字识别', code: 'ocr_recognize', category: 'other', callCount: 76540, status: 'online', createTime: '2025-04-04 14:00:00' , isTop: false},
+                    { id: 5, name: '在线支付', code: 'online_pay', category: 'pay', callCount: 65430, status: 'online', createTime: '2025-04-05 16:00:00' , isTop: false},
+                    { id: 6, name: '业务办理', code: 'business_handle', category: 'business', callCount: 54320, status: 'online', createTime: '2025-04-06 08:30:00' , isTop: false},
+                    { id: 7, name: '组织机构查询', code: 'org_query', category: 'data', callCount: 43210, status: 'online', createTime: '2025-04-07 10:15:00' , isTop: false},
+                    { id: 8, name: '人脸识别', code: 'face_recognize', category: 'auth', callCount: 32100, status: 'offline', createTime: '2025-04-08 13:45:00' , isTop: false},
                 ],
             },
             'resource': {
@@ -4284,6 +4292,7 @@ var pageConfigs = {
                     { key: 'name', label: '资源名称', type: 'input', placeholder: '请输入资源名称' },
                     { key: 'type', label: '资源类型', type: 'select', placeholder: '请选择', options: [{ value: '', label: '全部' }, { value: 'doc', label: '开发文档' }, { value: 'sdk', label: 'SDK下载' }, { value: 'tool', label: '工具软件' }, { value: 'template', label: '模板文件' }, { value: 'video', label: '视频教程' }] },
                     { key: 'status', label: '状态', type: 'select', placeholder: '请选择', options: [{ value: '', label: '全部' }, { value: '1', label: '启用' }, { value: '0', label: '停用' }] },
+                    { key: 'isTop', label: '是否置顶', type: 'select', placeholder: '请选择', options: [{ value: '', label: '全部' }, { value: 'true', label: '已置顶' }, { value: 'false', label: '未置顶' }] },
                 ],
                 toolbar: [{ type: 'add', text: '新增资源' }, { type: 'batchDelete' }],
                 columns: [
@@ -4295,7 +4304,7 @@ var pageConfigs = {
                     { key: 'downloadCount', title: '下载次数' },
                     { key: 'status', title: '状态', type: 'tag', tagMap: { true: { text: '启用', color: 'green' }, false: { text: '停用', color: 'red' } } },
                     { key: 'updateTime', title: '更新时间', sortable: true },
-                    { type: 'actions', title: '操作', actions: [{ key: 'view', label: '查看' }, { key: 'edit', label: '编辑' }, { key: 'delete', label: '删除', danger: true }] },
+                    { key: 'isTop', title: '置顶', type: 'tag', tagMap: { true: { text: '置顶', color: 'red' }, false: { text: '普通', color: 'gray' } } },                    { type: 'actions', title: '操作', actions: [{ key: 'view', label: '查看' }, { key: 'edit', label: '编辑' }, { key: 'delete', label: '删除', danger: true }, { key: 'top', label: '置顶', hideWhen: { field: 'isTop', value: true } }, { key: 'untop', label: '取消置顶', hideWhen: { field: 'isTop', value: false } }] },
                 ],
                 formFields: [
                     { key: 'name', label: '资源名称', type: 'input', required: true, maxLength: 100, charCount: true },
@@ -4308,17 +4317,18 @@ var pageConfigs = {
                     { key: 'downloadCount', label: '下载次数', type: 'number', defaultValue: 0, min: 0 },
                     { key: 'status', label: '状态', type: 'radio', required: true, options: [{ value: true, label: '启用', checked: true }, { value: false, label: '停用' }] },
                     { key: 'sortNo', label: '排序号', type: 'number', defaultValue: 1, min: 1 },
+                    { key: 'isTop', label: '是否置顶', type: 'toggle', tip: '置顶内容将在首页优先展示' },
                 ],
                 modalSize: 'large',
                 data: [
-                    { id: 1, name: 'Java SDK v2.0', type: 'sdk', fileSize: '15.6 MB', downloadCount: 15680, status: true, updateTime: '2025-04-01 10:00:00' },
-                    { id: 2, name: 'Python SDK v1.5', type: 'sdk', fileSize: '8.2 MB', downloadCount: 12450, status: true, updateTime: '2025-04-02 11:00:00' },
-                    { id: 3, name: 'API开发文档', type: 'doc', fileSize: '3.4 MB', downloadCount: 9876, status: true, updateTime: '2025-04-03 09:00:00' },
-                    { id: 4, name: '接口调试工具', type: 'tool', fileSize: '25.8 MB', downloadCount: 8650, status: true, updateTime: '2025-04-04 14:00:00' },
-                    { id: 5, name: 'JavaScript SDK', type: 'sdk', fileSize: '5.1 MB', downloadCount: 7234, status: false, updateTime: '2025-04-05 16:00:00' },
-                    { id: 6, name: '应用模板工程', type: 'template', fileSize: '45.2 MB', downloadCount: 6543, status: true, updateTime: '2025-04-06 08:30:00' },
-                    { id: 7, name: '快速入门视频教程', type: 'video', fileSize: '128 MB', downloadCount: 5430, status: true, updateTime: '2025-04-07 10:15:00' },
-                    { id: 8, name: 'Go SDK v1.2', type: 'sdk', fileSize: '10.3 MB', downloadCount: 4321, status: true, updateTime: '2025-04-08 13:45:00' },
+                    { id: 1, name: 'Java SDK v2.0', type: 'sdk', fileSize: '15.6 MB', downloadCount: 15680, status: true, updateTime: '2025-04-01 10:00:00' , isTop: true},
+                    { id: 2, name: 'Python SDK v1.5', type: 'sdk', fileSize: '8.2 MB', downloadCount: 12450, status: true, updateTime: '2025-04-02 11:00:00' , isTop: false},
+                    { id: 3, name: 'API开发文档', type: 'doc', fileSize: '3.4 MB', downloadCount: 9876, status: true, updateTime: '2025-04-03 09:00:00' , isTop: false},
+                    { id: 4, name: '接口调试工具', type: 'tool', fileSize: '25.8 MB', downloadCount: 8650, status: true, updateTime: '2025-04-04 14:00:00' , isTop: false},
+                    { id: 5, name: 'JavaScript SDK', type: 'sdk', fileSize: '5.1 MB', downloadCount: 7234, status: false, updateTime: '2025-04-05 16:00:00' , isTop: false},
+                    { id: 6, name: '应用模板工程', type: 'template', fileSize: '45.2 MB', downloadCount: 6543, status: true, updateTime: '2025-04-06 08:30:00' , isTop: false},
+                    { id: 7, name: '快速入门视频教程', type: 'video', fileSize: '128 MB', downloadCount: 5430, status: true, updateTime: '2025-04-07 10:15:00' , isTop: false},
+                    { id: 8, name: 'Go SDK v1.2', type: 'sdk', fileSize: '10.3 MB', downloadCount: 4321, status: true, updateTime: '2025-04-08 13:45:00' , isTop: false},
                 ],
             },
             'guide': {
@@ -4326,6 +4336,7 @@ var pageConfigs = {
                     { key: 'title', label: '指南标题', type: 'input', placeholder: '请输入标题' },
                     { key: 'category', label: '分类', type: 'select', placeholder: '请选择', options: [{ value: '', label: '全部' }, { value: 'quickstart', label: '快速入门' }, { value: 'advanced', label: '进阶教程' }, { value: 'bestpractice', label: '最佳实践' }, { value: 'faq', label: '常见问题' }, { value: 'api', label: 'API参考' }] },
                     { key: 'status', label: '状态', type: 'select', placeholder: '请选择', options: [{ value: '', label: '全部' }, { value: 'draft', label: '草稿' }, { value: 'published', label: '已发布' }, { value: 'offline', label: '已下架' }] },
+                    { key: 'isTop', label: '是否置顶', type: 'select', placeholder: '请选择', options: [{ value: '', label: '全部' }, { value: 'true', label: '已置顶' }, { value: 'false', label: '未置顶' }] },
                 ],
                 toolbar: [{ type: 'add', text: '新增指南' }, { type: 'batchDelete' }],
                 columns: [
@@ -4336,7 +4347,7 @@ var pageConfigs = {
                     { key: 'viewCount', title: '浏览量' },
                     { key: 'status', title: '状态', type: 'tag', tagMap: { 'draft': { text: '草稿', color: 'gray' }, 'published': { text: '已发布', color: 'green' }, 'offline': { text: '已下架', color: 'red' } } },
                     { key: 'updateTime', title: '更新时间', sortable: true },
-                    { type: 'actions', title: '操作', actions: [{ key: 'view', label: '查看' }, { key: 'edit', label: '编辑' }, { key: 'delete', label: '删除', danger: true }] },
+                    { key: 'isTop', title: '置顶', type: 'tag', tagMap: { true: { text: '置顶', color: 'red' }, false: { text: '普通', color: 'gray' } } },                    { type: 'actions', title: '操作', actions: [{ key: 'view', label: '查看' }, { key: 'edit', label: '编辑' }, { key: 'delete', label: '删除', danger: true }, { key: 'top', label: '置顶', hideWhen: { field: 'isTop', value: true } }, { key: 'untop', label: '取消置顶', hideWhen: { field: 'isTop', value: false } }] },
                 ],
                 formFields: [
                     { key: 'section1', label: '基本信息', type: 'section-title' },
@@ -4352,6 +4363,7 @@ var pageConfigs = {
                     { key: 'viewCount', label: '浏览量', type: 'number', defaultValue: 0, min: 0 },
                     { key: 'status', label: '状态', type: 'radio', required: true, options: [{ value: 'draft', label: '草稿' }, { value: 'published', label: '已发布', checked: true }, { value: 'offline', label: '已下架' }] },
                     { key: 'sortNo', label: '排序号', type: 'number', defaultValue: 1, min: 1 },
+                    { key: 'isTop', label: '是否置顶', type: 'toggle', tip: '置顶内容将在首页优先展示' },
                     { key: 'section5', label: 'SEO信息', type: 'section-title' },
                     { key: 'seoTitle', label: 'SEO标题', type: 'input', placeholder: '搜索引擎优化标题' },
                     { key: 'seoKeywords', label: 'SEO关键词', type: 'input', placeholder: '多个关键词用逗号分隔' },
@@ -4359,14 +4371,14 @@ var pageConfigs = {
                 ],
                 modalSize: 'xlarge',
                 data: [
-                    { id: 1, title: '快速接入指南', category: 'quickstart', viewCount: 15680, status: 'published', updateTime: '2025-04-01 10:00:00' },
-                    { id: 2, title: '认证授权详解', category: 'advanced', viewCount: 12450, status: 'published', updateTime: '2025-04-02 11:00:00' },
-                    { id: 3, title: '接口调用最佳实践', category: 'bestpractice', viewCount: 9876, status: 'published', updateTime: '2025-04-03 09:00:00' },
-                    { id: 4, title: 'SDK使用教程', category: 'quickstart', viewCount: 8650, status: 'published', updateTime: '2025-04-04 14:00:00' },
-                    { id: 5, title: '常见问题汇总', category: 'faq', viewCount: 7234, status: 'published', updateTime: '2025-04-05 16:00:00' },
-                    { id: 6, title: 'API参考手册', category: 'api', viewCount: 6543, status: 'published', updateTime: '2025-04-06 08:30:00' },
-                    { id: 7, title: '错误排查指南', category: 'advanced', viewCount: 5430, status: 'draft', updateTime: '2025-04-07 10:15:00' },
-                    { id: 8, title: '性能优化技巧', category: 'bestpractice', viewCount: 4321, status: 'offline', updateTime: '2025-04-08 13:45:00' },
+                    { id: 1, title: '快速接入指南', category: 'quickstart', viewCount: 15680, status: 'published', updateTime: '2025-04-01 10:00:00' , isTop: true},
+                    { id: 2, title: '认证授权详解', category: 'advanced', viewCount: 12450, status: 'published', updateTime: '2025-04-02 11:00:00' , isTop: false},
+                    { id: 3, title: '接口调用最佳实践', category: 'bestpractice', viewCount: 9876, status: 'published', updateTime: '2025-04-03 09:00:00' , isTop: false},
+                    { id: 4, title: 'SDK使用教程', category: 'quickstart', viewCount: 8650, status: 'published', updateTime: '2025-04-04 14:00:00' , isTop: false},
+                    { id: 5, title: '常见问题汇总', category: 'faq', viewCount: 7234, status: 'published', updateTime: '2025-04-05 16:00:00' , isTop: false},
+                    { id: 6, title: 'API参考手册', category: 'api', viewCount: 6543, status: 'published', updateTime: '2025-04-06 08:30:00' , isTop: false},
+                    { id: 7, title: '错误排查指南', category: 'advanced', viewCount: 5430, status: 'draft', updateTime: '2025-04-07 10:15:00' , isTop: false},
+                    { id: 8, title: '性能优化技巧', category: 'bestpractice', viewCount: 4321, status: 'offline', updateTime: '2025-04-08 13:45:00' , isTop: false},
                 ],
             },
             'helpCenter': {
@@ -4374,6 +4386,7 @@ var pageConfigs = {
                     { key: 'title', label: '问题标题', type: 'input', placeholder: '请输入问题标题' },
                     { key: 'category', label: '分类', type: 'select', placeholder: '请选择', options: [{ value: '', label: '全部' }, { value: 'account', label: '账号问题' }, { value: 'usage', label: '使用指南' }, { value: 'permission', label: '权限配置' }, { value: 'exception', label: '异常处理' }, { value: 'other', label: '其他' }] },
                     { key: 'status', label: '状态', type: 'select', placeholder: '请选择', options: [{ value: '', label: '全部' }, { value: '1', label: '启用' }, { value: '0', label: '停用' }] },
+                    { key: 'isTop', label: '是否置顶', type: 'select', placeholder: '请选择', options: [{ value: '', label: '全部' }, { value: 'true', label: '已置顶' }, { value: 'false', label: '未置顶' }] },
                 ],
                 toolbar: [{ type: 'add', text: '新增帮助' }, { type: 'batchDelete' }],
                 columns: [
@@ -4385,7 +4398,7 @@ var pageConfigs = {
                     { key: 'isFaq', title: '常见问题', type: 'tag', tagMap: { true: { text: '常见', color: 'orange' }, false: { text: '否', color: 'gray' } } },
                     { key: 'status', title: '状态', type: 'tag', tagMap: { true: { text: '启用', color: 'green' }, false: { text: '停用', color: 'red' } } },
                     { key: 'updateTime', title: '更新时间', sortable: true },
-                    { type: 'actions', title: '操作', actions: [{ key: 'view', label: '查看' }, { key: 'edit', label: '编辑' }, { key: 'delete', label: '删除', danger: true }] },
+                    { key: 'isTop', title: '置顶', type: 'tag', tagMap: { true: { text: '置顶', color: 'red' }, false: { text: '普通', color: 'gray' } } },                    { type: 'actions', title: '操作', actions: [{ key: 'view', label: '查看' }, { key: 'edit', label: '编辑' }, { key: 'delete', label: '删除', danger: true }, { key: 'top', label: '置顶', hideWhen: { field: 'isTop', value: true } }, { key: 'untop', label: '取消置顶', hideWhen: { field: 'isTop', value: false } }] },
                 ],
                 formFields: [
                     { key: 'title', label: '问题标题', type: 'input', required: true, maxLength: 100, charCount: true },
@@ -4393,20 +4406,21 @@ var pageConfigs = {
                     { key: 'answer', label: '问题答案', type: 'large-textarea', required: true, tip: '详细的问题解答内容，支持富文本格式' },
                     { key: 'isFaq', label: '是否常见问题', type: 'toggle', tip: '开启后将在常见问题专区展示' },
                     { key: 'sortNo', label: '排序号', type: 'number', defaultValue: 1, min: 1 },
+                    { key: 'isTop', label: '是否置顶', type: 'toggle', tip: '置顶内容将在首页优先展示' },
                     { key: 'viewCount', label: '浏览量', type: 'number', defaultValue: 0, min: 0 },
                     { key: 'status', label: '状态', type: 'radio', required: true, options: [{ value: true, label: '启用', checked: true }, { value: false, label: '停用' }] },
                     { key: 'relatedQuestions', label: '关联问题', type: 'tag-input' },
                 ],
                 modalSize: 'large',
                 data: [
-                    { id: 1, title: '如何注册开放平台账号', category: 'account', viewCount: 15680, isFaq: true, status: true, updateTime: '2025-04-01 10:00:00' },
-                    { id: 2, title: '如何申请接口权限', category: 'permission', viewCount: 12450, isFaq: true, status: true, updateTime: '2025-04-02 11:00:00' },
-                    { id: 3, title: 'SDK下载后如何使用', category: 'usage', viewCount: 9876, isFaq: true, status: true, updateTime: '2025-04-03 09:00:00' },
-                    { id: 4, title: '接口调用频率限制说明', category: 'usage', viewCount: 8650, isFaq: true, status: true, updateTime: '2025-04-04 14:00:00' },
-                    { id: 5, title: '忘记密码怎么办', category: 'account', viewCount: 7234, isFaq: false, status: false, updateTime: '2025-04-05 16:00:00' },
-                    { id: 6, title: '接口返回403错误怎么处理', category: 'exception', viewCount: 6543, isFaq: true, status: true, updateTime: '2025-04-06 08:30:00' },
-                    { id: 7, title: '如何配置应用回调地址', category: 'permission', viewCount: 5430, isFaq: false, status: true, updateTime: '2025-04-07 10:15:00' },
-                    { id: 8, title: '实名认证失败原因有哪些', category: 'account', viewCount: 4321, isFaq: false, status: true, updateTime: '2025-04-08 13:45:00' },
+                    { id: 1, title: '如何注册开放平台账号', category: 'account', viewCount: 15680, isFaq: true, status: true, updateTime: '2025-04-01 10:00:00' , isTop: true},
+                    { id: 2, title: '如何申请接口权限', category: 'permission', viewCount: 12450, isFaq: true, status: true, updateTime: '2025-04-02 11:00:00' , isTop: false},
+                    { id: 3, title: 'SDK下载后如何使用', category: 'usage', viewCount: 9876, isFaq: true, status: true, updateTime: '2025-04-03 09:00:00' , isTop: false},
+                    { id: 4, title: '接口调用频率限制说明', category: 'usage', viewCount: 8650, isFaq: true, status: true, updateTime: '2025-04-04 14:00:00' , isTop: false},
+                    { id: 5, title: '忘记密码怎么办', category: 'account', viewCount: 7234, isFaq: false, status: false, updateTime: '2025-04-05 16:00:00' , isTop: false},
+                    { id: 6, title: '接口返回403错误怎么处理', category: 'exception', viewCount: 6543, isFaq: true, status: true, updateTime: '2025-04-06 08:30:00' , isTop: false},
+                    { id: 7, title: '如何配置应用回调地址', category: 'permission', viewCount: 5430, isFaq: false, status: true, updateTime: '2025-04-07 10:15:00' , isTop: false},
+                    { id: 8, title: '实名认证失败原因有哪些', category: 'account', viewCount: 4321, isFaq: false, status: true, updateTime: '2025-04-08 13:45:00' , isTop: false},
                 ],
             },
         },
@@ -9014,6 +9028,23 @@ function handleAction(actionKey, pageKey, rowId) {
         case 'forward': openTicketForwardModal(rowId); break;
         case 'rate': openTicketRateModal(rowId); break;
         case 'upload': openTicketUploadModal(rowId); break;
+        // 置顶/取消置顶
+        case 'top':
+        case 'untop':
+            togglePinTop(pageKey, rowId, actionKey === 'top');
+            break;
+        // 推荐/取消推荐
+        case 'recommend':
+        case 'unrecommend':
+            toggleRecommend(pageKey, rowId, actionKey === 'recommend');
+            break;
+        case 'moveUp':
+        case 'moveDown':
+            showToast(actionKey === 'moveUp' ? '已上移' : '已下移', 'success');
+            break;
+        case 'toggleShelf':
+            showToast('上下架操作成功', 'success');
+            break;
         default: showToast('操作: ' + actionKey, 'info');
     }
 }
@@ -9024,6 +9055,39 @@ function handleAction(actionKey, pageKey, rowId) {
 
 /** 6. 通用弹窗打开 */
 var modalZIndex = 1000;
+
+/** 置顶/取消置顶 */
+function togglePinTop(pageKey, rowId, isTop) {
+    const resolved = resolvePageConfig(pageKey);
+    if (!resolved) return;
+    const data = resolved.getData();
+    const row = data.find(r => r.id === rowId);
+    if (!row) return;
+    row.isTop = isTop;
+    showToast(isTop ? '已置顶' : '已取消置顶', 'success');
+    // 重新渲染
+    if (resolved.tabKey) {
+        renderTabTablePage(pageKey, resolved.tabKey);
+    } else {
+        renderTablePage(pageKey);
+    }
+}
+
+/** 推荐/取消推荐 */
+function toggleRecommend(pageKey, rowId, isRecommend) {
+    const resolved = resolvePageConfig(pageKey);
+    if (!resolved) return;
+    const data = resolved.getData();
+    const row = data.find(r => r.id === rowId);
+    if (!row) return;
+    row.isRecommend = isRecommend;
+    showToast(isRecommend ? '已设为推荐' : '已取消推荐', 'success');
+    if (resolved.tabKey) {
+        renderTabTablePage(pageKey, resolved.tabKey);
+    } else {
+        renderTablePage(pageKey);
+    }
+}
 function openModal(id, title, bodyHtml, footerHtml, size) {
     // 移除已存在的同名弹窗
     closeModal(id);
@@ -15015,8 +15079,16 @@ var prdData = {
         resourceSortConfig: '【资源中心-排序】支持资源标题、下载量、创建时间、排序号字段排序。点击表头切换升序/降序。默认按排序号升序排列。',
         resourceQueryFlow: '【资源中心-查询】支持资源标题（模糊）、类型（下拉）、状态（下拉）多条件组合查询，AND关系。支持分页查询。',
         guideAddFlow: '【新手指南-新增】在新手指南Tab → 点击"新增"按钮 → 打开新增弹窗 → 填写指南标题（必填）→ 选择指南分类 → 填写指南内容（富文本）→ 上传封面图 → 设置排序号 → 设置状态 → 点击保存 → 校验通过 → 新增成功 → 列表刷新。',
-        redFields: ['addFlow', 'editFlow', 'deleteFlow', 'sortConfig', 'viewFlow', 'queryFlow', 'bannerAddFlow', 'bannerEditFlow', 'bannerDeleteFlow', 'bannerSortConfig', 'bannerQueryFlow', 'abilityAddFlow', 'abilityEditFlow', 'abilityDeleteFlow', 'abilitySortConfig', 'abilityQueryFlow', 'resourceAddFlow', 'resourceEditFlow', 'resourceDeleteFlow', 'resourceSortConfig', 'resourceQueryFlow', 'guideAddFlow'],
-},
+        topFlow: '【置顶功能-通用】7个Tab均支持置顶/取消置顶操作。点击操作列"置顶"按钮 → 将该内容设为置顶状态 → 列表中置顶标签高亮显示（红色标签）→ 置顶内容在门户首页优先展示。点击"取消置顶" → 取消置顶状态 → 恢复普通展示。支持按"是否置顶"筛选查询。新增/编辑时可通过"是否置顶"开关设置。置顶内容排序优先于排序号。',
+        bannerTopFlow: '【轮播图-置顶】轮播图管理Tab支持置顶功能。置顶的轮播图将在Banner轮播中优先展示，始终排在非置顶内容前面。支持按是否置顶筛选查询。操作列动态显示"置顶"/"取消置顶"按钮。',
+        accessStepsTopFlow: '【接入步骤-置顶】接入步骤Tab支持置顶功能。置顶的步骤在门户首页接入步骤区域优先展示。支持按是否置顶筛选查询。操作列动态显示"置顶"/"取消置顶"按钮。',
+        appCaseTopFlow: '【应用案例-置顶】应用案例管理Tab支持置顶功能。置顶案例在门户首页案例展示区优先展示，可配合推荐标识双重突出。支持按是否置顶筛选查询。',
+        abilityTopFlow: '【开放能力-置顶】开放能力管理Tab支持置顶功能。置顶能力在门户首页开放能力区域优先展示。支持按是否置顶筛选查询。',
+        resourceTopFlow: '【资源中心-置顶】资源中心管理Tab支持置顶功能。置顶资源在门户首页资源下载区优先展示。支持按是否置顶筛选查询。',
+        guideTopFlow: '【开发指南-置顶】开发指南管理Tab支持置顶功能。置顶指南在门户首页开发指南区域优先展示。支持按是否置顶筛选查询。',
+        helpCenterTopFlow: '【帮助中心-置顶】帮助中心管理Tab支持置顶功能。置顶帮助内容在门户首页帮助中心区域优先展示，常见问题可置顶显示。支持按是否置顶筛选查询。',
+        redFields: ['addFlow', 'editFlow', 'deleteFlow', 'sortConfig', 'viewFlow', 'queryFlow', 'topFlow', 'bannerTopFlow', 'accessStepsTopFlow', 'appCaseTopFlow', 'abilityTopFlow', 'resourceTopFlow', 'guideTopFlow', 'helpCenterTopFlow', 'bannerAddFlow', 'bannerEditFlow', 'bannerDeleteFlow', 'bannerSortConfig', 'bannerQueryFlow', 'abilityAddFlow', 'abilityEditFlow', 'abilityDeleteFlow', 'abilitySortConfig', 'abilityQueryFlow', 'resourceAddFlow', 'resourceEditFlow', 'resourceDeleteFlow', 'resourceSortConfig', 'resourceQueryFlow', 'guideAddFlow'],
+    },
 
 
     /* ---------- 全局搜索管理 ---------- */    /* ---------- 全局搜索管理 ---------- */
@@ -15282,6 +15354,15 @@ function renderPrdCard(pageKey, pageName, prd) {
     html += renderSection('configFlow', '配置操作', prd.configFlow);
     html += renderSection('versionFlow', '版本记录', prd.versionFlow);
     html += renderSection('moveFlow', '目录移动', prd.moveFlow);
+    // 置顶功能
+    html += renderSection('topFlow', '置顶功能', prd.topFlow);
+    html += renderSection('bannerTopFlow', '轮播图-置顶', prd.bannerTopFlow);
+    html += renderSection('accessStepsTopFlow', '接入步骤-置顶', prd.accessStepsTopFlow);
+    html += renderSection('appCaseTopFlow', '应用案例-置顶', prd.appCaseTopFlow);
+    html += renderSection('abilityTopFlow', '开放能力-置顶', prd.abilityTopFlow);
+    html += renderSection('resourceTopFlow', '资源中心-置顶', prd.resourceTopFlow);
+    html += renderSection('guideTopFlow', '开发指南-置顶', prd.guideTopFlow);
+    html += renderSection('helpCenterTopFlow', '帮助中心-置顶', prd.helpCenterTopFlow);
 
     // 工单相关
     html += renderSection('fillFlow', '工单填报', prd.fillFlow);
