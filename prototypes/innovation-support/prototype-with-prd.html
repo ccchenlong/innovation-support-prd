@@ -3546,101 +3546,106 @@ var pageConfigs = {
 
     /* ---------- 开放门户管理 - 帮助信息管理 ---------- */
     'help-info': {
-        type: 'tab-table',
+        type: 'table',
         breadcrumb: ['开放门户管理', '帮助信息管理'],
-        tabs: [
-            { key: 'category', label: '帮助分类' },
-            { key: 'content', label: '帮助内容' },
+        query: [
+            { key: 'title', label: '文章标题', type: 'input', placeholder: '请输入标题' },
+            { key: 'category', label: '所属标签', type: 'select', placeholder: '请选择', options: [{ value: '', label: '全部' }, { value: 'get_started', label: '入门指南' }, { value: 'api_call', label: '接口调用' }, { value: 'sdk', label: 'SDK使用' }, { value: 'faq', label: '常见问题' }] },
+            { key: 'status', label: '状态', type: 'select', placeholder: '请选择', options: [{ value: '', label: '全部' }, { value: 'draft', label: '草稿' }, { value: 'published', label: '已发布' }, { value: 'offline', label: '已下架' }] },
         ],
-        tabConfigs: {
-            'category': {
-                query: [
-                    { key: 'name', label: '分类名称', type: 'input', placeholder: '请输入分类名称' },
-                    { key: 'status', label: '状态', type: 'select', placeholder: '请选择', options: [{ value: '', label: '全部' }, { value: '1', label: '启用' }, { value: '0', label: '停用' }] },
-                ],
-                toolbar: [{ type: 'add', text: '新增分类' }, { type: 'batchDelete' }],
-                columns: [
-                    { type: 'checkbox' },
-                    { type: 'index', title: '序号' },
-                    { key: 'name', title: '分类名称', sortable: true },
-                    { key: 'code', title: '分类编码' },
-                    { key: 'parentName', title: '父级分类' },
-                    { key: 'sortNo', title: '排序号' },
-                    { key: 'status', title: '状态', type: 'tag', tagMap: { true: { text: '启用', color: 'green' }, false: { text: '停用', color: 'red' } } },
-                    { key: 'createTime', title: '创建时间', sortable: true },
-                    { type: 'actions', title: '操作', actions: [{ key: 'view', label: '查看' }, { key: 'edit', label: '编辑' }, { key: 'delete', label: '删除', danger: true }] },
-                ],
-                formFields: [
-                    { key: 'name', label: '分类名称', type: 'input', required: true, maxLength: 50, charCount: true },
-                    { key: 'code', label: '分类编码', type: 'input', required: true, placeholder: '英文唯一标识' },
-                    { key: 'parentId', label: '父级分类', type: 'select', options: [{ value: '', label: '顶级分类' }, { value: '1', label: '入门指南' }, { value: '2', label: '账号注册' }, { value: '3', label: '接口调用' }, { value: '4', label: 'SDK使用' }] },
-                    { key: 'icon', label: '分类图标', type: 'image-upload', uploadTip: '点击上传分类图标', uploadDesc: '建议尺寸 32*32px，支持 PNG 格式' },
-                    { key: 'sortNo', label: '排序号', type: 'number', defaultValue: 1, min: 1 },
-                    { key: 'status', label: '状态', type: 'radio', required: true, options: [{ value: true, label: '启用', checked: true }, { value: false, label: '停用' }] },
-                    { key: 'description', label: '分类描述', type: 'textarea', rows: 3, placeholder: '请输入分类描述（可选）' },
-                ],
-                modalSize: 'large',
-                data: [
-                    { id: 1, name: '入门指南', code: 'GET_STARTED', parentName: '顶级分类', sortNo: 1, status: true, createTime: '2025-04-01 10:00:00' },
-                    { id: 2, name: '账号注册', code: 'ACCOUNT_REGISTER', parentName: '入门指南', sortNo: 2, status: true, createTime: '2025-04-02 11:00:00' },
-                    { id: 3, name: '接口调用', code: 'API_CALL', parentName: '顶级分类', sortNo: 3, status: true, createTime: '2025-04-03 09:00:00' },
-                    { id: 4, name: 'SDK使用', code: 'SDK_USE', parentName: '顶级分类', sortNo: 4, status: true, createTime: '2025-04-04 14:00:00' },
-                    { id: 5, name: '常见问题', code: 'FAQ', parentName: '顶级分类', sortNo: 5, status: false, createTime: '2025-04-05 16:00:00' },
-                    { id: 6, name: '最佳实践', code: 'BEST_PRACTICE', parentName: '顶级分类', sortNo: 6, status: true, createTime: '2025-04-06 08:30:00' },
-                ],
-            },
-            'content': {
-                query: [
-                    { key: 'title', label: '文章标题', type: 'input', placeholder: '请输入标题' },
-                    { key: 'category', label: '所属分类', type: 'select', placeholder: '请选择', options: [{ value: '', label: '全部' }, { value: 'get_started', label: '入门指南' }, { value: 'api_call', label: '接口调用' }, { value: 'sdk', label: 'SDK使用' }, { value: 'faq', label: '常见问题' }] },
-                    { key: 'status', label: '状态', type: 'select', placeholder: '请选择', options: [{ value: '', label: '全部' }, { value: 'draft', label: '草稿' }, { value: 'published', label: '已发布' }, { value: 'offline', label: '已下架' }] },
-                ],
-                toolbar: [{ type: 'add', text: '新增帮助' }, { type: 'batchDelete' }],
-                columns: [
-                    { type: 'checkbox' },
-                    { type: 'index', title: '序号' },
-                    { key: 'title', title: '文章标题', sortable: true },
-                    { key: 'category', title: '所属分类' },
-                    { key: 'author', title: '作者' },
-                    { key: 'viewCount', title: '浏览量' },
-                    { key: 'status', title: '状态', type: 'tag', tagMap: { 'draft': { text: '草稿', color: 'gray' }, 'published': { text: '已发布', color: 'green' }, 'offline': { text: '已下架', color: 'red' } } },
-                    { key: 'publishTime', title: '发布时间', sortable: true },
-                    { type: 'actions', title: '操作', actions: [{ key: 'view', label: '查看' }, { key: 'edit', label: '编辑' }, { key: 'version', label: '版本记录' }, { key: 'delete', label: '删除', danger: true }] },
-                ],
-                formFields: [
-                    { key: 'section1', label: '基本信息', type: 'section-title' },
-                    { key: 'title', label: '文章标题', type: 'input', required: true, maxLength: 100, charCount: true },
-                    { key: 'category', label: '所属分类', type: 'select', required: true, options: [{ value: 'get_started', label: '入门指南' }, { value: 'account', label: '账号注册' }, { value: 'api_call', label: '接口调用' }, { value: 'sdk', label: 'SDK使用' }, { value: 'faq', label: '常见问题' }, { value: 'best_practice', label: '最佳实践' }] },
-                    { key: 'coverImage', label: '文章封面', type: 'image-upload', uploadTip: '点击上传封面图（可选）', uploadDesc: '建议尺寸 400*200px，支持 JPG/PNG 格式' },
-                    { key: 'summary', label: '内容摘要', type: 'textarea', rows: 3, placeholder: '请输入内容摘要，用于列表页展示' },
-                    { key: 'section2', label: '正文内容', type: 'section-title' },
-                    { key: 'content', label: '正文内容', type: 'large-textarea', required: true, tip: '支持富文本格式，可插入图片、代码块等' },
-                    { key: 'section3', label: '其他设置', type: 'section-title' },
-                    { key: 'author', label: '作者', type: 'input', placeholder: '请输入作者名称' },
-                    { key: 'source', label: '来源', type: 'input', placeholder: '请输入文章来源' },
-                    { key: 'keywords', label: '关键词', type: 'tag-input' },
-                    { key: 'isTop', label: '是否置顶', type: 'toggle', tip: '置顶后将在分类顶部展示' },
-                    { key: 'isRecommend', label: '是否推荐', type: 'toggle', tip: '推荐后将在推荐专区展示' },
-                    { key: 'viewCount', label: '浏览量', type: 'number', defaultValue: 0, min: 0 },
-                    { key: 'status', label: '状态', type: 'radio', required: true, options: [{ value: 'draft', label: '草稿' }, { value: 'published', label: '已发布', checked: true }, { value: 'offline', label: '已下架' }] },
-                    { key: 'publishTime', label: '发布时间', type: 'datetime' },
-                    { key: 'sortNo', label: '排序号', type: 'number', defaultValue: 1, min: 1 },
-                ],
-                modalSize: 'xlarge',
-                data: [
-                    { id: 1, title: '如何注册开放平台账号', category: '账号注册', author: '张工', viewCount: 15680, status: 'published', publishTime: '2025-04-01 10:00:00' },
-                    { id: 2, title: '如何完成实名认证', category: '账号注册', author: '李工', viewCount: 12450, status: 'published', publishTime: '2025-04-02 11:00:00' },
-                    { id: 3, title: '快速入门指南', category: '入门指南', author: '王工', viewCount: 9876, status: 'published', publishTime: '2025-04-03 09:00:00' },
-                    { id: 4, title: '接口调用方式说明', category: '接口调用', author: '赵工', viewCount: 8650, status: 'published', publishTime: '2025-04-04 14:00:00' },
-                    { id: 5, title: '签名认证机制', category: '接口调用', author: '孙工', viewCount: 7234, status: 'published', publishTime: '2025-04-05 16:00:00' },
-                    { id: 6, title: 'Java SDK使用教程', category: 'SDK使用', author: '周工', viewCount: 6543, status: 'draft', publishTime: '2025-04-06 08:30:00' },
-                    { id: 7, title: 'Python SDK安装说明', category: 'SDK使用', author: '吴工', viewCount: 5430, status: 'published', publishTime: '2025-04-07 10:15:00' },
-                    { id: 8, title: '常见问题汇总', category: '常见问题', author: '郑工', viewCount: 4321, status: 'published', publishTime: '2025-04-08 11:30:00' },
-                    { id: 9, title: '错误码对照表', category: '常见问题', author: '冯工', viewCount: 3210, status: 'published', publishTime: '2025-04-09 09:00:00' },
-                    { id: 10, title: '接口限流最佳实践', category: '最佳实践', author: '陈工', viewCount: 2100, status: 'offline', publishTime: '2025-04-10 14:20:00' },
-                ],
-            },
-        },
+        toolbar: [
+            { type: 'add', text: '新增帮助' },
+            { type: 'batchDelete' },
+            { type: 'custom', text: '标签管理', icon: 'fa-tags', onClick: "switchPage('help-info-tags')" },
+        ],
+        columns: [
+            { type: 'checkbox' },
+            { type: 'index', title: '序号' },
+            { key: 'title', title: '文章标题', sortable: true },
+            { key: 'category', title: '所属标签' },
+            { key: 'author', title: '作者' },
+            { key: 'viewCount', title: '浏览量' },
+            { key: 'status', title: '状态', type: 'tag', tagMap: { 'draft': { text: '草稿', color: 'gray' }, 'published': { text: '已发布', color: 'green' }, 'offline': { text: '已下架', color: 'red' } } },
+            { key: 'publishTime', title: '发布时间', sortable: true },
+            { type: 'actions', title: '操作', actions: [{ key: 'view', label: '查看' }, { key: 'edit', label: '编辑' }, { key: 'version', label: '版本记录' }, { key: 'delete', label: '删除', danger: true }] },
+        ],
+        formFields: [
+            { key: 'section1', label: '基本信息', type: 'section-title' },
+            { key: 'title', label: '文章标题', type: 'input', required: true, maxLength: 100, charCount: true },
+            { key: 'category', label: '所属标签', type: 'select', required: true, options: [{ value: 'get_started', label: '入门指南' }, { value: 'account', label: '账号注册' }, { value: 'api_call', label: '接口调用' }, { value: 'sdk', label: 'SDK使用' }, { value: 'faq', label: '常见问题' }, { value: 'best_practice', label: '最佳实践' }] },
+            { key: 'coverImage', label: '文章封面', type: 'image-upload', uploadTip: '点击上传封面图（可选）', uploadDesc: '建议尺寸 400*200px，支持 JPG/PNG 格式' },
+            { key: 'summary', label: '内容摘要', type: 'textarea', rows: 3, placeholder: '请输入内容摘要，用于列表页展示' },
+            { key: 'section2', label: '正文内容', type: 'section-title' },
+            { key: 'content', label: '正文内容', type: 'large-textarea', required: true, tip: '支持富文本格式，可插入图片、代码块等' },
+            { key: 'section3', label: '其他设置', type: 'section-title' },
+            { key: 'author', label: '作者', type: 'input', placeholder: '请输入作者名称' },
+            { key: 'source', label: '来源', type: 'input', placeholder: '请输入文章来源' },
+            { key: 'keywords', label: '关键词', type: 'tag-input' },
+            { key: 'isTop', label: '是否置顶', type: 'toggle', tip: '置顶后将在分类顶部展示' },
+            { key: 'isRecommend', label: '是否推荐', type: 'toggle', tip: '推荐后将在推荐专区展示' },
+            { key: 'viewCount', label: '浏览量', type: 'number', defaultValue: 0, min: 0 },
+            { key: 'status', label: '状态', type: 'radio', required: true, options: [{ value: 'draft', label: '草稿' }, { value: 'published', label: '已发布', checked: true }, { value: 'offline', label: '已下架' }] },
+            { key: 'publishTime', label: '发布时间', type: 'datetime' },
+            { key: 'sortNo', label: '排序号', type: 'number', defaultValue: 1, min: 1 },
+        ],
+        modalSize: 'xlarge',
+        data: [
+            { id: 1, title: '如何注册开放平台账号', category: '账号注册', author: '张工', viewCount: 15680, status: 'published', publishTime: '2025-04-01 10:00:00' },
+            { id: 2, title: '如何完成实名认证', category: '账号注册', author: '李工', viewCount: 12450, status: 'published', publishTime: '2025-04-02 11:00:00' },
+            { id: 3, title: '快速入门指南', category: '入门指南', author: '王工', viewCount: 9876, status: 'published', publishTime: '2025-04-03 09:00:00' },
+            { id: 4, title: '接口调用方式说明', category: '接口调用', author: '赵工', viewCount: 8650, status: 'published', publishTime: '2025-04-04 14:00:00' },
+            { id: 5, title: '签名认证机制', category: '接口调用', author: '孙工', viewCount: 7234, status: 'published', publishTime: '2025-04-05 16:00:00' },
+            { id: 6, title: 'Java SDK使用教程', category: 'SDK使用', author: '周工', viewCount: 6543, status: 'draft', publishTime: '2025-04-06 08:30:00' },
+            { id: 7, title: 'Python SDK安装说明', category: 'SDK使用', author: '吴工', viewCount: 5430, status: 'published', publishTime: '2025-04-07 10:15:00' },
+            { id: 8, title: '常见问题汇总', category: '常见问题', author: '郑工', viewCount: 4321, status: 'published', publishTime: '2025-04-08 11:30:00' },
+            { id: 9, title: '错误码对照表', category: '常见问题', author: '冯工', viewCount: 3210, status: 'published', publishTime: '2025-04-09 09:00:00' },
+            { id: 10, title: '接口限流最佳实践', category: '最佳实践', author: '陈工', viewCount: 2100, status: 'offline', publishTime: '2025-04-10 14:20:00' },
+        ],
+    },
+
+    /* ---------- 帮助信息管理 - 标签管理子页面 ---------- */
+    'help-info-tags': {
+        type: 'table',
+        breadcrumb: ['开放门户管理', '帮助信息管理', '标签管理'],
+        query: [
+            { key: 'name', label: '标签名称', type: 'input', placeholder: '请输入标签名称' },
+            { key: 'status', label: '状态', type: 'select', placeholder: '请选择', options: [{ value: '', label: '全部' }, { value: '1', label: '启用' }, { value: '0', label: '停用' }] },
+        ],
+        toolbar: [
+            { type: 'custom', text: '返回', icon: 'fa-arrow-left', onClick: "switchPage('help-info')" },
+            { type: 'add', text: '新增标签' },
+            { type: 'batchDelete' },
+        ],
+        columns: [
+            { type: 'checkbox' },
+            { type: 'index', title: '序号' },
+            { key: 'name', title: '标签名称', sortable: true },
+            { key: 'code', title: '标签编码' },
+            { key: 'tagColor', title: '标签颜色', type: 'color-tag' },
+            { key: 'articleCount', title: '关联文章数' },
+            { key: 'sortNo', title: '排序号' },
+            { key: 'status', title: '状态', type: 'tag', tagMap: { true: { text: '启用', color: 'green' }, false: { text: '停用', color: 'red' } } },
+            { key: 'createTime', title: '创建时间', sortable: true },
+            { type: 'actions', title: '操作', actions: [{ key: 'edit', label: '编辑' }, { key: 'delete', label: '删除', danger: true }] },
+        ],
+        formFields: [
+            { key: 'name', label: '标签名称', type: 'input', required: true, maxLength: 20, charCount: true, placeholder: '请输入标签名称' },
+            { key: 'code', label: '标签编码', type: 'input', required: true, placeholder: '英文唯一标识，如 get_started' },
+            { key: 'tagColor', label: '标签颜色', type: 'color-picker', defaultValue: '#165DFF' },
+            { key: 'sortNo', label: '排序号', type: 'number', defaultValue: 1, min: 1 },
+            { key: 'status', label: '状态', type: 'radio', required: true, options: [{ value: true, label: '启用', checked: true }, { value: false, label: '停用' }] },
+            { key: 'description', label: '标签描述', type: 'textarea', rows: 2, placeholder: '请输入标签描述（可选）' },
+        ],
+        modalSize: 'large',
+        data: [
+            { id: 1, name: '入门指南', code: 'get_started', tagColor: '#165DFF', articleCount: 12, sortNo: 1, status: true, createTime: '2025-04-01 10:00:00' },
+            { id: 2, name: '账号注册', code: 'account', tagColor: '#00B42A', articleCount: 8, sortNo: 2, status: true, createTime: '2025-04-01 10:05:00' },
+            { id: 3, name: '接口调用', code: 'api_call', tagColor: '#FF7D00', articleCount: 15, sortNo: 3, status: true, createTime: '2025-04-01 10:10:00' },
+            { id: 4, name: 'SDK使用', code: 'sdk', tagColor: '#722ED1', articleCount: 10, sortNo: 4, status: true, createTime: '2025-04-01 10:15:00' },
+            { id: 5, name: '常见问题', code: 'faq', tagColor: '#F53F3F', articleCount: 20, sortNo: 5, status: true, createTime: '2025-04-02 11:00:00' },
+            { id: 6, name: '最佳实践', code: 'best_practice', tagColor: '#14C9C9', articleCount: 6, sortNo: 6, status: true, createTime: '2025-04-03 09:00:00' },
+            { id: 7, name: '异常处理', code: 'exception', tagColor: '#F7BA1E', articleCount: 9, sortNo: 7, status: false, createTime: '2025-04-05 14:30:00' },
+        ],
     },
 
     /* ---------- 用户任职管理（3Tab） ---------- */
@@ -11961,12 +11966,15 @@ function renderSubTable(data, columns, tableId, batchBtnText, showBatch) {
             } else if (col.type === 'tag' && col.tagMap) {
                 var tagInfo = col.tagMap[row[col.key]];
                 if (tagInfo) {
-                    var colors = { blue: '#165DFF', green: '#52C41A', orange: '#FA8C16', red: '#FF4D4F', gray: '#999999', teal: '#13C2C2' };
+                    var colors = { blue: '#165DFF', green: '#52C41A', orange: '#FA8C16', red: '#FF4D4F', gray: '#999999', teal: '#13C2C2', purple: '#722ED1' };
                     var bg = colors[tagInfo.color] || '#999999';
                     html += '<td style="padding:8px 12px;"><span style="padding:2px 8px;border-radius:4px;font-size:12px;color:' + bg + ';background:' + bg + '15;">' + tagInfo.text + '</span></td>';
                 } else {
                     html += '<td style="padding:8px 12px;">' + esc(row[col.key]) + '</td>';
                 }
+            } else if (col.type === 'color-tag') {
+                var colorVal = row[col.key] || '#165DFF';
+                html += '<td style="padding:8px 12px;"><span style="display:inline-flex;align-items:center;gap:6px;padding:2px 10px;border-radius:12px;font-size:12px;color:' + colorVal + ';background:' + colorVal + '15;"><span style="width:8px;height:8px;border-radius:50%;background:' + colorVal + ';display:inline-block;"></span>' + (row.name || '') + '</span></td>';
             } else {
                 html += '<td style="padding:8px 12px;">' + esc(row[col.key]) + '</td>';
             }
@@ -15562,19 +15570,20 @@ var prdData = {
     },
 
     'help-info': {
-        background: '【帮助信息管理】帮助信息管理是开放门户管理的子模块，负责管理门户前端的帮助文档和版本记录。支持帮助内容的分类管理、版本记录追溯、内容编辑等功能。走查覆盖1项功能点：帮助版本记录查看。',
+        background: '【帮助信息管理】帮助信息管理是开放门户管理的内容运营模块，负责管理门户前端的帮助文档内容。采用文章列表+标签管理子页面的设计模式，帮助内容主页面负责文章的增删改查、版本记录管理，通过工具栏"标签管理"按钮跳转到标签管理子页面，标签子页面支持标签的新增、编辑、删除、颜色配置、排序等完整CRUD功能。走查覆盖1项功能点：帮助版本记录查看。',
         targetUsers: '系统管理员、平台管理员、内容运营人员',
-        coreFeatures: '1.帮助分类管理 2.帮助内容管理 3.版本记录查看 4.帮助搜索',
-        businessFlow: '进入帮助信息管理页 → 左侧分类树选择分类 → 右侧查看帮助内容列表 → 点击查看详情 → 切换版本记录Tab → 查看历史版本变更 → 支持版本对比',
-        pageInfo: '左右布局，左侧帮助分类树，右侧帮助内容列表+详情；详情页包含内容Tab和版本记录Tab；版本记录展示版本号、发布时间、更新内容、操作人',
-        dataModel: '核心实体：帮助分类（id/名称/编码/排序号）、帮助内容（id/标题/分类/内容/版本号/状态/发布时间）、版本记录（id/帮助ID/版本号/更新内容/发布时间/操作人）。',
-        versionRecordFlow: '【帮助版本记录】在帮助详情页 → 切换到"版本记录"Tab → 展示该帮助文档的所有历史版本 → 按版本号倒序排列 → 每条记录包含版本号、发布时间、更新说明、操作人 → 点击版本号可查看该版本的完整内容 → 支持相邻版本对比（差异高亮显示）→ 支持回滚到指定版本（需二次确认）。',
-        queryFlow: '支持帮助标题（模糊）、分类（下拉）、状态（下拉）多条件组合查询，AND关系。支持分页查询。',
-        exceptionHandling: '1.空数据状态：显示空状态占位图+提示文字"暂无帮助文档" 2.网络异常：Toast提示"网络连接失败，请稍后重试" 3.版本对比数据量大：分页或折叠展示',
-        permissionReq: '1.系统管理员：拥有全部权限（新增/编辑/删除/查看/版本管理） 2.平台管理员：拥有全部权限 3.分级管理员：仅查看权限 4.普通用户：无访问权限',
-        interaction: '分类树导航；帮助内容列表；富文本编辑器；版本记录列表；版本对比',
-        acceptance: '1.帮助分类管理正常 2.帮助内容CRUD正常 3.版本记录查看正常 4.版本对比功能正常 5.查询筛选正常 6.分页功能正常',
-        redFields: ['versionRecordFlow'],
+        coreFeatures: '1.帮助内容管理（增删改查+版本记录） 2.标签管理子页面（增删改查+颜色配置+排序） 3.多条件查询 4.批量删除',
+        businessFlow: '进入帮助信息管理页 → 查看帮助内容列表 → 新增/编辑/删除帮助文章 → 点击"版本记录"查看历史版本 → 点击工具栏"标签管理"按钮 → 跳转到标签管理子页面 → 新增/编辑/删除标签 → 设置标签颜色和排序 → 点击"返回"回到帮助内容列表',
+        pageInfo: '帮助内容列表为主页面；工具栏含"标签管理"按钮，点击跳转到标签管理子页面；标签管理子页面含返回按钮，面包屑显示三级导航；标签支持颜色自定义、关联文章数统计、排序号管理',
+        dataModel: '核心实体：帮助内容（id/标题/标签/内容/作者/状态/版本号/发布时间）、标签（id/名称/编码/颜色/排序号/状态/关联文章数）、版本记录（id/帮助ID/版本号/更新内容/操作人/状态）。',
+        versionRecordFlow: '【帮助版本记录】点击操作列"版本记录" → 打开版本记录弹窗 → 展示该帮助文档的所有历史版本 → 按版本号倒序排列 → 每条记录包含版本号、发布时间、更新说明、操作人、状态 → 最新版本标记"当前版" → 支持新增版本 → 版本记录随每次编辑保存自动生成。',
+        tagManageFlow: '【标签管理】在帮助内容列表 → 点击工具栏"标签管理"按钮 → 跳转到标签管理子页面 → 展示所有标签列表 → 支持标签名称/状态查询 → 支持新增标签（名称/编码/颜色/排序号/状态/描述）→ 支持编辑标签 → 支持单条删除和批量删除 → 支持标签颜色自定义 → 显示每个标签关联的文章数量 → 点击"返回"按钮回到帮助内容列表。',
+        queryFlow: '支持文章标题（模糊）、所属标签（下拉）、状态（下拉）多条件组合查询，AND关系。支持分页查询。',
+        exceptionHandling: '1.空数据状态：显示空状态占位图+提示文字"暂无帮助文档" 2.删除标签校验：有关联文章的标签不可删除，需先解除关联 3.标签编码重复：保存时提示"标签编码已存在"',
+        permissionReq: '1.系统管理员：拥有全部权限（帮助内容CRUD+版本管理+标签管理） 2.平台管理员：拥有全部权限 3.内容运营人员：拥有新增/编辑/查看权限 4.普通用户：无访问权限',
+        interaction: '帮助内容列表；新增/编辑/查看弹窗；版本记录弹窗；标签管理子页面跳转；返回按钮；标签颜色选择器',
+        acceptance: '1.帮助内容列表正常 2.新增/编辑/删除功能正常 3.版本记录弹窗正常 4.标签管理按钮跳转正常 5.标签管理子页面CRUD正常 6.标签颜色配置正常 7.返回按钮正常 8.面包屑三级导航正确',
+        redFields: ['versionRecordFlow', 'tagManageFlow'],
     },
 
     'user-appointment': {
@@ -15704,6 +15713,7 @@ function renderPrdCard(pageKey, pageName, prd) {
     html += renderSection('configFlow', '配置操作', prd.configFlow);
     html += renderSection('versionFlow', '版本记录', prd.versionFlow);
     html += renderSection('moveFlow', '目录移动', prd.moveFlow);
+    html += renderSection('tagManageFlow', '标签管理', prd.tagManageFlow);
     // 置顶功能
     html += renderSection('topFlow', '置顶功能', prd.topFlow);
     html += renderSection('bannerTopFlow', '轮播图-置顶', prd.bannerTopFlow);
