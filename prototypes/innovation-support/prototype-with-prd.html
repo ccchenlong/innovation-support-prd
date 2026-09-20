@@ -10108,6 +10108,42 @@ var thirdPartyFormFields = [
     ]},
 ];
 
+/** 根据字段配置生成表单HTML */
+function buildFormHtml(fields, data) {
+    var html = '<div style="width:480px;">';
+    for (var i = 0; i < fields.length; i++) {
+        var f = fields[i];
+        var val = data && data[f.key] !== undefined ? data[f.key] : '';
+        var required = f.required ? ' <span style="color:#FF4D4F;">*</span>' : '';
+        html += '<div style="margin-bottom:14px;"><label class="form-label">' + f.label + required + '</label>';
+        if (f.type === 'input') {
+            html += '<input type="text" class="form-input w-full" placeholder="' + (f.placeholder || '') + '" value="' + val + '" />';
+        } else if (f.type === 'select') {
+            html += '<select class="form-input w-full">';
+            html += '<option value="">请选择</option>';
+            if (f.options && f.options.length > 0) {
+                for (var o = 0; o < f.options.length; o++) {
+                    var opt = f.options[o];
+                    // 支持 {value, label} 或直接字符串
+                    var optVal = typeof opt === 'object' ? opt.value : opt;
+                    var optLabel = typeof opt === 'object' ? opt.label : opt;
+                    // data里存的是label文本时也能匹配回显
+                    var selected = (val && (val === optVal || val === optLabel)) ? 'selected' : '';
+                    html += '<option value="' + optVal + '" ' + selected + '>' + optLabel + '</option>';
+                }
+            }
+            html += '</select>';
+        } else if (f.type === 'textarea') {
+            html += '<textarea class="form-input w-full" rows="' + (f.rows || 4) + '" placeholder="' + (f.placeholder || '') + '">' + val + '</textarea>';
+        } else if (f.type === 'text') {
+            html += '<div style="padding:8px 12px;background:#F7F8FA;border-radius:4px;font-size:13px;">' + val + '</div>';
+        }
+        html += '</div>';
+    }
+    html += '</div>';
+    return html;
+}
+
 /** 新增第三方工作台 */
 function openThirdPartyAddModal() {
     var bodyHtml = buildFormHtml(thirdPartyFormFields, null);
