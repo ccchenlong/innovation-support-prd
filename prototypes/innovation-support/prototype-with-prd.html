@@ -3605,7 +3605,7 @@ var pageConfigs = {
                     { key: 'viewCount', title: '浏览量' },
                     { key: 'status', title: '状态', type: 'tag', tagMap: { 'draft': { text: '草稿', color: 'gray' }, 'published': { text: '已发布', color: 'green' }, 'offline': { text: '已下架', color: 'red' } } },
                     { key: 'publishTime', title: '发布时间', sortable: true },
-                    { type: 'actions', title: '操作', actions: [{ key: 'view', label: '查看' }, { key: 'edit', label: '编辑' }, { key: 'delete', label: '删除', danger: true }] },
+                    { type: 'actions', title: '操作', actions: [{ key: 'view', label: '查看' }, { key: 'edit', label: '编辑' }, { key: 'version', label: '版本记录' }, { key: 'delete', label: '删除', danger: true }] },
                 ],
                 formFields: [
                     { key: 'section1', label: '基本信息', type: 'section-title' },
@@ -4399,7 +4399,8 @@ var pageConfigs = {
                     { key: 'isFaq', title: '常见问题', type: 'tag', tagMap: { true: { text: '常见', color: 'orange' }, false: { text: '否', color: 'gray' } } },
                     { key: 'status', title: '状态', type: 'tag', tagMap: { true: { text: '启用', color: 'green' }, false: { text: '停用', color: 'red' } } },
                     { key: 'updateTime', title: '更新时间', sortable: true },
-                    { key: 'isTop', title: '置顶', type: 'tag', tagMap: { true: { text: '置顶', color: 'red' }, false: { text: '普通', color: 'gray' } } },                    { type: 'actions', title: '操作', actions: [{ key: 'view', label: '查看' }, { key: 'edit', label: '编辑' }, { key: 'delete', label: '删除', danger: true }, { key: 'top', label: '置顶', hideWhen: { field: 'isTop', value: true } }, { key: 'untop', label: '取消置顶', hideWhen: { field: 'isTop', value: false } }] },
+                    { key: 'isTop', title: '置顶', type: 'tag', tagMap: { true: { text: '置顶', color: 'red' }, false: { text: '普通', color: 'gray' } } },
+                    { type: 'actions', title: '操作', actions: [{ key: 'view', label: '查看' }, { key: 'edit', label: '编辑' }, { key: 'version', label: '版本记录' }, { key: 'delete', label: '删除', danger: true }, { key: 'top', label: '置顶', hideWhen: { field: 'isTop', value: true } }, { key: 'untop', label: '取消置顶', hideWhen: { field: 'isTop', value: false } }] },
                 ],
                 formFields: [
                     { key: 'title', label: '问题标题', type: 'input', required: true, maxLength: 100, charCount: true },
@@ -8514,10 +8515,10 @@ function renderCardListPage(pageKey) {
         html += '<div class="flex items-center justify-between pt-2" style="border-top: 1px solid var(--table-border);">';
         html += '<span class="text-xs" style="color: var(--text-tertiary);"><i class="fa fa-eye mr-1"></i>' + (item.views || 0) + '</span>';
         html += '<div class="flex gap-2">';
-        html += '<span class="link-btn text-xs" onclick="event.stopPropagation();openModal(\'view\',\'' + pageKey + '\',' + itemId + ')">查看</span>';
-        html += '<span class="link-btn text-xs" onclick="event.stopPropagation();openModal(\'version\',\'' + pageKey + '\',' + itemId + ')">版本</span>';
-        html += '<span class="link-btn text-xs" onclick="event.stopPropagation();openModal(\'edit\',\'' + pageKey + '\',' + itemId + ')">编辑</span>';
-        html += '<span class="link-btn danger text-xs" onclick="event.stopPropagation();deleteItem(\'' + pageKey + '\',' + itemId + ')">删除</span>';
+        html += '<span class="link-btn text-xs" onclick="event.stopPropagation();openCardViewModal(\'' + pageKey + '\',' + itemId + ')">查看</span>';
+        html += '<span class="link-btn text-xs" onclick="event.stopPropagation();openCardVersionModal(\'' + pageKey + '\',' + itemId + ')">版本</span>';
+        html += '<span class="link-btn text-xs" onclick="event.stopPropagation();openCardEditModal(\'' + pageKey + '\',' + itemId + ')">编辑</span>';
+        html += '<span class="link-btn danger text-xs" onclick="event.stopPropagation();deleteCardItem(\'' + pageKey + '\',' + itemId + ')">删除</span>';
         html += '</div>';
         html += '</div>';
         
@@ -8531,6 +8532,199 @@ function renderCardListPage(pageKey) {
     
     html += '</div></div>';
     return html;
+}
+
+/** 卡片布局 - 查看弹窗 */
+function openCardViewModal(pageKey, itemId) {
+    var config = pageConfigs[pageKey];
+    if (!config) return;
+    var data = config.cardData || [];
+    var item = data.find(function(d) { return d.id === itemId; });
+    if (!item) return;
+
+    var id = 'modal_card_view_' + pageKey + '_' + itemId;
+    var title = item.title || item.name || '详情';
+
+    // 如果配置了 viewFlow，用配置渲染
+    if (config.viewFlow && config.viewFlow.fields) {
+        var body = '<div class="space-y-3">';
+        var fields = config.viewFlow.fields;
+        for (var i = 0; i < fields.length; i++) {
+            var f = fields[i];
+            var val = item[f.key] || item[f.key.toLowerCase()] || '';
+            if (f.type === 'image') {
+                val = '<div style="width:100%;max-width:300px;height:180px;background:' + (item.coverGradient || '#667eea') + ';border-radius:8px;display:flex;align-items:center;justify-content:center;"><i class="fa ' + (item.coverIcon || 'fa-file-text-o') + ' text-5xl" style="color:rgba(255,255,255,0.85);"></i></div>';
+            } else if (f.type === 'tag' && f.tagMap) {
+                var tagText = f.tagMap[val] || val;
+                val = '<span class="tag tag-blue">' + tagText + '</span>';
+            } else if (f.type === 'textarea') {
+                val = '<div class="p-3 rounded" style="background:var(--bg-secondary);color:var(--text-secondary);font-size:13px;line-height:1.6;">' + (val || '暂无内容') + '</div>';
+            }
+            body += '<div class="flex"><div class="w-24 flex-shrink-0 text-sm" style="color:var(--text-tertiary);">' + f.label + '：</div><div class="flex-1 text-sm" style="color:var(--text-primary);">' + (val !== '' && val !== undefined ? val : '-') + '</div></div>';
+        }
+        body += '</div>';
+        openModal(id, title, body, '<button class="px-4 py-1.5 text-sm rounded" style="background:var(--primary);color:#fff;" onclick="closeModal(\'' + id + '\')">关闭</button>', 'large');
+        return;
+    }
+
+    // 默认查看弹窗
+    var body = '<div class="space-y-3">';
+    body += '<div class="flex"><div class="w-24 flex-shrink-0 text-sm" style="color:var(--text-tertiary);">标题：</div><div class="flex-1 text-sm font-medium" style="color:var(--text-primary);">' + (item.title || item.name || '') + '</div></div>';
+    body += '<div class="flex"><div class="w-24 flex-shrink-0 text-sm" style="color:var(--text-tertiary);">简介：</div><div class="flex-1 text-sm" style="color:var(--text-primary);">' + (item.desc || item.summary || '') + '</div></div>';
+    body += '<div class="flex"><div class="w-24 flex-shrink-0 text-sm" style="color:var(--text-tertiary);">状态：</div><div class="flex-1 text-sm" style="color:var(--text-primary);">' + (item.status === 'online' || item.status === true ? '已上架/启用' : '已下架/停用') + '</div></div>';
+    body += '<div class="flex"><div class="w-24 flex-shrink-0 text-sm" style="color:var(--text-tertiary);">浏览量：</div><div class="flex-1 text-sm" style="color:var(--text-primary);">' + (item.views || 0) + '</div></div>';
+    body += '</div>';
+    openModal(id, title, body, '<button class="px-4 py-1.5 text-sm rounded" style="background:var(--primary);color:#fff;" onclick="closeModal(\'' + id + '\')">关闭</button>', 'large');
+}
+
+/** 卡片布局 - 版本记录弹窗 */
+function openCardVersionModal(pageKey, itemId) {
+    var config = pageConfigs[pageKey];
+    if (!config) return;
+    var data = config.cardData || [];
+    var item = data.find(function(d) { return d.id === itemId; });
+    if (!item) return;
+
+    var id = 'modal_card_version_' + pageKey + '_' + itemId;
+    var title = (item.title || item.name || '') + ' - 版本记录';
+
+    // 如果配置了 versionRecordFlow，用配置渲染
+    var versionData = [];
+    var versionColumns = [];
+    if (config.versionRecordFlow) {
+        versionData = config.versionRecordFlow.data || [];
+        versionColumns = config.versionRecordFlow.columns || [];
+    } else {
+        // 默认版本数据
+        versionData = [
+            { id: 1, version: 'v1.0', updateTime: '2025-01-15 10:00', content: '初始版本发布', operator: '系统管理员', status: '已发布' },
+            { id: 2, version: 'v1.1', updateTime: '2025-02-20 14:30', content: '内容优化更新', operator: '内容运营', status: '已发布' },
+            { id: 3, version: 'v2.0', updateTime: '2025-04-01 16:45', content: '重大版本更新', operator: '产品经理', status: '已发布' },
+        ];
+        versionColumns = [
+            { type: 'index', title: '序号' },
+            { key: 'version', title: '版本号' },
+            { key: 'updateTime', title: '更新时间' },
+            { key: 'content', title: '更新内容' },
+            { key: 'operator', title: '操作人' },
+        ];
+    }
+
+    // 渲染版本表格
+    var body = '<div>';
+    body += '<div class="mb-3 flex items-center justify-between">';
+    body += '<span class="text-sm" style="color:var(--text-secondary);">共 ' + versionData.length + ' 个历史版本</span>';
+    body += '<button class="px-3 py-1 text-sm rounded" style="background:var(--primary);color:#fff;" onclick="showToast(\'新增版本功能开发中\',\'info\')"><i class="fa fa-plus mr-1"></i>新增版本</button>';
+    body += '</div>';
+    body += '<div class="border rounded overflow-hidden" style="border-color:var(--table-border);">';
+    body += '<table class="w-full text-sm">';
+    body += '<thead><tr style="background:var(--bg-secondary);">';
+    for (var c = 0; c < versionColumns.length; c++) {
+        var col = versionColumns[c];
+        if (col.type === 'index') {
+            body += '<th class="px-3 py-2 text-center font-medium" style="color:var(--text-secondary);width:60px;">序号</th>';
+        } else {
+            body += '<th class="px-3 py-2 text-left font-medium" style="color:var(--text-secondary);">' + (col.title || col.key) + '</th>';
+        }
+    }
+    body += '</tr></thead>';
+    body += '<tbody>';
+    for (var v = 0; v < versionData.length; v++) {
+        var ver = versionData[v];
+        var isCurrent = v === 0;
+        body += '<tr style="border-top:1px solid var(--table-border);">';
+        for (var c2 = 0; c2 < versionColumns.length; c2++) {
+            var col2 = versionColumns[c2];
+            if (col2.type === 'index') {
+                body += '<td class="px-3 py-2 text-center" style="color:var(--text-tertiary);">' + (v + 1) + '</td>';
+            } else if (col2.type === 'tag' && col2.tagMap) {
+                var tagVal = ver[col2.key] || '';
+                var tagInfo = col2.tagMap[tagVal] || { text: tagVal, color: 'gray' };
+                var tagText = typeof tagInfo === 'string' ? tagInfo : tagInfo.text;
+                var tagColor = typeof tagInfo === 'string' ? 'gray' : (tagInfo.color || 'gray');
+                body += '<td class="px-3 py-2"><span class="tag tag-' + tagColor + '">' + tagText + '</span></td>';
+            } else if (col2.key === 'version' && isCurrent) {
+                body += '<td class="px-3 py-2 font-medium" style="color:var(--primary);">' + (ver[col2.key] || '') + ' <span class="tag tag-green ml-1" style="font-size:11px;">当前版</span></td>';
+            } else {
+                body += '<td class="px-3 py-2" style="color:var(--text-primary);">' + (ver[col2.key] !== undefined ? ver[col2.key] : '') + '</td>';
+            }
+        }
+        body += '</tr>';
+    }
+    if (versionData.length === 0) {
+        body += '<tr><td colspan="' + versionColumns.length + '" class="px-3 py-10 text-center" style="color:var(--text-tertiary);">暂无版本记录</td></tr>';
+    }
+    body += '</tbody></table></div></div>';
+
+    openModal(id, title, body, '<button class="px-4 py-1.5 text-sm rounded" style="background:var(--primary);color:#fff;" onclick="closeModal(\'' + id + '\')">关闭</button>', 'large');
+}
+
+/** 卡片布局 - 编辑弹窗 */
+function openCardEditModal(pageKey, itemId) {
+    var config = pageConfigs[pageKey];
+    if (!config) return;
+    var data = config.cardData || [];
+    var item = data.find(function(d) { return d.id === itemId; });
+    if (!item) return;
+
+    var id = 'modal_card_edit_' + pageKey + '_' + itemId;
+    var title = '编辑 - ' + (item.title || item.name || '');
+
+    // 如果配置了 formFields，用通用表单渲染
+    if (config.formFields && config.formFields.length > 0) {
+        var body = renderFormBody(config.formFields, item, 'edit_' + pageKey + '_' + itemId);
+        var footer = `
+            <button class="px-4 py-1.5 text-sm rounded border" style="border-color:#D9D9D9;color:var(--text-secondary);background:#fff;" onclick="closeModal('${id}')">取消</button>
+            <button class="px-4 py-1.5 text-sm rounded" style="background:var(--primary);color:#fff;" onclick="saveCardEdit('${pageKey}',${itemId},'${id}')">保存</button>
+        `;
+        var size = config.modalSize || 'large';
+        openModal(id, title, body, footer, size);
+        return;
+    }
+
+    openModal(id, title, '<p>编辑功能开发中</p>', '<button class="px-4 py-1.5 text-sm rounded" style="background:var(--primary);color:#fff;" onclick="closeModal(\'' + id + '\')">关闭</button>', 'normal');
+}
+
+/** 卡片布局 - 删除 */
+function deleteCardItem(pageKey, itemId) {
+    var config = pageConfigs[pageKey];
+    if (!config) return;
+    var data = config.cardData || [];
+    var item = data.find(function(d) { return d.id === itemId; });
+    if (!item) return;
+
+    var name = item.title || item.name || ('ID:' + itemId);
+    var id = 'modal_card_delete_' + pageKey + '_' + itemId;
+    var body = '<div class="text-center py-4">' +
+        '<i class="fa fa-exclamation-triangle text-3xl mb-3" style="color:var(--warning);"></i>' +
+        '<p style="color:var(--text-primary);">确定要删除「' + name + '」吗？</p>' +
+        '<p class="mt-2 text-sm" style="color:var(--text-tertiary);">删除后不可恢复，请谨慎操作</p>' +
+        '</div>';
+    var footer = `
+        <button class="px-4 py-1.5 text-sm rounded border" style="border-color:#D9D9D9;color:var(--text-secondary);background:#fff;" onclick="closeModal('${id}')">取消</button>
+        <button class="px-4 py-1.5 text-sm rounded" style="background:var(--danger);color:#fff;" onclick="confirmDeleteCard('${pageKey}',${itemId},'${id}')">确定删除</button>
+    `;
+    openModal(id, '删除确认', body, footer, 'small');
+}
+
+/** 卡片布局 - 确认删除 */
+function confirmDeleteCard(pageKey, itemId, modalId) {
+    var config = pageConfigs[pageKey];
+    if (!config) return;
+    var idx = config.cardData.findIndex(function(d) { return d.id === itemId; });
+    if (idx > -1) {
+        config.cardData.splice(idx, 1);
+    }
+    closeModal(modalId);
+    showToast('删除成功', 'success');
+    renderCardListPage(pageKey);
+}
+
+/** 卡片布局 - 保存编辑 */
+function saveCardEdit(pageKey, itemId, modalId) {
+    closeModal(modalId);
+    showToast('保存成功', 'success');
+    renderCardListPage(pageKey);
 }
 
 function renderAdminAuthPage() {
@@ -9087,6 +9281,10 @@ function handleAction(actionKey, pageKey, rowId) {
         case 'unrecommend':
             toggleRecommend(pageKey, rowId, actionKey === 'recommend');
             break;
+        // 版本记录
+        case 'version':
+            showVersionRecordModal(pageKey, rowId);
+            break;
         case 'moveUp':
         case 'moveDown':
             showToast(actionKey === 'moveUp' ? '已上移' : '已下移', 'success');
@@ -9136,6 +9334,101 @@ function toggleRecommend(pageKey, rowId, isRecommend) {
     } else {
         renderTablePage(pageKey);
     }
+}
+
+/** 通用版本记录弹窗（表格型页面） */
+function showVersionRecordModal(pageKey, rowId) {
+    const resolved = resolvePageConfig(pageKey);
+    if (!resolved) return;
+    const data = resolved.getData();
+    const row = data.find(r => r.id === rowId);
+    if (!row) return;
+
+    const id = 'modal_version_' + pageKey + '_' + rowId;
+    const rowName = row.title || row.name || row.question || ('ID:' + rowId);
+    const title = rowName + ' - 版本记录';
+
+    // 如果行数据有 versions 字段，用行数据里的版本
+    let versionData = row.versions || null;
+
+    // 如果页面配置有 versionRecordFlow，用配置的版本数据
+    const config = resolved.config;
+    if (!versionData && config.versionRecordFlow && config.versionRecordFlow.data) {
+        versionData = config.versionRecordFlow.data;
+    }
+
+    // 默认版本数据
+    if (!versionData || versionData.length === 0) {
+        versionData = [
+            { id: 1, version: 'v1.0', updateTime: '2025-01-15 10:00:00', content: '初始版本发布，完成基础内容建设', operator: '系统管理员', status: 'published' },
+            { id: 2, version: 'v1.1', updateTime: '2025-02-20 14:30:00', content: '优化内容表述，补充说明细节', operator: '内容运营', status: 'published' },
+            { id: 3, version: 'v2.0', updateTime: '2025-04-01 16:45:00', content: '重大版本更新，结构重构，内容全面升级', operator: '产品经理', status: 'published' },
+        ];
+    }
+
+    const versionColumns = [
+        { type: 'index', title: '序号', width: '60px' },
+        { key: 'version', title: '版本号', width: '100px' },
+        { key: 'updateTime', title: '更新时间', width: '170px' },
+        { key: 'content', title: '更新内容' },
+        { key: 'operator', title: '操作人', width: '100px' },
+        { key: 'status', title: '状态', width: '80px', type: 'tag', tagMap: { 'published': { text: '已发布', color: 'green' }, 'draft': { text: '草稿', color: 'gray' } } },
+    ];
+
+    // 渲染版本表格
+    let body = '<div>';
+    body += '<div class="mb-3 flex items-center justify-between">';
+    body += '<span class="text-sm" style="color:var(--text-secondary);">共 ' + versionData.length + ' 个历史版本</span>';
+    body += '<button class="px-3 py-1 text-sm rounded" style="background:var(--primary);color:#fff;" onclick="showToast(\'新增版本：请在编辑内容时自动生成新版本记录\',\'info\')"><i class="fa fa-plus mr-1"></i>新增版本</button>';
+    body += '</div>';
+    body += '<div class="border rounded overflow-hidden" style="border-color:var(--table-border);">';
+    body += '<table class="w-full text-sm">';
+    body += '<thead><tr style="background:var(--bg-secondary);">';
+    for (let c = 0; c < versionColumns.length; c++) {
+        const col = versionColumns[c];
+        const w = col.width || '';
+        const style = w ? 'width:' + w + ';' : '';
+        if (col.type === 'index') {
+            body += '<th class="px-3 py-2 text-center font-medium" style="color:var(--text-secondary);' + style + '">序号</th>';
+        } else {
+            body += '<th class="px-3 py-2 text-left font-medium" style="color:var(--text-secondary);' + style + '">' + (col.title || col.key) + '</th>';
+        }
+    }
+    body += '</tr></thead>';
+    body += '<tbody>';
+    for (let v = 0; v < versionData.length; v++) {
+        const ver = versionData[v];
+        const isCurrent = v === 0;
+        body += '<tr style="border-top:1px solid var(--table-border);">';
+        for (let c2 = 0; c2 < versionColumns.length; c2++) {
+            const col2 = versionColumns[c2];
+            if (col2.type === 'index') {
+                body += '<td class="px-3 py-2 text-center" style="color:var(--text-tertiary);">' + (v + 1) + '</td>';
+            } else if (col2.type === 'tag' && col2.tagMap) {
+                const tagVal = ver[col2.key] || '';
+                const tagInfo = col2.tagMap[tagVal] || { text: tagVal, color: 'gray' };
+                const tagText = typeof tagInfo === 'string' ? tagInfo : tagInfo.text;
+                const tagColor = typeof tagInfo === 'string' ? 'gray' : (tagInfo.color || 'gray');
+                body += '<td class="px-3 py-2"><span class="tag tag-' + tagColor + '">' + tagText + '</span></td>';
+            } else if (col2.key === 'version' && isCurrent) {
+                body += '<td class="px-3 py-2 font-medium" style="color:var(--primary);">' + (ver[col2.key] || '') + ' <span class="tag tag-green ml-1" style="font-size:11px;">当前版</span></td>';
+            } else {
+                body += '<td class="px-3 py-2" style="color:var(--text-primary);">' + (ver[col2.key] !== undefined ? ver[col2.key] : '') + '</td>';
+            }
+        }
+        body += '</tr>';
+    }
+    if (versionData.length === 0) {
+        body += '<tr><td colspan="' + versionColumns.length + '" class="px-3 py-10 text-center" style="color:var(--text-tertiary);">暂无版本记录</td></tr>';
+    }
+    body += '</tbody></table></div>';
+    body += '<div class="mt-3 text-xs" style="color:var(--text-tertiary);">';
+    body += '<i class="fa fa-info-circle mr-1"></i>';
+    body += '版本记录自动生成：每次编辑保存内容后，系统自动生成新版本记录，保留历史版本供追溯。';
+    body += '</div>';
+    body += '</div>';
+
+    openModal(id, title, body, '<button class="px-4 py-1.5 text-sm rounded" style="background:var(--primary);color:#fff;" onclick="closeModal(\'' + id + '\')">关闭</button>', 'large');
 }
 function openModal(id, title, bodyHtml, footerHtml, size) {
     // 移除已存在的同名弹窗
@@ -15136,6 +15429,7 @@ var prdData = {
         resourceTopFlow: '【资源中心-置顶】资源中心管理Tab支持置顶功能。置顶资源在门户首页资源下载区优先展示。支持按是否置顶筛选查询。',
         guideTopFlow: '【开发指南-置顶】开发指南管理Tab支持置顶功能。置顶指南在门户首页开发指南区域优先展示。支持按是否置顶筛选查询。',
         helpCenterTopFlow: '【帮助中心-置顶】帮助中心管理Tab支持置顶功能。置顶帮助内容在门户首页帮助中心区域优先展示，常见问题可置顶显示。支持按是否置顶筛选查询。',
+        helpCenterVersionFlow: '【帮助中心-版本记录】帮助中心管理Tab每条帮助内容支持版本记录查看。点击操作列"版本记录" → 打开版本记录弹窗 → 展示历史版本列表（版本号/更新时间/更新内容/操作人/状态）→ 最新版本标记"当前版"。版本记录随每次编辑保存自动生成，保留完整历史版本供追溯对比。支持查看各版本详情，支持版本回滚（预留能力）。',
         noticeAddFlow: '【通知公告-新增】在通知公告管理Tab → 点击"新增公告"按钮 → 打开新增弹窗 → 填写公告标题（必填，100字符内）→ 选择公告类型（系统通知/业务公告/活动通知/升级维护）→ 设置发布范围（全部用户/开发者/服务商/管理员）→ 编辑公告内容（富文本，必填）→ 设置是否置顶 → 设置排序号 → 选择发布方式（保存草稿/立即发布/定时发布）→ 定时发布需设置发布时间 → 可上传附件 → 点击保存/发布 → 校验通过 → 操作成功 → 列表刷新。',
         noticeEditFlow: '【通知公告-修改】点击操作列"编辑" → 打开编辑弹窗 → 回显公告全部信息 → 修改可编辑字段 → 可调整发布状态 → 点击保存 → 更新成功 → 列表刷新。已发布公告编辑后可选择重新发布或保存修改。',
         noticeDeleteFlow: '【通知公告-删除】点击操作列"删除" → 弹出二次确认弹窗 → 确认删除 → 逻辑删除 → Toast提示成功 → 列表刷新。',
@@ -15143,7 +15437,7 @@ var prdData = {
         noticeSortConfig: '【通知公告-排序】支持公告标题、发布时间、排序号字段排序。点击表头切换升序/降序。默认按发布时间降序排列。',
         noticeTopFlow: '【通知公告-置顶】通知公告管理Tab支持置顶功能。置顶公告在门户首页通知公告区域优先展示，始终排在最前面。支持按是否置顶筛选查询。操作列动态显示"置顶"/"取消置顶"按钮。新增/编辑时可通过"是否置顶"开关设置。',
         noticeViewFlow: '【通知公告-查看】点击操作列"查看" → 打开查看弹窗 → 展示公告完整信息（标题、类型、发布范围、内容、附件、发布时间、状态、浏览量等）→ 关闭返回列表。',
-        redFields: ['addFlow', 'editFlow', 'deleteFlow', 'sortConfig', 'viewFlow', 'queryFlow', 'topFlow', 'bannerTopFlow', 'accessStepsTopFlow', 'appCaseTopFlow', 'abilityTopFlow', 'resourceTopFlow', 'guideTopFlow', 'helpCenterTopFlow', 'noticeTopFlow', 'bannerAddFlow', 'bannerEditFlow', 'bannerDeleteFlow', 'bannerSortConfig', 'bannerQueryFlow', 'abilityAddFlow', 'abilityEditFlow', 'abilityDeleteFlow', 'abilitySortConfig', 'abilityQueryFlow', 'resourceAddFlow', 'resourceEditFlow', 'resourceDeleteFlow', 'resourceSortConfig', 'resourceQueryFlow', 'guideAddFlow', 'noticeAddFlow', 'noticeEditFlow', 'noticeDeleteFlow', 'noticeQueryFlow', 'noticeSortConfig', 'noticeViewFlow'],
+        redFields: ['addFlow', 'editFlow', 'deleteFlow', 'sortConfig', 'viewFlow', 'queryFlow', 'topFlow', 'versionRecordFlow', 'bannerTopFlow', 'accessStepsTopFlow', 'appCaseTopFlow', 'abilityTopFlow', 'resourceTopFlow', 'guideTopFlow', 'helpCenterTopFlow', 'helpCenterVersionFlow', 'noticeTopFlow', 'bannerAddFlow', 'bannerEditFlow', 'bannerDeleteFlow', 'bannerSortConfig', 'bannerQueryFlow', 'abilityAddFlow', 'abilityEditFlow', 'abilityDeleteFlow', 'abilitySortConfig', 'abilityQueryFlow', 'resourceAddFlow', 'resourceEditFlow', 'resourceDeleteFlow', 'resourceSortConfig', 'resourceQueryFlow', 'guideAddFlow', 'noticeAddFlow', 'noticeEditFlow', 'noticeDeleteFlow', 'noticeQueryFlow', 'noticeSortConfig', 'noticeViewFlow'],
     },
 
 
