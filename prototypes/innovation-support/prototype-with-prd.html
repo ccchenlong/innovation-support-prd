@@ -18045,6 +18045,23 @@ function renderPrdCard(pageKey, pageName, prd) {
     html += renderSection('detailConfigFlow', '详情-配置管理', prd.detailConfigFlow);
     html += renderSection('detailMonitorFlow', '详情-监控数据', prd.detailMonitorFlow);
     html += renderSection('detailLogFlow', '详情-操作日志', prd.detailLogFlow);
+    // 应用链接（应用配置弹窗内）
+    html += renderSection('appLinkAddFlow', '应用链接-新增', prd.appLinkAddFlow);
+    html += renderSection('appLinkEditFlow', '应用链接-修改', prd.appLinkEditFlow);
+    html += renderSection('appLinkDeleteFlow', '应用链接-删除', prd.appLinkDeleteFlow);
+    html += renderSection('appLinkQueryFlow', '应用链接-查询', prd.appLinkQueryFlow);
+    html += renderSection('appLinkBatchDeleteFlow', '应用链接-批量删除', prd.appLinkBatchDeleteFlow);
+    html += renderSection('appLinkSortFlow', '应用链接-排序', prd.appLinkSortFlow);
+    html += renderSection('appPermQueryFlow', '应用权限信息查询', prd.appPermQueryFlow);
+    // 应用日志（应用日志弹窗内）
+    html += renderSection('appLogOpConfigFlow', '操作日志-配置管理', prd.appLogOpConfigFlow);
+    html += renderSection('appLogOpAggregateFlow', '操作日志-信息汇集', prd.appLogOpAggregateFlow);
+    html += renderSection('appLogSubConfigFlow', '订阅日志-配置管理', prd.appLogSubConfigFlow);
+    html += renderSection('appLogSubAggregateFlow', '订阅日志-信息汇集', prd.appLogSubAggregateFlow);
+    html += renderSection('appLogFullPushConfigFlow', '全量推送日志-配置管理', prd.appLogFullPushConfigFlow);
+    html += renderSection('appLogFullPushAggregateFlow', '全量推送日志-信息汇集', prd.appLogFullPushAggregateFlow);
+    html += renderSection('appLogIncPushConfigFlow', '增量推送日志-配置管理', prd.appLogIncPushConfigFlow);
+    html += renderSection('appLogIncPushAggregateFlow', '增量推送日志-信息汇集', prd.appLogIncPushAggregateFlow);
 
     // 应用监测相关（app-monitor）
     html += renderSection('realTimeMonitorFlow', '实时监控', prd.realTimeMonitorFlow);
@@ -18055,6 +18072,19 @@ function renderPrdCard(pageKey, pageName, prd) {
     html += renderSection('usageFlow', '使用统计', prd.usageFlow);
     html += renderSection('userStatFlow', '用户统计', prd.userStatFlow);
     html += renderSection('orgStatFlow', '机构统计', prd.orgStatFlow);
+    html += renderSection('usageExportFlow', '应用使用监测导出', prd.usageExportFlow);
+    html += renderSection('runStatExportFlow', '应用运行统计导出', prd.runStatExportFlow);
+    html += renderSection('userVisitExportFlow', '用户访问日统计导出', prd.userVisitExportFlow);
+    html += renderSection('appVisitExportFlow', '应用访问日统计导出', prd.appVisitExportFlow);
+    html += renderSection('activeUserExportFlow', '日活跃用户数导出', prd.activeUserExportFlow);
+    html += renderSection('activeUserMonthExportFlow', '月活跃用户数导出', prd.activeUserMonthExportFlow);
+    html += renderSection('activePeriodExportFlow', '用户活跃数时段导出', prd.activePeriodExportFlow);
+    html += renderSection('errorExportFlow', '错误和异常导出', prd.errorExportFlow);
+    html += renderSection('startupAvgTimeExportFlow', '启动平均时长导出', prd.startupAvgTimeExportFlow);
+    html += renderSection('abilityCallExportFlow', '能力调用数导出', prd.abilityCallExportFlow);
+    html += renderSection('abilityCallAbnormalExportFlow', '能力调用异常数导出', prd.abilityCallAbnormalExportFlow);
+    html += renderSection('noticeDailyExportFlow', '日通知数导出', prd.noticeDailyExportFlow);
+    html += renderSection('todoDailyExportFlow', '日待办次数导出', prd.todoDailyExportFlow);
 
     // 应用统计相关（app-statistics）
     html += renderSection('visitStatFlow', '访问统计', prd.visitStatFlow);
