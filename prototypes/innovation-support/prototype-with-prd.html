@@ -688,13 +688,8 @@ var navConfig = [
             { key: 'ticket-center', label: '办件中心', type: 'page' },
             { key: 'ticket-record', label: '办件记录', type: 'page' },
             { key: 'ticket-cc', label: '工单抄送管理', type: 'page' },
-            {
-                key: 's-ticket-ops', label: '工单管理运营侧', type: 'subgroup',
-                children: [
-                    { key: 'ticket-my-todo', label: '我的代办', type: 'page' },
-                    { key: 'ticket-cc-mine', label: '抄送我的工单', type: 'page' },
-                ]
-            },
+            { key: 'ticket-my-todo', label: '我的代办', type: 'page' },
+            { key: 'ticket-cc-mine', label: '抄送我的工单', type: 'page' },
         ]
     },
     {
@@ -945,7 +940,7 @@ var pageConfigs = {
 
     /* ---------- 工单流程配置管理 ---------- */
     'ticket-flow': {
-        breadcrumb: ['工单中心', '工单管理运营侧', '工单流程配置管理'],
+        breadcrumb: ['工单中心', '工单流程配置管理'],
         query: [
             { key: 'name', label: '流程名称', type: 'input', placeholder: '请输入流程名称' },
             { key: 'status', label: '流程状态', type: 'select', placeholder: '请选择', options: [{ value: '', label: '全部' }, { value: '1', label: '启用' }, { value: '0', label: '停用' }] },
@@ -969,7 +964,7 @@ var pageConfigs = {
 
     /* ---------- 我的代办 ---------- */
     'ticket-my-todo': {
-        breadcrumb: ['工单中心', '工单管理运营侧', '我的代办'],
+        breadcrumb: ['工单中心', '我的代办'],
         query: [
             { key: 'title', label: '工单标题', type: 'input', placeholder: '请输入工单标题' },
             { key: 'type', label: '工单类型', type: 'select', placeholder: '请选择', options: [{ value: '', label: '全部' }, { value: 'general', label: '通用工单' }, { value: 'equipment', label: '设备申请' }, { value: 'auth', label: '权限申请' }] },
@@ -1005,7 +1000,7 @@ var pageConfigs = {
     /* ---------- 抄送我的工单 ---------- */
     'ticket-cc-mine': {
         type: 'tab-table',
-        breadcrumb: ['工单中心', '工单管理运营侧', '抄送我的工单'],
+        breadcrumb: ['工单中心', '抄送我的工单'],
         tabs: [
             { key: 'stat', label: '抄送工单统计' },
             { key: 'ccMine', label: '抄送我的工单' },
@@ -16069,9 +16064,9 @@ var pageList = [
     { key: 'ticket-sort', name: '工单排序', group: '工单中心' },
     { key: 'ticket-type', name: '工单类型管理', group: '工单中心' },
     { key: 'ticket-flow', name: '工单流程配置管理', group: '工单中心' },
-    { key: 'ticket-my-todo', name: '我的代办', group: '工单中心/工单管理运营侧' },
-    { key: 'ticket-customer-mine', name: '工单管理(客户侧)', group: '工单中心/工单管理运营侧' },
-    { key: 'ticket-cc-mine', name: '抄送我的工单', group: '工单中心/工单管理运营侧' },
+    { key: 'ticket-my-todo', name: '我的代办', group: '工单中心' },
+    { key: 'ticket-customer-mine', name: '工单管理(客户侧)', group: '工单中心' },
+    { key: 'ticket-cc-mine', name: '抄送我的工单', group: '工单中心' },
     { key: 'ticket-cc', name: '工单抄送管理', group: '工单中心' },
     { key: 'notice', name: '通知公告管理', group: '开放门户管理' },
     { key: 'provider', name: '软件服务商管理', group: '软件服务商工作台' },
