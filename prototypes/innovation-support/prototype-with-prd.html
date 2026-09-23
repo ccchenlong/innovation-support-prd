@@ -688,7 +688,6 @@ var navConfig = [
             { key: 'ticket-center', label: '办件中心', type: 'page' },
             { key: 'ticket-record', label: '办件记录', type: 'page' },
             { key: 'ticket-cc', label: '工单抄送管理', type: 'page' },
-            { key: 'portal-my-ticket', label: '我的工单', type: 'page' },
             {
                 key: 's-ticket-ops', label: '工单管理运营侧', type: 'subgroup',
                 children: [
@@ -720,6 +719,7 @@ var navConfig = [
             { key: 'global-search', label: '全局搜索管理', type: 'page' },
             { key: 'help-info', label: '帮助信息管理', type: 'page' },
             { key: 'app-case-manage', label: '应用案例管理', type: 'page' },
+            { key: 'portal-my-ticket', label: '我的工单', type: 'page' },
             {
                 key: 's-portal-ability', label: '开放能力管理', type: 'subgroup',
                 children: [
@@ -5875,7 +5875,6 @@ var _overviewModules = [
         { key: 'ticket-center', label: '办件中心' },
         { key: 'ticket-record', label: '办件记录' },
         { key: 'ticket-cc', label: '工单抄送管理' },
-        { key: 'portal-my-ticket', label: '我的工单' },
         { key: 'ticket-my-todo', label: '我的代办' },
         { key: 'ticket-cc-mine', label: '抄送我的工单' },
     ]},
@@ -5893,6 +5892,7 @@ var _overviewModules = [
         { key: 'global-search', label: '全局搜索管理' },
         { key: 'help-info', label: '帮助信息管理' },
         { key: 'app-case-manage', label: '应用案例管理' },
+        { key: 'portal-my-ticket', label: '我的工单' },
         { key: 'api-example', label: '接口示例管理' },
         { key: 'api-error-code', label: '接口错误码管理' },
         { key: 'access-steps', label: '接入步骤管理' },
@@ -5961,8 +5961,8 @@ function renderOverviewPage() {
     const newFeatures = [
         { category: '工作台管理', items: ['标准工作台卡片式布局（创建/编辑/删除/预览/状态切换）', '工作台创建弹窗（空白创建+工作台复刻）', '工作台历史版本记录（版本列表+版本详情+回滚）', '第三方工作台管理（增删改查+表格列表）', '第三方工作台版本管理（新增版本/版本详情/版本记录）'] },
         { category: '软件服务商工作台', items: ['消息通知管理-站内消息单页（新增/编辑/查看/删除/标记已读）', '消息通知管理-手动通知管理说明', '软件服务商详情抽屉-应用关联Tab', '应用关联CRUD+批量解除+排序', '服务商入驻详情抽屉-应用关联CRUD'] },
-        { category: '工单中心', items: ['我的代办（查询/办理/查看/移交/批量办理/导出）', '抄送我的工单-抄送工单统计（增删改查/转发）', '抄送我的工单-抄送工单列表（查看/评分/附件/标记已读/导出）', '工单类型管理-查询', '我的工单-修改/删除/排序', '工单抄送管理-信息管理（8项）', '办件中心-配置信息管理（3项）'] },
-        { category: '开放门户管理', items: ['全局搜索管理（搜索配置+热搜词+排序号）', '通知公告管理-删除/查看', '接口示例管理-增删改查完善', '接口错误码管理-增删改查完善', '我的工单-填报/处理/审批', '应用案例管理-卡片式+查看+版本记录'] },
+        { category: '工单中心', items: ['我的代办（查询/办理/查看/移交/批量办理/导出）', '抄送我的工单-抄送工单统计（增删改查/转发）', '抄送我的工单-抄送工单列表（查看/评分/附件/标记已读/导出）', '工单类型管理-查询', '工单抄送管理-信息管理（8项）', '办件中心-配置信息管理（3项）'] },
+        { category: '开放门户管理', items: ['全局搜索管理（搜索配置+热搜词+排序号）', '通知公告管理-删除/查看', '接口示例管理-增删改查完善', '接口错误码管理-增删改查完善', '我的工单-填报/处理/审批/修改/删除/排序', '应用案例管理-卡片式+查看+版本记录'] },
         { category: '门户配置', items: ['统一门户配置7Tab（轮播图/接入步骤/应用案例/开放能力/资源中心/开发指南/帮助中心）', '接入步骤-拖拽上传+字符计数', '轮播图-间隔时间设置', '热搜词管理-排序号字段'] },
     ];
 
