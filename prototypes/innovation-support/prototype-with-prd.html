@@ -15439,138 +15439,137 @@ function openAppConfigModal(pageKey, rowId) {
     var appName = appRow ? (appRow.name || '') : '';
     var modalId = 'app_config_' + rowId;
 
-    // 配置数据
-    var configItems = [
-        { id: 1, name: '操作日志开关', configType: '日志配置', configValue: '开启', status: true, sortNo: 1, desc: '是否记录操作日志' },
-        { id: 2, name: '登录日志开关', configType: '日志配置', configValue: '开启', status: true, sortNo: 2, desc: '是否记录登录日志' },
-        { id: 3, name: '会话超时时间', configType: '安全配置', configValue: '30分钟', status: true, sortNo: 3, desc: '用户会话超时时长' },
-        { id: 4, name: '密码强度等级', configType: '安全配置', configValue: '中', status: true, sortNo: 4, desc: '密码复杂度要求' },
-        { id: 5, name: '数据备份周期', configType: '系统配置', configValue: '每日', status: true, sortNo: 5, desc: '数据自动备份频率' },
-        { id: 6, name: '接口限流开关', configType: '性能配置', configValue: '关闭', status: false, sortNo: 6, desc: '是否启用API限流' },
+    // 应用链接数据
+    var linkItems = [
+        { id: 1, linkName: '办公入口', linkUrl: 'https://gov.example.com/office', linkType: '内部链接', openMode: 'newWindow', sortNo: 1, status: true, contact: '张工', phone: '13800138001' },
+        { id: 2, linkName: '服务大厅', linkUrl: 'https://gov.example.com/service', linkType: '内部链接', openMode: 'current', sortNo: 2, status: true, contact: '李工', phone: '13800138002' },
+        { id: 3, linkName: '数据看板', linkUrl: 'https://dashboard.example.com', linkType: '外部链接', openMode: 'newWindow', sortNo: 3, status: false, contact: '王工', phone: '13800138003' },
+        { id: 4, linkName: '移动办公H5', linkUrl: 'https://m.example.com/work', linkType: 'H5链接', openMode: 'newWindow', sortNo: 4, status: true, contact: '赵工', phone: '13800138004' },
     ];
 
-    // 权限数据
-    var permItems = [
-        { id: 101, permName: '应用查看', permCode: 'app:view', permType: '查询', status: true },
-        { id: 102, permName: '应用新增', permCode: 'app:add', permType: '新增', status: true },
-        { id: 103, permName: '应用编辑', permCode: 'app:edit', permType: '修改', status: true },
-        { id: 104, permName: '应用删除', permCode: 'app:delete', permType: '删除', status: true },
-        { id: 105, permName: '配置管理', permCode: 'app:config', permType: '管理', status: true },
-        { id: 106, permName: '日志查看', permCode: 'app:log:view', permType: '查询', status: true },
-    ];
-
-    function renderConfigTable() {
+    function renderLinkTable() {
         var html = '<div style="margin-bottom:10px;display:flex;gap:8px;align-items:center;flex-wrap:wrap;">';
-        html += '<input type="text" class="form-input" id="cfg_searchName" style="width:160px;padding:4px 8px;font-size:12px;" placeholder="配置名称" />';
-        html += '<select class="form-input" id="cfg_searchType" style="width:120px;padding:4px 8px;font-size:12px;"><option value="">全部类型</option><option value="日志配置">日志配置</option><option value="安全配置">安全配置</option><option value="系统配置">系统配置</option><option value="性能配置">性能配置</option></select>';
-        html += '<select class="form-input" id="cfg_searchStatus" style="width:100px;padding:4px 8px;font-size:12px;"><option value="">全部状态</option><option value="true">启用</option><option value="false">停用</option></select>';
+        html += '<input type="text" class="form-input" id="link_searchName" style="width:160px;padding:4px 8px;font-size:12px;" placeholder="请输入链接名称" />';
+        html += '<select class="form-input" id="link_searchType" style="width:110px;padding:4px 8px;font-size:12px;"><option value="">全部类型</option><option value="内部链接">内部链接</option><option value="外部链接">外部链接</option><option value="H5链接">H5链接</option></select>';
+        html += '<select class="form-input" id="link_searchStatus" style="width:90px;padding:4px 8px;font-size:12px;"><option value="">全部状态</option><option value="true">启用</option><option value="false">停用</option></select>';
         html += '<button class="btn btn-primary btn-sm" onclick="showToast(\'查询成功\',\'success\')"><i class="fa fa-search"></i> 查询</button>';
         html += '<button class="btn btn-default btn-sm" onclick="showToast(\'已重置\',\'info\')"><i class="fa fa-refresh"></i> 重置</button>';
         html += '<div style="flex:1;"></div>';
-        html += '<button class="btn btn-primary btn-sm" onclick="openAppConfigItemModal(\'add\',' + rowId + ')"><i class="fa fa-plus"></i> 新增配置</button>';
+        html += '<button class="btn btn-primary btn-sm" onclick="openAppLinkModal(\'add\',' + rowId + ')"><i class="fa fa-plus"></i> 新增链接</button>';
         html += '<button class="btn btn-default btn-sm" onclick="showAppPermModal(' + rowId + ')"><i class="fa fa-key"></i> 权限查询</button>';
         html += '</div>';
         html += '<div style="border:1px solid #E8E8E8;border-radius:4px;overflow:hidden;">';
         html += '<table class="data-table" style="margin:0;"><thead><tr>';
-        html += '<th style="width:50px;">序号</th><th>配置项名称</th><th style="width:100px;">配置类型</th><th style="width:120px;">配置值</th><th style="width:80px;">状态</th><th style="width:60px;">排序号</th><th style="width:180px;">操作</th></tr></thead><tbody>';
-        for (var ci = 0; ci < configItems.length; ci++) {
-            var item = configItems[ci];
+        html += '<th style="width:40px;"><input type="checkbox" onclick="toggleAllCheckboxes(this)" /></th>';
+        html += '<th style="width:50px;">序号</th><th onclick="sortAppLinkTable(\'linkName\')" style="cursor:pointer;">链接名称 <i class="fa fa-sort" style="color:#C9CDD4;font-size:12px;"></i></th><th>链接地址</th><th style="width:90px;">链接类型</th><th style="width:90px;">打开方式</th><th style="width:70px;">状态</th><th style="width:60px;">排序号</th><th style="width:170px;">操作</th></tr></thead><tbody>';
+        for (var li = 0; li < linkItems.length; li++) {
+            var item = linkItems[li];
             var statusTag = item.status ? '<span class="tag tag-green">启用</span>' : '<span class="tag tag-gray">停用</span>';
-            html += '<tr><td>' + (ci+1) + '</td><td>' + item.name + '</td><td>' + item.configType + '</td><td>' + item.configValue + '</td><td>' + statusTag + '</td><td>' + item.sortNo + '</td>';
-            html += '<td><a href="javascript:;" class="link-btn" onclick="viewAppConfigItem(' + item.id + ',' + rowId + ')">查看</a> ';
-            html += '<a href="javascript:;" class="link-btn" onclick="openAppConfigItemModal(\'edit\',' + rowId + ',' + item.id + ')">修改</a> ';
-            html += '<a href="javascript:;" class="link-btn danger" onclick="deleteAppConfigItem(' + item.id + ',' + rowId + ')">删除</a></td></tr>';
+            html += '<tr><td><input type="checkbox" /></td><td>' + (li+1) + '</td><td>' + item.linkName + '</td>';
+            html += '<td><code style="background:#F5F7FA;padding:2px 6px;border-radius:3px;font-size:12px;">' + item.linkUrl + '</code></td>';
+            html += '<td>' + item.linkType + '</td><td>' + (item.openMode==='newWindow'?'新窗口打开':'当前页打开') + '</td>';
+            html += '<td>' + statusTag + '</td><td>' + item.sortNo + '</td>';
+            html += '<td><a href="javascript:;" class="link-btn" onclick="viewAppLink(' + item.id + ',' + rowId + ')">查看</a> ';
+            html += '<a href="javascript:;" class="link-btn" onclick="openAppLinkModal(\'edit\',' + rowId + ',' + item.id + ')">修改</a> ';
+            html += '<a href="javascript:;" class="link-btn danger" onclick="deleteAppLink(' + item.id + ',' + rowId + ')">删除</a></td></tr>';
         }
         html += '</tbody></table></div>';
         return html;
     }
 
     var body = '<div style="margin-bottom:12px;color:var(--text-secondary);font-size:13px;">应用：<span style="color:var(--text-primary);font-weight:500;">' + esc(appName) + '</span></div>';
-    body += '<div id="configTableContainer_' + rowId + '">' + renderConfigTable() + '</div>';
+    body += '<div id="configTableContainer_' + rowId + '">' + renderLinkTable() + '</div>';
     openModal(modalId, '应用配置 - ' + appName, body, '', 'xlarge');
 }
 
-/** 应用配置项 - 查看弹窗 */
-function viewAppConfigItem(itemId, appId) {
+/** 应用链接 - 查看弹窗 */
+function viewAppLink(itemId, appId) {
     var items = {
-        1: { name: '操作日志开关', configType: '日志配置', configValue: '开启', status: true, sortNo: 1, desc: '是否记录操作日志', createTime: '2025-01-10 10:00:00', updateTime: '2025-02-15 14:30:00' },
-        2: { name: '登录日志开关', configType: '日志配置', configValue: '开启', status: true, sortNo: 2, desc: '是否记录登录日志', createTime: '2025-01-10 10:00:00', updateTime: '2025-02-15 14:30:00' },
-        3: { name: '会话超时时间', configType: '安全配置', configValue: '30分钟', status: true, sortNo: 3, desc: '用户会话超时时长', createTime: '2025-01-12 09:00:00', updateTime: '2025-03-01 11:00:00' },
-        4: { name: '密码强度等级', configType: '安全配置', configValue: '中', status: true, sortNo: 4, desc: '密码复杂度要求', createTime: '2025-01-12 09:00:00', updateTime: '2025-02-20 16:00:00' },
-        5: { name: '数据备份周期', configType: '系统配置', configValue: '每日', status: true, sortNo: 5, desc: '数据自动备份频率', createTime: '2025-01-15 14:00:00', updateTime: '2025-03-10 09:30:00' },
-        6: { name: '接口限流开关', configType: '性能配置', configValue: '关闭', status: false, sortNo: 6, desc: '是否启用API限流', createTime: '2025-02-01 11:00:00', updateTime: '2025-03-05 10:00:00' },
+        1: { linkName: '办公入口', linkUrl: 'https://gov.example.com/office', linkType: '内部链接', openMode: 'newWindow', sortNo: 1, status: true, contact: '张工', phone: '13800138001', createTime: '2025-01-10 10:00:00', updateTime: '2025-02-15 14:30:00', remark: '政务办公系统入口链接' },
+        2: { linkName: '服务大厅', linkUrl: 'https://gov.example.com/service', linkType: '内部链接', openMode: 'current', sortNo: 2, status: true, contact: '李工', phone: '13800138002', createTime: '2025-01-12 09:00:00', updateTime: '2025-03-01 11:00:00', remark: '民生服务大厅入口' },
+        3: { linkName: '数据看板', linkUrl: 'https://dashboard.example.com', linkType: '外部链接', openMode: 'newWindow', sortNo: 3, status: false, contact: '王工', phone: '13800138003', createTime: '2025-02-01 11:00:00', updateTime: '2025-03-05 10:00:00', remark: '外部数据可视化看板' },
+        4: { linkName: '移动办公H5', linkUrl: 'https://m.example.com/work', linkType: 'H5链接', openMode: 'newWindow', sortNo: 4, status: true, contact: '赵工', phone: '13800138004', createTime: '2025-02-15 14:00:00', updateTime: '2025-03-10 09:30:00', remark: '移动端H5办公页面' },
     };
     var item = items[itemId] || {};
-    var id = 'modal_view_configItem_' + itemId;
+    var id = 'modal_view_appLink_' + itemId;
     var body = '<div style="line-height:2.2;">';
     body += '<div class="grid grid-cols-2 gap-4">';
-    body += '<div class="flex"><span class="form-label" style="width:100px;">配置项名称</span><span style="color:var(--text-primary);">' + esc(item.name || '') + '</span></div>';
-    body += '<div class="flex"><span class="form-label" style="width:100px;">配置类型</span><span style="color:var(--text-primary);">' + esc(item.configType || '') + '</span></div>';
-    body += '<div class="flex"><span class="form-label" style="width:100px;">配置值</span><span style="color:var(--text-primary);">' + esc(item.configValue || '') + '</span></div>';
+    body += '<div class="flex"><span class="form-label" style="width:100px;">链接名称</span><span style="color:var(--text-primary);">' + esc(item.linkName || '') + '</span></div>';
+    body += '<div class="flex"><span class="form-label" style="width:100px;">链接类型</span><span style="color:var(--text-primary);">' + esc(item.linkType || '') + '</span></div>';
+    body += '<div class="flex"><span class="form-label" style="width:100px;">链接地址</span><span style="color:var(--text-primary);"><code style="background:#F5F7FA;padding:2px 6px;border-radius:3px;font-size:12px;">' + esc(item.linkUrl || '') + '</code></span></div>';
+    body += '<div class="flex"><span class="form-label" style="width:100px;">打开方式</span><span style="color:var(--text-primary);">' + (item.openMode==='newWindow'?'新窗口打开':'当前页打开') + '</span></div>';
     body += '<div class="flex"><span class="form-label" style="width:100px;">排序号</span><span style="color:var(--text-primary);">' + (item.sortNo || '') + '</span></div>';
-    body += '<div class="flex"><span class="form-label" style="width:100px;">状态</span><span style="color:var(--text-primary);">' + (item.status ? '<span class="tag tag-green">启用</span>' : '<span class="tag tag-red">停用</span>') + '</span></div>';
+    body += '<div class="flex"><span class="form-label" style="width:100px;">状态</span><span style="color:var(--text-primary);">' + (item.status ? '<span class="tag tag-green">启用</span>' : '<span class="tag tag-gray">停用</span>') + '</span></div>';
+    body += '<div class="flex"><span class="form-label" style="width:100px;">联系人</span><span style="color:var(--text-primary);">' + esc(item.contact || '') + '</span></div>';
+    body += '<div class="flex"><span class="form-label" style="width:100px;">联系电话</span><span style="color:var(--text-primary);">' + esc(item.phone || '') + '</span></div>';
     body += '<div class="flex"><span class="form-label" style="width:100px;">创建时间</span><span style="color:var(--text-primary);">' + esc(item.createTime || '') + '</span></div>';
     body += '<div class="flex"><span class="form-label" style="width:100px;">更新时间</span><span style="color:var(--text-primary);">' + esc(item.updateTime || '') + '</span></div>';
     body += '</div>';
-    body += '<div class="flex mt-2"><span class="form-label" style="width:100px;">配置描述</span><span style="color:var(--text-primary);flex:1;">' + esc(item.desc || '') + '</span></div>';
+    body += '<div class="flex mt-2"><span class="form-label" style="width:100px;">备注</span><span style="color:var(--text-primary);flex:1;">' + esc(item.remark || '') + '</span></div>';
     body += '</div>';
     var footer = '<button class="btn btn-default btn-sm" onclick="closeModal(\'' + id + '\')">关闭</button>';
-    openModal(id, '查看配置项', body, footer, 'normal');
+    openModal(id, '查看应用链接', body, footer, 'normal');
 }
 
-/** 应用配置项 - 新增/编辑弹窗 */
-function openAppConfigItemModal(mode, appId, itemId) {
+/** 应用链接 - 新增/编辑弹窗 */
+function openAppLinkModal(mode, appId, itemId) {
     var items = {
-        1: { name: '操作日志开关', configType: '日志配置', configValue: '开启', status: true, sortNo: 1, desc: '是否记录操作日志' },
-        2: { name: '登录日志开关', configType: '日志配置', configValue: '开启', status: true, sortNo: 2, desc: '是否记录登录日志' },
-        3: { name: '会话超时时间', configType: '安全配置', configValue: '30分钟', status: true, sortNo: 3, desc: '用户会话超时时长' },
+        1: { linkName: '办公入口', linkUrl: 'https://gov.example.com/office', linkType: '内部链接', openMode: 'newWindow', sortNo: 1, status: true, contact: '张工', phone: '13800138001' },
+        2: { linkName: '服务大厅', linkUrl: 'https://gov.example.com/service', linkType: '内部链接', openMode: 'current', sortNo: 2, status: true, contact: '李工', phone: '13800138002' },
+        3: { linkName: '数据看板', linkUrl: 'https://dashboard.example.com', linkType: '外部链接', openMode: 'newWindow', sortNo: 3, status: false, contact: '王工', phone: '13800138003' },
     };
     var r = mode === 'edit' ? (items[itemId] || {}) : {};
-    var id = 'modal_configItem_' + mode + '_' + appId;
-    var title = mode === 'edit' ? '修改配置项' : '新增配置项';
+    var id = 'modal_appLink_' + mode + '_' + appId;
+    var title = mode === 'edit' ? '修改应用链接' : '新增应用链接';
     var body = '<div style="line-height:2;">';
     body += '<div class="grid grid-cols-2 gap-4">';
-    body += '<div><label class="form-label">配置项名称 <span class="text-red-500">*</span></label>';
-    if (mode === 'edit') {
-        body += '<input type="text" class="form-input w-full" value="' + esc(r.name || '') + '" readonly style="background:#F5F7FA;color:var(--text-secondary);"></div>';
-    } else {
-        body += '<input type="text" class="form-input w-full" id="ci_name" value="' + esc(r.name || '') + '" placeholder="请输入配置项名称"></div>';
-    }
-    body += '<div><label class="form-label">配置类型 <span class="text-red-500">*</span></label><select class="form-input w-full" id="ci_configType">';
-    var types = ['日志配置', '安全配置', '系统配置', '性能配置'];
-    types.forEach(function(t){ body += '<option' + (r.configType===t?' selected':'') + '>' + t + '</option>'; });
+    body += '<div><label class="form-label">链接名称 <span class="text-red-500">*</span></label>';
+    body += '<input type="text" class="form-input w-full" id="al_linkName" value="' + esc(r.linkName || '') + '" placeholder="请输入链接名称"></div>';
+    body += '<div><label class="form-label">链接类型 <span class="text-red-500">*</span></label><select class="form-input w-full" id="al_linkType">';
+    var linkTypes = ['内部链接', '外部链接', 'H5链接'];
+    linkTypes.forEach(function(t){ body += '<option' + (r.linkType===t?' selected':'') + '>' + t + '</option>'; });
     body += '</select></div>';
-    body += '<div><label class="form-label">配置值 <span class="text-red-500">*</span></label><input type="text" class="form-input w-full" id="ci_configValue" value="' + esc(r.configValue || '') + '" placeholder="请输入配置值"></div>';
-    body += '<div><label class="form-label">排序号</label><input type="number" class="form-input" id="ci_sortNo" style="width:150px;" value="' + (r.sortNo || 1) + '" min="1"></div>';
+    body += '<div style="grid-column:span 2;"><label class="form-label">链接地址 <span class="text-red-500">*</span></label><input type="text" class="form-input w-full" id="al_linkUrl" value="' + esc(r.linkUrl || '') + '" placeholder="请输入完整URL地址"></div>';
+    body += '<div><label class="form-label">打开方式</label><select class="form-input w-full" id="al_openMode">';
+    body += '<option value="newWindow"' + (r.openMode==='newWindow'?' selected':'') + '>新窗口打开</option>';
+    body += '<option value="current"' + (r.openMode==='current'?' selected':'') + '>当前页打开</option>';
+    body += '</select></div>';
+    body += '<div><label class="form-label">排序号</label><input type="number" class="form-input" id="al_sortNo" style="width:150px;" value="' + (r.sortNo || 1) + '" min="1"></div>';
     body += '<div><label class="form-label">状态</label><div style="display:flex;align-items:center;height:32px;"><span class="toggle-switch ' + (r.status!==false?'on':'') + '" onclick="this.classList.toggle(\'on\')"></span></div></div>';
+    body += '<div><label class="form-label">联系人</label><input type="text" class="form-input w-full" id="al_contact" value="' + esc(r.contact || '') + '" placeholder="请输入联系人"></div>';
+    body += '<div><label class="form-label">联系电话</label><input type="text" class="form-input w-full" id="al_phone" value="' + esc(r.phone || '') + '" placeholder="请输入联系电话"></div>';
     body += '</div>';
-    body += '<div><label class="form-label">配置描述</label><textarea class="form-input w-full" id="ci_desc" rows="3" placeholder="请输入配置描述">' + esc(r.desc || '') + '</textarea></div>';
-    body += '</div>';
+    body += '<div><label class="form-label">备注</label><textarea class="form-input w-full" id="al_remark" rows="2" placeholder="请输入备注说明"></textarea></div>';
     body += '</div>';
     var footer = '<button class="btn btn-default btn-sm" onclick="closeModal(\'' + id + '\')">取消</button>' +
-        '<button class="btn btn-primary btn-sm" onclick="saveAppConfigItem(\'' + mode + '\',' + appId + ',\'' + id + '\')">确定</button>';
+        '<button class="btn btn-primary btn-sm" onclick="saveAppLink(\'' + mode + '\',' + appId + ',\'' + id + '\')">确定</button>';
     openModal(id, title, body, footer, '600px');
 }
 
-/** 保存应用配置项 */
-function saveAppConfigItem(mode, appId, modalId) {
+/** 保存应用链接 */
+function saveAppLink(mode, appId, modalId) {
     closeModal(modalId);
     showToast(mode === 'add' ? '新增成功' : '修改成功', 'success');
 }
 
-/** 删除应用配置项 */
-function deleteAppConfigItem(itemId, appId) {
-    var id = 'modal_delete_configItem_' + itemId;
-    var body = '<div style="padding:10px 0;">确定要删除该配置项吗？删除后不可恢复。</div>';
+/** 删除应用链接 */
+function deleteAppLink(itemId, appId) {
+    var id = 'modal_delete_appLink_' + itemId;
+    var body = '<div style="padding:10px 0;">确定要删除该应用链接吗？删除后不可恢复。</div>';
     var footer = '<button class="btn btn-default btn-sm" onclick="closeModal(\'' + id + '\')">取消</button>' +
-        '<button class="btn btn-danger btn-sm" onclick="confirmDeleteConfigItem(' + itemId + ',' + appId + ',\'' + id + '\')">确定删除</button>';
+        '<button class="btn btn-danger btn-sm" onclick="confirmDeleteAppLink(' + itemId + ',' + appId + ',\'' + id + '\')">确定删除</button>';
     openModal(id, '删除确认', body, footer, 'small');
 }
 
-/** 确认删除配置项 */
-function confirmDeleteConfigItem(itemId, appId, modalId) {
+/** 确认删除应用链接 */
+function confirmDeleteAppLink(itemId, appId, modalId) {
     closeModal(modalId);
     showToast('删除成功', 'success');
+}
+
+/** 应用链接排序 */
+function sortAppLinkTable(field) {
+    showToast('按' + field + '排序', 'info');
 }
 
 /** 应用权限查询弹窗 */
@@ -15612,6 +15611,8 @@ function openAppLogModal(pageKey, rowId) {
     var tabBtns = '<div style="display:flex;border-bottom:1px solid #F0F0F0;margin:0 -20px 16px;padding:0 20px;">';
     tabBtns += '<div id="logTab_op_' + modalId + '" onclick="switchAppLogTab(\'' + modalId + '\',\'op\',this)" style="padding:8px 20px;cursor:pointer;font-size:13px;border-bottom:2px solid var(--primary);color:var(--primary);font-weight:500;">操作日志</div>';
     tabBtns += '<div id="logTab_sub_' + modalId + '" onclick="switchAppLogTab(\'' + modalId + '\',\'sub\',this)" style="padding:8px 20px;cursor:pointer;font-size:13px;border-bottom:2px solid transparent;color:var(--text-secondary);">订阅日志</div>';
+    tabBtns += '<div id="logTab_fullPush_' + modalId + '" onclick="switchAppLogTab(\'' + modalId + '\',\'fullPush\',this)" style="padding:8px 20px;cursor:pointer;font-size:13px;border-bottom:2px solid transparent;color:var(--text-secondary);">全量推送日志</div>';
+    tabBtns += '<div id="logTab_incPush_' + modalId + '" onclick="switchAppLogTab(\'' + modalId + '\',\'incPush\',this)" style="padding:8px 20px;cursor:pointer;font-size:13px;border-bottom:2px solid transparent;color:var(--text-secondary);">增量推送日志</div>';
     tabBtns += '</div>';
 
     // 操作日志配置表格
@@ -15720,9 +15721,119 @@ function openAppLogModal(pageKey, rowId) {
         return html;
     }
 
+    // 全量推送日志配置表格
+    function renderFullPushLogConfig() {
+        var html = '<div style="margin-bottom:8px;font-weight:500;color:var(--text-primary);">全量推送日志配置</div>';
+        html += '<div style="margin-bottom:10px;display:flex;gap:6px;">';
+        html += '<button class="btn btn-primary btn-sm" onclick="showToast(\'全量推送日志配置新增\',\'success\')"><i class="fa fa-plus"></i> 新增</button>';
+        html += '<button class="btn btn-default btn-sm" onclick="showToast(\'全量推送日志配置批量删除\',\'warning\')"><i class="fa fa-trash-o"></i> 批量删除</button>';
+        html += '<div style="flex:1;"></div>';
+        html += '<input type="text" class="form-input" style="width:200px;padding:4px 8px;font-size:12px;" placeholder="请输入配置名称" />';
+        html += '<button class="btn btn-default btn-sm"><i class="fa fa-search"></i> 查询</button>';
+        html += '</div>';
+        html += '<div style="border:1px solid #E8E8E8;border-radius:4px;overflow:hidden;">';
+        html += '<table class="data-table" style="margin:0;"><thead><tr>';
+        html += '<th style="width:40px;"><input type="checkbox" onclick="toggleAllCheckboxes(this)" /></th>';
+        html += '<th style="width:50px;">序号</th><th>配置名称</th><th style="width:120px;">推送类型</th><th style="width:100px;">状态</th><th style="width:180px;">操作</th>';
+        html += '</tr></thead><tbody>';
+        var fpItems = [
+            { id: 1, name: '用户数据全量推送', type: '用户数据', status: true },
+            { id: 2, name: '组织架构全量推送', type: '组织数据', status: true },
+            { id: 3, name: '权限数据全量推送', type: '权限数据', status: false },
+        ];
+        for (var fi = 0; fi < fpItems.length; fi++) {
+            var fp = fpItems[fi];
+            var st3 = fp.status ? '<span class="tag tag-green">启用</span>' : '<span class="tag tag-gray">停用</span>';
+            html += '<tr><td><input type="checkbox" /></td><td>' + (fi+1) + '</td><td>' + fp.name + '</td><td>' + fp.type + '</td><td>' + st3 + '</td>';
+            html += '<td><a href="javascript:;" class="link-btn" onclick="showToast(\'全量推送配置：查看\',\'info\')">查看</a> ';
+            html += '<a href="javascript:;" class="link-btn" onclick="showToast(\'全量推送配置：修改\',\'info\')">修改</a> ';
+            html += '<a href="javascript:;" class="link-btn danger" onclick="showToast(\'全量推送配置：删除\',\'warning\')">删除</a></td></tr>';
+        }
+        html += '</tbody></table></div>';
+        // 全量推送日志列表
+        html += '<div style="margin:16px 0 8px;font-weight:500;color:var(--text-primary);">全量推送日志</div>';
+        html += '<div style="margin-bottom:10px;display:flex;gap:6px;">';
+        html += '<button class="btn btn-default btn-sm" onclick="showToast(\'全量推送日志新增\',\'success\')"><i class="fa fa-plus"></i> 新增</button>';
+        html += '<button class="btn btn-default btn-sm" onclick="showToast(\'全量推送日志导出\',\'info\')"><i class="fa fa-download"></i> 导出</button>';
+        html += '</div>';
+        html += '<div style="border:1px solid #E8E8E8;border-radius:4px;overflow:hidden;">';
+        html += '<table class="data-table" style="margin:0;"><thead><tr>';
+        html += '<th style="width:50px;">序号</th><th>推送任务</th><th>推送类型</th><th>数据量</th><th style="width:100px;">状态</th><th style="width:160px;">推送时间</th><th style="width:80px;">操作</th>';
+        html += '</tr></thead><tbody>';
+        var fpLogItems = [
+            { id: 1, task: '用户数据全量推送', type: '用户数据', count: '12,580条', status: '成功', time: '2026-08-25 02:00:00' },
+            { id: 2, task: '组织架构全量推送', type: '组织数据', count: '1,260条', status: '成功', time: '2026-08-25 02:30:00' },
+            { id: 3, task: '权限数据全量推送', type: '权限数据', count: '8,900条', status: '失败', time: '2026-08-25 03:00:00' },
+        ];
+        for (var fli = 0; fli < fpLogItems.length; fli++) {
+            var flg = fpLogItems[fli];
+            var stTag = flg.status === '成功' ? '<span class="tag tag-green">成功</span>' : '<span class="tag tag-red">失败</span>';
+            html += '<tr><td>' + (fli+1) + '</td><td>' + flg.task + '</td><td>' + flg.type + '</td><td>' + flg.count + '</td><td>' + stTag + '</td><td>' + flg.time + '</td>';
+            html += '<td><a href="javascript:;" class="link-btn" onclick="showToast(\'查看推送详情\',\'info\')">查看</a></td></tr>';
+        }
+        html += '</tbody></table></div>';
+        return html;
+    }
+
+    // 增量推送日志配置表格
+    function renderIncPushLogConfig() {
+        var html = '<div style="margin-bottom:8px;font-weight:500;color:var(--text-primary);">增量推送日志配置</div>';
+        html += '<div style="margin-bottom:10px;display:flex;gap:6px;">';
+        html += '<button class="btn btn-primary btn-sm" onclick="showToast(\'增量推送日志配置新增\',\'success\')"><i class="fa fa-plus"></i> 新增</button>';
+        html += '<button class="btn btn-default btn-sm" onclick="showToast(\'增量推送日志配置批量删除\',\'warning\')"><i class="fa fa-trash-o"></i> 批量删除</button>';
+        html += '<div style="flex:1;"></div>';
+        html += '<input type="text" class="form-input" style="width:200px;padding:4px 8px;font-size:12px;" placeholder="请输入配置名称" />';
+        html += '<button class="btn btn-default btn-sm"><i class="fa fa-search"></i> 查询</button>';
+        html += '</div>';
+        html += '<div style="border:1px solid #E8E8E8;border-radius:4px;overflow:hidden;">';
+        html += '<table class="data-table" style="margin:0;"><thead><tr>';
+        html += '<th style="width:40px;"><input type="checkbox" onclick="toggleAllCheckboxes(this)" /></th>';
+        html += '<th style="width:50px;">序号</th><th>配置名称</th><th style="width:120px;">推送频率</th><th style="width:100px;">状态</th><th style="width:180px;">操作</th>';
+        html += '</tr></thead><tbody>';
+        var ipItems = [
+            { id: 1, name: '用户增量推送', freq: '实时', status: true },
+            { id: 2, name: '部门增量推送', freq: '5分钟', status: true },
+            { id: 3, name: '角色增量推送', freq: '10分钟', status: false },
+        ];
+        for (var ii = 0; ii < ipItems.length; ii++) {
+            var ip = ipItems[ii];
+            var st4 = ip.status ? '<span class="tag tag-green">启用</span>' : '<span class="tag tag-gray">停用</span>';
+            html += '<tr><td><input type="checkbox" /></td><td>' + (ii+1) + '</td><td>' + ip.name + '</td><td>' + ip.freq + '</td><td>' + st4 + '</td>';
+            html += '<td><a href="javascript:;" class="link-btn" onclick="showToast(\'增量推送配置：查看\',\'info\')">查看</a> ';
+            html += '<a href="javascript:;" class="link-btn" onclick="showToast(\'增量推送配置：修改\',\'info\')">修改</a> ';
+            html += '<a href="javascript:;" class="link-btn danger" onclick="showToast(\'增量推送配置：删除\',\'warning\')">删除</a></td></tr>';
+        }
+        html += '</tbody></table></div>';
+        // 增量推送日志列表
+        html += '<div style="margin:16px 0 8px;font-weight:500;color:var(--text-primary);">增量推送日志</div>';
+        html += '<div style="margin-bottom:10px;display:flex;gap:6px;">';
+        html += '<button class="btn btn-default btn-sm" onclick="showToast(\'增量推送日志新增\',\'success\')"><i class="fa fa-plus"></i> 新增</button>';
+        html += '<button class="btn btn-default btn-sm" onclick="showToast(\'增量推送日志导出\',\'info\')"><i class="fa fa-download"></i> 导出</button>';
+        html += '</div>';
+        html += '<div style="border:1px solid #E8E8E8;border-radius:4px;overflow:hidden;">';
+        html += '<table class="data-table" style="margin:0;"><thead><tr>';
+        html += '<th style="width:50px;">序号</th><th>推送任务</th><th>推送方式</th><th>数据量</th><th style="width:100px;">状态</th><th style="width:160px;">推送时间</th><th style="width:80px;">操作</th>';
+        html += '</tr></thead><tbody>';
+        var ipLogItems = [
+            { id: 1, task: '用户增量推送', mode: '实时', count: '128条', status: '成功', time: '2026-08-25 14:25:00' },
+            { id: 2, task: '部门增量推送', mode: '定时(5min)', count: '36条', status: '成功', time: '2026-08-25 14:20:00' },
+            { id: 3, task: '角色增量推送', mode: '定时(10min)', count: '15条', status: '成功', time: '2026-08-25 14:10:00' },
+        ];
+        for (var ili = 0; ili < ipLogItems.length; ili++) {
+            var ilg = ipLogItems[ili];
+            var stTag2 = ilg.status === '成功' ? '<span class="tag tag-green">成功</span>' : '<span class="tag tag-red">失败</span>';
+            html += '<tr><td>' + (ili+1) + '</td><td>' + ilg.task + '</td><td>' + ilg.mode + '</td><td>' + ilg.count + '</td><td>' + stTag2 + '</td><td>' + ilg.time + '</td>';
+            html += '<td><a href="javascript:;" class="link-btn" onclick="showToast(\'查看推送详情\',\'info\')">查看</a></td></tr>';
+        }
+        html += '</tbody></table></div>';
+        return html;
+    }
+
     var body = tabBtns;
     body += '<div id="logContent_op_' + modalId + '">' + renderOpLogConfig() + '</div>';
     body += '<div id="logContent_sub_' + modalId + '" style="display:none;">' + renderSubLogConfig() + '</div>';
+    body += '<div id="logContent_fullPush_' + modalId + '" style="display:none;">' + renderFullPushLogConfig() + '</div>';
+    body += '<div id="logContent_incPush_' + modalId + '" style="display:none;">' + renderIncPushLogConfig() + '</div>';
 
     var footer = '<button class="btn btn-default btn-sm" onclick="closeModal(\'' + modalId + '\')">关闭</button>';
     openModal(modalId, '应用日志 - ' + appName, body, footer, 'xlarge');
@@ -16839,25 +16950,32 @@ var prdData = {
         redFields: ['batchDeleteFlow'],
 },
     'app-list': {
-        background: '【模式A+B+查询+详情多Tab】应用列表是应用管理的主入口，负责应用基础信息展示和应用级配置管理。走查覆盖3类功能：①应用列表查询与批量删除 ②应用配置管理（配置项CRUD+权限信息查询）③应用日志管理（操作日志/订阅日志的配置管理+日志汇集+导出）。原型实现：标准表格列表，支持多条件查询、字段排序、批量删除；操作列包含详情、应用配置、应用日志、变更申请、子应用管理5个入口；应用配置弹窗内管理配置项（增删改查+批量删除+排序）和权限信息查询；应用日志弹窗采用Tab结构（操作日志/订阅日志），每个Tab包含配置管理区和日志列表区，支持新增、修改、删除、批量删除、查询、导出等操作。',
+        background: '【模式A+B+查询+详情多Tab】应用列表是应用管理的主入口，负责应用基础信息展示和应用级配置管理。走查覆盖3大类功能：①应用列表查询与批量删除 ②应用配置管理（应用链接CRUD+权限信息查询）③应用日志管理（操作日志/订阅日志/全量推送日志/增量推送日志的配置管理+日志汇集+导出）。原型实现：标准表格列表，支持多条件查询、字段排序、批量删除；操作列包含详情、应用配置、应用日志、变更申请、子应用管理5个入口；应用配置弹窗内管理应用链接（增删改查+批量删除+排序）和权限信息查询；应用日志弹窗采用4Tab结构（操作日志/订阅日志/全量推送日志/增量推送日志），每个Tab包含配置管理区和日志列表区，支持新增、修改、删除、批量删除、查询、字段排序、导出等操作。',
         targetUsers: '系统管理员、平台管理员、应用管理员',
-        coreFeatures: '1.多条件组合查询 2.列表字段排序 3.批量删除 4.应用配置管理（配置项CRUD+权限查询） 5.应用日志管理（操作日志+订阅日志的配置与汇集） 6.日志导出 7.子应用管理 8.变更申请',
-        businessFlow: '进入应用列表页 → 设置查询条件 → 查看列表 → 点击"应用配置" → 管理配置项（新增/修改/删除/查询）→ 点击"权限查询"查看应用权限 → 点击"应用日志" → 切换操作日志/订阅日志Tab → 管理日志配置 → 查看日志列表 → 导出日志 → 返回列表 → 勾选多条 → 批量删除',
+        coreFeatures: '1.多条件组合查询 2.列表字段排序 3.批量删除 4.应用链接管理（新增/修改/删除/查询） 5.应用权限信息查询 6.操作日志配置管理+信息汇集 7.订阅日志配置管理+信息汇集 8.全量推送日志配置管理+信息汇集 9.增量推送日志配置管理+信息汇集 10.日志导出 11.子应用管理 12.变更申请',
+        businessFlow: '进入应用列表页 → 设置查询条件 → 查看列表 → 点击"应用配置" → 管理应用链接（新增/修改/删除/查询）→ 点击"权限查询"查看应用权限 → 点击"应用日志" → 切换4类日志Tab → 管理日志配置 → 查看日志列表 → 导出日志 → 返回列表 → 勾选多条 → 批量删除',
         pageInfo: '标准表格列表页；查询区（应用名称/履职领域/状态）；工具栏（监测配置/统计配置/批量删除/列设置）；列表列（复选框/序号/应用名称排序/履职领域/状态/建设单位/供应商/监测状态/创建时间排序/操作列）；操作列（详情/应用配置/应用日志/变更申请/子应用管理）；5条模拟数据。',
-        dataModel: '核心实体：应用（id/名称/编码/履职领域/状态/建设单位/供应商/监测状态/创建时间）；子实体：配置项（id/名称/类型/配置值/状态/排序号/描述）；应用权限（id/权限名称/权限编码/权限类型/状态）；日志配置（id/配置名称/日志类型/状态）；日志记录（id/操作人/操作类型/操作内容/操作时间/IP）。',
+        dataModel: '核心实体：应用（id/名称/编码/履职领域/状态/建设单位/供应商/监测状态/创建时间）；子实体：应用链接（id/链接名称/链接地址/链接类型/打开方式/排序号/状态/联系人/联系电话）；应用权限（id/权限名称/权限编码/权限类型/状态）；日志配置（id/配置名称/日志类型/状态/排序号）；日志记录（id/操作人/操作类型/操作内容/操作时间/IP）。',
         deleteFlow: '【批量删除】勾选多条应用记录 → 点击"批量删除"按钮 → 弹出二次确认弹窗（显示选中数量）→ 确认删除 → 批量逻辑删除 → Toast提示成功删除数量。删除约束：已被引用的应用不可删除，需先解除引用关系；启用状态的应用删除时有拦截提示；删除操作记录操作日志。',
         queryFlow: '【列表查询】支持多条件组合查询（应用名称模糊搜索+履职领域下拉+状态下拉），多条件为AND关系。输入/选择条件后点击"查询"按钮 → 列表按条件过滤显示 → 点击"重置"按钮清空所有条件，恢复默认列表。支持分页查询，默认10条/页。',
         sortConfig: '【列表排序】支持应用名称、创建时间字段排序。排序方式：点击表头切换排序状态，顺序为 无排序→升序→降序→无排序 循环切换；排序状态用箭头图标标识（↑升序，↓降序）；默认按创建时间降序排列。仅支持单列排序。',
-        appConfigFlow: '【应用配置管理】点击操作列"应用配置" → 打开应用配置弹窗 → 配置项表格展示 → 支持按配置名称/配置类型/状态查询 → 点击"新增配置" → 填写配置项名称/类型/配置值/排序号/状态/描述 → 保存 → 配置项新增成功 → 点击"修改" → 修改配置项信息 → 保存 → 修改成功 → 点击"删除" → 二次确认 → 删除成功 → 点击"查看" → 查看配置项详情。支持配置项排序号管理。',
+        appLinkAddFlow: '【应用链接新增】点击操作列"应用配置" → 打开应用配置弹窗 → 点击"新增链接"按钮 → 打开新增链接弹窗 → 填写链接名称（必填）、选择链接类型（内部/外部/H5）、填写链接地址（必填）、选择打开方式、设置排序号、选择状态、填写联系人/电话/备注 → 点击确定 → 校验通过 → 应用链接新增成功 → Toast提示。',
+        appLinkEditFlow: '【应用链接修改】在应用链接列表 → 点击操作列"修改" → 打开修改弹窗 → 修改链接名称、链接类型、链接地址、打开方式、排序号、状态、联系人等信息 → 点击确定 → 修改成功 → Toast提示。',
+        appLinkDeleteFlow: '【应用链接删除】在应用链接列表 → 点击操作列"删除" → 弹出二次确认弹窗 → 确认删除 → 删除成功 → Toast提示"删除成功" → 列表刷新。',
+        appLinkQueryFlow: '【应用链接查询】支持按链接名称（模糊）、链接类型（下拉：内部链接/外部链接/H5链接）、状态（下拉：启用/停用）多条件组合查询，AND关系。支持链接名称字段排序。',
         appPermQueryFlow: '【应用权限信息查询】在应用配置弹窗中 → 点击"权限查询"按钮 → 打开应用权限信息弹窗 → 展示该应用所有权限列表（权限名称/权限编码/权限类型/状态）→ 支持按权限类型筛选 → 权限信息只读展示，不可修改。',
         appLogOpConfigFlow: '【操作日志配置管理】点击操作列"应用日志" → 默认展示操作日志Tab → 操作日志配置区 → 点击"新增" → 填写配置名称/日志类型/状态 → 保存 → 配置新增成功 → 点击"修改" → 修改配置信息 → 保存 → 修改成功 → 点击"删除" → 二次确认 → 删除成功 → 勾选多条 → 批量删除 → 二次确认 → 批量删除成功 → 支持按配置名称查询 → 支持查询字段排序。',
         appLogOpAggregateFlow: '【操作日志信息汇集】操作日志Tab下方展示操作日志列表 → 汇集该应用的所有操作日志记录（操作人/操作类型/操作内容/操作时间/IP地址）→ 支持新增日志记录 → 支持日志导出（Excel格式）→ 日志按操作时间倒序排列。',
         appLogSubConfigFlow: '【订阅日志配置管理】切换到订阅日志Tab → 订阅日志配置区 → 点击"新增" → 填写配置名称/订阅类型/状态 → 保存 → 配置新增成功 → 点击"修改" → 修改配置信息 → 保存 → 修改成功 → 点击"删除" → 二次确认 → 删除成功 → 勾选多条 → 批量删除 → 二次确认 → 批量删除成功 → 支持按配置名称查询 → 支持查询字段排序。',
         appLogSubAggregateFlow: '【订阅日志信息汇集】订阅日志Tab下方展示订阅日志列表 → 汇集该应用的所有订阅日志记录 → 支持新增订阅日志 → 支持订阅日志导出（Excel格式）→ 日志按时间倒序排列。',
+        appLogFullPushConfigFlow: '【全量推送日志配置管理】切换到全量推送日志Tab → 全量推送日志配置区 → 点击"新增" → 填写配置名称/推送类型/状态 → 保存 → 配置新增成功 → 点击"修改" → 修改配置信息 → 保存 → 修改成功 → 点击"删除" → 二次确认 → 删除成功 → 勾选多条 → 批量删除 → 二次确认 → 批量删除成功 → 支持按配置名称查询 → 支持查询字段排序。',
+        appLogFullPushAggregateFlow: '【全量推送日志信息汇集】全量推送日志Tab下方展示全量推送日志列表 → 汇集该应用的所有全量推送日志记录（推送任务/推送类型/数据量/状态/推送时间）→ 支持新增推送日志 → 支持全量推送日志导出（Excel格式）→ 日志按推送时间倒序排列 → 支持查看推送详情。',
+        appLogIncPushConfigFlow: '【增量推送日志配置管理】切换到增量推送日志Tab → 增量推送日志配置区 → 点击"新增" → 填写配置名称/推送频率/状态 → 保存 → 配置新增成功 → 点击"修改" → 修改配置信息 → 保存 → 修改成功 → 点击"删除" → 二次确认 → 删除成功 → 勾选多条 → 批量删除 → 二次确认 → 批量删除成功 → 支持按配置名称查询 → 支持查询字段排序 → 支持配置查看。',
+        appLogIncPushAggregateFlow: '【增量推送日志信息汇集】增量推送日志Tab下方展示增量推送日志列表 → 汇集该应用的所有增量推送日志记录（推送任务/推送方式/数据量/状态/推送时间）→ 支持新增推送日志 → 支持增量推送日志导出（Excel格式）→ 日志按推送时间倒序排列 → 支持查看推送详情。',
         exceptionHandling: '1.空数据状态：列表显示空状态占位图+提示文字"暂无数据" 2.网络异常：Toast提示"网络连接失败，请稍后重试" 3.数据加载失败：显示"加载失败，点击重试"按钮 4.删除被引用数据：拦截删除并提示"该应用已被引用，无法删除"',
         permissionReq: '1.系统管理员：拥有全部权限 2.平台管理员：拥有全部权限 3.分级管理员：仅查询权限，不可删除 4.普通用户：无访问权限，菜单不可见',
-        interaction: '多条件组合查询；表头点击排序；复选框多选+批量删除；操作列点击打开对应弹窗；应用配置弹窗内配置项管理+权限查询；应用日志Tab切换+配置管理+日志列表+导出；子应用管理弹窗',
-        redFields: ['deleteFlow', 'queryFlow', 'sortConfig', 'appConfigFlow', 'appPermQueryFlow', 'appLogOpConfigFlow', 'appLogOpAggregateFlow', 'appLogSubConfigFlow', 'appLogSubAggregateFlow'],
+        interaction: '多条件组合查询；表头点击排序；复选框多选+批量删除；操作列点击打开对应弹窗；应用配置弹窗内应用链接管理+权限查询；应用日志4Tab切换+配置管理+日志列表+导出；子应用管理弹窗',
+        redFields: ['deleteFlow', 'queryFlow', 'sortConfig', 'appLinkAddFlow', 'appLinkEditFlow', 'appLinkDeleteFlow', 'appLinkQueryFlow', 'appPermQueryFlow', 'appLogOpConfigFlow', 'appLogOpAggregateFlow', 'appLogSubConfigFlow', 'appLogSubAggregateFlow', 'appLogFullPushConfigFlow', 'appLogFullPushAggregateFlow', 'appLogIncPushConfigFlow', 'appLogIncPushAggregateFlow'],
     },
     'app-monitor': {
         background: '【全功能覆盖】应用监测是应用管理的核心模块，负责对应用的使用、运行、访问、活跃、行为、错误、性能、能力、通知、待办等11大类、14个细分子项进行监测配置管理和统计数据分析。走查覆盖100+功能点，包含每个子项的配置管理（新增/修改/删除/批量删除/查询字段排序/查看/查询7项）和统计数据（统计/导出2项），共9项功能/子项。原型实现：11个主分类Tab+细分子类型Tab+配置管理/统计数据双层Tab的三级结构；每个子类型独立维护配置项和统计数据；配置管理支持完整CRUD+批量删除+字段排序；统计数据支持动态列+日期范围查询+Excel导出。',
