@@ -15852,9 +15852,13 @@ function switchAppLogTab(modalId, tabKey, el) {
     el.style.fontWeight = '500';
     var opDiv = document.getElementById('logContent_op_' + modalId);
     var subDiv = document.getElementById('logContent_sub_' + modalId);
-    if (opDiv && subDiv) {
+    var fullPushDiv = document.getElementById('logContent_fullPush_' + modalId);
+    var incPushDiv = document.getElementById('logContent_incPush_' + modalId);
+    if (opDiv && subDiv && fullPushDiv && incPushDiv) {
         opDiv.style.display = tabKey === 'op' ? 'block' : 'none';
         subDiv.style.display = tabKey === 'sub' ? 'block' : 'none';
+        fullPushDiv.style.display = tabKey === 'fullPush' ? 'block' : 'none';
+        incPushDiv.style.display = tabKey === 'incPush' ? 'block' : 'none';
     }
 }
 
@@ -17001,7 +17005,21 @@ var prdData = {
         performanceFlow: '【性能指标】性能指标面板 → 展示应用性能关键指标（平均响应时间、峰值响应时间、吞吐量、并发用户数等）→ 性能趋势图展示 → 性能评分及健康度评估 → 性能瓶颈分析。',
         usageFlow: '【使用统计】使用统计面板 → 展示应用使用情况（访问次数、使用时长、功能使用率等）→ 支持按时间/用户/机构维度统计 → 使用趋势图展示 → 热门功能排行。',
         userStatFlow: '【用户统计】用户统计面板 → 展示应用用户使用数据（活跃用户数、新增用户数、用户留存率等）→ 用户分布统计 → 用户活跃度排行 → 用户使用时长统计。',
-        redFields: ['queryFlow', 'viewFlow', 'sortConfig', 'exportFlow', 'realTimeMonitorFlow', 'historyDataFlow', 'alarmFlow', 'alarmConfigFlow', 'performanceFlow', 'usageFlow', 'userStatFlow', 'orgStatFlow'],
+        orgStatFlow: '【机构统计】机构统计面板 → 按组织机构维度展示应用使用数据（各机构访问量、使用人数、使用时长等）→ 支持机构层级钻取 → 机构使用排行 → 机构活跃度对比分析。',
+        usageExportFlow: '【应用使用监测导出】在使用监测Tab → 设置时间范围和筛选条件 → 点击"导出"按钮 → 导出应用使用监测数据（应用名称/使用次数/使用时长/功能使用率等）→ 导出格式为Excel → 支持按日/周/月维度导出。',
+        runStatExportFlow: '【应用运行统计导出】在运行统计Tab → 设置筛选条件 → 点击"导出"按钮 → 导出应用运行统计数据（启动次数/启动平均时长/运行时长/崩溃率等）→ 导出格式为Excel → 支持按日统计维度导出。',
+        userVisitExportFlow: '【用户访问日统计导出】在用户访问Tab → 选择日期范围 → 点击"导出"按钮 → 按日导出用户访问统计数据（日期/访问用户数/访问次数/人均访问次数等）→ 导出格式为Excel。',
+        appVisitExportFlow: '【应用访问日统计导出】在用户访问Tab → 选择日期范围 → 点击"导出"按钮 → 按应用维度按日导出访问统计数据（应用名称/日期/访问量/独立用户数等）→ 导出格式为Excel。',
+        activeUserExportFlow: '【日活跃用户数导出】在用户活跃Tab → 选择日期范围 → 点击"导出"按钮 → 按日导出活跃用户数数据（日期/日活跃用户数/环比增长率等）→ 导出格式为Excel。',
+        activeUserMonthExportFlow: '【月活跃用户数导出】在用户活跃Tab → 选择月份范围 → 点击"导出"按钮 → 按月导出活跃用户数数据（月份/月活跃用户数/环比增长率等）→ 导出格式为Excel。',
+        activePeriodExportFlow: '【用户活跃数时段导出】在用户活跃Tab → 选择日期 → 点击"导出"按钮 → 按时段（小时）导出用户活跃数分布数据（时段/活跃用户数/占比）→ 导出格式为Excel。',
+        errorExportFlow: '【错误和异常导出】在错误信息Tab → 设置筛选条件（错误类型/时间范围）→ 点击"导出"按钮 → 导出错误和异常数据（错误类型/错误次数/影响用户数/发生时间等）→ 导出格式为Excel。',
+        startupAvgTimeExportFlow: '【启动平均时长导出】在性能监控Tab → 选择时间范围 → 点击"导出"按钮 → 导出启动平均时长统计数据（日期/平均启动时长/Android启动时长/iOS启动时长等）→ 导出格式为Excel。',
+        abilityCallExportFlow: '【能力调用数导出】在能力监测Tab → 选择时间范围 → 点击"导出"按钮 → 导出能力调用数统计（能力名称/调用次数/成功次数/失败次数/成功率等）→ 导出格式为Excel。',
+        abilityCallAbnormalExportFlow: '【能力调用异常数导出】在能力监测Tab → 选择时间范围 → 点击"导出"按钮 → 导出能力调用异常数据（能力名称/异常次数/异常类型/发生时间等）→ 导出格式为Excel。',
+        noticeDailyExportFlow: '【日通知数导出】在通知统计Tab → 选择日期范围 → 点击"导出"按钮 → 按日导出通知发送统计数据（日期/通知发送数/到达数/阅读数/到达率等）→ 导出格式为Excel。',
+        todoDailyExportFlow: '【日待办次数导出】在待办统计Tab → 选择日期范围 → 点击"导出"按钮 → 按日导出待办统计数据（日期/待办发起数/已办数/待办数/办结率等）→ 导出格式为Excel。',
+        redFields: ['queryFlow', 'viewFlow', 'sortConfig', 'exportFlow', 'realTimeMonitorFlow', 'historyDataFlow', 'alarmFlow', 'alarmConfigFlow', 'performanceFlow', 'usageFlow', 'userStatFlow', 'orgStatFlow', 'usageExportFlow', 'runStatExportFlow', 'userVisitExportFlow', 'appVisitExportFlow', 'activeUserExportFlow', 'activeUserMonthExportFlow', 'activePeriodExportFlow', 'errorExportFlow', 'startupAvgTimeExportFlow', 'abilityCallExportFlow', 'abilityCallAbnormalExportFlow', 'noticeDailyExportFlow', 'todoDailyExportFlow'],
 },
 
     /* ---------- 待办管理 ---------- */
