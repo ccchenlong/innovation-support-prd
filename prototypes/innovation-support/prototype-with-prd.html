@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
@@ -11339,6 +11339,10 @@ function handleAction(actionKey, pageKey, rowId) {
             break;
         case 'adjustPost': openAdjustPostModal(rowId); break;
         case 'editUser': openEditUserModal(rowId); break;
+        case 'paramConfig':
+            if (pageKey === 'ticket-evaluation') { openEvalParamConfigModal(rowId); break; }
+            showToast('参数设置', 'info');
+            break;
         case 'disable': showToast('禁用用户', 'warning'); break;
         case 'sync': showToast('同步用户', 'info'); break;
         case 'resetPwd': showToast('重置密码', 'info'); break;
@@ -12124,6 +12128,24 @@ function openAddModal(pageKey) {
         body += renderFormField('操作IP', `<input type="text" class="form-input w-full" id="add_handleIp" placeholder="请输入操作IP" />`);
         body += '</div>';
         body += renderFormField('备注', `<textarea class="form-input w-full" id="add_remark" rows="3" placeholder="请输入备注"></textarea>`);
+    } else if (pageKey === 'ticket-type') {
+        // 工单类型管理 — 新增工单类型
+        body = renderFormField('工单类型名称', `<input type="text" class="form-input w-full" id="add_name" placeholder="请输入类型名称" />`, true);
+        body += renderFormField('工单类型编码', `<input type="text" class="form-input w-full" id="add_code" placeholder="请输入类型编码（字母+下划线，如 GENERAL）" />`, true);
+        body += renderFormField('工单分类', `<select class="form-input w-full" id="add_category"><option value="consult">咨询类</option><option value="complaint">投诉类</option><option value="suggestion">建议类</option><option value="business">业务办理</option><option value="fault">故障报修</option><option value="auth">权限申请</option><option value="other">其他</option></select>`, true);
+        body += renderFormField('排序号', `<input type="number" class="form-input" id="add_sortNo" style="width:120px;" value="1" min="0" max="9999" />`);
+        body += renderFormField('状态', `<span class="toggle-switch on" id="add_status" onclick="this.classList.toggle('on')"></span>`);
+        body += renderFormField('备注', `<textarea class="form-input w-full" id="add_remark" rows="3" placeholder="请输入备注说明"></textarea>`);
+    } else if (pageKey === 'ticket-evaluation') {
+        // 工单评价管理 — 新增评价
+        body = renderFormField('评价名称', `<input type="text" class="form-input w-full" id="add_name" placeholder="请输入评价名称" />`, true);
+        body += renderFormField('评价类型', `<select class="form-input w-full" id="add_evalType"><option value="satisfaction">满意度</option><option value="quality">服务质量</option><option value="efficiency">效率</option></select>`, true);
+        body += renderFormField('评价维度', `<input type="text" class="form-input w-full" id="add_dimension" placeholder="请输入评价维度，多个用顿号分隔" />`, true);
+        body += renderFormField('评价等级', `<select class="form-input w-full" id="add_level"><option value="5">5级（非常满意/满意/一般/不满意/非常不满意）</option><option value="3">3级（满意/一般/不满意）</option></select>`);
+        body += renderFormField('是否必填', `<span class="toggle-switch on" id="add_required" onclick="this.classList.toggle('on')"></span>`);
+        body += renderFormField('允许追加评价', `<span class="toggle-switch" id="add_allowAppend" onclick="this.classList.toggle('on')"></span>`);
+        body += renderFormField('状态', `<span class="toggle-switch on" id="add_status" onclick="this.classList.toggle('on')"></span>`);
+        body += renderFormField('备注', `<textarea class="form-input w-full" id="add_remark" rows="3" placeholder="请输入备注说明"></textarea>`);
     } else if (pageKey === 'dict-manage') {
         // 字典管理 — 新增字典
         body = renderFormField('字典名称', `<input type="text" class="form-input w-full" id="add_name" placeholder="请输入字典名称" />`, true);
@@ -12429,6 +12451,37 @@ function openEditModal(pageKey, rowId) {
         body = renderFormField('条线名称', `<input type="text" class="form-input w-full" id="add_name" value="${esc(row.name)}" />`, true);
         body += renderFormField('条线编码', `<input type="text" class="form-input w-full" id="add_code" value="${esc(row.code)}" readonly style="background:#F5F5F5;" />`, true);
         body += renderFormField('状态', `<span class="toggle-switch ${row.status ? 'on' : ''}" id="add_status" onclick="this.classList.toggle('on')"></span>`);
+    } else if (pageKey === 'ticket-type') {
+        body = renderFormField('工单类型名称', `<input type="text" class="form-input w-full" id="add_name" value="${esc(row.name)}" />`, true);
+        body += renderFormField('工单类型编码', `<input type="text" class="form-input w-full" id="add_code" value="${esc(row.code)}" readonly style="background:#F5F5F5;" />`, true);
+        body += renderFormField('工单分类', `<select class="form-input w-full" id="add_category">
+            <option value="consult" ${row.category === 'consult' ? 'selected' : ''}>咨询类</option>
+            <option value="complaint" ${row.category === 'complaint' ? 'selected' : ''}>投诉类</option>
+            <option value="suggestion" ${row.category === 'suggestion' ? 'selected' : ''}>建议类</option>
+            <option value="business" ${row.category === 'business' ? 'selected' : ''}>业务办理</option>
+            <option value="fault" ${row.category === 'fault' ? 'selected' : ''}>故障报修</option>
+            <option value="auth" ${row.category === 'auth' ? 'selected' : ''}>权限申请</option>
+            <option value="other" ${row.category === 'other' ? 'selected' : ''}>其他</option>
+        </select>`, true);
+        body += renderFormField('排序号', `<input type="number" class="form-input" id="add_sortNo" style="width:120px;" value="${row.sortNo || 1}" min="0" max="9999" />`);
+        body += renderFormField('状态', `<span class="toggle-switch ${row.status ? 'on' : ''}" id="add_status" onclick="this.classList.toggle('on')"></span>`);
+        body += renderFormField('备注', `<textarea class="form-input w-full" id="add_remark" rows="3">${esc(row.remark || '')}</textarea>`);
+    } else if (pageKey === 'ticket-evaluation') {
+        body = renderFormField('评价名称', `<input type="text" class="form-input w-full" id="add_name" value="${esc(row.name)}" />`, true);
+        body += renderFormField('评价类型', `<select class="form-input w-full" id="add_evalType">
+            <option value="satisfaction" ${row.evalType === 'satisfaction' ? 'selected' : ''}>满意度</option>
+            <option value="quality" ${row.evalType === 'quality' ? 'selected' : ''}>服务质量</option>
+            <option value="efficiency" ${row.evalType === 'efficiency' ? 'selected' : ''}>效率</option>
+        </select>`, true);
+        body += renderFormField('评价维度', `<input type="text" class="form-input w-full" id="add_dimension" value="${esc(row.dimension || '')}" />`);
+        body += renderFormField('评价等级', `<select class="form-input w-full" id="add_level">
+            <option value="5">5级（非常满意/满意/一般/不满意/非常不满意）</option>
+            <option value="3">3级（满意/一般/不满意）</option>
+        </select>`);
+        body += renderFormField('是否必填', `<span class="toggle-switch ${row.required !== false ? 'on' : ''}" id="add_required" onclick="this.classList.toggle('on')"></span>`);
+        body += renderFormField('允许追加评价', `<span class="toggle-switch ${row.allowAppend ? 'on' : ''}" id="add_allowAppend" onclick="this.classList.toggle('on')"></span>`);
+        body += renderFormField('状态', `<span class="toggle-switch ${row.status ? 'on' : ''}" id="add_status" onclick="this.classList.toggle('on')"></span>`);
+        body += renderFormField('备注', `<textarea class="form-input w-full" id="add_remark" rows="3">${esc(row.remark || '')}</textarea>`);
     } else {
         // 通用编辑
         body = renderFormField('名称', `<input type="text" class="form-input w-full" id="add_name" value="${esc(row.name || row.userName || '')}" />`, true);
@@ -12508,6 +12561,37 @@ function confirmEdit(pageKey, modalId, rowId) {
     showToast('编辑成功', 'success');
 }
 
+
+/** 工单评价 - 参数设置弹窗 */
+function openEvalParamConfigModal(rowId) {
+    const config = pageConfigs['ticket-evaluation'];
+    const row = config.data.find(r => r.id === rowId);
+    if (!row) return;
+    const id = 'modal_eval_param_' + rowId;
+    let body = '';
+    body += '<div style="padding:4px 0 12px 0;font-size:13px;color:var(--text-secondary);">评价名称：<span style="color:var(--text-primary);font-weight:500;">' + esc(row.name) + '</span></div>';
+    body += renderFormField('评价等级', `<select class="form-input w-full" id="eval_level">
+        <option value="5">5级（非常满意 / 满意 / 一般 / 不满意 / 非常不满意）</option>
+        <option value="3">3级（满意 / 一般 / 不满意）</option>
+    </select>`);
+    body += '<div style="margin-bottom:16px;">';
+    body += '<div style="font-size:13px;color:var(--text-primary);margin-bottom:8px;font-weight:500;">等级标签配置</div>';
+    body += '<div class="grid grid-cols-5 gap-2">';
+    const levels = ['非常满意', '满意', '一般', '不满意', '非常不满意'];
+    const colors = ['#00B42A', '#23C343', '#FF7D00', '#F53F3F', '#D91D11'];
+    for (var li = 0; li < levels.length; li++) {
+        body += '<div style="text-align:center;">';
+        body += '<div style="font-size:12px;color:' + colors[li] + ';margin-bottom:4px;">' + levels[li] + '</div>';
+        body += '<input type="text" class="form-input" style="font-size:12px;text-align:center;" value="' + levels[li] + '" />';
+        body += '</div>';
+    }
+    body += '</div></div>';
+    body += renderFormField('是否必填', `<span class="toggle-switch on" id="eval_required" onclick="this.classList.toggle('on')"></span><span class="ml-2 text-sm" style="color:var(--text-tertiary);">开启后用户提交评价时必须填写</span>`);
+    body += renderFormField('允许追加评价', `<span class="toggle-switch" id="eval_append" onclick="this.classList.toggle('on')"></span><span class="ml-2 text-sm" style="color:var(--text-tertiary);">开启后用户可在工单完成后追加评价</span>`);
+    body += renderFormField('评价说明', `<textarea class="form-input w-full" id="eval_desc" rows="3" placeholder="请输入评价说明，将展示在评价入口处">请根据您的真实体验进行评价，您的反馈将帮助我们持续改进服务质量。</textarea>`);
+    const footer = '<button class="px-4 py-1.5 text-sm rounded border" style="border-color:#D9D9D9;color:var(--text-secondary);background:#fff;" onclick="closeModal(\'' + id + '\')">取消</button><button class="px-4 py-1.5 text-sm text-white rounded" style="background:var(--primary);" onclick="closeModal(\'' + id + '\');showToast(\'参数设置已保存\',\'success\');">保存</button>';
+    openModal(id, '评价参数设置', body, footer, 'large');
+}
 
 /** 应用日志 - 操作日志配置 - 新增/编辑弹窗 */
 function openAppLogOpConfigModal(mode, row) {
