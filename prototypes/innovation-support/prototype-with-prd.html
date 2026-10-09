@@ -1064,119 +1064,6 @@ var pageConfigs = {
                 ],
             },
         },
-        customTabRender: {
-            config: function() {
-                var cards = [
-                    { icon: 'fa-plus-circle', color: '#165DFF', title: '工单新增配置', desc: '配置门户用户新增工单的字段、校验规则和权限', items: [
-                        { label: '允许门户用户新增工单', value: false, type: 'switch' },
-                        { label: '新增表单字段配置', value: '未配置', type: 'tag', tagColor: 'gray' },
-                        { label: '允许上传附件', value: false, type: 'switch' },
-                        { label: '附件大小限制', value: '未配置', type: 'text' },
-                    ]},
-                    { icon: 'fa-edit', color: '#00B42A', title: '工单修改配置', desc: '配置工单修改权限、可编辑字段和状态约束', items: [
-                        { label: '允许用户修改自己工单', value: false, type: 'switch' },
-                        { label: '允许修改的状态', value: '未配置', type: 'tag', tagColor: 'gray' },
-                        { label: '可编辑字段', value: '未配置', type: 'text' },
-                        { label: '只读字段', value: '未配置', type: 'text' },
-                    ]},
-                    { icon: 'fa-trash-o', color: '#F53F3F', title: '工单删除配置', desc: '配置删除按钮显示、状态约束和操作日志', items: [
-                        { label: '显示删除按钮', value: false, type: 'switch' },
-                        { label: '允许删除的状态', value: '未配置', type: 'tag', tagColor: 'gray' },
-                        { label: '删除操作留日志', value: false, type: 'switch' },
-                        { label: '删除方式', value: '未配置', type: 'text' },
-                    ]},
-                    { icon: 'fa-sort', color: '#722ED1', title: '查询字段排序配置', desc: '配置列表列展示、列顺序和排序能力', items: [
-                        { label: '默认展示列', value: '未配置', type: 'text' },
-                        { label: '支持排序列', value: '未配置', type: 'text' },
-                        { label: '列顺序可配置', value: false, type: 'switch' },
-                        { label: '按角色差异化列', value: false, type: 'switch' },
-                    ]},
-                    { icon: 'fa-eye', color: '#13C2C2', title: '工单查看配置', desc: '配置详情页字段显隐、脱敏和按钮控制', items: [
-                        { label: '详情页字段脱敏', value: false, type: 'switch' },
-                        { label: '按钮显隐配置', value: '未配置', type: 'tag', tagColor: 'gray' },
-                        { label: '仅查看自己的工单', value: false, type: 'switch' },
-                        { label: '查看流转审批日志', value: false, type: 'switch' },
-                    ]},
-                    { icon: 'fa-search', color: '#FF7D00', title: '工单查询配置', desc: '配置查询条件、默认值和数据范围', items: [
-                        { label: '查询条件', value: '未配置', type: 'text' },
-                        { label: '默认分页大小', value: '未配置', type: 'text' },
-                        { label: '数据范围', value: '未配置', type: 'tag', tagColor: 'gray' },
-                        { label: '支持时间范围查询', value: false, type: 'switch' },
-                    ]},
-                    { icon: 'fa-clock-o', color: '#1890FF', title: '待处理工单配置', desc: '配置待处理状态集合、列表字段和入口显示', items: [
-                        { label: '待处理状态集合', value: '未配置', type: 'tag', tagColor: 'gray' },
-                        { label: '展示待处理入口', value: false, type: 'switch' },
-                        { label: '待处理列表字段', value: '未配置', type: 'text' },
-                        { label: '默认排序', value: '未配置', type: 'text' },
-                    ]},
-                    { icon: 'fa-check-circle', color: '#00B42A', title: '工单确认配置', desc: '配置确认环节开关、触发状态和流转规则', items: [
-                        { label: '启用工单确认环节', value: false, type: 'switch' },
-                        { label: '确认按钮出现状态', value: '未配置', type: 'tag', tagColor: 'gray' },
-                        { label: '确认必填项', value: '未配置', type: 'text' },
-                        { label: '确认后状态', value: '未配置', type: 'text' },
-                    ]},
-                    { icon: 'fa-comment', color: '#722ED1', title: '工单评价配置', desc: '配置评价功能开关、必填性和字数限制', items: [
-                        { label: '开启评价功能', value: false, type: 'switch' },
-                        { label: '评价输入框必填', value: false, type: 'switch' },
-                        { label: '允许评价的状态', value: '未配置', type: 'tag', tagColor: 'gray' },
-                        { label: '评价字数限制', value: '未配置', type: 'text' },
-                    ]},
-                    { icon: 'fa-star', color: '#FAAD14', title: '工单评分配置', desc: '配置评分开关、评分维度和评分时机', items: [
-                        { label: '开启评分功能', value: false, type: 'switch' },
-                        { label: '评分维度', value: '未配置', type: 'tag', tagColor: 'gray' },
-                        { label: '评分时机', value: '未配置', type: 'text' },
-                        { label: '评分是否必填', value: false, type: 'switch' },
-                    ]},
-                    { icon: 'fa-thumbs-up', color: '#00B42A', title: '审批通过配置', desc: '配置门户端审批通过权限和流转规则', items: [
-                        { label: '开放审批通过按钮', value: false, type: 'switch' },
-                        { label: '审批权限角色', value: '未配置', type: 'tag', tagColor: 'gray' },
-                        { label: '可审批状态', value: '未配置', type: 'text' },
-                        { label: '通过后状态', value: '未配置', type: 'text' },
-                    ]},
-                    { icon: 'fa-reply', color: '#F53F3F', title: '审批退回配置', desc: '配置退回按钮、退回意见和流转规则', items: [
-                        { label: '开放退回按钮', value: false, type: 'switch' },
-                        { label: '退回意见必填', value: false, type: 'switch' },
-                        { label: '允许退回的状态', value: '未配置', type: 'tag', tagColor: 'gray' },
-                        { label: '退回后状态', value: '未配置', type: 'text' },
-                    ]},
-                ];
-                var h = '<div style="margin-top:16px;">';
-                h += '<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;">';
-                h += '<div style="font-size:15px;font-weight:600;color:#1D2129;">工单功能配置总览 <span style="font-size:12px;color:#86909C;font-weight:400;margin-left:8px;">共 12 项配置，点击卡片进入详情配置</span></div>';
-                h += '<button class="btn btn-default btn-sm" onclick="showToast(\'保存成功\',\'success\');"><i class="fa fa-save"></i> 保存全部配置</button>';
-                h += '</div>';
-                h += '<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px;">';
-                for (var ci = 0; ci < cards.length; ci++) {
-                    var c = cards[ci];
-                    h += '<div style="border:1px solid #E5E6EB;border-radius:8px;padding:16px;cursor:pointer;transition:all 0.2s;" onmouseover="this.style.borderColor=\'' + c.color + '\';this.style.boxShadow=\'0 4px 12px rgba(0,0,0,0.08)\';" onmouseout="this.style.borderColor=\'#E5E6EB\';this.style.boxShadow=\'none\';" onclick="openTicketConfigDetail(\'' + c.title + '\')">';
-                    h += '<div style="display:flex;align-items:flex-start;gap:12px;margin-bottom:14px;">';
-                    h += '<div style="width:40px;height:40px;border-radius:8px;background:' + c.color + '15;display:flex;align-items:center;justify-content:center;color:' + c.color + ';font-size:18px;flex-shrink:0;"><i class="fa ' + c.icon + '"></i></div>';
-                    h += '<div style="flex:1;min-width:0;">';
-                    h += '<div style="font-size:14px;font-weight:600;color:#1D2129;margin-bottom:4px;">' + c.title + '</div>';
-                    h += '<div style="font-size:12px;color:#86909C;line-height:1.5;">' + c.desc + '</div>';
-                    h += '</div></div>';
-                    h += '<div style="border-top:1px solid #F2F3F5;padding-top:12px;">';
-                    for (var ii = 0; ii < c.items.length; ii++) {
-                        var item = c.items[ii];
-                        h += '<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;">';
-                        h += '<span style="font-size:12px;color:#4E5969;">' + item.label + '</span>';
-                        if (item.type === 'switch') {
-                            h += '<span class="toggle-switch ' + (item.value ? 'on' : '') + '" style="transform:scale(0.8);" onclick="event.stopPropagation();this.classList.toggle(\'on\')"></span>';
-                        } else if (item.type === 'tag') {
-                            h += '<span style="display:inline-block;padding:1px 8px;border-radius:10px;background:' + (item.tagColor === 'blue' ? '#E8F3FF' : item.tagColor === 'green' ? '#E8F7EE' : item.tagColor === 'red' ? '#FFF1F0' : item.tagColor === 'orange' ? '#FFF7E6' : item.tagColor === 'purple' ? '#F2E8FF' : item.tagColor === 'yellow' ? '#FFFBE6' : '#E6FFFB') + ';color:' + (item.tagColor === 'blue' ? '#165DFF' : item.tagColor === 'green' ? '#00B42A' : item.tagColor === 'red' ? '#F53F3F' : item.tagColor === 'orange' ? '#FF7D00' : item.tagColor === 'purple' ? '#722ED1' : item.tagColor === 'yellow' ? '#FAAD14' : '#13C2C2') + ';font-size:11px;">' + item.value + '</span>';
-                        } else {
-                            h += '<span style="font-size:12px;color:#1D2129;font-weight:500;">' + item.value + '</span>';
-                        }
-                        h += '</div>';
-                    }
-                    h += '</div>';
-                    h += '<div style="text-align:right;margin-top:10px;"><a href="javascript:;" style="font-size:12px;color:#165DFF;" onclick="event.stopPropagation();openTicketConfigDetail(\'' + c.title + '\')">配置详情 <i class="fa fa-angle-right"></i></a></div>';
-                    h += '</div>';
-                }
-                h += '</div></div>';
-                return h;
-            }
-        }
     },
 
     /* ---------- 工单抄送管理（3Tab结构） ---------- */
@@ -4195,6 +4082,119 @@ var pageConfigs = {
                 ],
             },
         },
+        customTabRender: {
+            config: function() {
+                var cards = [
+                    { icon: 'fa-plus-circle', color: '#165DFF', title: '工单新增配置', desc: '配置门户用户新增工单的字段、校验规则和权限', items: [
+                        { label: '允许门户用户新增工单', value: false, type: 'switch' },
+                        { label: '新增表单字段配置', value: '未配置', type: 'tag', tagColor: 'gray' },
+                        { label: '允许上传附件', value: false, type: 'switch' },
+                        { label: '附件大小限制', value: '未配置', type: 'text' },
+                    ]},
+                    { icon: 'fa-edit', color: '#00B42A', title: '工单修改配置', desc: '配置工单修改权限、可编辑字段和状态约束', items: [
+                        { label: '允许用户修改自己工单', value: false, type: 'switch' },
+                        { label: '允许修改的状态', value: '未配置', type: 'tag', tagColor: 'gray' },
+                        { label: '可编辑字段', value: '未配置', type: 'text' },
+                        { label: '只读字段', value: '未配置', type: 'text' },
+                    ]},
+                    { icon: 'fa-trash-o', color: '#F53F3F', title: '工单删除配置', desc: '配置删除按钮显示、状态约束和操作日志', items: [
+                        { label: '显示删除按钮', value: false, type: 'switch' },
+                        { label: '允许删除的状态', value: '未配置', type: 'tag', tagColor: 'gray' },
+                        { label: '删除操作留日志', value: false, type: 'switch' },
+                        { label: '删除方式', value: '未配置', type: 'text' },
+                    ]},
+                    { icon: 'fa-sort', color: '#722ED1', title: '查询字段排序配置', desc: '配置列表列展示、列顺序和排序能力', items: [
+                        { label: '默认展示列', value: '未配置', type: 'text' },
+                        { label: '支持排序列', value: '未配置', type: 'text' },
+                        { label: '列顺序可配置', value: false, type: 'switch' },
+                        { label: '按角色差异化列', value: false, type: 'switch' },
+                    ]},
+                    { icon: 'fa-eye', color: '#13C2C2', title: '工单查看配置', desc: '配置详情页字段显隐、脱敏和按钮控制', items: [
+                        { label: '详情页字段脱敏', value: false, type: 'switch' },
+                        { label: '按钮显隐配置', value: '未配置', type: 'tag', tagColor: 'gray' },
+                        { label: '仅查看自己的工单', value: false, type: 'switch' },
+                        { label: '查看流转审批日志', value: false, type: 'switch' },
+                    ]},
+                    { icon: 'fa-search', color: '#FF7D00', title: '工单查询配置', desc: '配置查询条件、默认值和数据范围', items: [
+                        { label: '查询条件', value: '未配置', type: 'text' },
+                        { label: '默认分页大小', value: '未配置', type: 'text' },
+                        { label: '数据范围', value: '未配置', type: 'tag', tagColor: 'gray' },
+                        { label: '支持时间范围查询', value: false, type: 'switch' },
+                    ]},
+                    { icon: 'fa-clock-o', color: '#1890FF', title: '待处理工单配置', desc: '配置待处理状态集合、列表字段和入口显示', items: [
+                        { label: '待处理状态集合', value: '未配置', type: 'tag', tagColor: 'gray' },
+                        { label: '展示待处理入口', value: false, type: 'switch' },
+                        { label: '待处理列表字段', value: '未配置', type: 'text' },
+                        { label: '默认排序', value: '未配置', type: 'text' },
+                    ]},
+                    { icon: 'fa-check-circle', color: '#00B42A', title: '工单确认配置', desc: '配置确认环节开关、触发状态和流转规则', items: [
+                        { label: '启用工单确认环节', value: false, type: 'switch' },
+                        { label: '确认按钮出现状态', value: '未配置', type: 'tag', tagColor: 'gray' },
+                        { label: '确认必填项', value: '未配置', type: 'text' },
+                        { label: '确认后状态', value: '未配置', type: 'text' },
+                    ]},
+                    { icon: 'fa-comment', color: '#722ED1', title: '工单评价配置', desc: '配置评价功能开关、必填性和字数限制', items: [
+                        { label: '开启评价功能', value: false, type: 'switch' },
+                        { label: '评价输入框必填', value: false, type: 'switch' },
+                        { label: '允许评价的状态', value: '未配置', type: 'tag', tagColor: 'gray' },
+                        { label: '评价字数限制', value: '未配置', type: 'text' },
+                    ]},
+                    { icon: 'fa-star', color: '#FAAD14', title: '工单评分配置', desc: '配置评分开关、评分维度和评分时机', items: [
+                        { label: '开启评分功能', value: false, type: 'switch' },
+                        { label: '评分维度', value: '未配置', type: 'tag', tagColor: 'gray' },
+                        { label: '评分时机', value: '未配置', type: 'text' },
+                        { label: '评分是否必填', value: false, type: 'switch' },
+                    ]},
+                    { icon: 'fa-thumbs-up', color: '#00B42A', title: '审批通过配置', desc: '配置门户端审批通过权限和流转规则', items: [
+                        { label: '开放审批通过按钮', value: false, type: 'switch' },
+                        { label: '审批权限角色', value: '未配置', type: 'tag', tagColor: 'gray' },
+                        { label: '可审批状态', value: '未配置', type: 'text' },
+                        { label: '通过后状态', value: '未配置', type: 'text' },
+                    ]},
+                    { icon: 'fa-reply', color: '#F53F3F', title: '审批退回配置', desc: '配置退回按钮、退回意见和流转规则', items: [
+                        { label: '开放退回按钮', value: false, type: 'switch' },
+                        { label: '退回意见必填', value: false, type: 'switch' },
+                        { label: '允许退回的状态', value: '未配置', type: 'tag', tagColor: 'gray' },
+                        { label: '退回后状态', value: '未配置', type: 'text' },
+                    ]},
+                ];
+                var h = '<div style="margin-top:16px;">';
+                h += '<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;">';
+                h += '<div style="font-size:15px;font-weight:600;color:#1D2129;">工单功能配置总览 <span style="font-size:12px;color:#86909C;font-weight:400;margin-left:8px;">共 12 项配置，点击卡片进入详情配置</span></div>';
+                h += '<button class="btn btn-default btn-sm" onclick="showToast(\'保存成功\',\'success\');"><i class="fa fa-save"></i> 保存全部配置</button>';
+                h += '</div>';
+                h += '<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px;">';
+                for (var ci = 0; ci < cards.length; ci++) {
+                    var c = cards[ci];
+                    h += '<div style="border:1px solid #E5E6EB;border-radius:8px;padding:16px;cursor:pointer;transition:all 0.2s;" onmouseover="this.style.borderColor=\'' + c.color + '\';this.style.boxShadow=\'0 4px 12px rgba(0,0,0,0.08)\';" onmouseout="this.style.borderColor=\'#E5E6EB\';this.style.boxShadow=\'none\';" onclick="openTicketConfigDetail(\'' + c.title + '\')">';
+                    h += '<div style="display:flex;align-items:flex-start;gap:12px;margin-bottom:14px;">';
+                    h += '<div style="width:40px;height:40px;border-radius:8px;background:' + c.color + '15;display:flex;align-items:center;justify-content:center;color:' + c.color + ';font-size:18px;flex-shrink:0;"><i class="fa ' + c.icon + '"></i></div>';
+                    h += '<div style="flex:1;min-width:0;">';
+                    h += '<div style="font-size:14px;font-weight:600;color:#1D2129;margin-bottom:4px;">' + c.title + '</div>';
+                    h += '<div style="font-size:12px;color:#86909C;line-height:1.5;">' + c.desc + '</div>';
+                    h += '</div></div>';
+                    h += '<div style="border-top:1px solid #F2F3F5;padding-top:12px;">';
+                    for (var ii = 0; ii < c.items.length; ii++) {
+                        var item = c.items[ii];
+                        h += '<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;">';
+                        h += '<span style="font-size:12px;color:#4E5969;">' + item.label + '</span>';
+                        if (item.type === 'switch') {
+                            h += '<span class="toggle-switch ' + (item.value ? 'on' : '') + '" style="transform:scale(0.8);" onclick="event.stopPropagation();this.classList.toggle(\'on\')"></span>';
+                        } else if (item.type === 'tag') {
+                            h += '<span style="display:inline-block;padding:1px 8px;border-radius:10px;background:' + (item.tagColor === 'blue' ? '#E8F3FF' : item.tagColor === 'green' ? '#E8F7EE' : item.tagColor === 'red' ? '#FFF1F0' : item.tagColor === 'orange' ? '#FFF7E6' : item.tagColor === 'purple' ? '#F2E8FF' : item.tagColor === 'yellow' ? '#FFFBE6' : '#E6FFFB') + ';color:' + (item.tagColor === 'blue' ? '#165DFF' : item.tagColor === 'green' ? '#00B42A' : item.tagColor === 'red' ? '#F53F3F' : item.tagColor === 'orange' ? '#FF7D00' : item.tagColor === 'purple' ? '#722ED1' : item.tagColor === 'yellow' ? '#FAAD14' : '#13C2C2') + ';font-size:11px;">' + item.value + '</span>';
+                        } else {
+                            h += '<span style="font-size:12px;color:#1D2129;font-weight:500;">' + item.value + '</span>';
+                        }
+                        h += '</div>';
+                    }
+                    h += '</div>';
+                    h += '<div style="text-align:right;margin-top:10px;"><a href="javascript:;" style="font-size:12px;color:#165DFF;" onclick="event.stopPropagation();openTicketConfigDetail(\'' + c.title + '\')">配置详情 <i class="fa fa-angle-right"></i></a></div>';
+                    h += '</div>';
+                }
+                h += '</div></div>';
+                return h;
+            }
+        }
     },
 
     /* ---------- 开放门户管理 - 接口示例管理 ---------- */
