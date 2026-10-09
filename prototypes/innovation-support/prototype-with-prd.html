@@ -15750,207 +15750,515 @@ function openTicketConfigModal(pageKey) {
 /** 我的工单 - 配置详情弹窗 */
 function openTicketConfigDetail(title) {
     var id = 'modal_ticket_config_detail';
-    var body = '<div style="width:560px;">';
-    body += '<div style="padding:0 4px 16px;border-bottom:1px solid #F2F3F5;margin-bottom:16px;">';
+    var body = '<div style="width:720px;max-height:600px;overflow-y:auto;">';
+    body += '<div style="padding:0 4px 14px;border-bottom:1px solid #F2F3F5;margin-bottom:14px;">';
     body += '<div style="font-size:15px;font-weight:600;color:#1D2129;margin-bottom:4px;">' + title + '</div>';
     body += '<div style="font-size:12px;color:#86909C;">配置门户端我的工单对应功能的规则和权限</div>';
     body += '</div>';
 
-    // 通用配置字段（全部为未配置状态）
-    var fields = [];
-    if (title.indexOf('新增') > -1) {
-        fields = [
-            { label: '允许门户用户新增工单', type: 'switch', value: false, tip: '关闭后门户用户无法提交新工单' },
-            { label: '表单字段配置', type: 'link', value: '未配置', linkText: '配置字段', tip: '配置字段显示、必填/非必填、隐藏等' },
-            { label: '提交校验规则', type: 'link', value: '未配置', linkText: '配置规则' },
-            { label: '提交后提示文案', type: 'input', value: '' },
-            { label: '允许上传附件', type: 'switch', value: false },
-            { label: '附件大小限制', type: 'select', value: '请选择', options: ['请选择', '5MB', '10MB', '20MB', '50MB'] },
-            { label: '附件格式限制', type: 'tag-input', value: '' },
-            { label: '角色权限', type: 'link', value: '未配置', linkText: '配置角色' },
-        ];
-    } else if (title.indexOf('修改') > -1) {
-        fields = [
-            { label: '允许用户修改自己工单', type: 'switch', value: false },
-            { label: '允许修改的工单状态', type: 'checkbox-group', options: [
-                { label: '草稿', checked: false },
-                { label: '待提交', checked: false },
-                { label: '待处理', checked: false },
-                { label: '处理中', checked: false },
-                { label: '已办结', checked: false },
-            ]},
-            { label: '可编辑字段配置', type: 'link', value: '未配置', linkText: '配置字段' },
-            { label: '只读字段配置', type: 'link', value: '未配置', linkText: '配置字段' },
-            { label: '修改权限角色', type: 'link', value: '未配置', linkText: '配置角色' },
-        ];
-    } else if (title.indexOf('删除') > -1) {
-        fields = [
-            { label: '门户用户可见删除按钮', type: 'switch', value: false },
-            { label: '允许删除的工单状态', type: 'checkbox-group', options: [
-                { label: '草稿', checked: false },
-                { label: '待提交', checked: false },
-                { label: '待处理', checked: false },
-                { label: '处理中', checked: false },
-                { label: '已办结', checked: false },
-            ]},
-            { label: '删除方式', type: 'radio', options: [{ label: '逻辑删除', checked: false }, { label: '物理删除', checked: false }] },
-            { label: '删除操作记录日志', type: 'switch', value: false },
-            { label: '删除权限角色', type: 'link', value: '未配置', linkText: '配置角色' },
-        ];
-    } else if (title.indexOf('排序') > -1) {
-        fields = [
-            { label: '默认展示列配置', type: 'link', value: '未配置', linkText: '配置列' },
-            { label: '列顺序配置', type: 'link', value: '未配置', linkText: '配置顺序' },
-            { label: '支持排序的字段', type: 'link', value: '未配置', linkText: '配置字段' },
-            { label: '默认排序字段', type: 'select', value: '请选择', options: ['请选择', '提交时间', '工单编号', '优先级', '更新时间'] },
-            { label: '默认排序方式', type: 'radio', options: [{ label: '降序', checked: false }, { label: '升序', checked: false }] },
-            { label: '按角色差异化列显示', type: 'switch', value: false },
-        ];
-    } else if (title.indexOf('查看') > -1) {
-        fields = [
-            { label: '详情页字段显隐配置', type: 'link', value: '未配置', linkText: '配置字段' },
-            { label: '详情页字段脱敏配置', type: 'switch', value: false },
-            { label: '详情页按钮显隐配置', type: 'link', value: '未配置', linkText: '配置按钮' },
-            { label: '仅查看自己的工单', type: 'switch', value: false, tip: '开启后用户只能看到自己创建的工单' },
-            { label: '允许查看流转审批日志', type: 'switch', value: false },
-        ];
-    } else if (title.indexOf('查询') > -1 && title.indexOf('待处理') === -1) {
-        fields = [
-            { label: '查询条件显示配置', type: 'link', value: '未配置', linkText: '配置条件' },
-            { label: '默认查询条件', type: 'link', value: '未配置', linkText: '配置默认值' },
-            { label: '默认分页大小', type: 'select', value: '请选择', options: ['请选择', '10条/页', '20条/页', '50条/页', '100条/页'] },
-            { label: '数据范围', type: 'radio', options: [
-                { label: '仅本人创建', checked: false },
-                { label: '本部门', checked: false },
-                { label: '全部', checked: false },
-            ]},
-            { label: '支持时间范围查询', type: 'switch', value: false },
-        ];
-    } else if (title.indexOf('待处理') > -1) {
-        fields = [
-            { label: '展示待处理工单入口', type: 'switch', value: false },
-            { label: '待处理状态集合', type: 'checkbox-group', options: [
-                { label: '待处理', checked: false },
-                { label: '处理中', checked: false },
-                { label: '待审批', checked: false },
-                { label: '已退回', checked: false },
-            ]},
-            { label: '待处理列表字段配置', type: 'link', value: '未配置', linkText: '配置字段' },
-            { label: '默认排序', type: 'select', value: '请选择', options: ['请选择', '按提交时间倒序', '按提交时间升序', '按优先级倒序'] },
-            { label: '待处理查询条件', type: 'link', value: '未配置', linkText: '配置条件' },
-        ];
-    } else if (title.indexOf('确认') > -1) {
-        fields = [
-            { label: '启用工单确认环节', type: 'switch', value: false },
-            { label: '确认按钮出现的状态', type: 'checkbox-group', options: [
-                { label: '已完成', checked: false },
-                { label: '处理完成', checked: false },
-            ]},
-            { label: '确认操作必填项', type: 'checkbox-group', options: [
-                { label: '确认意见', checked: false },
-                { label: '确认评分', checked: false },
-            ]},
-            { label: '确认后工单状态', type: 'select', value: '请选择', options: ['请选择', '已确认', '已办结', '已完成'] },
-        ];
-    } else if (title.indexOf('评价') > -1) {
-        fields = [
-            { label: '开启评价功能', type: 'switch', value: false },
-            { label: '评价输入框必填', type: 'switch', value: false },
-            { label: '允许评价的工单状态', type: 'checkbox-group', options: [
-                { label: '已办结', checked: false },
-                { label: '已确认', checked: false },
-                { label: '已完成', checked: false },
-            ]},
-            { label: '评价是否可修改重填', type: 'switch', value: false },
-            { label: '评价字数限制', type: 'select', value: '请选择', options: ['请选择', '200字', '500字', '1000字', '2000字'] },
-        ];
-    } else if (title.indexOf('评分') > -1) {
-        fields = [
-            { label: '开启评分功能', type: 'switch', value: false },
-            { label: '评分维度配置', type: 'link', value: '未配置', linkText: '配置维度' },
-            { label: '评分时机', type: 'radio', options: [
-                { label: '仅办结后可评分', checked: false },
-                { label: '办结+确认后均可评分', checked: false },
-            ]},
-            { label: '评分是否必填', type: 'switch', value: false },
-            { label: '评分等级', type: 'radio', options: [
-                { label: '5级评分（五星）', checked: false },
-                { label: '3级评分（好/中/差）', checked: false },
-            ]},
-        ];
-    } else if (title.indexOf('审批通过') > -1) {
-        fields = [
-            { label: '门户端开放审批通过按钮', type: 'switch', value: false },
-            { label: '审批通过权限角色', type: 'link', value: '未配置', linkText: '配置角色' },
-            { label: '可审批的工单状态', type: 'checkbox-group', options: [
-                { label: '待审批', checked: false },
-                { label: '审批中', checked: false },
-                { label: '已退回', checked: false },
-            ]},
-            { label: '审批通过后状态', type: 'select', value: '请选择', options: ['请选择', '已审批通过', '处理中', '已完成'] },
-            { label: '审批通过意见', type: 'radio', options: [
-                { label: '非必填', checked: false },
-                { label: '必填', checked: false },
-            ]},
-        ];
-    } else if (title.indexOf('审批退回') > -1) {
-        fields = [
-            { label: '门户端开放退回按钮', type: 'switch', value: false },
-            { label: '退回意见是否必填', type: 'switch', value: false },
-            { label: '退回权限角色', type: 'link', value: '未配置', linkText: '配置角色' },
-            { label: '允许退回的工单状态', type: 'checkbox-group', options: [
-                { label: '待审批', checked: false },
-                { label: '审批中', checked: false },
-                { label: '待处理', checked: false },
-            ]},
-            { label: '退回后工单状态', type: 'select', value: '请选择', options: ['请选择', '已退回', '待提交', '草稿'] },
-        ];
+    // 通用行渲染
+    function renderRow(label, rightHtml, tip) {
+        var h = '<div style="display:flex;align-items:flex-start;justify-content:space-between;padding:10px 0;border-bottom:1px solid #F7F8FA;">';
+        h += '<div style="flex:1;padding-right:16px;">';
+        h += '<div style="font-size:13px;color:#1D2129;font-weight:500;">' + label + '</div>';
+        if (tip) h += '<div style="font-size:12px;color:#86909C;margin-top:2px;">' + tip + '</div>';
+        h += '</div>';
+        h += '<div style="flex-shrink:0;min-width:200px;text-align:right;">' + rightHtml + '</div>';
+        h += '</div>';
+        return h;
     }
 
-    for (var fi = 0; fi < fields.length; fi++) {
-        var f = fields[fi];
-        body += '<div style="display:flex;align-items:flex-start;justify-content:space-between;padding:12px 0;border-bottom:1px solid #F7F8FA;">';
-        body += '<div style="flex:1;padding-right:16px;">';
-        body += '<div style="font-size:13px;color:#1D2129;font-weight:500;margin-bottom:2px;">' + f.label + '</div>';
-        if (f.tip) body += '<div style="font-size:12px;color:#86909C;">' + f.tip + '</div>';
-        body += '</div>';
-        body += '<div style="flex-shrink:0;min-width:180px;text-align:right;">';
-        if (f.type === 'switch') {
-            body += '<span class="toggle-switch ' + (f.value ? 'on' : '') + '" onclick="this.classList.toggle(\'on\')"></span>';
-        } else if (f.type === 'link') {
-            body += '<span style="font-size:12px;color:#4E5969;margin-right:8px;">' + f.value + '</span>';
-            body += '<a href="javascript:;" style="font-size:12px;color:#165DFF;" onclick="showToast(\'打开' + f.linkText + '弹窗\',\'info\')">' + f.linkText + '</a>';
-        } else if (f.type === 'input') {
-            body += '<input type="text" class="form-input" style="width:200px;font-size:12px;" value="' + f.value + '" />';
-        } else if (f.type === 'select') {
-            body += '<select class="form-input" style="width:200px;font-size:12px;">';
-            for (var oi = 0; oi < f.options.length; oi++) {
-                body += '<option' + (f.options[oi] === f.value ? ' selected' : '') + '>' + f.options[oi] + '</option>';
-            }
-            body += '</select>';
-        } else if (f.type === 'tag-input') {
-            var tags = f.value && f.value.length > 0 ? f.value.split(',') : [];
-            body += '<div style="display:flex;flex-wrap:wrap;gap:4px;justify-content:flex-end;">';
-            for (var ti = 0; ti < tags.length; ti++) {
-                if (!tags[ti]) continue;
-                body += '<span style="display:inline-flex;align-items:center;gap:4px;padding:1px 6px 1px 8px;border-radius:4px;background:#F2F3F5;color:#4E5969;font-size:11px;">' + tags[ti] + '<i class="fa fa-times" style="cursor:pointer;font-size:10px;"></i></span>';
-            }
-            body += '<span style="display:inline-flex;align-items:center;gap:4px;padding:1px 6px;border-radius:4px;background:#E8F3FF;color:#165DFF;font-size:11px;cursor:pointer;">+ 添加</span>';
-            body += '</div>';
-        } else if (f.type === 'radio') {
-            body += '<div style="display:flex;gap:12px;justify-content:flex-end;">';
-            for (var ri = 0; ri < f.options.length; ri++) {
-                body += '<label style="display:flex;align-items:center;gap:4px;font-size:12px;color:#4E5969;cursor:pointer;"><input type="radio" name="cfg_' + fi + '"' + (f.options[ri].checked ? ' checked' : '') + ' /> ' + f.options[ri].label + '</label>';
-            }
-            body += '</div>';
-        } else if (f.type === 'checkbox-group') {
-            body += '<div style="display:flex;flex-wrap:wrap;gap:8px 12px;justify-content:flex-end;">';
-            for (var ci2 = 0; ci2 < f.options.length; ci2++) {
-                body += '<label style="display:flex;align-items:center;gap:4px;font-size:12px;color:#4E5969;cursor:pointer;"><input type="checkbox"' + (f.options[ci2].checked ? ' checked' : '') + ' /> ' + f.options[ci2].label + '</label>';
-            }
-            body += '</div>';
+    function switchHtml(checked) {
+        return '<span class="toggle-switch ' + (checked ? 'on' : '') + '" onclick="this.classList.toggle(\'on\')"></span>';
+    }
+
+    function selectHtml(options, selected) {
+        var h = '<select class="form-input" style="width:180px;font-size:12px;">';
+        for (var i = 0; i < options.length; i++) {
+            h += '<option' + (options[i] === selected ? ' selected' : '') + '>' + options[i] + '</option>';
         }
+        h += '</select>';
+        return h;
+    }
+
+    function radioHtml(name, options) {
+        var h = '<div style="display:flex;gap:12px;justify-content:flex-end;">';
+        for (var i = 0; i < options.length; i++) {
+            h += '<label style="display:flex;align-items:center;gap:4px;font-size:12px;color:#4E5969;cursor:pointer;"><input type="radio" name="' + name + '"' + (options[i].checked ? ' checked' : '') + ' /> ' + options[i].label + '</label>';
+        }
+        h += '</div>';
+        return h;
+    }
+
+    function checkboxGroupHtml(options) {
+        var h = '<div style="display:flex;flex-wrap:wrap;gap:8px 12px;justify-content:flex-end;">';
+        for (var i = 0; i < options.length; i++) {
+            h += '<label style="display:flex;align-items:center;gap:4px;font-size:12px;color:#4E5969;cursor:pointer;"><input type="checkbox"' + (options[i].checked ? ' checked' : '') + ' /> ' + options[i].label + '</label>';
+        }
+        h += '</div>';
+        return h;
+    }
+
+    // 字段配置表格
+    function fieldTable(fields, columns) {
+        var h = '<div style="border:1px solid #E5E6EB;border-radius:6px;overflow:hidden;">';
+        h += '<table style="width:100%;border-collapse:collapse;font-size:12px;">';
+        h += '<thead><tr style="background:#F7F8FA;">';
+        for (var c = 0; c < columns.length; c++) {
+            h += '<th style="padding:8px 10px;text-align:' + (columns[c].align || 'left') + ';font-weight:500;color:#4E5969;border-bottom:1px solid #E5E6EB;">' + columns[c].title + '</th>';
+        }
+        h += '</tr></thead><tbody>';
+        for (var f = 0; f < fields.length; f++) {
+            h += '<tr style="border-bottom:1px solid #F2F3F5;">';
+            for (var c2 = 0; c2 < columns.length; c2++) {
+                var col = columns[c2];
+                var val = fields[f][col.key];
+                var align = col.align || 'left';
+                h += '<td style="padding:8px 10px;text-align:' + align + ';color:#1D2129;">';
+                if (col.type === 'text') {
+                    h += val || '-';
+                } else if (col.type === 'checkbox') {
+                    h += '<input type="checkbox"' + (val ? ' checked' : '') + ' style="cursor:pointer;" />';
+                } else if (col.type === 'switch') {
+                    h += '<span class="toggle-switch ' + (val ? 'on' : '') + '" style="transform:scale(0.75);" onclick="event.stopPropagation();this.classList.toggle(\'on\')"></span>';
+                } else if (col.type === 'select') {
+                    h += '<select class="form-input" style="width:100px;font-size:11px;padding:2px 6px;">';
+                    for (var oi = 0; oi < col.options.length; oi++) {
+                        h += '<option' + (val === col.options[oi] ? ' selected' : '') + '>' + col.options[oi] + '</option>';
+                    }
+                    h += '</select>';
+                } else if (col.type === 'tag') {
+                    var tagColor = val === '显示' ? '#00B42A' : val === '隐藏' ? '#86909C' : val === '必填' ? '#F53F3F' : '#165DFF';
+                    h += '<span style="display:inline-block;padding:1px 8px;border-radius:10px;background:' + tagColor + '15;color:' + tagColor + ';font-size:11px;">' + (val || '-') + '</span>';
+                }
+                h += '</td>';
+            }
+            h += '</tr>';
+        }
+        h += '</tbody></table></div>';
+        return h;
+    }
+
+    // ========== 工单新增配置 ==========
+    if (title.indexOf('新增') > -1) {
+        body += renderRow('允许门户用户新增工单', switchHtml(false), '关闭后门户用户无法提交新工单');
+        body += renderRow('提交后提示文案', '<input type="text" class="form-input" style="width:220px;font-size:12px;" placeholder="请输入提示文案" />');
+        body += '<div style="padding:14px 0 8px;"><div style="font-size:13px;font-weight:600;color:#1D2129;margin-bottom:10px;"><i class="fa fa-list-ul" style="color:#165DFF;margin-right:4px;"></i>表单字段配置</div>';
+        body += fieldTable([
+            { name: '工单标题', type: '输入框', required: false, show: false, sort: false },
+            { name: '工单类型', type: '下拉选择', required: false, show: false, sort: false },
+            { name: '优先级', type: '下拉选择', required: false, show: false, sort: false },
+            { name: '问题描述', type: '富文本', required: false, show: false, sort: false },
+            { name: '附件上传', type: '文件上传', required: false, show: false, sort: false },
+            { name: '联系人', type: '输入框', required: false, show: false, sort: false },
+            { name: '联系电话', type: '输入框', required: false, show: false, sort: false },
+            { name: '所属部门', type: '下拉选择', required: false, show: false, sort: false },
+            { name: '期望完成时间', type: '日期选择', required: false, show: false, sort: false },
+            { name: '备注', type: '文本域', required: false, show: false, sort: false },
+        ], [
+            { key: 'name', title: '字段名称', align: 'left', type: 'text' },
+            { key: 'type', title: '字段类型', align: 'left', type: 'text' },
+            { key: 'show', title: '是否显示', align: 'center', type: 'switch' },
+            { key: 'required', title: '是否必填', align: 'center', type: 'switch' },
+        ]);
+        body += '<div style="text-align:right;margin-top:8px;"><a href="javascript:;" style="font-size:12px;color:#165DFF;"><i class="fa fa-plus-circle"></i> 添加字段</a></div></div>';
+        body += '<div style="padding:10px 0 8px;"><div style="font-size:13px;font-weight:600;color:#1D2129;margin-bottom:10px;"><i class="fa fa-paperclip" style="color:#165DFF;margin-right:4px;"></i>附件配置</div>';
+        body += renderRow('允许上传附件', switchHtml(false));
+        body += renderRow('单个附件大小限制', selectHtml(['请选择', '5MB', '10MB', '20MB', '50MB', '100MB'], '请选择'));
+        body += renderRow('附件数量限制', selectHtml(['请选择', '1个', '3个', '5个', '10个', '不限'], '请选择'));
+        body += renderRow('允许的附件格式', checkboxGroupHtml([
+            { label: '图片(JPG/PNG/GIF)', checked: false },
+            { label: '文档(DOC/XLS/PPT)', checked: false },
+            { label: 'PDF', checked: false },
+            { label: '压缩包(ZIP/RAR)', checked: false },
+            { label: '视频', checked: false },
+        ]));
+        body += '</div>';
+        body += '<div style="padding:10px 0 8px;"><div style="font-size:13px;font-weight:600;color:#1D2129;margin-bottom:10px;"><i class="fa fa-shield" style="color:#165DFF;margin-right:4px;"></i>角色权限</div>';
+        body += fieldTable([
+            { role: '注册用户', allow: false },
+            { role: '企业用户', allow: false },
+            { role: '开发者', allow: false },
+            { role: 'VIP用户', allow: false },
+            { role: '游客', allow: false },
+        ], [
+            { key: 'role', title: '角色名称', align: 'left', type: 'text' },
+            { key: 'allow', title: '允许新增工单', align: 'center', type: 'switch' },
+        ]);
+        body += '</div>';
+
+    // ========== 工单修改配置 ==========
+    } else if (title.indexOf('修改') > -1) {
+        body += renderRow('允许用户修改自己工单', switchHtml(false));
+        body += '<div style="padding:12px 0 8px;"><div style="font-size:13px;font-weight:600;color:#1D2129;margin-bottom:10px;"><i class="fa fa-exchange" style="color:#00B42A;margin-right:4px;"></i>允许修改的工单状态</div>';
+        body += checkboxGroupHtml([
+            { label: '草稿', checked: false },
+            { label: '待提交', checked: false },
+            { label: '待处理', checked: false },
+            { label: '处理中', checked: false },
+            { label: '待审批', checked: false },
+            { label: '已退回', checked: false },
+            { label: '已完成', checked: false },
+            { label: '已办结', checked: false },
+        ]);
+        body += '</div>';
+        body += '<div style="padding:12px 0 8px;"><div style="font-size:13px;font-weight:600;color:#1D2129;margin-bottom:10px;"><i class="fa fa-edit" style="color:#00B42A;margin-right:4px;"></i>字段编辑权限</div>';
+        body += fieldTable([
+            { name: '工单标题', editable: false, readonly: false },
+            { name: '工单类型', editable: false, readonly: false },
+            { name: '优先级', editable: false, readonly: false },
+            { name: '问题描述', editable: false, readonly: false },
+            { name: '附件', editable: false, readonly: false },
+            { name: '联系人', editable: false, readonly: false },
+            { name: '联系电话', editable: false, readonly: false },
+            { name: '备注', editable: false, readonly: false },
+        ], [
+            { key: 'name', title: '字段名称', align: 'left', type: 'text' },
+            { key: 'editable', title: '可编辑', align: 'center', type: 'switch' },
+            { key: 'readonly', title: '只读显示', align: 'center', type: 'switch' },
+        ]);
+        body += '</div>';
+        body += '<div style="padding:12px 0 8px;"><div style="font-size:13px;font-weight:600;color:#1D2129;margin-bottom:10px;"><i class="fa fa-users" style="color:#00B42A;margin-right:4px;"></i>修改权限角色</div>';
+        body += fieldTable([
+            { role: '注册用户', allow: false },
+            { role: '企业用户', allow: false },
+            { role: '开发者', allow: false },
+            { role: 'VIP用户', allow: false },
+        ], [
+            { key: 'role', title: '角色名称', align: 'left', type: 'text' },
+            { key: 'allow', title: '允许修改', align: 'center', type: 'switch' },
+        ]);
+        body += '</div>';
+
+    // ========== 工单删除配置 ==========
+    } else if (title.indexOf('删除') > -1) {
+        body += renderRow('门户用户可见删除按钮', switchHtml(false));
+        body += '<div style="padding:12px 0 8px;"><div style="font-size:13px;font-weight:600;color:#1D2129;margin-bottom:10px;"><i class="fa fa-exchange" style="color:#F53F3F;margin-right:4px;"></i>允许删除的工单状态</div>';
+        body += checkboxGroupHtml([
+            { label: '草稿', checked: false },
+            { label: '待提交', checked: false },
+            { label: '待处理', checked: false },
+            { label: '处理中', checked: false },
+            { label: '待审批', checked: false },
+            { label: '已退回', checked: false },
+            { label: '已完成', checked: false },
+            { label: '已办结', checked: false },
+        ]);
+        body += '</div>';
+        body += renderRow('删除方式', radioHtml('del_type', [
+            { label: '逻辑删除', checked: false },
+            { label: '物理删除', checked: false },
+        ]));
+        body += renderRow('删除操作记录日志', switchHtml(false));
+        body += renderRow('删除二次确认', switchHtml(false), '开启后删除前弹出二次确认弹窗');
+        body += '<div style="padding:12px 0 8px;"><div style="font-size:13px;font-weight:600;color:#1D2129;margin-bottom:10px;"><i class="fa fa-users" style="color:#F53F3F;margin-right:4px;"></i>删除权限角色</div>';
+        body += fieldTable([
+            { role: '注册用户', allow: false },
+            { role: '企业用户', allow: false },
+            { role: '开发者', allow: false },
+            { role: 'VIP用户', allow: false },
+        ], [
+            { key: 'role', title: '角色名称', align: 'left', type: 'text' },
+            { key: 'allow', title: '允许删除', align: 'center', type: 'switch' },
+        ]);
+        body += '</div>';
+
+    // ========== 查询字段排序配置 ==========
+    } else if (title.indexOf('排序') > -1) {
+        body += '<div style="padding:0 0 8px;"><div style="font-size:13px;font-weight:600;color:#1D2129;margin-bottom:10px;"><i class="fa fa-columns" style="color:#722ED1;margin-right:4px;"></i>列表列配置</div>';
+        body += fieldTable([
+            { name: '工单编号', show: false, sortable: false, order: '1' },
+            { name: '工单标题', show: false, sortable: false, order: '2' },
+            { name: '工单类型', show: false, sortable: false, order: '3' },
+            { name: '优先级', show: false, sortable: false, order: '4' },
+            { name: '状态', show: false, sortable: false, order: '5' },
+            { name: '提交人', show: false, sortable: false, order: '6' },
+            { name: '提交时间', show: false, sortable: false, order: '7' },
+            { name: '处理人', show: false, sortable: false, order: '8' },
+            { name: '更新时间', show: false, sortable: false, order: '9' },
+            { name: '所属部门', show: false, sortable: false, order: '10' },
+        ], [
+            { key: 'name', title: '字段名称', align: 'left', type: 'text' },
+            { key: 'show', title: '是否显示', align: 'center', type: 'switch' },
+            { key: 'sortable', title: '支持排序', align: 'center', type: 'switch' },
+            { key: 'order', title: '列顺序', align: 'center', type: 'text' },
+        ]);
+        body += '<div style="display:flex;justify-content:space-between;align-items:center;margin-top:8px;">';
+        body += '<span style="font-size:12px;color:#86909C;"><i class="fa fa-info-circle"></i> 拖拽调整列顺序</span>';
+        body += '<div><a href="javascript:;" style="font-size:12px;color:#165DFF;margin-right:12px;"><i class="fa fa-arrow-up"></i> 上移</a><a href="javascript:;" style="font-size:12px;color:#165DFF;"><i class="fa fa-arrow-down"></i> 下移</a></div>';
         body += '</div></div>';
+        body += renderRow('默认排序字段', selectHtml(['请选择', '工单编号', '提交时间', '更新时间', '优先级'], '请选择'));
+        body += renderRow('默认排序方式', radioHtml('sort_order', [
+            { label: '降序', checked: false },
+            { label: '升序', checked: false },
+        ]));
+        body += renderRow('按角色差异化列显示', switchHtml(false), '开启后不同角色看到的列表列不一样');
+
+    // ========== 工单查看配置 ==========
+    } else if (title.indexOf('查看') > -1) {
+        body += '<div style="padding:0 0 8px;"><div style="font-size:13px;font-weight:600;color:#1D2129;margin-bottom:10px;"><i class="fa fa-eye" style="color:#13C2C2;margin-right:4px;"></i>详情页字段显隐配置</div>';
+        body += fieldTable([
+            { name: '基本信息区', group: true, show: false, desensitize: false },
+            { name: '工单编号', show: false, desensitize: false },
+            { name: '工单标题', show: false, desensitize: false },
+            { name: '工单类型', show: false, desensitize: false },
+            { name: '优先级', show: false, desensitize: false },
+            { name: '状态', show: false, desensitize: false },
+            { name: '提交人信息', group: true, show: false, desensitize: false },
+            { name: '提交人', show: false, desensitize: false },
+            { name: '联系电话', show: false, desensitize: false },
+            { name: '所属部门', show: false, desensitize: false },
+            { name: '处理信息', group: true, show: false, desensitize: false },
+            { name: '处理人', show: false, desensitize: false },
+            { name: '处理记录', show: false, desensitize: false },
+            { name: '附件信息', show: false, desensitize: false },
+        ], [
+            { key: 'name', title: '字段/分组', align: 'left', type: 'text' },
+            { key: 'show', title: '是否显示', align: 'center', type: 'switch' },
+            { key: 'desensitize', title: '脱敏显示', align: 'center', type: 'switch' },
+        ]);
+        body += '</div>';
+        body += '<div style="padding:12px 0 8px;"><div style="font-size:13px;font-weight:600;color:#1D2129;margin-bottom:10px;"><i class="fa fa-cogs" style="color:#13C2C2;margin-right:4px;"></i>详情页按钮显隐配置</div>';
+        body += fieldTable([
+            { name: '修改按钮', show: false },
+            { name: '删除按钮', show: false },
+            { name: '确认按钮', show: false },
+            { name: '评价按钮', show: false },
+            { name: '评分按钮', show: false },
+            { name: '打印按钮', show: false },
+            { name: '导出按钮', show: false },
+            { name: '关闭按钮', show: false },
+        ], [
+            { key: 'name', title: '按钮名称', align: 'left', type: 'text' },
+            { key: 'show', title: '是否显示', align: 'center', type: 'switch' },
+        ]);
+        body += '</div>';
+        body += renderRow('仅查看自己的工单', switchHtml(false), '开启后用户只能看到自己创建的工单');
+        body += renderRow('允许查看流转审批日志', switchHtml(false));
+
+    // ========== 工单查询配置 ==========
+    } else if (title.indexOf('查询') > -1 && title.indexOf('待处理') === -1) {
+        body += '<div style="padding:0 0 8px;"><div style="font-size:13px;font-weight:600;color:#1D2129;margin-bottom:10px;"><i class="fa fa-filter" style="color:#FF7D00;margin-right:4px;"></i>查询条件配置</div>';
+        body += fieldTable([
+            { name: '工单标题', type: '输入框(模糊)', show: false, defaultValue: '' },
+            { name: '工单编号', type: '输入框(精确)', show: false, defaultValue: '' },
+            { name: '工单类型', type: '下拉选择', show: false, defaultValue: '全部' },
+            { name: '优先级', type: '下拉选择', show: false, defaultValue: '全部' },
+            { name: '工单状态', type: '下拉选择', show: false, defaultValue: '全部' },
+            { name: '提交时间', type: '日期范围', show: false, defaultValue: '' },
+            { name: '提交人', type: '输入框', show: false, defaultValue: '' },
+            { name: '处理人', type: '输入框', show: false, defaultValue: '' },
+        ], [
+            { key: 'name', title: '条件名称', align: 'left', type: 'text' },
+            { key: 'type', title: '控件类型', align: 'left', type: 'text' },
+            { key: 'show', title: '是否显示', align: 'center', type: 'switch' },
+        ]);
+        body += '</div>';
+        body += renderRow('默认分页大小', selectHtml(['请选择', '10条/页', '20条/页', '50条/页', '100条/页'], '请选择'));
+        body += '<div style="padding:12px 0 8px;"><div style="font-size:13px;font-weight:600;color:#1D2129;margin-bottom:10px;"><i class="fa fa-database" style="color:#FF7D00;margin-right:4px;"></i>查询数据范围</div>';
+        body += radioHtml('data_scope', [
+            { label: '仅本人创建', checked: false },
+            { label: '本部门', checked: false },
+            { label: '本部门及下级', checked: false },
+            { label: '全部', checked: false },
+        ]);
+        body += '</div>';
+        body += renderRow('支持时间范围查询', switchHtml(false));
+        body += renderRow('支持高级查询', switchHtml(false), '开启后显示更多查询条件');
+
+    // ========== 待处理工单配置 ==========
+    } else if (title.indexOf('待处理') > -1) {
+        body += renderRow('展示待处理工单入口', switchHtml(false));
+        body += '<div style="padding:12px 0 8px;"><div style="font-size:13px;font-weight:600;color:#1D2129;margin-bottom:10px;"><i class="fa fa-tags" style="color:#1890FF;margin-right:4px;"></i>待处理状态集合</div>';
+        body += checkboxGroupHtml([
+            { label: '待处理', checked: false },
+            { label: '处理中', checked: false },
+            { label: '待审批', checked: false },
+            { label: '已退回', checked: false },
+            { label: '待确认', checked: false },
+            { label: '已挂起', checked: false },
+        ]);
+        body += '</div>';
+        body += '<div style="padding:12px 0 8px;"><div style="font-size:13px;font-weight:600;color:#1D2129;margin-bottom:10px;"><i class="fa fa-list" style="color:#1890FF;margin-right:4px;"></i>待处理列表字段</div>';
+        body += fieldTable([
+            { name: '工单编号', show: false, sortable: false },
+            { name: '工单标题', show: false, sortable: false },
+            { name: '工单类型', show: false, sortable: false },
+            { name: '优先级', show: false, sortable: false },
+            { name: '状态', show: false, sortable: false },
+            { name: '提交人', show: false, sortable: false },
+            { name: '提交时间', show: false, sortable: false },
+            { name: '剩余时间', show: false, sortable: false },
+        ], [
+            { key: 'name', title: '字段名称', align: 'left', type: 'text' },
+            { key: 'show', title: '是否显示', align: 'center', type: 'switch' },
+            { key: 'sortable', title: '支持排序', align: 'center', type: 'switch' },
+        ]);
+        body += '</div>';
+        body += renderRow('默认排序', selectHtml(['请选择', '按提交时间倒序', '按提交时间升序', '按优先级倒序', '按剩余时间升序'], '请选择'));
+        body += renderRow('待处理数量角标', switchHtml(false), '开启后Tab上显示待处理数量角标');
+
+    // ========== 工单确认配置 ==========
+    } else if (title.indexOf('确认') > -1) {
+        body += renderRow('启用工单确认环节', switchHtml(false));
+        body += '<div style="padding:12px 0 8px;"><div style="font-size:13px;font-weight:600;color:#1D2129;margin-bottom:10px;"><i class="fa fa-check-square-o" style="color:#00B42A;margin-right:4px;"></i>确认按钮出现的状态</div>';
+        body += checkboxGroupHtml([
+            { label: '已完成', checked: false },
+            { label: '处理完成', checked: false },
+            { label: '已办结', checked: false },
+            { label: '待确认', checked: false },
+        ]);
+        body += '</div>';
+        body += '<div style="padding:12px 0 8px;"><div style="font-size:13px;font-weight:600;color:#1D2129;margin-bottom:10px;"><i class="fa fa-list-alt" style="color:#00B42A;margin-right:4px;"></i>确认操作必填项</div>';
+        body += checkboxGroupHtml([
+            { label: '确认意见', checked: false },
+            { label: '确认评分', checked: false },
+            { label: '确认附件', checked: false },
+            { label: '短信验证码', checked: false },
+        ]);
+        body += '</div>';
+        body += renderRow('确认后工单状态', selectHtml(['请选择', '已确认', '已办结', '已完成', '已关闭'], '请选择'));
+        body += renderRow('确认后跳转评价页', switchHtml(false), '开启后确认成功自动跳转评价页面');
+        body += renderRow('确认超时自动确认', switchHtml(false));
+        body += renderRow('自动确认天数', selectHtml(['请选择', '3天', '7天', '15天', '30天'], '请选择'));
+
+    // ========== 工单评价配置 ==========
+    } else if (title.indexOf('评价') > -1) {
+        body += renderRow('开启评价功能', switchHtml(false));
+        body += renderRow('评价输入框必填', switchHtml(false));
+        body += '<div style="padding:12px 0 8px;"><div style="font-size:13px;font-weight:600;color:#1D2129;margin-bottom:10px;"><i class="fa fa-comments" style="color:#722ED1;margin-right:4px;"></i>允许评价的工单状态</div>';
+        body += checkboxGroupHtml([
+            { label: '已办结', checked: false },
+            { label: '已确认', checked: false },
+            { label: '已完成', checked: false },
+            { label: '已关闭', checked: false },
+        ]);
+        body += '</div>';
+        body += renderRow('评价是否可修改重填', switchHtml(false));
+        body += renderRow('评价字数限制', selectHtml(['请选择', '200字', '500字', '1000字', '2000字', '5000字'], '请选择'));
+        body += renderRow('评价匿名显示', switchHtml(false), '开启后评价人信息匿名显示');
+        body += renderRow('评价审核', switchHtml(false), '开启后评价需审核后显示');
+        body += '<div style="padding:12px 0 8px;"><div style="font-size:13px;font-weight:600;color:#1D2129;margin-bottom:10px;"><i class="fa fa-tag" style="color:#722ED1;margin-right:4px;"></i>评价标签配置</div>';
+        body += fieldTable([
+            { name: '服务态度好', type: '好评标签', enable: false },
+            { name: '响应速度快', type: '好评标签', enable: false },
+            { name: '问题解决彻底', type: '好评标签', enable: false },
+            { name: '专业水平高', type: '好评标签', enable: false },
+            { name: '响应慢', type: '差评标签', enable: false },
+            { name: '问题未解决', type: '差评标签', enable: false },
+            { name: '态度差', type: '差评标签', enable: false },
+        ], [
+            { key: 'name', title: '标签名称', align: 'left', type: 'text' },
+            { key: 'type', title: '标签类型', align: 'left', type: 'text' },
+            { key: 'enable', title: '是否启用', align: 'center', type: 'switch' },
+        ]);
+        body += '<div style="text-align:right;margin-top:8px;"><a href="javascript:;" style="font-size:12px;color:#165DFF;"><i class="fa fa-plus-circle"></i> 添加标签</a></div></div>';
+
+    // ========== 工单评分配置 ==========
+    } else if (title.indexOf('评分') > -1) {
+        body += renderRow('开启评分功能', switchHtml(false));
+        body += '<div style="padding:12px 0 8px;"><div style="font-size:13px;font-weight:600;color:#1D2129;margin-bottom:10px;"><i class="fa fa-star" style="color:#FAAD14;margin-right:4px;"></i>评分维度配置</div>';
+        body += fieldTable([
+            { name: '服务态度', weight: '20%', enable: false },
+            { name: '解决效率', weight: '25%', enable: false },
+            { name: '专业水平', weight: '25%', enable: false },
+            { name: '响应速度', weight: '15%', enable: false },
+            { name: '结果满意度', weight: '15%', enable: false },
+        ], [
+            { key: 'name', title: '维度名称', align: 'left', type: 'text' },
+            { key: 'weight', title: '权重占比', align: 'center', type: 'text' },
+            { key: 'enable', title: '是否启用', align: 'center', type: 'switch' },
+        ]);
+        body += '<div style="text-align:right;margin-top:8px;"><a href="javascript:;" style="font-size:12px;color:#165DFF;"><i class="fa fa-plus-circle"></i> 添加维度</a></div></div>';
+        body += '<div style="padding:12px 0 8px;"><div style="font-size:13px;font-weight:600;color:#1D2129;margin-bottom:10px;"><i class="fa fa-clock-o" style="color:#FAAD14;margin-right:4px;"></i>评分时机</div>';
+        body += radioHtml('score_time', [
+            { label: '仅办结后可评分', checked: false },
+            { label: '办结+确认后均可评分', checked: false },
+            { label: '处理完成后即可评分', checked: false },
+        ]);
+        body += '</div>';
+        body += renderRow('评分是否必填', switchHtml(false));
+        body += '<div style="padding:12px 0 8px;"><div style="font-size:13px;font-weight:600;color:#1D2129;margin-bottom:10px;"><i class="fa fa-signal" style="color:#FAAD14;margin-right:4px;"></i>评分等级</div>';
+        body += radioHtml('score_level', [
+            { label: '5级评分（五星）', checked: false },
+            { label: '3级评分（好/中/差）', checked: false },
+            { label: '10分制', checked: false },
+            { label: '100分制', checked: false },
+        ]);
+        body += '</div>';
+        body += renderRow('评分后自动评价', switchHtml(false), '开启后评分完成自动打开评价输入框');
+
+    // ========== 审批通过配置 ==========
+    } else if (title.indexOf('审批通过') > -1) {
+        body += renderRow('门户端开放审批通过按钮', switchHtml(false));
+        body += '<div style="padding:12px 0 8px;"><div style="font-size:13px;font-weight:600;color:#1D2129;margin-bottom:10px;"><i class="fa fa-users" style="color:#00B42A;margin-right:4px;"></i>审批通过权限角色</div>';
+        body += fieldTable([
+            { role: '系统管理员', allow: false },
+            { role: '平台管理员', allow: false },
+            { role: '工单管理员', allow: false },
+            { role: '部门负责人', allow: false },
+            { role: '审批专员', allow: false },
+        ], [
+            { key: 'role', title: '角色名称', align: 'left', type: 'text' },
+            { key: 'allow', title: '审批通过权限', align: 'center', type: 'switch' },
+        ]);
+        body += '</div>';
+        body += '<div style="padding:12px 0 8px;"><div style="font-size:13px;font-weight:600;color:#1D2129;margin-bottom:10px;"><i class="fa fa-exchange" style="color:#00B42A;margin-right:4px;"></i>可审批的工单状态</div>';
+        body += checkboxGroupHtml([
+            { label: '待审批', checked: false },
+            { label: '审批中', checked: false },
+            { label: '已退回', checked: false },
+            { label: '待处理', checked: false },
+        ]);
+        body += '</div>';
+        body += renderRow('审批通过后状态', selectHtml(['请选择', '已审批通过', '处理中', '已完成', '待确认'], '请选择'));
+        body += '<div style="padding:12px 0 8px;"><div style="font-size:13px;font-weight:600;color:#1D2129;margin-bottom:10px;"><i class="fa fa-file-text-o" style="color:#00B42A;margin-right:4px;"></i>审批通过意见</div>';
+        body += radioHtml('approve_opinion', [
+            { label: '非必填', checked: false },
+            { label: '必填', checked: false },
+            { label: '默认模板', checked: false },
+        ]);
+        body += '</div>';
+        body += renderRow('多级审批', switchHtml(false), '开启后支持多级审批流程');
+
+    // ========== 审批退回配置 ==========
+    } else if (title.indexOf('审批退回') > -1) {
+        body += renderRow('门户端开放退回按钮', switchHtml(false));
+        body += renderRow('退回意见是否必填', switchHtml(false));
+        body += '<div style="padding:12px 0 8px;"><div style="font-size:13px;font-weight:600;color:#1D2129;margin-bottom:10px;"><i class="fa fa-users" style="color:#F53F3F;margin-right:4px;"></i>退回权限角色</div>';
+        body += fieldTable([
+            { role: '系统管理员', allow: false },
+            { role: '平台管理员', allow: false },
+            { role: '工单管理员', allow: false },
+            { role: '部门负责人', allow: false },
+            { role: '审批专员', allow: false },
+        ], [
+            { key: 'role', title: '角色名称', align: 'left', type: 'text' },
+            { key: 'allow', title: '退回权限', align: 'center', type: 'switch' },
+        ]);
+        body += '</div>';
+        body += '<div style="padding:12px 0 8px;"><div style="font-size:13px;font-weight:600;color:#1D2129;margin-bottom:10px;"><i class="fa fa-exchange" style="color:#F53F3F;margin-right:4px;"></i>允许退回的工单状态</div>';
+        body += checkboxGroupHtml([
+            { label: '待审批', checked: false },
+            { label: '审批中', checked: false },
+            { label: '待处理', checked: false },
+            { label: '处理中', checked: false },
+            { label: '已完成', checked: false },
+        ]);
+        body += '</div>';
+        body += renderRow('退回后工单状态', selectHtml(['请选择', '已退回', '待提交', '草稿', '已关闭'], '请选择'));
+        body += '<div style="padding:12px 0 8px;"><div style="font-size:13px;font-weight:600;color:#1D2129;margin-bottom:10px;"><i class="fa fa-list-ul" style="color:#F53F3F;margin-right:4px;"></i>退回原因模板</div>';
+        body += fieldTable([
+            { name: '信息不完整，请补充', type: '资料问题', enable: false },
+            { name: '格式不正确，请修改', type: '格式问题', enable: false },
+            { name: '超出权限范围', type: '权限问题', enable: false },
+            { name: '内容不符合要求', type: '内容问题', enable: false },
+        ], [
+            { key: 'name', title: '原因内容', align: 'left', type: 'text' },
+            { key: 'type', title: '分类', align: 'left', type: 'text' },
+            { key: 'enable', title: '是否启用', align: 'center', type: 'switch' },
+        ]);
+        body += '<div style="text-align:right;margin-top:8px;"><a href="javascript:;" style="font-size:12px;color:#165DFF;"><i class="fa fa-plus-circle"></i> 添加原因</a></div></div>';
     }
 
     body += '</div>';
