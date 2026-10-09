@@ -1064,6 +1064,119 @@ var pageConfigs = {
                 ],
             },
         },
+        customTabRender: {
+            config: function() {
+                var cards = [
+                    { icon: 'fa-plus-circle', color: '#165DFF', title: '工单新增配置', desc: '配置门户用户新增工单的字段、校验规则和权限', items: [
+                        { label: '允许门户用户新增工单', value: true, type: 'switch' },
+                        { label: '新增表单字段配置', value: '12个字段，8个必填', type: 'tag', tagColor: 'blue' },
+                        { label: '允许上传附件', value: true, type: 'switch' },
+                        { label: '附件大小限制', value: '20MB/个', type: 'text' },
+                    ]},
+                    { icon: 'fa-edit', color: '#00B42A', title: '工单修改配置', desc: '配置工单修改权限、可编辑字段和状态约束', items: [
+                        { label: '允许用户修改自己工单', value: true, type: 'switch' },
+                        { label: '允许修改的状态', value: '待提交、待处理', type: 'tag', tagColor: 'green' },
+                        { label: '可编辑字段数', value: '8个字段可改', type: 'text' },
+                        { label: '只读字段数', value: '4个字段只读', type: 'text' },
+                    ]},
+                    { icon: 'fa-trash-o', color: '#F53F3F', title: '工单删除配置', desc: '配置删除按钮显示、状态约束和操作日志', items: [
+                        { label: '显示删除按钮', value: true, type: 'switch' },
+                        { label: '允许删除的状态', value: '草稿、待提交', type: 'tag', tagColor: 'red' },
+                        { label: '删除操作留日志', value: true, type: 'switch' },
+                        { label: '删除方式', value: '逻辑删除', type: 'text' },
+                    ]},
+                    { icon: 'fa-sort', color: '#722ED1', title: '查询字段排序配置', desc: '配置列表列展示、列顺序和排序能力', items: [
+                        { label: '默认展示列数', value: '10列', type: 'text' },
+                        { label: '支持排序列数', value: '6列', type: 'text' },
+                        { label: '列顺序可配置', value: true, type: 'switch' },
+                        { label: '按角色差异化列', value: true, type: 'switch' },
+                    ]},
+                    { icon: 'fa-eye', color: '#13C2C2', title: '工单查看配置', desc: '配置详情页字段显隐、脱敏和按钮控制', items: [
+                        { label: '详情页字段脱敏', value: true, type: 'switch' },
+                        { label: '按钮显隐配置', value: '6个按钮可配置', type: 'tag', tagColor: 'cyan' },
+                        { label: '仅查看自己的工单', value: true, type: 'switch' },
+                        { label: '查看流转审批日志', value: true, type: 'switch' },
+                    ]},
+                    { icon: 'fa-search', color: '#FF7D00', title: '工单查询配置', desc: '配置查询条件、默认值和数据范围', items: [
+                        { label: '查询条件数', value: '6个筛选条件', type: 'text' },
+                        { label: '默认分页大小', value: '20条/页', type: 'text' },
+                        { label: '数据范围', value: '仅本人创建', type: 'tag', tagColor: 'orange' },
+                        { label: '支持时间范围查询', value: true, type: 'switch' },
+                    ]},
+                    { icon: 'fa-clock-o', color: '#1890FF', title: '待处理工单配置', desc: '配置待处理状态集合、列表字段和入口显示', items: [
+                        { label: '待处理状态集合', value: '待处理、处理中', type: 'tag', tagColor: 'blue' },
+                        { label: '展示待处理入口', value: true, type: 'switch' },
+                        { label: '待处理列表字段', value: '8个字段', type: 'text' },
+                        { label: '默认排序', value: '按提交时间倒序', type: 'text' },
+                    ]},
+                    { icon: 'fa-check-circle', color: '#00B42A', title: '工单确认配置', desc: '配置确认环节开关、触发状态和流转规则', items: [
+                        { label: '启用工单确认环节', value: true, type: 'switch' },
+                        { label: '确认按钮出现状态', value: '已完成', type: 'tag', tagColor: 'green' },
+                        { label: '确认必填项', value: '确认意见（非必填）', type: 'text' },
+                        { label: '确认后状态', value: '已确认', type: 'text' },
+                    ]},
+                    { icon: 'fa-comment', color: '#722ED1', title: '工单评价配置', desc: '配置评价功能开关、必填性和字数限制', items: [
+                        { label: '开启评价功能', value: true, type: 'switch' },
+                        { label: '评价输入框必填', value: false, type: 'switch' },
+                        { label: '允许评价的状态', value: '已办结、已确认', type: 'tag', tagColor: 'purple' },
+                        { label: '评价字数限制', value: '500字', type: 'text' },
+                    ]},
+                    { icon: 'fa-star', color: '#FAAD14', title: '工单评分配置', desc: '配置评分开关、评分维度和评分时机', items: [
+                        { label: '开启评分功能', value: true, type: 'switch' },
+                        { label: '评分维度', value: '5个维度', type: 'tag', tagColor: 'yellow' },
+                        { label: '评分时机', value: '仅办结后可评分', type: 'text' },
+                        { label: '评分是否必填', value: false, type: 'switch' },
+                    ]},
+                    { icon: 'fa-thumbs-up', color: '#00B42A', title: '审批通过配置', desc: '配置门户端审批通过权限和流转规则', items: [
+                        { label: '开放审批通过按钮', value: true, type: 'switch' },
+                        { label: '审批权限角色', value: '工单管理员、部门负责人', type: 'tag', tagColor: 'green' },
+                        { label: '可审批状态', value: '待审批', type: 'text' },
+                        { label: '通过后状态', value: '已审批通过', type: 'text' },
+                    ]},
+                    { icon: 'fa-reply', color: '#F53F3F', title: '审批退回配置', desc: '配置退回按钮、退回意见和流转规则', items: [
+                        { label: '开放退回按钮', value: true, type: 'switch' },
+                        { label: '退回意见必填', value: true, type: 'switch' },
+                        { label: '允许退回的状态', value: '待审批、审批中', type: 'tag', tagColor: 'red' },
+                        { label: '退回后状态', value: '已退回', type: 'text' },
+                    ]},
+                ];
+                var h = '<div style="margin-top:16px;">';
+                h += '<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;">';
+                h += '<div style="font-size:15px;font-weight:600;color:#1D2129;">工单功能配置总览 <span style="font-size:12px;color:#86909C;font-weight:400;margin-left:8px;">共 12 项配置，点击卡片进入详情配置</span></div>';
+                h += '<button class="btn btn-default btn-sm" onclick="showToast(\'保存成功\',\'success\');"><i class="fa fa-save"></i> 保存全部配置</button>';
+                h += '</div>';
+                h += '<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px;">';
+                for (var ci = 0; ci < cards.length; ci++) {
+                    var c = cards[ci];
+                    h += '<div style="border:1px solid #E5E6EB;border-radius:8px;padding:16px;cursor:pointer;transition:all 0.2s;" onmouseover="this.style.borderColor=\'' + c.color + '\';this.style.boxShadow=\'0 4px 12px rgba(0,0,0,0.08)\';" onmouseout="this.style.borderColor=\'#E5E6EB\';this.style.boxShadow=\'none\';" onclick="openTicketConfigDetail(\'' + c.title + '\')">';
+                    h += '<div style="display:flex;align-items:flex-start;gap:12px;margin-bottom:14px;">';
+                    h += '<div style="width:40px;height:40px;border-radius:8px;background:' + c.color + '15;display:flex;align-items:center;justify-content:center;color:' + c.color + ';font-size:18px;flex-shrink:0;"><i class="fa ' + c.icon + '"></i></div>';
+                    h += '<div style="flex:1;min-width:0;">';
+                    h += '<div style="font-size:14px;font-weight:600;color:#1D2129;margin-bottom:4px;">' + c.title + '</div>';
+                    h += '<div style="font-size:12px;color:#86909C;line-height:1.5;">' + c.desc + '</div>';
+                    h += '</div></div>';
+                    h += '<div style="border-top:1px solid #F2F3F5;padding-top:12px;">';
+                    for (var ii = 0; ii < c.items.length; ii++) {
+                        var item = c.items[ii];
+                        h += '<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;">';
+                        h += '<span style="font-size:12px;color:#4E5969;">' + item.label + '</span>';
+                        if (item.type === 'switch') {
+                            h += '<span class="toggle-switch ' + (item.value ? 'on' : '') + '" style="transform:scale(0.8);" onclick="event.stopPropagation();this.classList.toggle(\'on\')"></span>';
+                        } else if (item.type === 'tag') {
+                            h += '<span style="display:inline-block;padding:1px 8px;border-radius:10px;background:' + (item.tagColor === 'blue' ? '#E8F3FF' : item.tagColor === 'green' ? '#E8F7EE' : item.tagColor === 'red' ? '#FFF1F0' : item.tagColor === 'orange' ? '#FFF7E6' : item.tagColor === 'purple' ? '#F2E8FF' : item.tagColor === 'yellow' ? '#FFFBE6' : '#E6FFFB') + ';color:' + (item.tagColor === 'blue' ? '#165DFF' : item.tagColor === 'green' ? '#00B42A' : item.tagColor === 'red' ? '#F53F3F' : item.tagColor === 'orange' ? '#FF7D00' : item.tagColor === 'purple' ? '#722ED1' : item.tagColor === 'yellow' ? '#FAAD14' : '#13C2C2') + ';font-size:11px;">' + item.value + '</span>';
+                        } else {
+                            h += '<span style="font-size:12px;color:#1D2129;font-weight:500;">' + item.value + '</span>';
+                        }
+                        h += '</div>';
+                    }
+                    h += '</div>';
+                    h += '<div style="text-align:right;margin-top:10px;"><a href="javascript:;" style="font-size:12px;color:#165DFF;" onclick="event.stopPropagation();openTicketConfigDetail(\'' + c.title + '\')">配置详情 <i class="fa fa-angle-right"></i></a></div>';
+                    h += '</div>';
+                }
+                h += '</div></div>';
+                return h;
+            }
+        }
     },
 
     /* ---------- 工单抄送管理（3Tab结构） ---------- */
@@ -3977,6 +4090,7 @@ var pageConfigs = {
             { key: 'pending', label: '待我处理' },
             { key: 'submitted', label: '我提交的' },
             { key: 'cc', label: '我抄送的' },
+            { key: 'config', label: '配置管理' },
         ],
         formFields: [
             { key: 'section1', label: '基本信息', type: 'section-title' },
@@ -5965,7 +6079,7 @@ function renderOverviewPage() {
         { category: '工作台管理', items: ['标准工作台卡片式布局（创建/编辑/删除/预览/状态切换）', '工作台创建弹窗（空白创建+工作台复刻）', '工作台历史版本记录（版本列表+版本详情+回滚）', '第三方工作台管理（增删改查+表格列表）', '第三方工作台版本管理（新增版本/版本详情/版本记录）'] },
         { category: '软件服务商工作台', items: ['消息通知管理-站内消息单页（新增/编辑/查看/删除/标记已读）', '消息通知管理-手动通知管理说明', '软件服务商详情抽屉-应用关联Tab', '应用关联CRUD+批量解除+排序', '服务商入驻详情抽屉-应用关联CRUD'] },
         { category: '工单中心', items: ['我的代办（查询/办理/查看/移交/批量办理/导出）', '抄送我的工单-抄送工单统计（增删改查/转发）', '抄送我的工单-抄送工单列表（查看/评分/附件/标记已读/导出）', '工单类型管理-增删改查+排序', '工单评价管理-增删改查+参数设置+排序', '工单排序-增删改查+优先级配置', '工单流程配置管理-增删改查+审批环节配置', '工单抄送管理-信息管理（8项）', '办件中心-配置信息管理（3项）'] },
-        { category: '开放门户管理', items: ['全局搜索管理（搜索配置+热搜词+排序号）', '通知公告管理-删除/查看', '接口示例管理-增删改查完善', '接口错误码管理-增删改查完善', '我的工单-填报/处理/审批/修改/删除/排序', '应用案例管理-卡片式+查看+版本记录'] },
+        { category: '开放门户管理', items: ['全局搜索管理（搜索配置+热搜词+排序号）', '通知公告管理-删除/查看', '接口示例管理-增删改查完善', '接口错误码管理-增删改查完善', '我的工单-填报/处理/审批/修改/删除/排序+12项配置管理', '应用案例管理-卡片式+查看+版本记录'] },
         { category: '门户配置', items: ['统一门户配置7Tab（轮播图/接入步骤/应用案例/开放能力/资源中心/开发指南/帮助中心）', '接入步骤-拖拽上传+字符计数', '轮播图-间隔时间设置', '热搜词管理-排序号字段'] },
     ];
 
@@ -6412,6 +6526,12 @@ function renderTabTablePage(pageKey) {
         html += '<div class="tab-item ' + active + '" onclick="switchTab(\'' + pageKey + '\', \'' + tab.key + '\')">' + tab.label + '</div>';
     }
     html += '</div>';
+    // 自定义Tab内容（配置管理类）
+    if (config.customTabRender && config.customTabRender[currentTab]) {
+        html += config.customTabRender[currentTab]();
+        html += '</div></div>';
+        return html;
+    }
     var tabConfig = (config.tabConfigs && config.tabConfigs[currentTab]) ? config.tabConfigs[currentTab] : config;
     html += renderQueryArea(pageKey + '_' + currentTab, tabConfig);
     html += renderToolbar(pageKey + '_' + currentTab, tabConfig);
@@ -15630,6 +15750,216 @@ function openTicketConfigModal(pageKey) {
     openModal('modal_ticket_config', '配置管理', body, '', 'wide');
 }
 
+/** 我的工单 - 配置详情弹窗 */
+function openTicketConfigDetail(title) {
+    var id = 'modal_ticket_config_detail';
+    var body = '<div style="width:560px;">';
+    body += '<div style="padding:0 4px 16px;border-bottom:1px solid #F2F3F5;margin-bottom:16px;">';
+    body += '<div style="font-size:15px;font-weight:600;color:#1D2129;margin-bottom:4px;">' + title + '</div>';
+    body += '<div style="font-size:12px;color:#86909C;">配置门户端我的工单对应功能的规则和权限</div>';
+    body += '</div>';
+
+    // 通用配置字段
+    var fields = [];
+    if (title.indexOf('新增') > -1) {
+        fields = [
+            { label: '允许门户用户新增工单', type: 'switch', value: true, tip: '关闭后门户用户无法提交新工单' },
+            { label: '表单字段配置', type: 'link', value: '12个字段，8个必填', linkText: '配置字段', tip: '配置字段显示、必填/非必填、隐藏等' },
+            { label: '提交校验规则', type: 'link', value: '已配置 5 条规则', linkText: '配置规则' },
+            { label: '提交后提示文案', type: 'input', value: '工单提交成功，我们会尽快处理' },
+            { label: '允许上传附件', type: 'switch', value: true },
+            { label: '附件大小限制', type: 'select', value: '20MB', options: ['5MB', '10MB', '20MB', '50MB'] },
+            { label: '附件格式限制', type: 'tag-input', value: 'JPG,PNG,PDF,DOC,XLS' },
+            { label: '角色权限', type: 'link', value: '3个角色允许新增', linkText: '配置角色' },
+        ];
+    } else if (title.indexOf('修改') > -1) {
+        fields = [
+            { label: '允许用户修改自己工单', type: 'switch', value: true },
+            { label: '允许修改的工单状态', type: 'checkbox-group', options: [
+                { label: '草稿', checked: true },
+                { label: '待提交', checked: true },
+                { label: '待处理', checked: true },
+                { label: '处理中', checked: false },
+                { label: '已办结', checked: false },
+            ]},
+            { label: '可编辑字段配置', type: 'link', value: '8个字段可编辑', linkText: '配置字段' },
+            { label: '只读字段配置', type: 'link', value: '4个字段只读', linkText: '配置字段' },
+            { label: '修改权限角色', type: 'link', value: '全部门户用户', linkText: '配置角色' },
+        ];
+    } else if (title.indexOf('删除') > -1) {
+        fields = [
+            { label: '门户用户可见删除按钮', type: 'switch', value: true },
+            { label: '允许删除的工单状态', type: 'checkbox-group', options: [
+                { label: '草稿', checked: true },
+                { label: '待提交', checked: true },
+                { label: '待处理', checked: false },
+                { label: '处理中', checked: false },
+                { label: '已办结', checked: false },
+            ]},
+            { label: '删除方式', type: 'radio', options: [{ label: '逻辑删除', checked: true }, { label: '物理删除', checked: false }] },
+            { label: '删除操作记录日志', type: 'switch', value: true },
+            { label: '删除权限角色', type: 'link', value: '全部门户用户', linkText: '配置角色' },
+        ];
+    } else if (title.indexOf('排序') > -1) {
+        fields = [
+            { label: '默认展示列配置', type: 'link', value: '10列已配置', linkText: '配置列' },
+            { label: '列顺序配置', type: 'link', value: '支持拖拽排序', linkText: '配置顺序' },
+            { label: '支持排序的字段', type: 'link', value: '6个字段可排序', linkText: '配置字段' },
+            { label: '默认排序字段', type: 'select', value: '提交时间', options: ['提交时间', '工单编号', '优先级', '更新时间'] },
+            { label: '默认排序方式', type: 'radio', options: [{ label: '降序', checked: true }, { label: '升序', checked: false }] },
+            { label: '按角色差异化列显示', type: 'switch', value: true },
+        ];
+    } else if (title.indexOf('查看') > -1) {
+        fields = [
+            { label: '详情页字段显隐配置', type: 'link', value: '15个字段', linkText: '配置字段' },
+            { label: '详情页字段脱敏配置', type: 'switch', value: true },
+            { label: '详情页按钮显隐配置', type: 'link', value: '6个按钮可配置', linkText: '配置按钮' },
+            { label: '仅查看自己的工单', type: 'switch', value: true, tip: '开启后用户只能看到自己创建的工单' },
+            { label: '允许查看流转审批日志', type: 'switch', value: true },
+        ];
+    } else if (title.indexOf('查询') > -1 && title.indexOf('待处理') === -1) {
+        fields = [
+            { label: '查询条件显示配置', type: 'link', value: '6个筛选条件', linkText: '配置条件' },
+            { label: '默认查询条件', type: 'link', value: '已配置', linkText: '配置默认值' },
+            { label: '默认分页大小', type: 'select', value: '20条/页', options: ['10条/页', '20条/页', '50条/页', '100条/页'] },
+            { label: '数据范围', type: 'radio', options: [
+                { label: '仅本人创建', checked: true },
+                { label: '本部门', checked: false },
+                { label: '全部', checked: false },
+            ]},
+            { label: '支持时间范围查询', type: 'switch', value: true },
+        ];
+    } else if (title.indexOf('待处理') > -1) {
+        fields = [
+            { label: '展示待处理工单入口', type: 'switch', value: true },
+            { label: '待处理状态集合', type: 'checkbox-group', options: [
+                { label: '待处理', checked: true },
+                { label: '处理中', checked: true },
+                { label: '待审批', checked: false },
+                { label: '已退回', checked: false },
+            ]},
+            { label: '待处理列表字段配置', type: 'link', value: '8个字段', linkText: '配置字段' },
+            { label: '默认排序', type: 'select', value: '按提交时间倒序', options: ['按提交时间倒序', '按提交时间升序', '按优先级倒序'] },
+            { label: '待处理查询条件', type: 'link', value: '4个筛选条件', linkText: '配置条件' },
+        ];
+    } else if (title.indexOf('确认') > -1) {
+        fields = [
+            { label: '启用工单确认环节', type: 'switch', value: true },
+            { label: '确认按钮出现的状态', type: 'checkbox-group', options: [
+                { label: '已完成', checked: true },
+                { label: '处理完成', checked: false },
+            ]},
+            { label: '确认操作必填项', type: 'checkbox-group', options: [
+                { label: '确认意见', checked: false },
+                { label: '确认评分', checked: false },
+            ]},
+            { label: '确认后工单状态', type: 'select', value: '已确认', options: ['已确认', '已办结', '已完成'] },
+        ];
+    } else if (title.indexOf('评价') > -1) {
+        fields = [
+            { label: '开启评价功能', type: 'switch', value: true },
+            { label: '评价输入框必填', type: 'switch', value: false },
+            { label: '允许评价的工单状态', type: 'checkbox-group', options: [
+                { label: '已办结', checked: true },
+                { label: '已确认', checked: true },
+                { label: '已完成', checked: false },
+            ]},
+            { label: '评价是否可修改重填', type: 'switch', value: false },
+            { label: '评价字数限制', type: 'select', value: '500字', options: ['200字', '500字', '1000字', '2000字'] },
+        ];
+    } else if (title.indexOf('评分') > -1) {
+        fields = [
+            { label: '开启评分功能', type: 'switch', value: true },
+            { label: '评分维度配置', type: 'link', value: '5个维度', linkText: '配置维度' },
+            { label: '评分时机', type: 'radio', options: [
+                { label: '仅办结后可评分', checked: true },
+                { label: '办结+确认后均可评分', checked: false },
+            ]},
+            { label: '评分是否必填', type: 'switch', value: false },
+            { label: '评分等级', type: 'radio', options: [
+                { label: '5级评分（五星）', checked: true },
+                { label: '3级评分（好/中/差）', checked: false },
+            ]},
+        ];
+    } else if (title.indexOf('审批通过') > -1) {
+        fields = [
+            { label: '门户端开放审批通过按钮', type: 'switch', value: true },
+            { label: '审批通过权限角色', type: 'link', value: '2个角色', linkText: '配置角色' },
+            { label: '可审批的工单状态', type: 'checkbox-group', options: [
+                { label: '待审批', checked: true },
+                { label: '审批中', checked: false },
+                { label: '已退回', checked: false },
+            ]},
+            { label: '审批通过后状态', type: 'select', value: '已审批通过', options: ['已审批通过', '处理中', '已完成'] },
+            { label: '审批通过意见', type: 'radio', options: [
+                { label: '非必填', checked: true },
+                { label: '必填', checked: false },
+            ]},
+        ];
+    } else if (title.indexOf('审批退回') > -1) {
+        fields = [
+            { label: '门户端开放退回按钮', type: 'switch', value: true },
+            { label: '退回意见是否必填', type: 'switch', value: true },
+            { label: '退回权限角色', type: 'link', value: '2个角色', linkText: '配置角色' },
+            { label: '允许退回的工单状态', type: 'checkbox-group', options: [
+                { label: '待审批', checked: true },
+                { label: '审批中', checked: true },
+                { label: '待处理', checked: false },
+            ]},
+            { label: '退回后工单状态', type: 'select', value: '已退回', options: ['已退回', '待提交', '草稿'] },
+        ];
+    }
+
+    for (var fi = 0; fi < fields.length; fi++) {
+        var f = fields[fi];
+        body += '<div style="display:flex;align-items:flex-start;justify-content:space-between;padding:12px 0;border-bottom:1px solid #F7F8FA;">';
+        body += '<div style="flex:1;padding-right:16px;">';
+        body += '<div style="font-size:13px;color:#1D2129;font-weight:500;margin-bottom:2px;">' + f.label + '</div>';
+        if (f.tip) body += '<div style="font-size:12px;color:#86909C;">' + f.tip + '</div>';
+        body += '</div>';
+        body += '<div style="flex-shrink:0;min-width:180px;text-align:right;">';
+        if (f.type === 'switch') {
+            body += '<span class="toggle-switch ' + (f.value ? 'on' : '') + '" onclick="this.classList.toggle(\'on\')"></span>';
+        } else if (f.type === 'link') {
+            body += '<span style="font-size:12px;color:#4E5969;margin-right:8px;">' + f.value + '</span>';
+            body += '<a href="javascript:;" style="font-size:12px;color:#165DFF;" onclick="showToast(\'打开' + f.linkText + '弹窗\',\'info\')">' + f.linkText + '</a>';
+        } else if (f.type === 'input') {
+            body += '<input type="text" class="form-input" style="width:200px;font-size:12px;" value="' + f.value + '" />';
+        } else if (f.type === 'select') {
+            body += '<select class="form-input" style="width:200px;font-size:12px;">';
+            for (var oi = 0; oi < f.options.length; oi++) {
+                body += '<option' + (f.options[oi] === f.value ? ' selected' : '') + '>' + f.options[oi] + '</option>';
+            }
+            body += '</select>';
+        } else if (f.type === 'tag-input') {
+            var tags = f.value.split(',');
+            body += '<div style="display:flex;flex-wrap:wrap;gap:4px;justify-content:flex-end;">';
+            for (var ti = 0; ti < tags.length; ti++) {
+                body += '<span style="display:inline-flex;align-items:center;gap:4px;padding:1px 6px 1px 8px;border-radius:4px;background:#F2F3F5;color:#4E5969;font-size:11px;">' + tags[ti] + '<i class="fa fa-times" style="cursor:pointer;font-size:10px;"></i></span>';
+            }
+            body += '<span style="display:inline-flex;align-items:center;gap:4px;padding:1px 6px;border-radius:4px;background:#E8F3FF;color:#165DFF;font-size:11px;cursor:pointer;">+ 添加</span>';
+            body += '</div>';
+        } else if (f.type === 'radio') {
+            body += '<div style="display:flex;gap:12px;justify-content:flex-end;">';
+            for (var ri = 0; ri < f.options.length; ri++) {
+                body += '<label style="display:flex;align-items:center;gap:4px;font-size:12px;color:#4E5969;cursor:pointer;"><input type="radio" name="cfg_' + fi + '"' + (f.options[ri].checked ? ' checked' : '') + ' /> ' + f.options[ri].label + '</label>';
+            }
+            body += '</div>';
+        } else if (f.type === 'checkbox-group') {
+            body += '<div style="display:flex;flex-wrap:wrap;gap:8px 12px;justify-content:flex-end;">';
+            for (var ci2 = 0; ci2 < f.options.length; ci2++) {
+                body += '<label style="display:flex;align-items:center;gap:4px;font-size:12px;color:#4E5969;cursor:pointer;"><input type="checkbox"' + (f.options[ci2].checked ? ' checked' : '') + ' /> ' + f.options[ci2].label + '</label>';
+            }
+            body += '</div>';
+        }
+        body += '</div></div>';
+    }
+
+    body += '</div>';
+    var footer = '<button class="px-4 py-1.5 text-sm rounded border" style="border-color:#D9D9D9;color:var(--text-secondary);background:#fff;" onclick="closeModal(\'' + id + '\')">取消</button><button class="px-4 py-1.5 text-sm text-white rounded" style="background:var(--primary);" onclick="closeModal(\'' + id + '\');showToast(\'配置已保存\',\'success\');">保存</button>';
+    openModal(id, title, body, footer, 'large');
+}
+
 function openSubAppModal(p,i){
 var appRow = pageConfigs[p].data.find(function(x){return x.id===i});
 var s = appRow.subApps || [];
@@ -17725,12 +18055,12 @@ var prdData = {
 
     /* ---------- 我的工单 ---------- */    /* ---------- 我的工单 ---------- */
     'portal-my-ticket': {
-        background: '【我的工单】我的工单是开放门户管理的工单处理模块，为开发者和用户提供统一的工单提交、处理和查询入口。包含待我处理、我提交的、我抄送的3个Tab页，分别管理需要处理的工单、自己提交的工单以及被抄送的工单，实现全生命周期的工单跟踪和管理。',
-        targetUsers: '开发者用户、企业用户、客服人员、技术支持人员',
-        coreFeatures: '1.待我处理工单（查看/处理/批量删除） 2.我提交的工单（新增/查看/撤回/批量删除） 3.我抄送的工单（查看/批量删除） 4.多条件组合查询 5.列表字段排序 6.工单状态流转 7.优先级管理',
-        businessFlow: '进入我的工单页 → 待我处理Tab → 查看待处理工单 → 点击"处理" → 填写处理意见 → 提交处理 → 工单状态更新；我提交的Tab → 点击"新增工单" → 选择工单类型 → 填写工单标题和内容 → 提交工单 → 查看处理进度 → 可撤回待处理工单；我抄送的Tab → 查看抄送我的工单 → 查看详情',
-        pageInfo: '3个Tab页（待我处理/我提交的/我抄送的）；待我处理：支持工单标题/工单类型/优先级/状态查询、查看、处理、批量删除；我提交的：支持工单标题/工单类型/状态查询、新增、查看、撤回、批量删除；我抄送的：支持工单标题/工单类型查询、查看、批量删除',
-        dataModel: '核心实体：工单（id/工单编号/标题/工单类型/优先级/状态/提交时间/处理人/提交人/内容）。枚举值：工单类型（咨询类/问题反馈/功能建议/投诉）、优先级（高/中/低）、状态（待处理/处理中/已完成/已撤回）。',
+        background: '【我的工单】我的工单是开放门户管理的工单处理模块，为开发者和用户提供统一的工单提交、处理和查询入口，同时为管理员提供工单功能的配置管理能力。包含待我处理、我提交的、我抄送的、配置管理4个Tab页，实现全生命周期的工单跟踪管理和后台配置能力。',
+        targetUsers: '开发者用户、企业用户、客服人员、技术支持人员、系统管理员、平台管理员',
+        coreFeatures: '1.待我处理工单（查看/处理/批量删除） 2.我提交的工单（新增/查看/撤回/批量删除） 3.我抄送的工单（查看/批量删除） 4.配置管理（12项功能配置） 5.多条件组合查询 6.列表字段排序 7.工单状态流转 8.优先级管理 9.工单确认/评价/评分 10.工单审批通过/退回',
+        businessFlow: '进入我的工单页 → 待我处理Tab → 查看待处理工单 → 点击"处理" → 填写处理意见 → 提交处理 → 工单状态更新；我提交的Tab → 点击"新增工单" → 选择工单类型 → 填写工单标题和内容 → 提交工单 → 查看处理进度 → 可撤回待处理工单；我抄送的Tab → 查看抄送我的工单 → 查看详情；配置管理Tab → 选择配置项 → 配置对应功能规则 → 保存配置 → 门户端生效',
+        pageInfo: '4个Tab页（待我处理/我提交的/我抄送的/配置管理）；待我处理：支持查询、查看、处理、批量删除；我提交的：支持查询、新增、查看、撤回、批量删除；我抄送的：支持查询、查看、批量删除；配置管理：12项功能配置卡片（新增/修改/删除/排序/查看/查询/待处理/确认/评价/评分/审批通过/审批退回）',
+        dataModel: '核心实体：工单（id/工单编号/标题/工单类型/优先级/状态/提交时间/处理人/提交人/内容）、工单配置（id/配置项编码/配置项名称/开关状态/配置值/角色权限/状态约束）。枚举值：工单类型（咨询类/问题反馈/功能建议/投诉）、优先级（高/中/低）、状态（待处理/处理中/已完成/已撤回/已确认/已评价）。',
         addFlow: '我提交的Tab：点击"新增工单" → 打开新增弹窗 → 选择工单类型（必填） → 填写工单标题（必填） → 选择优先级（高/中/低，默认中） → 填写问题描述（必填，富文本） → 上传附件（可选） → 点击提交 → 校验通过 → 工单创建成功 → 自动生成工单编号 → 列表刷新',
         editFlow: '【编辑工单】在"我提交的"Tab → 草稿状态的工单 → 点击操作列"编辑" → 打开编辑弹窗 → 修改工单信息（类型/标题/优先级/问题描述/附件等）→ 点击保存 → 校验通过 → 修改成功 → Toast提示 → 列表刷新。仅草稿状态的工单可编辑，已提交的不可编辑。',
         fillFlow: '【工单填报】用户在"我提交的"Tab页 → 点击"新增工单"按钮 → 打开工单填报表单 → 选择工单类型（咨询类/问题反馈/功能建议/投诉）→ 填写工单标题（必填，最多100字）→ 选择优先级（高/中/低，默认中）→ 填写问题描述（必填，富文本编辑器，支持格式化）→ 上传附件（可选，支持图片/文档，单文件不超过10MB，最多5个）→ 填写联系人和联系电话（选填）→ 点击"提交" → 表单校验 → 校验通过 → 工单创建成功 → 自动生成工单编号（如WO202504010001）→ 跳转至工单详情页 → 工单状态为"待处理"。填报过程中支持暂存草稿，草稿可继续编辑后提交。',
@@ -17750,7 +18080,23 @@ var prdData = {
         scoreFlow: '评价采用星级评分制 → 拖动或点击星级选择评分（1-5星）→ 5星对应非常满意，1星对应非常不满意 → 评分后自动关联满意度等级 → 支持分项评分（服务态度、解决效率、专业水平）→ 总分为各分项平均分。',
         approveFlow: '【工单审批】管理员在工单审批详情中 → 查看工单完整信息和审批流程节点 → 点击"审批通过"按钮 → 填写审批意见（选填）→ 点击确认 → 工单状态更新为"已通过" → 推送通知给申请人 → Toast提示"审批通过" → 审批记录自动保存。审批流程支持多级审批，逐级流转，每级审批通过后自动进入下一级。',
         rejectFlow: '【工单审批】管理员在工单审批详情中 → 点击"审批退回"按钮 → 填写退回原因（必填）→ 点击确认 → 工单状态更新为"已驳回" → 推送通知给申请人 → Toast提示"已退回" → 申请人可修改后重新提交。',
-        redFields: ['addFlow', 'editFlow', 'deleteFlow', 'sortConfig', 'viewFlow', 'queryFlow', 'todoQueryFlow', 'confirmFlow', 'evaluateFlow', 'scoreFlow', 'fillFlow', 'handleFlow', 'approveFlow', 'rejectFlow', 'batchDeleteFlow'],
+        configAddFlow: '【配置-工单新增】管理员进入配置管理Tab → 点击"工单新增配置"卡片 → 打开配置详情 → 设置是否允许门户用户新增工单（开关）→ 配置新增表单字段（显示/必填/隐藏/下拉选项）→ 配置提交校验规则 → 配置是否允许附件、附件大小和格式 → 配置允许新增的角色权限 → 点击保存 → 配置生效，门户端同步更新。',
+        configEditFlow: '【配置-工单修改】管理员进入配置管理Tab → 点击"工单修改配置"卡片 → 打开配置详情 → 设置是否允许用户修改自己工单（开关）→ 配置允许修改的工单状态（多选：草稿/待提交/待处理等）→ 配置可编辑字段和只读字段 → 配置修改权限角色 → 点击保存 → 配置生效。已办结的工单默认不允许修改。',
+        configDeleteFlow: '【配置-工单删除】管理员进入配置管理Tab → 点击"工单删除配置"卡片 → 打开配置详情 → 设置门户用户是否可见删除按钮（开关）→ 配置允许删除的工单状态（多选：草稿/待提交等）→ 配置删除方式（逻辑删除/物理删除）→ 配置删除是否记录操作日志 → 配置删除权限角色 → 点击保存 → 配置生效。',
+        configSortFlow: '【配置-查询字段排序】管理员进入配置管理Tab → 点击"查询字段排序配置"卡片 → 打开配置详情 → 配置列表默认展示哪些列及列顺序（支持拖拽排序）→ 配置哪些字段支持表头排序 → 配置默认排序字段和排序方式 → 配置不同角色的差异化列显示 → 点击保存 → 门户端列表同步更新。',
+        configViewFlow: '【配置-工单查看】管理员进入配置管理Tab → 点击"工单查看配置"卡片 → 打开配置详情 → 配置详情页字段显隐 → 配置字段脱敏规则 → 配置详情页按钮显隐（修改/删除/确认/评价等）→ 配置数据范围（仅看自己的工单）→ 配置是否允许查看流转审批日志 → 点击保存 → 配置生效。',
+        configQueryFlow: '【配置-工单查询】管理员进入配置管理Tab → 点击"工单查询配置"卡片 → 打开配置详情 → 配置查询筛选条件哪些显示（工单类型/状态/时间范围等）→ 配置默认查询条件值 → 配置分页大小 → 配置查询数据范围（仅本人创建/本部门/全部）→ 点击保存 → 门户端查询区同步更新。',
+        configPendingFlow: '【配置-待处理工单查询】管理员进入配置管理Tab → 点击"待处理工单配置"卡片 → 打开配置详情 → 配置待处理状态集合（哪些状态归类为待处理）→ 配置待处理列表查询条件 → 配置待处理列表字段和排序 → 控制是否展示待处理工单模块入口 → 点击保存 → 配置生效。',
+        configConfirmFlow: '【配置-工单确认】管理员进入配置管理Tab → 点击"工单确认配置"卡片 → 打开配置详情 → 设置是否启用工单确认环节（开关）→ 配置什么工单状态出现【确认】按钮 → 配置确认操作必填项（确认意见/确认评分）→ 配置确认后工单状态流转规则 → 点击保存 → 配置生效。',
+        configEvaluateFlow: '【配置-工单评价】管理员进入配置管理Tab → 点击"工单评价配置"卡片 → 打开配置详情 → 设置是否开启评价功能（开关）→ 配置评价输入框是否必填 → 配置什么状态工单允许评价 → 配置评价是否可修改重填 → 配置评价字数限制 → 点击保存 → 配置生效。',
+        configScoreFlow: '【配置-工单评分】管理员进入配置管理Tab → 点击"工单评分配置"卡片 → 打开配置详情 → 设置是否开启评分功能（开关）→ 配置评分维度（支持自定义维度）→ 配置评分时机（仅办结后/办结+确认后）→ 配置评分是否必填 → 配置评分等级（5级/3级）→ 点击保存 → 配置生效。',
+        configApproveFlow: '【配置-工单审批通过】管理员进入配置管理Tab → 点击"审批通过配置"卡片 → 打开配置详情 → 设置门户端是否开放审批通过按钮（开关）→ 配置哪些角色拥有审批通过权限 → 配置可审批的工单状态 → 配置审批通过后状态流转规则 → 配置审批通过意见是否必填 → 点击保存 → 配置生效。',
+        configRejectFlow: '【配置-工单审批退回】管理员进入配置管理Tab → 点击"审批退回配置"卡片 → 打开配置详情 → 设置门户端是否开放退回按钮（开关）→ 配置退回是否要求填写退回意见、意见是否必填 → 配置退回权限角色 → 配置允许退回的工单状态 → 配置退回后工单状态流转 → 点击保存 → 配置生效。',
+        redFields: ['addFlow', 'editFlow', 'deleteFlow', 'sortConfig', 'viewFlow', 'queryFlow', 'todoQueryFlow', 'confirmFlow', 'evaluateFlow', 'scoreFlow', 'fillFlow', 'handleFlow', 'approveFlow', 'rejectFlow', 'batchDeleteFlow', 'configAddFlow', 'configEditFlow', 'configDeleteFlow', 'configSortFlow', 'configViewFlow', 'configQueryFlow', 'configPendingFlow', 'configConfirmFlow', 'configEvaluateFlow', 'configScoreFlow', 'configApproveFlow', 'configRejectFlow'],
+        interaction: 'Tab切换（4个Tab）；多条件组合查询；表头点击排序；复选框多选+批量操作；新增工单弹窗；工单详情抽屉；处理操作弹窗；撤回二次确认；删除二次确认；配置管理卡片式布局；配置详情弹窗（开关/下拉/复选/标签等多种控件）',
+        exceptionHandling: '1.撤回已处理的工单：拦截提示"工单已开始处理，无法撤回" 2.删除已完成工单：拦截提示"已完成工单不可删除" 3.提交工单失败：Toast提示"提交失败，请稍后重试" 4.空数据状态：列表显示空状态占位图+提示文字"暂无工单" 5.配置保存失败：Toast提示"保存失败，请检查配置项"',
+        permissionReq: '1.注册用户：可提交工单、查看自己的工单、撤回待处理工单 2.客服/技术支持：可处理待办工单、查看所有相关工单 3.管理员：拥有全部权限，含配置管理权限 4.未登录用户：无访问权限',
+        acceptance: '1.4个Tab切换正常 2.待我处理工单列表和处理功能正常 3.我提交的工单新增和撤回功能正常 4.我抄送的工单查看功能正常 5.配置管理12项配置卡片展示正常 6.配置详情弹窗功能完整 7.批量删除有二次确认 8.查询条件可用 9.表头可排序 10.工单详情正常 11.Tag标签显示正确 12.分页功能正常'
 },
 
     /* ---------- 接口示例管理 ---------- */
